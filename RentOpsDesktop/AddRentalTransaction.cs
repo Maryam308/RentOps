@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class SignUp: Form
+    public partial class AddRentalTransaction: Form
     {
-        public SignUp()
+        public AddRentalTransaction()
         {
             InitializeComponent();
         }
