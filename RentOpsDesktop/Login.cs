@@ -10,11 +10,21 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class Login: Form
+    public partial class Login : Form
     {
         public Login()
         {
             InitializeComponent();
+        }
+
+        private void picLogo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblForgotPassword_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
