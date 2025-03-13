@@ -10,11 +10,19 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class Landing: Form
+    public partial class Landing : Form
     {
         public Landing()
         {
             InitializeComponent();
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            Login login = new Login();
+            this.Hide();
+            login.Show();
+            
         }
     }
 }
