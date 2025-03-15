@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class Profile: Form
+    public partial class Profile : Form
     {
         public Profile()
         {
             InitializeComponent();
+        }
+
+        private void Profile_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
