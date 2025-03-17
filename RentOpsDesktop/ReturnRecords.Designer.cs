@@ -28,19 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            pnlNavigationSideBar = new Panel();
+            this.pnlNavigationSideBar = new Panel();
             this.btnDeleteReturnRecord = new Button();
-            btnSelectRecord = new Button();
+            this.btnSelectRecord = new Button();
             this.btnEditReturnRecord = new Button();
-            btnAddRecord = new Button();
-            btnBack = new Button();
-            btnSearch = new Button();
-            dgvReturnRecords = new DataGridView();
-            lblReturnRecords = new Label();
-            btnFilter = new Button();
-            pnlNavigationSideBar.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvReturnRecords).BeginInit();
-            SuspendLayout();
+            this.btnAddRecord = new Button();
+            this.btnBack = new Button();
+            this.btnSearch = new Button();
+            this.dgvReturnRecords = new DataGridView();
+            this.lblReturnRecords = new Label();
+            this.btnFilter = new Button();
+
+            this.SuspendLayout();
+            this.pnlNavigationSideBar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvReturnRecords)).BeginInit();
+
             // 
             // pnlNavigationSideBar
             // 
@@ -200,27 +202,25 @@
             Controls.Add(pnlNavigationSideBar);
             Name = "ReturnRecords";
             Text = "ReturnRecords";
-            pnlNavigationSideBar.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dgvReturnRecords).EndInit();
-            ResumeLayout(false);
-            PerformLayout();
+            this.pnlNavigationSideBar.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvReturnRecords)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
 
         private Panel pnlNavigationSideBar;
-        private Button btnEquipmentInformation;
-        private Button btnReturnRecords;
-        private Button btnRentalTransactions;
+        private Button btnDeleteReturnRecord;
         private Button btnSelectRecord;
-        private Button btnLogout;
-        private Button btnProfile;
-        private Button btnRentalRequests;
+        private Button btnEditReturnRecord;
         private Button btnAddRecord;
         private Button btnBack;
         private Button btnSearch;
+        private Button btnFilter;
         private DataGridView dgvReturnRecords;
         private Label lblReturnRecords;
-        private Button btnFilter;
+
     }
 }
