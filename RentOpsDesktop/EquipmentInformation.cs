@@ -10,11 +10,21 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class EquipmentInformation: Form
+    public partial class EquipmentInformation : Form
     {
         public EquipmentInformation()
         {
             InitializeComponent();
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

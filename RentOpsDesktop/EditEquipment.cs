@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class EditEquipment: Form
+    public partial class EditEquipmentInformation: Form
     {
-        public EditEquipment()
+        public EditEquipmentInformation()
         {
             InitializeComponent();
         }
