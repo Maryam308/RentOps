@@ -49,9 +49,10 @@
             pnlNavigation.Controls.Add(btnEditEquipmentInformation);
             pnlNavigation.Controls.Add(btnAddNewEquipment);
             pnlNavigation.Controls.Add(btnBack);
-            pnlNavigation.Location = new Point(12, 12);
+            pnlNavigation.Location = new Point(6, 6);
+            pnlNavigation.Margin = new Padding(2, 1, 2, 1);
             pnlNavigation.Name = "pnlNavigation";
-            pnlNavigation.Size = new Size(400, 954);
+            pnlNavigation.Size = new Size(215, 447);
             pnlNavigation.TabIndex = 0;
             // 
             // btnDeleteEquipmentInformation
@@ -62,9 +63,10 @@
             btnDeleteEquipmentInformation.FlatStyle = FlatStyle.Flat;
             btnDeleteEquipmentInformation.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnDeleteEquipmentInformation.ForeColor = Color.Transparent;
-            btnDeleteEquipmentInformation.Location = new Point(36, 546);
+            btnDeleteEquipmentInformation.Location = new Point(19, 256);
+            btnDeleteEquipmentInformation.Margin = new Padding(2, 1, 2, 1);
             btnDeleteEquipmentInformation.Name = "btnDeleteEquipmentInformation";
-            btnDeleteEquipmentInformation.Size = new Size(337, 121);
+            btnDeleteEquipmentInformation.Size = new Size(181, 57);
             btnDeleteEquipmentInformation.TabIndex = 3;
             btnDeleteEquipmentInformation.Text = "Delete Equipment Information";
             btnDeleteEquipmentInformation.UseVisualStyleBackColor = false;
@@ -77,9 +79,10 @@
             btnEditEquipmentInformation.FlatStyle = FlatStyle.Flat;
             btnEditEquipmentInformation.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnEditEquipmentInformation.ForeColor = Color.Transparent;
-            btnEditEquipmentInformation.Location = new Point(36, 352);
+            btnEditEquipmentInformation.Location = new Point(19, 165);
+            btnEditEquipmentInformation.Margin = new Padding(2, 1, 2, 1);
             btnEditEquipmentInformation.Name = "btnEditEquipmentInformation";
-            btnEditEquipmentInformation.Size = new Size(337, 121);
+            btnEditEquipmentInformation.Size = new Size(181, 57);
             btnEditEquipmentInformation.TabIndex = 2;
             btnEditEquipmentInformation.Text = "Edit Equipment Information";
             btnEditEquipmentInformation.UseVisualStyleBackColor = false;
@@ -93,9 +96,10 @@
             btnAddNewEquipment.FlatStyle = FlatStyle.Flat;
             btnAddNewEquipment.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAddNewEquipment.ForeColor = Color.Transparent;
-            btnAddNewEquipment.Location = new Point(36, 160);
+            btnAddNewEquipment.Location = new Point(19, 75);
+            btnAddNewEquipment.Margin = new Padding(2, 1, 2, 1);
             btnAddNewEquipment.Name = "btnAddNewEquipment";
-            btnAddNewEquipment.Size = new Size(337, 121);
+            btnAddNewEquipment.Size = new Size(181, 57);
             btnAddNewEquipment.TabIndex = 1;
             btnAddNewEquipment.Text = "Add New Equipment";
             btnAddNewEquipment.UseVisualStyleBackColor = false;
@@ -107,10 +111,10 @@
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(36, 30);
-            btnBack.Margin = new Padding(5);
+            btnBack.Location = new Point(19, 14);
+            btnBack.Margin = new Padding(3, 2, 3, 2);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(337, 75);
+            btnBack.Size = new Size(181, 35);
             btnBack.TabIndex = 24;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
@@ -121,10 +125,9 @@
             lblEquipmentInformation.AutoSize = true;
             lblEquipmentInformation.Font = new Font("Segoe UI", 28.125F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblEquipmentInformation.ForeColor = Color.FromArgb(135, 66, 62);
-            lblEquipmentInformation.Location = new Point(608, 42);
-            lblEquipmentInformation.Margin = new Padding(5, 0, 5, 0);
+            lblEquipmentInformation.Location = new Point(327, 20);
             lblEquipmentInformation.Name = "lblEquipmentInformation";
-            lblEquipmentInformation.Size = new Size(862, 100);
+            lblEquipmentInformation.Size = new Size(440, 51);
             lblEquipmentInformation.TabIndex = 25;
             lblEquipmentInformation.Text = "Equipment Information";
             // 
@@ -136,11 +139,11 @@
             btnSearch.ForeColor = Color.White;
             btnSearch.Image = Properties.Resources.search;
             btnSearch.ImageAlign = ContentAlignment.MiddleLeft;
-            btnSearch.Location = new Point(712, 196);
-            btnSearch.Margin = new Padding(5);
+            btnSearch.Location = new Point(383, 92);
+            btnSearch.Margin = new Padding(3, 2, 3, 2);
             btnSearch.Name = "btnSearch";
-            btnSearch.Padding = new Padding(20, 0, 0, 0);
-            btnSearch.Size = new Size(256, 70);
+            btnSearch.Padding = new Padding(11, 0, 0, 0);
+            btnSearch.Size = new Size(138, 33);
             btnSearch.TabIndex = 38;
             btnSearch.Text = "Search";
             btnSearch.UseVisualStyleBackColor = false;
@@ -153,11 +156,11 @@
             btnFilter.ForeColor = Color.White;
             btnFilter.Image = Properties.Resources.filter;
             btnFilter.ImageAlign = ContentAlignment.MiddleLeft;
-            btnFilter.Location = new Point(1117, 196);
-            btnFilter.Margin = new Padding(5);
+            btnFilter.Location = new Point(601, 92);
+            btnFilter.Margin = new Padding(3, 2, 3, 2);
             btnFilter.Name = "btnFilter";
-            btnFilter.Padding = new Padding(40, 0, 0, 0);
-            btnFilter.Size = new Size(256, 70);
+            btnFilter.Padding = new Padding(22, 0, 0, 0);
+            btnFilter.Size = new Size(138, 33);
             btnFilter.TabIndex = 39;
             btnFilter.Text = "Filter";
             btnFilter.UseVisualStyleBackColor = false;
@@ -166,22 +169,24 @@
             // 
             dataGridView1.BackgroundColor = Color.WhiteSmoke;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(510, 336);
+            dataGridView1.Location = new Point(275, 158);
+            dataGridView1.Margin = new Padding(2, 1, 2, 1);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 82;
-            dataGridView1.Size = new Size(1170, 549);
+            dataGridView1.Size = new Size(630, 257);
             dataGridView1.TabIndex = 40;
             // 
             // EquipmentInformation
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1768, 978);
+            ClientSize = new Size(952, 458);
             Controls.Add(dataGridView1);
             Controls.Add(btnFilter);
             Controls.Add(btnSearch);
             Controls.Add(lblEquipmentInformation);
             Controls.Add(pnlNavigation);
+            Margin = new Padding(2, 1, 2, 1);
             Name = "EquipmentInformation";
             Text = "EquipmentInformation";
             pnlNavigation.ResumeLayout(false);
