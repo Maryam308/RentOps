@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class EditProfile: Form
+    public partial class EditProfile : Form
     {
         public EditProfile()
         {
             InitializeComponent();
+        }
+
+        private void btnSaveProfile_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -21,5 +21,13 @@ namespace RentOpsDesktop
         {
 
         }
+
+        private void btnEditProfile_Click(object sender, EventArgs e)
+        {
+            EditProfile editProfile = new EditProfile();
+            this.Hide(); //hide the curent form 
+            editProfile.Show(); //show edit profile form
+
+        }
     }
 }

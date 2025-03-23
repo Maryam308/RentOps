@@ -116,6 +116,7 @@
             btnSaveProfile.TabIndex = 16;
             btnSaveProfile.Text = "Save Changes";
             btnSaveProfile.UseVisualStyleBackColor = false;
+            btnSaveProfile.Click += btnSaveProfile_Click;
             // 
             // lblProfile
             // 

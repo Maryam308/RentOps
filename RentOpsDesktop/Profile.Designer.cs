@@ -29,18 +29,18 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
+            btnLogout = new Button();
+            btnProfile = new Button();
+            lblEquipmentInfo = new Label();
+            lblReturnRecord = new Label();
+            lblTransactions = new Label();
+            lblRentalRequest = new Label();
             picLogo = new PictureBox();
             lblProfile = new Label();
             btnEditProfile = new Button();
             lblUsername = new Label();
             lblPhone = new Label();
             lblEmail = new Label();
-            lblRentalRequest = new Label();
-            lblTransactions = new Label();
-            lblReturnRecord = new Label();
-            lblEquipmentInfo = new Label();
-            btnProfile = new Button();
-            btnLogout = new Button();
             txtUsername = new TextBox();
             txtPhone = new TextBox();
             txtEmail = new TextBox();
@@ -62,6 +62,74 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(306, 612);
             panel1.TabIndex = 0;
+            // 
+            // btnLogout
+            // 
+            btnLogout.BackColor = Color.FromArgb(139, 128, 116);
+            btnLogout.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnLogout.ForeColor = Color.White;
+            btnLogout.Location = new Point(159, 541);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(126, 47);
+            btnLogout.TabIndex = 15;
+            btnLogout.Text = "Logout";
+            btnLogout.UseVisualStyleBackColor = false;
+            // 
+            // btnProfile
+            // 
+            btnProfile.BackColor = Color.FromArgb(139, 128, 116);
+            btnProfile.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnProfile.ForeColor = Color.White;
+            btnProfile.Location = new Point(12, 541);
+            btnProfile.Name = "btnProfile";
+            btnProfile.Size = new Size(126, 47);
+            btnProfile.TabIndex = 11;
+            btnProfile.Text = "Profile";
+            btnProfile.UseVisualStyleBackColor = false;
+            // 
+            // lblEquipmentInfo
+            // 
+            lblEquipmentInfo.AutoSize = true;
+            lblEquipmentInfo.Font = new Font("Segoe UI", 14.8000011F);
+            lblEquipmentInfo.ForeColor = Color.White;
+            lblEquipmentInfo.Location = new Point(12, 435);
+            lblEquipmentInfo.Name = "lblEquipmentInfo";
+            lblEquipmentInfo.Size = new Size(273, 35);
+            lblEquipmentInfo.TabIndex = 14;
+            lblEquipmentInfo.Text = "Equipment Information";
+            // 
+            // lblReturnRecord
+            // 
+            lblReturnRecord.AutoSize = true;
+            lblReturnRecord.Font = new Font("Segoe UI", 14.8000011F);
+            lblReturnRecord.ForeColor = Color.White;
+            lblReturnRecord.Location = new Point(56, 369);
+            lblReturnRecord.Name = "lblReturnRecord";
+            lblReturnRecord.Size = new Size(183, 35);
+            lblReturnRecord.TabIndex = 13;
+            lblReturnRecord.Text = "Return Records";
+            // 
+            // lblTransactions
+            // 
+            lblTransactions.AutoSize = true;
+            lblTransactions.Font = new Font("Segoe UI", 14.8000011F);
+            lblTransactions.ForeColor = Color.White;
+            lblTransactions.Location = new Point(31, 292);
+            lblTransactions.Name = "lblTransactions";
+            lblTransactions.Size = new Size(227, 35);
+            lblTransactions.TabIndex = 12;
+            lblTransactions.Text = "Rental Transactions";
+            // 
+            // lblRentalRequest
+            // 
+            lblRentalRequest.AutoSize = true;
+            lblRentalRequest.Font = new Font("Segoe UI", 14.8000011F);
+            lblRentalRequest.ForeColor = Color.White;
+            lblRentalRequest.Location = new Point(56, 232);
+            lblRentalRequest.Name = "lblRentalRequest";
+            lblRentalRequest.Size = new Size(189, 35);
+            lblRentalRequest.TabIndex = 11;
+            lblRentalRequest.Text = "Rental Requests";
             // 
             // picLogo
             // 
@@ -95,6 +163,7 @@
             btnEditProfile.TabIndex = 7;
             btnEditProfile.Text = "Edit Profile";
             btnEditProfile.UseVisualStyleBackColor = false;
+            btnEditProfile.Click += btnEditProfile_Click;
             // 
             // lblUsername
             // 
@@ -128,74 +197,6 @@
             lblEmail.Size = new Size(88, 41);
             lblEmail.TabIndex = 10;
             lblEmail.Text = "Email";
-            // 
-            // lblRentalRequest
-            // 
-            lblRentalRequest.AutoSize = true;
-            lblRentalRequest.Font = new Font("Segoe UI", 14.8000011F);
-            lblRentalRequest.ForeColor = Color.White;
-            lblRentalRequest.Location = new Point(56, 232);
-            lblRentalRequest.Name = "lblRentalRequest";
-            lblRentalRequest.Size = new Size(189, 35);
-            lblRentalRequest.TabIndex = 11;
-            lblRentalRequest.Text = "Rental Requests";
-            // 
-            // lblTransactions
-            // 
-            lblTransactions.AutoSize = true;
-            lblTransactions.Font = new Font("Segoe UI", 14.8000011F);
-            lblTransactions.ForeColor = Color.White;
-            lblTransactions.Location = new Point(31, 292);
-            lblTransactions.Name = "lblTransactions";
-            lblTransactions.Size = new Size(227, 35);
-            lblTransactions.TabIndex = 12;
-            lblTransactions.Text = "Rental Transactions";
-            // 
-            // lblReturnRecord
-            // 
-            lblReturnRecord.AutoSize = true;
-            lblReturnRecord.Font = new Font("Segoe UI", 14.8000011F);
-            lblReturnRecord.ForeColor = Color.White;
-            lblReturnRecord.Location = new Point(56, 369);
-            lblReturnRecord.Name = "lblReturnRecord";
-            lblReturnRecord.Size = new Size(183, 35);
-            lblReturnRecord.TabIndex = 13;
-            lblReturnRecord.Text = "Return Records";
-            // 
-            // lblEquipmentInfo
-            // 
-            lblEquipmentInfo.AutoSize = true;
-            lblEquipmentInfo.Font = new Font("Segoe UI", 14.8000011F);
-            lblEquipmentInfo.ForeColor = Color.White;
-            lblEquipmentInfo.Location = new Point(12, 435);
-            lblEquipmentInfo.Name = "lblEquipmentInfo";
-            lblEquipmentInfo.Size = new Size(273, 35);
-            lblEquipmentInfo.TabIndex = 14;
-            lblEquipmentInfo.Text = "Equipment Information";
-            // 
-            // btnProfile
-            // 
-            btnProfile.BackColor = Color.FromArgb(139, 128, 116);
-            btnProfile.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnProfile.ForeColor = Color.White;
-            btnProfile.Location = new Point(12, 541);
-            btnProfile.Name = "btnProfile";
-            btnProfile.Size = new Size(126, 47);
-            btnProfile.TabIndex = 11;
-            btnProfile.Text = "Profile";
-            btnProfile.UseVisualStyleBackColor = false;
-            // 
-            // btnLogout
-            // 
-            btnLogout.BackColor = Color.FromArgb(139, 128, 116);
-            btnLogout.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(159, 541);
-            btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(126, 47);
-            btnLogout.TabIndex = 15;
-            btnLogout.Text = "Logout";
-            btnLogout.UseVisualStyleBackColor = false;
             // 
             // txtUsername
             // 
