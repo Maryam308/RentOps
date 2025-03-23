@@ -165,9 +165,9 @@
             lblTitle.Location = new Point(463, 47);
             lblTitle.Margin = new Padding(4, 0, 4, 0);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(660, 76);
+            lblTitle.Size = new Size(655, 76);
             lblTitle.TabIndex = 71;
-            lblTitle.Text = "Add Rental Transaction";
+            lblTitle.Text = "Edit Rental Transaction";
             // 
             // btnBack
             // 

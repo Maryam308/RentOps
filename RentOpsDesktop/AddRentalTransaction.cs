@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class AddRentalTransaction: Form
+    public partial class AddRentalTransaction : Form
     {
         public AddRentalTransaction()
         {
