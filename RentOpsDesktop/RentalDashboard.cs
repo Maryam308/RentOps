@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class RentalDashboard: Form
+    public partial class RentalDashboard : Form
     {
         public RentalDashboard()
         {
             InitializeComponent();
+        }
+
+        private void RentalDashboard_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
