@@ -34,15 +34,17 @@
             lblEmail = new Label();
             lblPhone = new Label();
             lblUsername = new Label();
-            btnSaveProfile = new Button();
             lblProfile = new Label();
+            btnSaveChanges = new Button();
             panel1 = new Panel();
+            btnEquipmentInformation = new Button();
+            btnReturnRecords = new Button();
+            btnRentalTransactions = new Button();
+            btnRentalDashboard = new Button();
             btnLogout = new Button();
             btnProfile = new Button();
-            lblEquipmentInfo = new Label();
-            lblReturnRecord = new Label();
-            lblTransactions = new Label();
-            lblRentalRequest = new Label();
+            btnRentalRequests = new Button();
+            btnEquipmentDashboard = new Button();
             picLogo = new PictureBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
@@ -105,19 +107,6 @@
             lblUsername.TabIndex = 17;
             lblUsername.Text = "Username";
             // 
-            // btnSaveProfile
-            // 
-            btnSaveProfile.BackColor = Color.FromArgb(139, 128, 116);
-            btnSaveProfile.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnSaveProfile.ForeColor = Color.White;
-            btnSaveProfile.Location = new Point(871, 52);
-            btnSaveProfile.Name = "btnSaveProfile";
-            btnSaveProfile.Size = new Size(172, 47);
-            btnSaveProfile.TabIndex = 16;
-            btnSaveProfile.Text = "Save Changes";
-            btnSaveProfile.UseVisualStyleBackColor = false;
-            btnSaveProfile.Click += btnSaveProfile_Click;
-            // 
             // lblProfile
             // 
             lblProfile.AutoSize = true;
@@ -129,95 +118,164 @@
             lblProfile.TabIndex = 15;
             lblProfile.Text = "My Profile";
             // 
+            // btnSaveChanges
+            // 
+            btnSaveChanges.BackColor = Color.FromArgb(139, 128, 116);
+            btnSaveChanges.FlatStyle = FlatStyle.Flat;
+            btnSaveChanges.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnSaveChanges.ForeColor = Color.White;
+            btnSaveChanges.Location = new Point(838, 62);
+            btnSaveChanges.Name = "btnSaveChanges";
+            btnSaveChanges.Size = new Size(173, 47);
+            btnSaveChanges.TabIndex = 24;
+            btnSaveChanges.Text = "Save Changes";
+            btnSaveChanges.UseVisualStyleBackColor = false;
+            // 
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(187, 178, 169);
+            panel1.Controls.Add(btnEquipmentInformation);
+            panel1.Controls.Add(btnReturnRecords);
+            panel1.Controls.Add(btnRentalTransactions);
+            panel1.Controls.Add(btnRentalDashboard);
             panel1.Controls.Add(btnLogout);
             panel1.Controls.Add(btnProfile);
-            panel1.Controls.Add(lblEquipmentInfo);
-            panel1.Controls.Add(lblReturnRecord);
-            panel1.Controls.Add(lblTransactions);
-            panel1.Controls.Add(lblRentalRequest);
+            panel1.Controls.Add(btnRentalRequests);
+            panel1.Controls.Add(btnEquipmentDashboard);
             panel1.Controls.Add(picLogo);
-            panel1.Location = new Point(2, 1);
+            panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(306, 612);
-            panel1.TabIndex = 14;
+            panel1.Size = new Size(267, 612);
+            panel1.TabIndex = 25;
+            // 
+            // btnEquipmentInformation
+            // 
+            btnEquipmentInformation.BackColor = Color.FromArgb(187, 178, 169);
+            btnEquipmentInformation.BackgroundImageLayout = ImageLayout.None;
+            btnEquipmentInformation.FlatAppearance.BorderSize = 0;
+            btnEquipmentInformation.FlatStyle = FlatStyle.Flat;
+            btnEquipmentInformation.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            btnEquipmentInformation.ForeColor = Color.White;
+            btnEquipmentInformation.Location = new Point(12, 438);
+            btnEquipmentInformation.Name = "btnEquipmentInformation";
+            btnEquipmentInformation.Size = new Size(230, 51);
+            btnEquipmentInformation.TabIndex = 28;
+            btnEquipmentInformation.Text = "Equipment Information";
+            btnEquipmentInformation.UseVisualStyleBackColor = false;
+            // 
+            // btnReturnRecords
+            // 
+            btnReturnRecords.BackColor = Color.FromArgb(187, 178, 169);
+            btnReturnRecords.BackgroundImageLayout = ImageLayout.None;
+            btnReturnRecords.FlatAppearance.BorderSize = 0;
+            btnReturnRecords.FlatStyle = FlatStyle.Flat;
+            btnReturnRecords.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            btnReturnRecords.ForeColor = Color.White;
+            btnReturnRecords.Location = new Point(23, 378);
+            btnReturnRecords.Name = "btnReturnRecords";
+            btnReturnRecords.Size = new Size(206, 51);
+            btnReturnRecords.TabIndex = 27;
+            btnReturnRecords.Text = "Return Records";
+            btnReturnRecords.UseVisualStyleBackColor = false;
+            // 
+            // btnRentalTransactions
+            // 
+            btnRentalTransactions.BackColor = Color.FromArgb(187, 178, 169);
+            btnRentalTransactions.BackgroundImageLayout = ImageLayout.None;
+            btnRentalTransactions.FlatAppearance.BorderSize = 0;
+            btnRentalTransactions.FlatStyle = FlatStyle.Flat;
+            btnRentalTransactions.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            btnRentalTransactions.ForeColor = Color.White;
+            btnRentalTransactions.Location = new Point(23, 318);
+            btnRentalTransactions.Name = "btnRentalTransactions";
+            btnRentalTransactions.Size = new Size(206, 51);
+            btnRentalTransactions.TabIndex = 26;
+            btnRentalTransactions.Text = "Rental Transactions";
+            btnRentalTransactions.UseVisualStyleBackColor = false;
+            // 
+            // btnRentalDashboard
+            // 
+            btnRentalDashboard.BackColor = Color.FromArgb(187, 178, 169);
+            btnRentalDashboard.BackgroundImageLayout = ImageLayout.None;
+            btnRentalDashboard.FlatAppearance.BorderSize = 0;
+            btnRentalDashboard.FlatStyle = FlatStyle.Flat;
+            btnRentalDashboard.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
+            btnRentalDashboard.ForeColor = Color.FromArgb(135, 66, 62);
+            btnRentalDashboard.Location = new Point(11, 201);
+            btnRentalDashboard.Name = "btnRentalDashboard";
+            btnRentalDashboard.Size = new Size(253, 51);
+            btnRentalDashboard.TabIndex = 25;
+            btnRentalDashboard.Text = "Rental Dashboard";
+            btnRentalDashboard.TextAlign = ContentAlignment.MiddleLeft;
+            btnRentalDashboard.UseVisualStyleBackColor = false;
             // 
             // btnLogout
             // 
             btnLogout.BackColor = Color.FromArgb(139, 128, 116);
-            btnLogout.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnLogout.BackgroundImageLayout = ImageLayout.None;
+            btnLogout.FlatAppearance.BorderSize = 0;
+            btnLogout.FlatStyle = FlatStyle.Flat;
+            btnLogout.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(159, 541);
+            btnLogout.Location = new Point(136, 542);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(126, 47);
-            btnLogout.TabIndex = 15;
+            btnLogout.Size = new Size(94, 53);
+            btnLogout.TabIndex = 24;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = false;
             // 
             // btnProfile
             // 
             btnProfile.BackColor = Color.FromArgb(139, 128, 116);
-            btnProfile.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnProfile.BackgroundImageLayout = ImageLayout.None;
+            btnProfile.FlatAppearance.BorderSize = 0;
+            btnProfile.FlatStyle = FlatStyle.Flat;
+            btnProfile.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             btnProfile.ForeColor = Color.White;
-            btnProfile.Location = new Point(12, 541);
+            btnProfile.Location = new Point(24, 542);
             btnProfile.Name = "btnProfile";
-            btnProfile.Size = new Size(126, 47);
-            btnProfile.TabIndex = 11;
+            btnProfile.Size = new Size(94, 53);
+            btnProfile.TabIndex = 23;
             btnProfile.Text = "Profile";
             btnProfile.UseVisualStyleBackColor = false;
             // 
-            // lblEquipmentInfo
+            // btnRentalRequests
             // 
-            lblEquipmentInfo.AutoSize = true;
-            lblEquipmentInfo.Font = new Font("Segoe UI", 14.8000011F);
-            lblEquipmentInfo.ForeColor = Color.White;
-            lblEquipmentInfo.Location = new Point(12, 435);
-            lblEquipmentInfo.Name = "lblEquipmentInfo";
-            lblEquipmentInfo.Size = new Size(273, 35);
-            lblEquipmentInfo.TabIndex = 14;
-            lblEquipmentInfo.Text = "Equipment Information";
+            btnRentalRequests.BackColor = Color.FromArgb(187, 178, 169);
+            btnRentalRequests.BackgroundImageLayout = ImageLayout.None;
+            btnRentalRequests.FlatAppearance.BorderSize = 0;
+            btnRentalRequests.FlatStyle = FlatStyle.Flat;
+            btnRentalRequests.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            btnRentalRequests.ForeColor = Color.White;
+            btnRentalRequests.Location = new Point(23, 258);
+            btnRentalRequests.Name = "btnRentalRequests";
+            btnRentalRequests.Size = new Size(206, 51);
+            btnRentalRequests.TabIndex = 22;
+            btnRentalRequests.Text = "Rental Requests";
+            btnRentalRequests.UseVisualStyleBackColor = false;
             // 
-            // lblReturnRecord
+            // btnEquipmentDashboard
             // 
-            lblReturnRecord.AutoSize = true;
-            lblReturnRecord.Font = new Font("Segoe UI", 14.8000011F);
-            lblReturnRecord.ForeColor = Color.White;
-            lblReturnRecord.Location = new Point(56, 369);
-            lblReturnRecord.Name = "lblReturnRecord";
-            lblReturnRecord.Size = new Size(183, 35);
-            lblReturnRecord.TabIndex = 13;
-            lblReturnRecord.Text = "Return Records";
-            // 
-            // lblTransactions
-            // 
-            lblTransactions.AutoSize = true;
-            lblTransactions.Font = new Font("Segoe UI", 14.8000011F);
-            lblTransactions.ForeColor = Color.White;
-            lblTransactions.Location = new Point(31, 292);
-            lblTransactions.Name = "lblTransactions";
-            lblTransactions.Size = new Size(227, 35);
-            lblTransactions.TabIndex = 12;
-            lblTransactions.Text = "Rental Transactions";
-            // 
-            // lblRentalRequest
-            // 
-            lblRentalRequest.AutoSize = true;
-            lblRentalRequest.Font = new Font("Segoe UI", 14.8000011F);
-            lblRentalRequest.ForeColor = Color.White;
-            lblRentalRequest.Location = new Point(56, 232);
-            lblRentalRequest.Name = "lblRentalRequest";
-            lblRentalRequest.Size = new Size(189, 35);
-            lblRentalRequest.TabIndex = 11;
-            lblRentalRequest.Text = "Rental Requests";
+            btnEquipmentDashboard.BackColor = Color.FromArgb(187, 178, 169);
+            btnEquipmentDashboard.BackgroundImageLayout = ImageLayout.None;
+            btnEquipmentDashboard.FlatAppearance.BorderSize = 0;
+            btnEquipmentDashboard.FlatStyle = FlatStyle.Flat;
+            btnEquipmentDashboard.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
+            btnEquipmentDashboard.ForeColor = Color.White;
+            btnEquipmentDashboard.Location = new Point(11, 154);
+            btnEquipmentDashboard.Name = "btnEquipmentDashboard";
+            btnEquipmentDashboard.Size = new Size(253, 51);
+            btnEquipmentDashboard.TabIndex = 21;
+            btnEquipmentDashboard.Text = "Equipment Dashboard";
+            btnEquipmentDashboard.TextAlign = ContentAlignment.MiddleLeft;
+            btnEquipmentDashboard.UseVisualStyleBackColor = false;
             // 
             // picLogo
             // 
             picLogo.Image = Properties.Resources.rentOpsLogo;
-            picLogo.Location = new Point(31, 12);
+            picLogo.Location = new Point(65, 12);
             picLogo.Name = "picLogo";
-            picLogo.Size = new Size(196, 180);
+            picLogo.Size = new Size(121, 120);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picLogo.TabIndex = 4;
             picLogo.TabStop = false;
@@ -227,19 +285,18 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1088, 611);
+            Controls.Add(panel1);
+            Controls.Add(btnSaveChanges);
             Controls.Add(txtEmail);
             Controls.Add(txtPhone);
             Controls.Add(txtUsername);
             Controls.Add(lblEmail);
             Controls.Add(lblPhone);
             Controls.Add(lblUsername);
-            Controls.Add(btnSaveProfile);
             Controls.Add(lblProfile);
-            Controls.Add(panel1);
             Name = "EditProfile";
             Text = "EditProfile";
             panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -253,15 +310,17 @@
         private Label lblEmail;
         private Label lblPhone;
         private Label lblUsername;
-        private Button btnSaveProfile;
         private Label lblProfile;
+        private Button btnSaveChanges;
         private Panel panel1;
+        private Button btnEquipmentInformation;
+        private Button btnReturnRecords;
+        private Button btnRentalTransactions;
+        private Button btnRentalDashboard;
         private Button btnLogout;
         private Button btnProfile;
-        private Label lblEquipmentInfo;
-        private Label lblReturnRecord;
-        private Label lblTransactions;
-        private Label lblRentalRequest;
+        private Button btnRentalRequests;
+        private Button btnEquipmentDashboard;
         private PictureBox picLogo;
     }
 }
