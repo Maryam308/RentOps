@@ -60,7 +60,7 @@
             lblRentalReport.AutoSize = true;
             lblRentalReport.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0, true);
             lblRentalReport.ForeColor = Color.FromArgb(135, 66, 62);
-            lblRentalReport.Location = new Point(386, 38);
+            lblRentalReport.Location = new Point(432, 38);
             lblRentalReport.Name = "lblRentalReport";
             lblRentalReport.Size = new Size(272, 52);
             lblRentalReport.TabIndex = 9;
