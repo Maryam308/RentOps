@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class AddReturnRecord: Form
+    public partial class AddReturnRecord : Form
     {
         public AddReturnRecord()
         {
             InitializeComponent();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

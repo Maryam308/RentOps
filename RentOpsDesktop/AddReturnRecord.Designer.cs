@@ -28,12 +28,229 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "AddReturnRecord";
+            btnAdd = new Button();
+            btnBack = new Button();
+            lblAddReturnRecords = new Label();
+            lblAssociatedTransaction = new Label();
+            txtAssociatedTransaction = new TextBox();
+            lblReturnDate = new Label();
+            dtpReturnDate = new DateTimePicker();
+            lblReturnCondition = new Label();
+            cmbReturnCondition = new ComboBox();
+            lblLateReturnPenalty = new Label();
+            lblAdditionalCharge = new Label();
+            lblAdditionalDocument = new Label();
+            btnUpload = new Button();
+            txtLateReturnPenalty = new TextBox();
+            txtAdditionalCharge = new TextBox();
+            SuspendLayout();
+            // 
+            // btnAdd
+            // 
+            btnAdd.BackColor = Color.FromArgb(121, 86, 76);
+            btnAdd.BackgroundImageLayout = ImageLayout.None;
+            btnAdd.FlatAppearance.BorderSize = 0;
+            btnAdd.FlatStyle = FlatStyle.Flat;
+            btnAdd.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAdd.ForeColor = Color.FromArgb(241, 240, 234);
+            btnAdd.Location = new Point(677, 376);
+            btnAdd.Margin = new Padding(0);
+            btnAdd.Name = "btnAdd";
+            btnAdd.Size = new Size(223, 48);
+            btnAdd.TabIndex = 13;
+            btnAdd.Text = "Add Record";
+            btnAdd.UseVisualStyleBackColor = false;
+            // 
+            // btnBack
+            // 
+            btnBack.BackColor = Color.FromArgb(139, 128, 116);
+            btnBack.BackgroundImageLayout = ImageLayout.None;
+            btnBack.FlatAppearance.BorderSize = 0;
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            btnBack.ForeColor = Color.White;
+            btnBack.Location = new Point(20, 17);
+            btnBack.Margin = new Padding(3, 2, 3, 2);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(155, 44);
+            btnBack.TabIndex = 12;
+            btnBack.Text = "Back";
+            btnBack.UseVisualStyleBackColor = false;
+            // 
+            // lblAddReturnRecords
+            // 
+            lblAddReturnRecords.AutoSize = true;
+            lblAddReturnRecords.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic);
+            lblAddReturnRecords.ForeColor = Color.FromArgb(135, 66, 62);
+            lblAddReturnRecords.Location = new Point(337, 30);
+            lblAddReturnRecords.Name = "lblAddReturnRecords";
+            lblAddReturnRecords.Size = new Size(304, 42);
+            lblAddReturnRecords.TabIndex = 11;
+            lblAddReturnRecords.Text = "Add Return Records";
+            // 
+            // lblAssociatedTransaction
+            // 
+            lblAssociatedTransaction.AutoSize = true;
+            lblAssociatedTransaction.Font = new Font("Segoe UI", 14F);
+            lblAssociatedTransaction.Location = new Point(42, 118);
+            lblAssociatedTransaction.Name = "lblAssociatedTransaction";
+            lblAssociatedTransaction.Size = new Size(203, 25);
+            lblAssociatedTransaction.TabIndex = 14;
+            lblAssociatedTransaction.Text = "Associated Transaction";
+            // 
+            // txtAssociatedTransaction
+            // 
+            txtAssociatedTransaction.BorderStyle = BorderStyle.FixedSingle;
+            txtAssociatedTransaction.Font = new Font("Segoe UI", 14F);
+            txtAssociatedTransaction.Location = new Point(266, 114);
+            txtAssociatedTransaction.Name = "txtAssociatedTransaction";
+            txtAssociatedTransaction.Size = new Size(205, 32);
+            txtAssociatedTransaction.TabIndex = 15;
+            // 
+            // lblReturnDate
+            // 
+            lblReturnDate.AutoSize = true;
+            lblReturnDate.Font = new Font("Segoe UI", 14F);
+            lblReturnDate.Location = new Point(88, 205);
+            lblReturnDate.Name = "lblReturnDate";
+            lblReturnDate.Size = new Size(111, 25);
+            lblReturnDate.TabIndex = 16;
+            lblReturnDate.Text = "Return Date";
+            // 
+            // dtpReturnDate
+            // 
+            dtpReturnDate.CalendarFont = new Font("Segoe UI", 14F);
+            dtpReturnDate.Location = new Point(266, 207);
+            dtpReturnDate.Name = "dtpReturnDate";
+            dtpReturnDate.Size = new Size(205, 23);
+            dtpReturnDate.TabIndex = 17;
+            // 
+            // lblReturnCondition
+            // 
+            lblReturnCondition.AutoSize = true;
+            lblReturnCondition.Font = new Font("Segoe UI", 14F);
+            lblReturnCondition.Location = new Point(66, 294);
+            lblReturnCondition.Name = "lblReturnCondition";
+            lblReturnCondition.Size = new Size(155, 25);
+            lblReturnCondition.TabIndex = 18;
+            lblReturnCondition.Text = "Return Condition";
+            // 
+            // cmbReturnCondition
+            // 
+            cmbReturnCondition.Font = new Font("Segoe UI", 14F);
+            cmbReturnCondition.FormattingEnabled = true;
+            cmbReturnCondition.Location = new Point(266, 291);
+            cmbReturnCondition.Name = "cmbReturnCondition";
+            cmbReturnCondition.Size = new Size(205, 33);
+            cmbReturnCondition.TabIndex = 19;
+            // 
+            // lblLateReturnPenalty
+            // 
+            lblLateReturnPenalty.AutoSize = true;
+            lblLateReturnPenalty.Font = new Font("Segoe UI", 14F);
+            lblLateReturnPenalty.Location = new Point(526, 116);
+            lblLateReturnPenalty.Name = "lblLateReturnPenalty";
+            lblLateReturnPenalty.Size = new Size(173, 25);
+            lblLateReturnPenalty.TabIndex = 20;
+            lblLateReturnPenalty.Text = "Late Return Penalty";
+            // 
+            // lblAdditionalCharge
+            // 
+            lblAdditionalCharge.AutoSize = true;
+            lblAdditionalCharge.Font = new Font("Segoe UI", 14F);
+            lblAdditionalCharge.Location = new Point(530, 207);
+            lblAdditionalCharge.Name = "lblAdditionalCharge";
+            lblAdditionalCharge.Size = new Size(165, 25);
+            lblAdditionalCharge.TabIndex = 21;
+            lblAdditionalCharge.Text = "Additional Charge";
+            lblAdditionalCharge.Click += label2_Click;
+            // 
+            // lblAdditionalDocument
+            // 
+            lblAdditionalDocument.AutoSize = true;
+            lblAdditionalDocument.Font = new Font("Segoe UI", 14F);
+            lblAdditionalDocument.Location = new Point(517, 291);
+            lblAdditionalDocument.Name = "lblAdditionalDocument";
+            lblAdditionalDocument.Size = new Size(191, 25);
+            lblAdditionalDocument.TabIndex = 22;
+            lblAdditionalDocument.Text = "Additional Document";
+            // 
+            // btnUpload
+            // 
+            btnUpload.BackColor = Color.FromArgb(121, 86, 76);
+            btnUpload.BackgroundImageLayout = ImageLayout.None;
+            btnUpload.FlatAppearance.BorderSize = 2;
+            btnUpload.FlatStyle = FlatStyle.Flat;
+            btnUpload.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic);
+            btnUpload.ForeColor = Color.FromArgb(241, 240, 234);
+            btnUpload.Location = new Point(745, 286);
+            btnUpload.Margin = new Padding(0);
+            btnUpload.Name = "btnUpload";
+            btnUpload.Size = new Size(125, 37);
+            btnUpload.TabIndex = 23;
+            btnUpload.Text = "Upload";
+            btnUpload.UseVisualStyleBackColor = false;
+            // 
+            // txtLateReturnPenalty
+            // 
+            txtLateReturnPenalty.BorderStyle = BorderStyle.FixedSingle;
+            txtLateReturnPenalty.Font = new Font("Segoe UI", 14F);
+            txtLateReturnPenalty.Location = new Point(725, 116);
+            txtLateReturnPenalty.Name = "txtLateReturnPenalty";
+            txtLateReturnPenalty.Size = new Size(165, 32);
+            txtLateReturnPenalty.TabIndex = 24;
+            // 
+            // txtAdditionalCharge
+            // 
+            txtAdditionalCharge.BorderStyle = BorderStyle.FixedSingle;
+            txtAdditionalCharge.Font = new Font("Segoe UI", 14F);
+            txtAdditionalCharge.Location = new Point(725, 203);
+            txtAdditionalCharge.Name = "txtAdditionalCharge";
+            txtAdditionalCharge.Size = new Size(165, 32);
+            txtAdditionalCharge.TabIndex = 25;
+            // 
+            // AddReturnRecord
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(952, 458);
+            Controls.Add(txtAdditionalCharge);
+            Controls.Add(txtLateReturnPenalty);
+            Controls.Add(btnUpload);
+            Controls.Add(lblAdditionalDocument);
+            Controls.Add(lblAdditionalCharge);
+            Controls.Add(lblLateReturnPenalty);
+            Controls.Add(cmbReturnCondition);
+            Controls.Add(lblReturnCondition);
+            Controls.Add(dtpReturnDate);
+            Controls.Add(lblReturnDate);
+            Controls.Add(txtAssociatedTransaction);
+            Controls.Add(lblAssociatedTransaction);
+            Controls.Add(btnAdd);
+            Controls.Add(btnBack);
+            Controls.Add(lblAddReturnRecords);
+            Name = "AddReturnRecord";
+            Text = "AddReturnRecord";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
+
+        private Button btnAdd;
+        private Button btnBack;
+        private Label lblAddReturnRecords;
+        private Label lblAssociatedTransaction;
+        private TextBox txtAssociatedTransaction;
+        private Label lblReturnDate;
+        private DateTimePicker dtpReturnDate;
+        private Label lblReturnCondition;
+        private ComboBox cmbReturnCondition;
+        private Label lblLateReturnPenalty;
+        private Label lblAdditionalCharge;
+        private Label lblAdditionalDocument;
+        private Button btnUpload;
+        private TextBox txtLateReturnPenalty;
+        private TextBox txtAdditionalCharge;
     }
 }

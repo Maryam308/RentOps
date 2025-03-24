@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class EquipmentDashboard: Form
+    public partial class EquipmentDashboard : Form
     {
         public EquipmentDashboard()
         {
             InitializeComponent();
+        }
+
+        private void lblRentalDashboard_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
