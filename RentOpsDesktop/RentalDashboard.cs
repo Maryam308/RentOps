@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace RentOpsDesktop
+{
+    public partial class RentalDashboard : Form
+    {
+        public RentalDashboard()
+        {
+            InitializeComponent();
+        }
+
+        private void RentalDashboard_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
