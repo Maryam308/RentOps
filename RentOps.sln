@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentOpsDesktop", "RentOpsDesktop\RentOpsDesktop.csproj", "{C4C0B5E4-3D5E-4D3E-B16E-4E17279F136D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentOpsBusinessObjects", "RentOpsBusinessObjects\RentOpsBusinessObjects.csproj", "{D6F899D4-A631-4B53-AF4A-9BDD3D545176}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentOpsObjects", "RentOpsObjects\RentOpsObjects.csproj", "{FA0E2DFD-88CF-4C5F-8DF4-F61747760255}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{C4C0B5E4-3D5E-4D3E-B16E-4E17279F136D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4C0B5E4-3D5E-4D3E-B16E-4E17279F136D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4C0B5E4-3D5E-4D3E-B16E-4E17279F136D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D6F899D4-A631-4B53-AF4A-9BDD3D545176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6F899D4-A631-4B53-AF4A-9BDD3D545176}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6F899D4-A631-4B53-AF4A-9BDD3D545176}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6F899D4-A631-4B53-AF4A-9BDD3D545176}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA0E2DFD-88CF-4C5F-8DF4-F61747760255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA0E2DFD-88CF-4C5F-8DF4-F61747760255}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA0E2DFD-88CF-4C5F-8DF4-F61747760255}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA0E2DFD-88CF-4C5F-8DF4-F61747760255}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
