@@ -42,6 +42,8 @@
             btnBack = new Button();
             lblEquipmentDashboard = new Label();
             btnUpdateEquipment = new Button();
+            btnDeleteEquipment = new Button();
+            btnAddEquipment = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvEquipment).BeginInit();
             pnlNavigationSideBar.SuspendLayout();
             SuspendLayout();
@@ -54,10 +56,10 @@
             btnSearch.FlatStyle = FlatStyle.Flat;
             btnSearch.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
-            btnSearch.Location = new Point(250, 76);
+            btnSearch.Location = new Point(286, 101);
             btnSearch.Margin = new Padding(0);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(223, 39);
+            btnSearch.Size = new Size(255, 52);
             btnSearch.TabIndex = 18;
             btnSearch.Text = "Search";
             btnSearch.UseVisualStyleBackColor = false;
@@ -66,9 +68,11 @@
             // 
             dgvEquipment.BackgroundColor = Color.WhiteSmoke;
             dgvEquipment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvEquipment.Location = new Point(250, 129);
+            dgvEquipment.Location = new Point(286, 172);
+            dgvEquipment.Margin = new Padding(3, 4, 3, 4);
             dgvEquipment.Name = "dgvEquipment";
-            dgvEquipment.Size = new Size(678, 253);
+            dgvEquipment.RowHeadersWidth = 51;
+            dgvEquipment.Size = new Size(775, 337);
             dgvEquipment.TabIndex = 20;
             // 
             // pnlNavigationSideBar
@@ -86,7 +90,7 @@
             pnlNavigationSideBar.Location = new Point(0, 0);
             pnlNavigationSideBar.Margin = new Padding(0);
             pnlNavigationSideBar.Name = "pnlNavigationSideBar";
-            pnlNavigationSideBar.Size = new Size(227, 458);
+            pnlNavigationSideBar.Size = new Size(259, 611);
             pnlNavigationSideBar.TabIndex = 19;
             // 
             // btnEquipmentInformation
@@ -97,10 +101,9 @@
             btnEquipmentInformation.FlatStyle = FlatStyle.Flat;
             btnEquipmentInformation.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnEquipmentInformation.ForeColor = Color.White;
-            btnEquipmentInformation.Location = new Point(13, 320);
-            btnEquipmentInformation.Margin = new Padding(3, 2, 3, 2);
+            btnEquipmentInformation.Location = new Point(15, 427);
             btnEquipmentInformation.Name = "btnEquipmentInformation";
-            btnEquipmentInformation.Size = new Size(201, 38);
+            btnEquipmentInformation.Size = new Size(230, 51);
             btnEquipmentInformation.TabIndex = 20;
             btnEquipmentInformation.Text = "Equipment Information";
             btnEquipmentInformation.UseVisualStyleBackColor = false;
@@ -113,10 +116,9 @@
             btnReturnRecords.FlatStyle = FlatStyle.Flat;
             btnReturnRecords.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnReturnRecords.ForeColor = Color.White;
-            btnReturnRecords.Location = new Point(23, 275);
-            btnReturnRecords.Margin = new Padding(3, 2, 3, 2);
+            btnReturnRecords.Location = new Point(26, 367);
             btnReturnRecords.Name = "btnReturnRecords";
-            btnReturnRecords.Size = new Size(180, 38);
+            btnReturnRecords.Size = new Size(206, 51);
             btnReturnRecords.TabIndex = 19;
             btnReturnRecords.Text = "Return Records";
             btnReturnRecords.UseVisualStyleBackColor = false;
@@ -129,10 +131,9 @@
             btnRentalTransactions.FlatStyle = FlatStyle.Flat;
             btnRentalTransactions.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnRentalTransactions.ForeColor = Color.White;
-            btnRentalTransactions.Location = new Point(23, 230);
-            btnRentalTransactions.Margin = new Padding(3, 2, 3, 2);
+            btnRentalTransactions.Location = new Point(26, 307);
             btnRentalTransactions.Name = "btnRentalTransactions";
-            btnRentalTransactions.Size = new Size(180, 38);
+            btnRentalTransactions.Size = new Size(206, 51);
             btnRentalTransactions.TabIndex = 18;
             btnRentalTransactions.Text = "Rental Transactions";
             btnRentalTransactions.UseVisualStyleBackColor = false;
@@ -145,10 +146,9 @@
             btnRentalDashboard.FlatStyle = FlatStyle.Flat;
             btnRentalDashboard.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             btnRentalDashboard.ForeColor = Color.FromArgb(135, 66, 62);
-            btnRentalDashboard.Location = new Point(2, 129);
-            btnRentalDashboard.Margin = new Padding(3, 2, 3, 2);
+            btnRentalDashboard.Location = new Point(2, 172);
             btnRentalDashboard.Name = "btnRentalDashboard";
-            btnRentalDashboard.Size = new Size(221, 38);
+            btnRentalDashboard.Size = new Size(253, 51);
             btnRentalDashboard.TabIndex = 17;
             btnRentalDashboard.Text = "Rental Dashboard";
             btnRentalDashboard.TextAlign = ContentAlignment.MiddleLeft;
@@ -162,13 +162,13 @@
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(123, 398);
-            btnLogout.Margin = new Padding(3, 2, 3, 2);
+            btnLogout.Location = new Point(141, 531);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(82, 40);
+            btnLogout.Size = new Size(94, 53);
             btnLogout.TabIndex = 16;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = false;
+            btnLogout.Click += btnLogout_Click;
             // 
             // btnProfile
             // 
@@ -178,10 +178,9 @@
             btnProfile.FlatStyle = FlatStyle.Flat;
             btnProfile.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             btnProfile.ForeColor = Color.White;
-            btnProfile.Location = new Point(22, 398);
-            btnProfile.Margin = new Padding(3, 2, 3, 2);
+            btnProfile.Location = new Point(25, 531);
             btnProfile.Name = "btnProfile";
-            btnProfile.Size = new Size(82, 40);
+            btnProfile.Size = new Size(94, 53);
             btnProfile.TabIndex = 15;
             btnProfile.Text = "Profile";
             btnProfile.UseVisualStyleBackColor = false;
@@ -194,10 +193,9 @@
             btnRentalRequests.FlatStyle = FlatStyle.Flat;
             btnRentalRequests.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnRentalRequests.ForeColor = Color.White;
-            btnRentalRequests.Location = new Point(23, 185);
-            btnRentalRequests.Margin = new Padding(3, 2, 3, 2);
+            btnRentalRequests.Location = new Point(26, 247);
             btnRentalRequests.Name = "btnRentalRequests";
-            btnRentalRequests.Size = new Size(180, 38);
+            btnRentalRequests.Size = new Size(206, 51);
             btnRentalRequests.TabIndex = 12;
             btnRentalRequests.Text = "Rental Requests";
             btnRentalRequests.UseVisualStyleBackColor = false;
@@ -210,10 +208,9 @@
             btnEquipmentDashboard.FlatStyle = FlatStyle.Flat;
             btnEquipmentDashboard.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             btnEquipmentDashboard.ForeColor = Color.White;
-            btnEquipmentDashboard.Location = new Point(3, 87);
-            btnEquipmentDashboard.Margin = new Padding(3, 2, 3, 2);
+            btnEquipmentDashboard.Location = new Point(3, 116);
             btnEquipmentDashboard.Name = "btnEquipmentDashboard";
-            btnEquipmentDashboard.Size = new Size(221, 38);
+            btnEquipmentDashboard.Size = new Size(253, 51);
             btnEquipmentDashboard.TabIndex = 10;
             btnEquipmentDashboard.Text = "Equipment Dashboard";
             btnEquipmentDashboard.TextAlign = ContentAlignment.MiddleLeft;
@@ -227,10 +224,9 @@
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(31, 21);
-            btnBack.Margin = new Padding(3, 2, 3, 2);
+            btnBack.Location = new Point(35, 28);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(155, 44);
+            btnBack.Size = new Size(177, 59);
             btnBack.TabIndex = 9;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
@@ -240,9 +236,9 @@
             lblEquipmentDashboard.AutoSize = true;
             lblEquipmentDashboard.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic);
             lblEquipmentDashboard.ForeColor = Color.FromArgb(135, 66, 62);
-            lblEquipmentDashboard.Location = new Point(432, 21);
+            lblEquipmentDashboard.Location = new Point(494, 28);
             lblEquipmentDashboard.Name = "lblEquipmentDashboard";
-            lblEquipmentDashboard.Size = new Size(341, 42);
+            lblEquipmentDashboard.Size = new Size(428, 52);
             lblEquipmentDashboard.TabIndex = 17;
             lblEquipmentDashboard.Text = "Equipment Dashboard";
             lblEquipmentDashboard.Click += lblRentalDashboard_Click;
@@ -255,26 +251,65 @@
             btnUpdateEquipment.FlatStyle = FlatStyle.Flat;
             btnUpdateEquipment.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnUpdateEquipment.ForeColor = Color.FromArgb(241, 240, 234);
-            btnUpdateEquipment.Location = new Point(705, 397);
+            btnUpdateEquipment.Location = new Point(806, 529);
             btnUpdateEquipment.Margin = new Padding(0);
             btnUpdateEquipment.Name = "btnUpdateEquipment";
-            btnUpdateEquipment.Size = new Size(223, 39);
+            btnUpdateEquipment.Size = new Size(255, 52);
             btnUpdateEquipment.TabIndex = 21;
             btnUpdateEquipment.Text = "Update Equipment";
             btnUpdateEquipment.UseVisualStyleBackColor = false;
+            btnUpdateEquipment.Click += btnUpdateEquipment_Click;
+            // 
+            // btnDeleteEquipment
+            // 
+            btnDeleteEquipment.BackColor = Color.FromArgb(121, 86, 76);
+            btnDeleteEquipment.BackgroundImageLayout = ImageLayout.None;
+            btnDeleteEquipment.FlatAppearance.BorderSize = 0;
+            btnDeleteEquipment.FlatStyle = FlatStyle.Flat;
+            btnDeleteEquipment.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnDeleteEquipment.ForeColor = Color.FromArgb(241, 240, 234);
+            btnDeleteEquipment.Location = new Point(529, 528);
+            btnDeleteEquipment.Margin = new Padding(0);
+            btnDeleteEquipment.Name = "btnDeleteEquipment";
+            btnDeleteEquipment.Size = new Size(255, 52);
+            btnDeleteEquipment.TabIndex = 22;
+            btnDeleteEquipment.Text = "Delete Equipment";
+            btnDeleteEquipment.UseVisualStyleBackColor = false;
+            btnDeleteEquipment.Click += btnDeleteEquipment_Click;
+            // 
+            // btnAddEquipment
+            // 
+            btnAddEquipment.BackColor = Color.FromArgb(121, 86, 76);
+            btnAddEquipment.BackgroundImageLayout = ImageLayout.None;
+            btnAddEquipment.FlatAppearance.BorderSize = 0;
+            btnAddEquipment.FlatStyle = FlatStyle.Flat;
+            btnAddEquipment.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnAddEquipment.ForeColor = Color.FromArgb(241, 240, 234);
+            btnAddEquipment.Location = new Point(306, 528);
+            btnAddEquipment.Margin = new Padding(0);
+            btnAddEquipment.Name = "btnAddEquipment";
+            btnAddEquipment.Size = new Size(208, 52);
+            btnAddEquipment.TabIndex = 23;
+            btnAddEquipment.Text = "Add Equipment";
+            btnAddEquipment.UseVisualStyleBackColor = false;
+            btnAddEquipment.Click += btnAddEquipment_Click;
             // 
             // EquipmentDashboard
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(952, 458);
+            ClientSize = new Size(1088, 611);
+            Controls.Add(btnAddEquipment);
+            Controls.Add(btnDeleteEquipment);
             Controls.Add(btnUpdateEquipment);
             Controls.Add(btnSearch);
             Controls.Add(dgvEquipment);
             Controls.Add(pnlNavigationSideBar);
             Controls.Add(lblEquipmentDashboard);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "EquipmentDashboard";
             Text = "EquipmentDashboard";
+            Load += EquipmentDashboard_Load;
             ((System.ComponentModel.ISupportInitialize)dgvEquipment).EndInit();
             pnlNavigationSideBar.ResumeLayout(false);
             ResumeLayout(false);
@@ -297,5 +332,7 @@
         private Button btnBack;
         private Label lblEquipmentDashboard;
         private Button btnUpdateEquipment;
+        private Button btnDeleteEquipment;
+        private Button btnAddEquipment;
     }
 }
