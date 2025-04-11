@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            btnSearch = new Button();
+            btnReset = new Button();
             dgvEquipment = new DataGridView();
             pnlNavigationSideBar = new Panel();
             btnEquipmentInformation = new Button();
@@ -44,35 +44,43 @@
             btnUpdateEquipment = new Button();
             btnDeleteEquipment = new Button();
             btnAddEquipment = new Button();
+            cmbConditionStatus = new ComboBox();
+            cmbEquipmentCategory = new ComboBox();
+            cmbAvailabilityStatus = new ComboBox();
+            btnFilter = new Button();
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvEquipment).BeginInit();
             pnlNavigationSideBar.SuspendLayout();
             SuspendLayout();
             // 
-            // btnSearch
+            // btnReset
             // 
-            btnSearch.BackColor = Color.FromArgb(121, 86, 76);
-            btnSearch.BackgroundImageLayout = ImageLayout.None;
-            btnSearch.FlatAppearance.BorderSize = 0;
-            btnSearch.FlatStyle = FlatStyle.Flat;
-            btnSearch.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
-            btnSearch.Location = new Point(286, 101);
-            btnSearch.Margin = new Padding(0);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(255, 52);
-            btnSearch.TabIndex = 18;
-            btnSearch.Text = "Search";
-            btnSearch.UseVisualStyleBackColor = false;
+            btnReset.BackColor = Color.FromArgb(121, 86, 76);
+            btnReset.BackgroundImageLayout = ImageLayout.None;
+            btnReset.FlatAppearance.BorderSize = 0;
+            btnReset.FlatStyle = FlatStyle.Flat;
+            btnReset.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
+            btnReset.ForeColor = Color.FromArgb(241, 240, 234);
+            btnReset.Location = new Point(939, 36);
+            btnReset.Margin = new Padding(0);
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(102, 41);
+            btnReset.TabIndex = 18;
+            btnReset.Text = "Reset";
+            btnReset.UseVisualStyleBackColor = false;
+            btnReset.Click += btnReset_Click;
             // 
             // dgvEquipment
             // 
             dgvEquipment.BackgroundColor = Color.WhiteSmoke;
             dgvEquipment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvEquipment.Location = new Point(286, 172);
+            dgvEquipment.Location = new Point(286, 193);
             dgvEquipment.Margin = new Padding(3, 4, 3, 4);
             dgvEquipment.Name = "dgvEquipment";
             dgvEquipment.RowHeadersWidth = 51;
-            dgvEquipment.Size = new Size(775, 337);
+            dgvEquipment.Size = new Size(775, 299);
             dgvEquipment.TabIndex = 20;
             // 
             // pnlNavigationSideBar
@@ -236,7 +244,7 @@
             lblEquipmentDashboard.AutoSize = true;
             lblEquipmentDashboard.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic);
             lblEquipmentDashboard.ForeColor = Color.FromArgb(135, 66, 62);
-            lblEquipmentDashboard.Location = new Point(494, 28);
+            lblEquipmentDashboard.Location = new Point(286, 24);
             lblEquipmentDashboard.Name = "lblEquipmentDashboard";
             lblEquipmentDashboard.Size = new Size(428, 52);
             lblEquipmentDashboard.TabIndex = 17;
@@ -294,15 +302,93 @@
             btnAddEquipment.UseVisualStyleBackColor = false;
             btnAddEquipment.Click += btnAddEquipment_Click;
             // 
+            // cmbConditionStatus
+            // 
+            cmbConditionStatus.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbConditionStatus.FormattingEnabled = true;
+            cmbConditionStatus.Location = new Point(533, 139);
+            cmbConditionStatus.Name = "cmbConditionStatus";
+            cmbConditionStatus.Size = new Size(216, 28);
+            cmbConditionStatus.TabIndex = 24;
+            // 
+            // cmbEquipmentCategory
+            // 
+            cmbEquipmentCategory.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbEquipmentCategory.FormattingEnabled = true;
+            cmbEquipmentCategory.Location = new Point(290, 139);
+            cmbEquipmentCategory.Name = "cmbEquipmentCategory";
+            cmbEquipmentCategory.Size = new Size(216, 28);
+            cmbEquipmentCategory.TabIndex = 25;
+            // 
+            // cmbAvailabilityStatus
+            // 
+            cmbAvailabilityStatus.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbAvailabilityStatus.FormattingEnabled = true;
+            cmbAvailabilityStatus.Location = new Point(782, 139);
+            cmbAvailabilityStatus.Name = "cmbAvailabilityStatus";
+            cmbAvailabilityStatus.Size = new Size(216, 28);
+            cmbAvailabilityStatus.TabIndex = 26;
+            // 
+            // btnFilter
+            // 
+            btnFilter.BackColor = Color.FromArgb(121, 86, 76);
+            btnFilter.BackgroundImageLayout = ImageLayout.None;
+            btnFilter.FlatAppearance.BorderSize = 0;
+            btnFilter.FlatStyle = FlatStyle.Flat;
+            btnFilter.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
+            btnFilter.ForeColor = Color.FromArgb(241, 240, 234);
+            btnFilter.Location = new Point(823, 36);
+            btnFilter.Margin = new Padding(0);
+            btnFilter.Name = "btnFilter";
+            btnFilter.Size = new Size(102, 41);
+            btnFilter.TabIndex = 26;
+            btnFilter.Text = "Filter";
+            btnFilter.UseVisualStyleBackColor = false;
+            btnFilter.Click += btnFilter_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(289, 114);
+            label1.Name = "label1";
+            label1.Size = new Size(126, 20);
+            label1.TabIndex = 27;
+            label1.Text = "Filter by Category";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(529, 114);
+            label2.Name = "label2";
+            label2.Size = new Size(175, 20);
+            label2.TabIndex = 28;
+            label2.Text = "Filter by Condition Status";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(782, 114);
+            label3.Name = "label3";
+            label3.Size = new Size(184, 20);
+            label3.TabIndex = 29;
+            label3.Text = "Filter by Availability Status";
+            // 
             // EquipmentDashboard
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1088, 611);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(label1);
+            Controls.Add(cmbAvailabilityStatus);
+            Controls.Add(btnFilter);
+            Controls.Add(cmbEquipmentCategory);
+            Controls.Add(cmbConditionStatus);
             Controls.Add(btnAddEquipment);
             Controls.Add(btnDeleteEquipment);
             Controls.Add(btnUpdateEquipment);
-            Controls.Add(btnSearch);
+            Controls.Add(btnReset);
             Controls.Add(dgvEquipment);
             Controls.Add(pnlNavigationSideBar);
             Controls.Add(lblEquipmentDashboard);
@@ -319,7 +405,7 @@
 
         #endregion
 
-        private Button btnSearch;
+        private Button btnReset;
         private DataGridView dgvEquipment;
         private Panel pnlNavigationSideBar;
         private Button btnEquipmentInformation;
@@ -335,5 +421,12 @@
         private Button btnUpdateEquipment;
         private Button btnDeleteEquipment;
         private Button btnAddEquipment;
+        private ComboBox cmbConditionStatus;
+        private ComboBox cmbEquipmentCategory;
+        private ComboBox cmbAvailabilityStatus;
+        private Button btnFilter;
+        private Label label1;
+        private Label label2;
+        private Label label3;
     }
 }
