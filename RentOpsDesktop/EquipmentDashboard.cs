@@ -27,15 +27,54 @@ namespace RentOpsDesktop
 
         private void EquipmentDashboard_Load(object sender, EventArgs e)
         {
-            LoadEquipment();
-        }
+            //load data to the equipment cateogry combobox
+            cmbEquipmentCategory.DataSource = context.EquipmentCategories.ToList();
+            cmbEquipmentCategory.DisplayMember = "EquipmentCategoryTitle";
+            cmbEquipmentCategory.ValueMember = "EquipmentCategoryId";
+            cmbEquipmentCategory.SelectedItem = null;
 
-        private void LoadEquipment()
+            //load data to the condition status combobox
+            cmbConditionStatus.DataSource = context.ConditionStatuses.ToList();
+            cmbConditionStatus.DisplayMember = "ConditionStatusTitle";
+            cmbConditionStatus.ValueMember = "ConditionStatusId";
+            cmbConditionStatus.SelectedItem = null;
+
+
+            //load data to the availability status combobox
+            cmbAvailabilityStatus.DataSource = context.AvailabilityStatuses.ToList();
+            cmbAvailabilityStatus.DisplayMember = "AvailabilityStatusTitle";
+            cmbAvailabilityStatus.ValueMember = "AvailabilityStatusId";
+            cmbAvailabilityStatus.SelectedItem = null;
+
+            RefreshEquipmentGridview();
+        }
+        private void RefreshEquipmentGridview()
         {
-            // Fetch the equipment list with related titles using LINQ
-            var equipmentList = context.Equipment
-                .Where(e => e.ConditionStatusId != null && e.AvailabilityStatusId != null && e.EquipmentCategoryId != null)
-                .Select(e => new
+            try
+            {
+                // Start with all equipment
+                var equipmentToShow = context.Equipment.AsQueryable();
+
+                // Apply Equipment Category filter if selected
+                if (cmbEquipmentCategory.SelectedValue != null)
+                {
+                    equipmentToShow = equipmentToShow.Where(e => e.EquipmentCategoryId == (int)cmbEquipmentCategory.SelectedValue);
+                }
+
+                // Apply Condition Status filter if selected
+                if (cmbConditionStatus.SelectedValue != null)
+                {
+                    equipmentToShow = equipmentToShow.Where(e => e.ConditionStatusId == (int)cmbConditionStatus.SelectedValue);
+                }
+
+                // Apply Availability Status filter if selected
+                if (cmbAvailabilityStatus.SelectedValue != null)
+                {
+                    equipmentToShow = equipmentToShow.Where(e => e.AvailabilityStatusId == (int)cmbAvailabilityStatus.SelectedValue);
+                }
+
+                // Fetch the filtered equipment list and select relevant fields
+                var equipmentList = equipmentToShow.Select(e => new
                 {
                     EquipmentID = e.EquipmentId, // Select the equipment ID
                     EquipmentName = e.EquipmentName, // Select the equipment name
@@ -54,12 +93,18 @@ namespace RentOpsDesktop
                         .Where(ec => ec.EquipmentCategoryId == e.EquipmentCategoryId)
                         .Select(ec => ec.EquipmentCategoryTitle)
                         .FirstOrDefault() // Fetch the equipment category title
-                })
-                .ToList(); // Convert the result to a list
+                }).ToList(); // Convert the result to a list
 
-            // Bind the fetched data to the DataGridView
-            dgvEquipment.DataSource = equipmentList;
+                // Bind the fetched data to the DataGridView
+                dgvEquipment.DataSource = equipmentList;
+            }
+            catch (Exception ex)
+            {
+                // Show error message if an exception occurs
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
+
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
@@ -119,7 +164,7 @@ namespace RentOpsDesktop
                 {
                     context.Equipment.Update(editEquipmentInformation.equipmentToEdit);
                     context.SaveChanges(); // Save changes to the database
-                    LoadEquipment(); // Refresh the DataGridView
+                    RefreshEquipmentGridview(); // Refresh the DataGridView
                 }
             }
         }
@@ -177,7 +222,7 @@ namespace RentOpsDesktop
                         MessageBox.Show("The equipment has been deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // Reload the equipment list to reflect the changes
-                        LoadEquipment();
+                        RefreshEquipmentGridview();
                     }
                     else
                     {
@@ -204,13 +249,31 @@ namespace RentOpsDesktop
             {
                 context.Equipment.Add(addEquipment.equipment);
                 context.SaveChanges(); // Save changes to the database
-                LoadEquipment(); // Refresh the DataGridView
+                RefreshEquipmentGridview(); // Refresh the DataGridView
             }
         }
 
         private void EquipmentDashboard_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit(); //exit the application
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            RefreshEquipmentGridview();
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            cmbAvailabilityStatus.SelectedItem = null;
+            cmbEquipmentCategory.SelectedItem = null;
+            cmbConditionStatus.SelectedItem = null;
+            RefreshEquipmentGridview();
         }
     }
 }
