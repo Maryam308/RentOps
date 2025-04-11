@@ -42,13 +42,15 @@
             lblEquipmentDescription = new Label();
             lblEquipmentName = new Label();
             lblTitle = new Label();
-            btnBack = new Button();
             cmbAvailabilityStatus = new ComboBox();
             lblAvailabilityStatus = new Label();
             lblEquipmentNameErr = new Label();
             lblEquipmentDescriptionErr = new Label();
             lblQuantityErr = new Label();
             lblRentalPriceErr = new Label();
+            lblEquipmentCategoryErr = new Label();
+            lblConditionStatusErr = new Label();
+            lblAvailabilityStatusErr = new Label();
             SuspendLayout();
             // 
             // btnSaveChanges
@@ -57,9 +59,9 @@
             btnSaveChanges.FlatStyle = FlatStyle.Flat;
             btnSaveChanges.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnSaveChanges.ForeColor = Color.White;
-            btnSaveChanges.Location = new Point(248, 552);
+            btnSaveChanges.Location = new Point(292, 541);
             btnSaveChanges.Name = "btnSaveChanges";
-            btnSaveChanges.Size = new Size(635, 47);
+            btnSaveChanges.Size = new Size(204, 47);
             btnSaveChanges.TabIndex = 37;
             btnSaveChanges.Text = "Save Changes";
             btnSaveChanges.UseVisualStyleBackColor = false;
@@ -67,30 +69,32 @@
             // 
             // cmbConditionStatus
             // 
+            cmbConditionStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbConditionStatus.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cmbConditionStatus.FormattingEnabled = true;
-            cmbConditionStatus.Location = new Point(513, 487);
+            cmbConditionStatus.Location = new Point(354, 414);
             cmbConditionStatus.Margin = new Padding(2, 1, 2, 1);
             cmbConditionStatus.Name = "cmbConditionStatus";
             cmbConditionStatus.Size = new Size(373, 36);
             cmbConditionStatus.TabIndex = 36;
-            cmbConditionStatus.Text = "Select Condition Status";
+            cmbConditionStatus.SelectedIndexChanged += cmbConditionStatus_SelectedIndexChanged;
             // 
             // cmbEquipmentCategory
             // 
+            cmbEquipmentCategory.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbEquipmentCategory.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cmbEquipmentCategory.FormattingEnabled = true;
-            cmbEquipmentCategory.Location = new Point(513, 244);
+            cmbEquipmentCategory.Location = new Point(357, 218);
             cmbEquipmentCategory.Margin = new Padding(2, 1, 2, 1);
             cmbEquipmentCategory.Name = "cmbEquipmentCategory";
             cmbEquipmentCategory.Size = new Size(373, 36);
             cmbEquipmentCategory.TabIndex = 35;
-            cmbEquipmentCategory.Text = "Select Equipment Category";
+            cmbEquipmentCategory.SelectedIndexChanged += cmbEquipmentCategory_SelectedIndexChanged;
             // 
             // txtRentalPrice
             // 
             txtRentalPrice.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtRentalPrice.Location = new Point(513, 366);
+            txtRentalPrice.Location = new Point(357, 346);
             txtRentalPrice.Margin = new Padding(2, 1, 2, 1);
             txtRentalPrice.Name = "txtRentalPrice";
             txtRentalPrice.PlaceholderText = "Enter Rental Price";
@@ -101,7 +105,7 @@
             // txtQuantity
             // 
             txtQuantity.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtQuantity.Location = new Point(510, 302);
+            txtQuantity.Location = new Point(354, 282);
             txtQuantity.Margin = new Padding(2, 1, 2, 1);
             txtQuantity.Name = "txtQuantity";
             txtQuantity.PlaceholderText = "Enter Quantity";
@@ -112,7 +116,7 @@
             // txtEquipmentDescription
             // 
             txtEquipmentDescription.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtEquipmentDescription.Location = new Point(513, 182);
+            txtEquipmentDescription.Location = new Point(357, 156);
             txtEquipmentDescription.Margin = new Padding(2, 1, 2, 1);
             txtEquipmentDescription.Name = "txtEquipmentDescription";
             txtEquipmentDescription.PlaceholderText = "Enter Equipment Description";
@@ -123,7 +127,7 @@
             // txtEquipmentName
             // 
             txtEquipmentName.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtEquipmentName.Location = new Point(513, 119);
+            txtEquipmentName.Location = new Point(357, 93);
             txtEquipmentName.Margin = new Padding(2, 1, 2, 1);
             txtEquipmentName.Name = "txtEquipmentName";
             txtEquipmentName.PlaceholderText = "Enter Equipment Name";
@@ -135,7 +139,7 @@
             // 
             lblConditionStatus.AutoSize = true;
             lblConditionStatus.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblConditionStatus.Location = new Point(257, 488);
+            lblConditionStatus.Location = new Point(98, 415);
             lblConditionStatus.Margin = new Padding(2, 0, 2, 0);
             lblConditionStatus.Name = "lblConditionStatus";
             lblConditionStatus.Size = new Size(210, 32);
@@ -146,7 +150,7 @@
             // 
             lblRentalPrice.AutoSize = true;
             lblRentalPrice.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRentalPrice.Location = new Point(304, 366);
+            lblRentalPrice.Location = new Point(148, 346);
             lblRentalPrice.Margin = new Padding(2, 0, 2, 0);
             lblRentalPrice.Name = "lblRentalPrice";
             lblRentalPrice.Size = new Size(157, 32);
@@ -157,7 +161,7 @@
             // 
             lblQuantity.AutoSize = true;
             lblQuantity.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblQuantity.Location = new Point(341, 302);
+            lblQuantity.Location = new Point(185, 282);
             lblQuantity.Margin = new Padding(2, 0, 2, 0);
             lblQuantity.Name = "lblQuantity";
             lblQuantity.Size = new Size(120, 32);
@@ -168,7 +172,7 @@
             // 
             lblEquipmentCategory.AutoSize = true;
             lblEquipmentCategory.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblEquipmentCategory.Location = new Point(214, 244);
+            lblEquipmentCategory.Location = new Point(58, 218);
             lblEquipmentCategory.Margin = new Padding(2, 0, 2, 0);
             lblEquipmentCategory.Name = "lblEquipmentCategory";
             lblEquipmentCategory.Size = new Size(256, 32);
@@ -179,7 +183,7 @@
             // 
             lblEquipmentDescription.AutoSize = true;
             lblEquipmentDescription.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblEquipmentDescription.Location = new Point(186, 184);
+            lblEquipmentDescription.Location = new Point(30, 158);
             lblEquipmentDescription.Margin = new Padding(2, 0, 2, 0);
             lblEquipmentDescription.Name = "lblEquipmentDescription";
             lblEquipmentDescription.Size = new Size(284, 32);
@@ -190,7 +194,7 @@
             // 
             lblEquipmentName.AutoSize = true;
             lblEquipmentName.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblEquipmentName.Location = new Point(248, 121);
+            lblEquipmentName.Location = new Point(92, 95);
             lblEquipmentName.Margin = new Padding(2, 0, 2, 0);
             lblEquipmentName.Name = "lblEquipmentName";
             lblEquipmentName.Size = new Size(219, 32);
@@ -200,44 +204,31 @@
             // lblTitle
             // 
             lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 28.125F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblTitle.Font = new Font("Segoe UI", 24.125F, FontStyle.Bold | FontStyle.Italic);
             lblTitle.ForeColor = Color.FromArgb(135, 66, 62);
-            lblTitle.Location = new Point(341, 29);
+            lblTitle.Location = new Point(162, 19);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(532, 62);
+            lblTitle.Size = new Size(461, 55);
             lblTitle.TabIndex = 24;
             lblTitle.Text = "Edit Equipment Details";
             // 
-            // btnBack
-            // 
-            btnBack.BackColor = Color.FromArgb(139, 128, 116);
-            btnBack.FlatStyle = FlatStyle.Flat;
-            btnBack.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(23, 29);
-            btnBack.Name = "btnBack";
-            btnBack.Size = new Size(173, 47);
-            btnBack.TabIndex = 23;
-            btnBack.Text = "Back";
-            btnBack.UseVisualStyleBackColor = false;
-            btnBack.Click += btnBack_Click;
-            // 
             // cmbAvailabilityStatus
             // 
+            cmbAvailabilityStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbAvailabilityStatus.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cmbAvailabilityStatus.FormattingEnabled = true;
-            cmbAvailabilityStatus.Location = new Point(513, 437);
+            cmbAvailabilityStatus.Location = new Point(354, 475);
             cmbAvailabilityStatus.Margin = new Padding(2, 1, 2, 1);
             cmbAvailabilityStatus.Name = "cmbAvailabilityStatus";
             cmbAvailabilityStatus.Size = new Size(373, 36);
             cmbAvailabilityStatus.TabIndex = 38;
-            cmbAvailabilityStatus.Text = "Select Availability Status";
+            cmbAvailabilityStatus.SelectedIndexChanged += cmbAvailabilityStatus_SelectedIndexChanged;
             // 
             // lblAvailabilityStatus
             // 
             lblAvailabilityStatus.AutoSize = true;
             lblAvailabilityStatus.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAvailabilityStatus.Location = new Point(257, 438);
+            lblAvailabilityStatus.Location = new Point(81, 476);
             lblAvailabilityStatus.Margin = new Padding(2, 0, 2, 0);
             lblAvailabilityStatus.Name = "lblAvailabilityStatus";
             lblAvailabilityStatus.Size = new Size(224, 32);
@@ -248,47 +239,74 @@
             // 
             lblEquipmentNameErr.AutoSize = true;
             lblEquipmentNameErr.ForeColor = Color.Red;
-            lblEquipmentNameErr.Location = new Point(513, 156);
+            lblEquipmentNameErr.Location = new Point(357, 130);
             lblEquipmentNameErr.Name = "lblEquipmentNameErr";
-            lblEquipmentNameErr.Size = new Size(156, 20);
+            lblEquipmentNameErr.Size = new Size(0, 20);
             lblEquipmentNameErr.TabIndex = 40;
-            lblEquipmentNameErr.Text = "lblEquipmentNameErr";
             // 
             // lblEquipmentDescriptionErr
             // 
             lblEquipmentDescriptionErr.AutoSize = true;
             lblEquipmentDescriptionErr.ForeColor = Color.Red;
-            lblEquipmentDescriptionErr.Location = new Point(513, 217);
+            lblEquipmentDescriptionErr.Location = new Point(357, 191);
             lblEquipmentDescriptionErr.Name = "lblEquipmentDescriptionErr";
-            lblEquipmentDescriptionErr.Size = new Size(192, 20);
+            lblEquipmentDescriptionErr.Size = new Size(0, 20);
             lblEquipmentDescriptionErr.TabIndex = 41;
-            lblEquipmentDescriptionErr.Text = "lblEquipmentDescriptionErr";
             // 
             // lblQuantityErr
             // 
             lblQuantityErr.AutoSize = true;
             lblQuantityErr.ForeColor = Color.Red;
-            lblQuantityErr.Location = new Point(510, 337);
+            lblQuantityErr.Location = new Point(354, 317);
             lblQuantityErr.Name = "lblQuantityErr";
-            lblQuantityErr.Size = new Size(100, 20);
+            lblQuantityErr.Size = new Size(0, 20);
             lblQuantityErr.TabIndex = 42;
-            lblQuantityErr.Text = "lblQuantityErr";
+            lblQuantityErr.Click += lblQuantityErr_Click;
             // 
             // lblRentalPriceErr
             // 
             lblRentalPriceErr.AutoSize = true;
             lblRentalPriceErr.ForeColor = Color.Red;
-            lblRentalPriceErr.Location = new Point(513, 401);
+            lblRentalPriceErr.Location = new Point(357, 381);
             lblRentalPriceErr.Name = "lblRentalPriceErr";
-            lblRentalPriceErr.Size = new Size(118, 20);
+            lblRentalPriceErr.Size = new Size(0, 20);
             lblRentalPriceErr.TabIndex = 43;
-            lblRentalPriceErr.Text = "lblRentalPriceErr";
+            // 
+            // lblEquipmentCategoryErr
+            // 
+            lblEquipmentCategoryErr.AutoSize = true;
+            lblEquipmentCategoryErr.ForeColor = Color.Red;
+            lblEquipmentCategoryErr.Location = new Point(357, 255);
+            lblEquipmentCategoryErr.Name = "lblEquipmentCategoryErr";
+            lblEquipmentCategoryErr.Size = new Size(0, 20);
+            lblEquipmentCategoryErr.TabIndex = 44;
+            // 
+            // lblConditionStatusErr
+            // 
+            lblConditionStatusErr.AutoSize = true;
+            lblConditionStatusErr.ForeColor = Color.Red;
+            lblConditionStatusErr.Location = new Point(354, 451);
+            lblConditionStatusErr.Name = "lblConditionStatusErr";
+            lblConditionStatusErr.Size = new Size(0, 20);
+            lblConditionStatusErr.TabIndex = 45;
+            // 
+            // lblAvailabilityStatusErr
+            // 
+            lblAvailabilityStatusErr.AutoSize = true;
+            lblAvailabilityStatusErr.ForeColor = Color.Red;
+            lblAvailabilityStatusErr.Location = new Point(354, 512);
+            lblAvailabilityStatusErr.Name = "lblAvailabilityStatusErr";
+            lblAvailabilityStatusErr.Size = new Size(0, 20);
+            lblAvailabilityStatusErr.TabIndex = 46;
             // 
             // EditEquipmentInformation
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1088, 611);
+            ClientSize = new Size(776, 600);
+            Controls.Add(lblAvailabilityStatusErr);
+            Controls.Add(lblConditionStatusErr);
+            Controls.Add(lblEquipmentCategoryErr);
             Controls.Add(lblRentalPriceErr);
             Controls.Add(lblQuantityErr);
             Controls.Add(lblEquipmentDescriptionErr);
@@ -309,7 +327,6 @@
             Controls.Add(lblEquipmentDescription);
             Controls.Add(lblEquipmentName);
             Controls.Add(lblTitle);
-            Controls.Add(btnBack);
             Margin = new Padding(2, 1, 2, 1);
             Name = "EditEquipmentInformation";
             Text = "EditEquipment";
@@ -334,12 +351,14 @@
         private Label lblEquipmentDescription;
         private Label lblEquipmentName;
         private Label lblTitle;
-        private Button btnBack;
         private ComboBox cmbAvailabilityStatus;
         private Label lblAvailabilityStatus;
         private Label lblEquipmentNameErr;
         private Label lblEquipmentDescriptionErr;
         private Label lblQuantityErr;
         private Label lblRentalPriceErr;
+        private Label lblEquipmentCategoryErr;
+        private Label lblConditionStatusErr;
+        private Label lblAvailabilityStatusErr;
     }
 }

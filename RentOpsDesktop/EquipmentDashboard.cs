@@ -42,15 +42,15 @@ namespace RentOpsDesktop
                     EquipmentDescription = e.EquipmentDescription, // Select the equipment description
                     RentalPrice = e.RentalPrice, // Select the rental price
                     EquipmentQuantity = e.EquipmentQuantity, // Select the equipment quantity
-                    ConditionStatusTitle = context.ConditionStatuses
+                    ConditionStatus = context.ConditionStatuses
                         .Where(cs => cs.ConditionStatusId == e.ConditionStatusId)
                         .Select(cs => cs.ConditionStatusTitle)
                         .FirstOrDefault(), // Fetch the condition status title
-                    AvailabilityStatusTitle = context.AvailabilityStatuses
+                    AvailabilityStatus = context.AvailabilityStatuses
                         .Where(a => a.AvailabilityStatusId == e.AvailabilityStatusId)
                         .Select(a => a.AvailabilityStatusTitle)
                         .FirstOrDefault(), // Fetch the availability status title
-                    EquipmentCategoryTitle = context.EquipmentCategories
+                    EquipmentCategory = context.EquipmentCategories
                         .Where(ec => ec.EquipmentCategoryId == e.EquipmentCategoryId)
                         .Select(ec => ec.EquipmentCategoryTitle)
                         .FirstOrDefault() // Fetch the equipment category title
@@ -112,8 +112,15 @@ namespace RentOpsDesktop
             {
                 // Pass the ID to the EditEquipmentInformation constructor and show the form
                 EditEquipmentInformation editEquipmentInformation = new EditEquipmentInformation(selectedEquipmentID);
-                this.Hide();
-                editEquipmentInformation.Show();
+                editEquipmentInformation.StartPosition = FormStartPosition.CenterScreen; // Center the form
+                editEquipmentInformation.ShowDialog();
+
+                if (editEquipmentInformation.DialogResult == DialogResult.OK)
+                {
+                    context.Equipment.Update(editEquipmentInformation.equipmentToEdit);
+                    context.SaveChanges(); // Save changes to the database
+                    LoadEquipment(); // Refresh the DataGridView
+                }
             }
         }
 
@@ -188,9 +195,22 @@ namespace RentOpsDesktop
 
         private void btnAddEquipment_Click(object sender, EventArgs e)
         {
+
             AddEquipment addEquipment = new AddEquipment();
-            this.Hide(); //hide the current form
-            addEquipment.Show(); //show the add equipment form
+            addEquipment.StartPosition = FormStartPosition.CenterScreen; // Center the form
+            addEquipment.ShowDialog(); // Show the add equipment form
+
+            if (addEquipment.DialogResult == DialogResult.OK)
+            {
+                context.Equipment.Add(addEquipment.equipment);
+                context.SaveChanges(); // Save changes to the database
+                LoadEquipment(); // Refresh the DataGridView
+            }
+        }
+
+        private void EquipmentDashboard_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit(); //exit the application
         }
     }
 }

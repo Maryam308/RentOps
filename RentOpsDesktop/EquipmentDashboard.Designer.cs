@@ -309,6 +309,7 @@
             Margin = new Padding(3, 4, 3, 4);
             Name = "EquipmentDashboard";
             Text = "EquipmentDashboard";
+            FormClosing += EquipmentDashboard_FormClosing;
             Load += EquipmentDashboard_Load;
             ((System.ComponentModel.ISupportInitialize)dgvEquipment).EndInit();
             pnlNavigationSideBar.ResumeLayout(false);

@@ -18,7 +18,10 @@ namespace RentOpsDesktop
         private bool validEquipmentDescription = false;
         private bool validRentalPrice = false;
         private bool validQuantity = false;
-
+        bool validConditionStatus = false;
+        bool validAvailabilityStatus = false;
+        bool validEquipmentCategory = false;
+        internal Equipment equipmentToEdit;
         int equipmentId;
         RentOpsDBContext context;
 
@@ -69,6 +72,12 @@ namespace RentOpsDesktop
             cmbEquipmentCategory.ValueMember = "EquipmentCategoryId";
         }
 
+        private void ValidateForm()
+        {
+            btnSaveChanges.Enabled = validEquipmentName && validEquipmentDescription && validEquipmentCategory &&
+                                      validQuantity && validRentalPrice && validConditionStatus && validAvailabilityStatus;
+        }
+
 
         private void LoadEquipmentDetails()
         {
@@ -108,29 +117,27 @@ namespace RentOpsDesktop
 
         private void btnSaveChanges_Click(object sender, EventArgs e)
         {
-              // Check if all fields are valid
+            // Check if all fields are valid
             if (validEquipmentName && validEquipmentDescription && validRentalPrice && validQuantity)
             {
                 try
                 {
                     // Prepare the SQL command for updating the equipment
-                    var equipment = context.Equipment.Find(equipmentId);
-                    if (equipment != null)
+                    equipmentToEdit = context.Equipment.Find(equipmentId);
+                    if (equipmentToEdit != null)
                     {
-                        equipment.EquipmentName = txtEquipmentName.Text;
-                        equipment.EquipmentDescription = txtEquipmentDescription.Text;
-                        equipment.RentalPrice = (double)Convert.ToDecimal(txtRentalPrice.Text);
-                        equipment.EquipmentQuantity = Convert.ToInt32(txtQuantity.Text);
-                        equipment.ConditionStatusId = Convert.ToInt32(cmbConditionStatus.SelectedValue);
-                        equipment.AvailabilityStatusId = Convert.ToInt32(cmbAvailabilityStatus.SelectedValue);
-                        equipment.EquipmentCategoryId = Convert.ToInt32(cmbEquipmentCategory.SelectedValue);
+                        equipmentToEdit.EquipmentName = txtEquipmentName.Text;
+                        equipmentToEdit.EquipmentDescription = txtEquipmentDescription.Text;
+                        equipmentToEdit.RentalPrice = (double)Convert.ToDecimal(txtRentalPrice.Text);
+                        equipmentToEdit.EquipmentQuantity = Convert.ToInt32(txtQuantity.Text);
+                        equipmentToEdit.ConditionStatusId = Convert.ToInt32(cmbConditionStatus.SelectedValue);
+                        equipmentToEdit.AvailabilityStatusId = Convert.ToInt32(cmbAvailabilityStatus.SelectedValue);
+                        equipmentToEdit.EquipmentCategoryId = Convert.ToInt32(cmbEquipmentCategory.SelectedValue);
 
-                        context.SaveChanges();
                         MessageBox.Show("The equipment has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        EquipmentDashboard equipmentDashboard = new EquipmentDashboard();
-                        this.Hide();
-                        equipmentDashboard.Show();
+                        this.DialogResult = DialogResult.OK;
+                        this.Close();
                     }
                     else
                     {
@@ -152,118 +159,126 @@ namespace RentOpsDesktop
 
         private void txtEquipmentName_TextChanged(object sender, EventArgs e)
         {
-            // Check if the field is blank or null
             if (string.IsNullOrWhiteSpace(txtEquipmentName.Text))
             {
-                lblEquipmentNameErr.Text = "Cannot be blank.";
-                validEquipmentName = false;
-                return; // Exit the method early
-            }
-
-            // Trim the text to remove leading and trailing spaces
-            string inputText = txtEquipmentName.Text.Trim();
-
-            if (inputText.Length < 3) // Check length after trimming leading/trailing spaces
-            {
-                lblEquipmentNameErr.Text = "Cannot be less than 3 characters.";
+                lblEquipmentNameErr.Text = "Equipment name cannot be empty";
                 validEquipmentName = false;
             }
-            else if (!Regex.IsMatch(inputText, @"^[a-zA-Z ]+$")) // pattern to allow spaces along with letters
+            else if (txtEquipmentName.Text.Length < 3)
             {
-                lblEquipmentNameErr.Text = "Only letters and spaces are allowed.";
+                lblEquipmentNameErr.Text = "Equipment name must be at least 3 characters long";
                 validEquipmentName = false;
             }
             else
             {
-                lblEquipmentNameErr.Text = ""; // Clear the error message
+                lblEquipmentNameErr.Text = string.Empty;
                 validEquipmentName = true;
             }
+            ValidateForm();
 
         }
 
         private void txtEquipmentDescription_TextChanged(object sender, EventArgs e)
         {
-            // Check if the field is blank or null
             if (string.IsNullOrWhiteSpace(txtEquipmentDescription.Text))
             {
-                lblEquipmentDescriptionErr.Text = "Cannot be blank.";
+                lblEquipmentDescriptionErr.Text = "Equipment description cannot be empty";
                 validEquipmentDescription = false;
-                return; // Exit the method early
             }
-
-            if (txtEquipmentDescription.Text.Length < 5)
+            else if (txtEquipmentDescription.Text.Length < 10)
             {
-                lblEquipmentDescriptionErr.Text = "Cannot be less than 5 characters.";
+                lblEquipmentDescriptionErr.Text = "Equipment description must be at least 10 characters long";
                 validEquipmentDescription = false;
             }
             else
             {
-                lblEquipmentDescriptionErr.Text = ""; // Clear the error message
+                lblEquipmentDescriptionErr.Text = string.Empty;
                 validEquipmentDescription = true;
             }
+            ValidateForm();
 
         }
 
         private void txtQuantity_TextChanged(object sender, EventArgs e)
         {
-            // Check if the field is blank or null
-            if (string.IsNullOrWhiteSpace(txtQuantity.Text))
+            if (!int.TryParse(txtQuantity.Text, out int quantity) || quantity <= 0)
             {
-                lblQuantityErr.Text = "Cannot be blank.";
-                validQuantity = false;
-                return; // Exit the method early
-            }
-
-            // Trim the text to remove leading and trailing spaces
-            string inputText = txtQuantity.Text.Trim();
-
-            if (!int.TryParse(inputText, out int quantity))
-            {
-                lblQuantityErr.Text = "Must be a valid number.";
-                validQuantity = false;
-            }
-            else if (quantity < 0)
-            {
-                lblQuantityErr.Text = "Cannot be negative.";
+                lblQuantityErr.Text = "Quantity must be a positive integer";
                 validQuantity = false;
             }
             else
             {
-                lblQuantityErr.Text = ""; // Clear the error message
+                lblQuantityErr.Text = string.Empty;
                 validQuantity = true;
             }
+            ValidateForm();
 
         }
 
         private void txtRentalPrice_TextChanged(object sender, EventArgs e)
         {
-            // Check if the field is blank or null
-            if (string.IsNullOrWhiteSpace(txtRentalPrice.Text))
+            if (!decimal.TryParse(txtRentalPrice.Text, out decimal price) || price <= 0)
             {
-                lblRentalPriceErr.Text = "Cannot be blank.";
-                validRentalPrice = false;
-                return; // Exit the method early
-            }
-
-            // Trim the text to remove leading and trailing spaces
-            string inputText = txtRentalPrice.Text.Trim();
-
-            if (!decimal.TryParse(inputText, out decimal rentalPrice))
-            {
-                lblRentalPriceErr.Text = "Must be a valid number.";
-                validRentalPrice = false;
-            }
-            else if (rentalPrice <= 0)
-            {
-                lblRentalPriceErr.Text = "Cannot be 0 or negative.";
+                lblRentalPriceErr.Text = "Rental price must be a positive number";
                 validRentalPrice = false;
             }
             else
             {
-                lblRentalPriceErr.Text = ""; // Clear the error message
+                lblRentalPriceErr.Text = string.Empty;
                 validRentalPrice = true;
             }
+            ValidateForm();
+        }
 
+        private void lblQuantityErr_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cmbEquipmentCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+                if (cmbEquipmentCategory.SelectedItem == null)
+                {
+                    lblEquipmentCategoryErr.Text = "Please select an equipment category";
+                    validEquipmentCategory = false;
+                }
+                else
+                {
+                    lblEquipmentCategoryErr.Text = string.Empty;
+                    validEquipmentCategory = true;
+                }         
+            ValidateForm();
+        }
+
+        private void cmbConditionStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+                if (cmbConditionStatus.SelectedItem == null)
+                {
+                    lblConditionStatusErr.Text = "Please select a condition status";
+                    validConditionStatus = false;
+                }
+                else
+                {
+                    lblConditionStatusErr.Text = string.Empty;
+                    validConditionStatus = true;
+                }
+          
+            ValidateForm();
+        }
+
+        private void cmbAvailabilityStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+                if (cmbAvailabilityStatus.SelectedItem == null)
+                {
+                    lblAvailabilityStatusErr.Text = "Please select availability status";
+                    validAvailabilityStatus = false;
+                }
+                else
+                {
+                    lblAvailabilityStatusErr.Text = string.Empty;
+                    validAvailabilityStatus = true;
+                }
+            ValidateForm();
         }
     }
 }
