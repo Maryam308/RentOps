@@ -29,53 +29,80 @@
         private void InitializeComponent()
         {
             lblReport = new Label();
-            btnCustomerReport = new Button();
-            btnRentalReports = new Button();
+            btnCustomerReports = new Button();
+            btnReturnReports = new Button();
+            btnBack = new Button();
             SuspendLayout();
             // 
             // lblReport
             // 
             lblReport.AutoSize = true;
-            lblReport.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0, true);
+            lblReport.Font = new Font("Segoe UI", 32F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
             lblReport.ForeColor = Color.FromArgb(135, 66, 62);
-            lblReport.Location = new Point(459, 27);
+            lblReport.Location = new Point(377, 51);
             lblReport.Name = "lblReport";
-            lblReport.Size = new Size(160, 52);
+            lblReport.Size = new Size(177, 59);
             lblReport.TabIndex = 2;
             lblReport.Text = "Reports";
             // 
-            // btnCustomerReport
+            // btnCustomerReports
             // 
-            btnCustomerReport.BackColor = Color.FromArgb(139, 128, 116);
-            btnCustomerReport.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnCustomerReport.ForeColor = Color.White;
-            btnCustomerReport.Location = new Point(191, 192);
-            btnCustomerReport.Name = "btnCustomerReport";
-            btnCustomerReport.Size = new Size(315, 273);
-            btnCustomerReport.TabIndex = 8;
-            btnCustomerReport.Text = "Customers Report";
-            btnCustomerReport.UseVisualStyleBackColor = false;
+            btnCustomerReports.BackColor = Color.FromArgb(121, 86, 76);
+            btnCustomerReports.BackgroundImageLayout = ImageLayout.None;
+            btnCustomerReports.FlatAppearance.BorderSize = 0;
+            btnCustomerReports.FlatStyle = FlatStyle.Flat;
+            btnCustomerReports.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold | FontStyle.Italic);
+            btnCustomerReports.ForeColor = Color.FromArgb(241, 240, 234);
+            btnCustomerReports.Location = new Point(99, 159);
+            btnCustomerReports.Margin = new Padding(0);
+            btnCustomerReports.Name = "btnCustomerReports";
+            btnCustomerReports.Size = new Size(325, 225);
+            btnCustomerReports.TabIndex = 14;
+            btnCustomerReports.Text = "Customer Reports";
+            btnCustomerReports.UseVisualStyleBackColor = false;
             // 
-            // btnRentalReports
+            // btnReturnReports
             // 
-            btnRentalReports.BackColor = Color.FromArgb(139, 128, 116);
-            btnRentalReports.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnRentalReports.ForeColor = Color.White;
-            btnRentalReports.Location = new Point(566, 192);
-            btnRentalReports.Name = "btnRentalReports";
-            btnRentalReports.Size = new Size(315, 273);
-            btnRentalReports.TabIndex = 9;
-            btnRentalReports.Text = "Rental Reports";
-            btnRentalReports.UseVisualStyleBackColor = false;
+            btnReturnReports.BackColor = Color.FromArgb(121, 86, 76);
+            btnReturnReports.BackgroundImageLayout = ImageLayout.None;
+            btnReturnReports.FlatAppearance.BorderSize = 0;
+            btnReturnReports.FlatStyle = FlatStyle.Flat;
+            btnReturnReports.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            btnReturnReports.ForeColor = Color.FromArgb(241, 240, 234);
+            btnReturnReports.Location = new Point(516, 159);
+            btnReturnReports.Margin = new Padding(0);
+            btnReturnReports.Name = "btnReturnReports";
+            btnReturnReports.Size = new Size(325, 225);
+            btnReturnReports.TabIndex = 15;
+            btnReturnReports.Text = "Return Reports";
+            btnReturnReports.UseVisualStyleBackColor = false;
+            // 
+            // btnBack
+            // 
+            btnBack.BackColor = Color.FromArgb(139, 128, 116);
+            btnBack.BackgroundImageLayout = ImageLayout.None;
+            btnBack.FlatAppearance.BorderSize = 0;
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            btnBack.ForeColor = Color.White;
+            btnBack.Location = new Point(30, 31);
+            btnBack.Margin = new Padding(3, 2, 3, 2);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(155, 44);
+            btnBack.TabIndex = 16;
+            btnBack.Text = "Back";
+            btnBack.UseVisualStyleBackColor = false;
             // 
             // Reports
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1088, 611);
-            Controls.Add(btnRentalReports);
-            Controls.Add(btnCustomerReport);
+            ClientSize = new Size(952, 458);
+            Controls.Add(btnBack);
+            Controls.Add(btnReturnReports);
+            Controls.Add(btnCustomerReports);
             Controls.Add(lblReport);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "Reports";
             Text = "Reports";
             ResumeLayout(false);
@@ -85,7 +112,8 @@
         #endregion
 
         private Label lblReport;
-        private Button btnCustomerReport;
-        private Button btnRentalReports;
+        private Button btnCustomerReports;
+        private Button btnReturnReports;
+        private Button btnBack;
     }
 }

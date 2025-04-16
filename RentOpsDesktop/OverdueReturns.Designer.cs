@@ -28,8 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            btnFilter = new Button();
-            btnSearch = new Button();
             dgvReturnRecords = new DataGridView();
             lblRentalOverdue = new Label();
             btnDeleteReturnRecord = new Button();
@@ -38,49 +36,28 @@
             btnAddRecord = new Button();
             btnBack = new Button();
             pnlNavigationSideBar = new Panel();
+            dtpActualReturnDate = new DateTimePicker();
+            btnReset = new Button();
+            txtTransactionID = new TextBox();
+            txtReturnID = new TextBox();
+            lblRentalTransaction = new Label();
+            lblReturnID = new Label();
+            label2 = new Label();
+            lblReturnDateFilter = new Label();
+            cmbConditionStatus = new ComboBox();
+            btnFilter = new Button();
+            btnSearch = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvReturnRecords).BeginInit();
             pnlNavigationSideBar.SuspendLayout();
             SuspendLayout();
-            // 
-            // btnFilter
-            // 
-            btnFilter.BackColor = Color.FromArgb(121, 86, 76);
-            btnFilter.BackgroundImageLayout = ImageLayout.None;
-            btnFilter.FlatAppearance.BorderSize = 0;
-            btnFilter.FlatStyle = FlatStyle.Flat;
-            btnFilter.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnFilter.ForeColor = Color.FromArgb(241, 240, 234);
-            btnFilter.Location = new Point(638, 85);
-            btnFilter.Margin = new Padding(0);
-            btnFilter.Name = "btnFilter";
-            btnFilter.Size = new Size(223, 39);
-            btnFilter.TabIndex = 25;
-            btnFilter.Text = "Filter";
-            btnFilter.UseVisualStyleBackColor = false;
-            // 
-            // btnSearch
-            // 
-            btnSearch.BackColor = Color.FromArgb(121, 86, 76);
-            btnSearch.BackgroundImageLayout = ImageLayout.None;
-            btnSearch.FlatAppearance.BorderSize = 0;
-            btnSearch.FlatStyle = FlatStyle.Flat;
-            btnSearch.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
-            btnSearch.Location = new Point(307, 86);
-            btnSearch.Margin = new Padding(0);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(223, 39);
-            btnSearch.TabIndex = 23;
-            btnSearch.Text = "Search";
-            btnSearch.UseVisualStyleBackColor = false;
             // 
             // dgvReturnRecords
             // 
             dgvReturnRecords.BackgroundColor = Color.WhiteSmoke;
             dgvReturnRecords.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvReturnRecords.Location = new Point(250, 149);
+            dgvReturnRecords.Location = new Point(250, 186);
             dgvReturnRecords.Name = "dgvReturnRecords";
-            dgvReturnRecords.Size = new Size(678, 288);
+            dgvReturnRecords.Size = new Size(678, 251);
             dgvReturnRecords.TabIndex = 24;
             // 
             // lblRentalOverdue
@@ -88,7 +65,7 @@
             lblRentalOverdue.AutoSize = true;
             lblRentalOverdue.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic);
             lblRentalOverdue.ForeColor = Color.FromArgb(135, 66, 62);
-            lblRentalOverdue.Location = new Point(458, 20);
+            lblRentalOverdue.Location = new Point(406, 16);
             lblRentalOverdue.Name = "lblRentalOverdue";
             lblRentalOverdue.Size = new Size(244, 42);
             lblRentalOverdue.TabIndex = 22;
@@ -109,6 +86,7 @@
             btnDeleteReturnRecord.TabIndex = 18;
             btnDeleteReturnRecord.Text = "Delete Return Record";
             btnDeleteReturnRecord.UseVisualStyleBackColor = false;
+            btnDeleteReturnRecord.Click += btnDeleteReturnRecord_Click;
             // 
             // btnSelectRecord
             // 
@@ -141,6 +119,7 @@
             btnEditReturnRecord.TabIndex = 12;
             btnEditReturnRecord.Text = "Edit Return Record";
             btnEditReturnRecord.UseVisualStyleBackColor = false;
+            btnEditReturnRecord.Click += btnEditReturnRecord_Click;
             // 
             // btnAddRecord
             // 
@@ -157,6 +136,7 @@
             btnAddRecord.TabIndex = 10;
             btnAddRecord.Text = "Add New Record";
             btnAddRecord.UseVisualStyleBackColor = false;
+            btnAddRecord.Click += btnAddRecord_Click;
             // 
             // btnBack
             // 
@@ -188,11 +168,142 @@
             pnlNavigationSideBar.Size = new Size(227, 458);
             pnlNavigationSideBar.TabIndex = 21;
             // 
+            // dtpActualReturnDate
+            // 
+            dtpActualReturnDate.Checked = false;
+            dtpActualReturnDate.Location = new Point(289, 143);
+            dtpActualReturnDate.Name = "dtpActualReturnDate";
+            dtpActualReturnDate.ShowCheckBox = true;
+            dtpActualReturnDate.Size = new Size(200, 23);
+            dtpActualReturnDate.TabIndex = 51;
+            // 
+            // btnReset
+            // 
+            btnReset.BackColor = Color.FromArgb(121, 86, 76);
+            btnReset.BackgroundImageLayout = ImageLayout.None;
+            btnReset.FlatAppearance.BorderSize = 0;
+            btnReset.FlatStyle = FlatStyle.Flat;
+            btnReset.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnReset.ForeColor = Color.FromArgb(241, 240, 234);
+            btnReset.Location = new Point(818, 16);
+            btnReset.Margin = new Padding(0);
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(108, 39);
+            btnReset.TabIndex = 50;
+            btnReset.Text = "Reset";
+            btnReset.UseVisualStyleBackColor = false;
+            btnReset.Click += btnReset_Click;
+            // 
+            // txtTransactionID
+            // 
+            txtTransactionID.BorderStyle = BorderStyle.FixedSingle;
+            txtTransactionID.Location = new Point(671, 88);
+            txtTransactionID.Name = "txtTransactionID";
+            txtTransactionID.Size = new Size(63, 23);
+            txtTransactionID.TabIndex = 49;
+            // 
+            // txtReturnID
+            // 
+            txtReturnID.BorderStyle = BorderStyle.FixedSingle;
+            txtReturnID.Location = new Point(395, 88);
+            txtReturnID.Name = "txtReturnID";
+            txtReturnID.Size = new Size(63, 23);
+            txtReturnID.TabIndex = 48;
+            // 
+            // lblRentalTransaction
+            // 
+            lblRentalTransaction.AutoSize = true;
+            lblRentalTransaction.Location = new Point(544, 90);
+            lblRentalTransaction.Name = "lblRentalTransaction";
+            lblRentalTransaction.Size = new Size(118, 15);
+            lblRentalTransaction.TabIndex = 47;
+            lblRentalTransaction.Text = "Rental Transaction ID";
+            // 
+            // lblReturnID
+            // 
+            lblReturnID.AutoSize = true;
+            lblReturnID.Location = new Point(295, 90);
+            lblReturnID.Name = "lblReturnID";
+            lblReturnID.Size = new Size(94, 15);
+            lblReturnID.TabIndex = 46;
+            lblReturnID.Text = "Rental Record ID";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(543, 124);
+            label2.Name = "label2";
+            label2.Size = new Size(140, 15);
+            label2.TabIndex = 45;
+            label2.Text = "Filter by Condition Status";
+            // 
+            // lblReturnDateFilter
+            // 
+            lblReturnDateFilter.AutoSize = true;
+            lblReturnDateFilter.Location = new Point(283, 124);
+            lblReturnDateFilter.Name = "lblReturnDateFilter";
+            lblReturnDateFilter.Size = new Size(114, 15);
+            lblReturnDateFilter.TabIndex = 44;
+            lblReturnDateFilter.Text = "Filter by Return Date";
+            // 
+            // cmbConditionStatus
+            // 
+            cmbConditionStatus.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbConditionStatus.FormattingEnabled = true;
+            cmbConditionStatus.Location = new Point(546, 142);
+            cmbConditionStatus.Margin = new Padding(3, 2, 3, 2);
+            cmbConditionStatus.Name = "cmbConditionStatus";
+            cmbConditionStatus.Size = new Size(190, 23);
+            cmbConditionStatus.TabIndex = 43;
+            // 
+            // btnFilter
+            // 
+            btnFilter.BackColor = Color.FromArgb(121, 86, 76);
+            btnFilter.BackgroundImageLayout = ImageLayout.None;
+            btnFilter.FlatAppearance.BorderSize = 0;
+            btnFilter.FlatStyle = FlatStyle.Flat;
+            btnFilter.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnFilter.ForeColor = Color.FromArgb(241, 240, 234);
+            btnFilter.Location = new Point(818, 130);
+            btnFilter.Margin = new Padding(0);
+            btnFilter.Name = "btnFilter";
+            btnFilter.Size = new Size(108, 39);
+            btnFilter.TabIndex = 42;
+            btnFilter.Text = "Filter";
+            btnFilter.UseVisualStyleBackColor = false;
+            btnFilter.Click += btnFilter_Click;
+            // 
+            // btnSearch
+            // 
+            btnSearch.BackColor = Color.FromArgb(121, 86, 76);
+            btnSearch.BackgroundImageLayout = ImageLayout.None;
+            btnSearch.FlatAppearance.BorderSize = 0;
+            btnSearch.FlatStyle = FlatStyle.Flat;
+            btnSearch.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
+            btnSearch.Location = new Point(818, 75);
+            btnSearch.Margin = new Padding(0);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(108, 39);
+            btnSearch.TabIndex = 41;
+            btnSearch.Text = "Search";
+            btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click += btnSearch_Click;
+            // 
             // OverdueReturns
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
+            Controls.Add(dtpActualReturnDate);
+            Controls.Add(btnReset);
+            Controls.Add(txtTransactionID);
+            Controls.Add(txtReturnID);
+            Controls.Add(lblRentalTransaction);
+            Controls.Add(lblReturnID);
+            Controls.Add(label2);
+            Controls.Add(lblReturnDateFilter);
+            Controls.Add(cmbConditionStatus);
             Controls.Add(btnFilter);
             Controls.Add(btnSearch);
             Controls.Add(dgvReturnRecords);
@@ -200,6 +311,7 @@
             Controls.Add(pnlNavigationSideBar);
             Name = "OverdueReturns";
             Text = "OverdueReturns";
+            Load += OverdueReturns_Load;
             ((System.ComponentModel.ISupportInitialize)dgvReturnRecords).EndInit();
             pnlNavigationSideBar.ResumeLayout(false);
             ResumeLayout(false);
@@ -207,9 +319,6 @@
         }
 
         #endregion
-
-        private Button btnFilter;
-        private Button btnSearch;
         private DataGridView dgvReturnRecords;
         private Label lblRentalOverdue;
         private Button btnDeleteReturnRecord;
@@ -218,5 +327,16 @@
         private Button btnAddRecord;
         private Button btnBack;
         private Panel pnlNavigationSideBar;
+        private DateTimePicker dtpActualReturnDate;
+        private Button btnReset;
+        private TextBox txtTransactionID;
+        private TextBox txtReturnID;
+        private Label lblRentalTransaction;
+        private Label lblReturnID;
+        private Label label2;
+        private Label lblReturnDateFilter;
+        private ComboBox cmbConditionStatus;
+        private Button btnFilter;
+        private Button btnSearch;
     }
 }

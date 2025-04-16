@@ -11,7 +11,7 @@ namespace RentOpsDesktop
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            ReturnRecords screen = new ReturnRecords();
+            OverdueReturns screen = new OverdueReturns();
             screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             Application.Run(screen);
 

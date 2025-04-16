@@ -16,5 +16,10 @@ namespace RentOpsDesktop
         {
             InitializeComponent();
         }
+
+        private void AuditLog_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
