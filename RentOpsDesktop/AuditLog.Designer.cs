@@ -36,6 +36,7 @@
             // 
             // dgvAuditLog
             // 
+            dgvAuditLog.BackgroundColor = Color.WhiteSmoke;
             dgvAuditLog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvAuditLog.Location = new Point(64, 100);
             dgvAuditLog.Margin = new Padding(3, 2, 3, 2);
@@ -81,6 +82,7 @@
             Controls.Add(lblAuditLog);
             Name = "AuditLog";
             Text = "AuditLog";
+            Load += AuditLog_Load;
             ((System.ComponentModel.ISupportInitialize)dgvAuditLog).EndInit();
             ResumeLayout(false);
             PerformLayout();
