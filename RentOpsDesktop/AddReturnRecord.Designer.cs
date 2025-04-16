@@ -43,6 +43,8 @@
             btnUpload = new Button();
             txtLateReturnPenalty = new TextBox();
             txtAdditionalCharge = new TextBox();
+            lblAdditionalChargesErr = new Label();
+            lblLateReturnPenaltyErr = new Label();
             SuspendLayout();
             // 
             // btnAdd
@@ -60,6 +62,7 @@
             btnAdd.TabIndex = 13;
             btnAdd.Text = "Add Record";
             btnAdd.UseVisualStyleBackColor = false;
+            btnAdd.Click += btnAdd_Click;
             // 
             // btnBack
             // 
@@ -143,6 +146,7 @@
             cmbReturnCondition.Name = "cmbReturnCondition";
             cmbReturnCondition.Size = new Size(205, 33);
             cmbReturnCondition.TabIndex = 19;
+            cmbReturnCondition.SelectedIndexChanged += cmbReturnCondition_SelectedIndexChanged;
             // 
             // lblLateReturnPenalty
             // 
@@ -199,6 +203,7 @@
             txtLateReturnPenalty.Name = "txtLateReturnPenalty";
             txtLateReturnPenalty.Size = new Size(165, 32);
             txtLateReturnPenalty.TabIndex = 24;
+            txtLateReturnPenalty.TextChanged += txtLateReturnPenalty_TextChanged;
             // 
             // txtAdditionalCharge
             // 
@@ -208,12 +213,35 @@
             txtAdditionalCharge.Name = "txtAdditionalCharge";
             txtAdditionalCharge.Size = new Size(165, 32);
             txtAdditionalCharge.TabIndex = 25;
+            txtAdditionalCharge.TextChanged += txtAdditionalCharge_TextChanged;
+            // 
+            // lblAdditionalChargesErr
+            // 
+            lblAdditionalChargesErr.AutoSize = true;
+            lblAdditionalChargesErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblAdditionalChargesErr.ForeColor = Color.Red;
+            lblAdditionalChargesErr.Location = new Point(736, 238);
+            lblAdditionalChargesErr.Name = "lblAdditionalChargesErr";
+            lblAdditionalChargesErr.Size = new Size(0, 15);
+            lblAdditionalChargesErr.TabIndex = 52;
+            // 
+            // lblLateReturnPenaltyErr
+            // 
+            lblLateReturnPenaltyErr.AutoSize = true;
+            lblLateReturnPenaltyErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblLateReturnPenaltyErr.ForeColor = Color.Red;
+            lblLateReturnPenaltyErr.Location = new Point(736, 151);
+            lblLateReturnPenaltyErr.Name = "lblLateReturnPenaltyErr";
+            lblLateReturnPenaltyErr.Size = new Size(0, 15);
+            lblLateReturnPenaltyErr.TabIndex = 51;
             // 
             // AddReturnRecord
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
+            Controls.Add(lblAdditionalChargesErr);
+            Controls.Add(lblLateReturnPenaltyErr);
             Controls.Add(txtAdditionalCharge);
             Controls.Add(txtLateReturnPenalty);
             Controls.Add(btnUpload);
@@ -231,6 +259,7 @@
             Controls.Add(lblAddReturnRecords);
             Name = "AddReturnRecord";
             Text = "AddReturnRecord";
+            Load += AddReturnRecord_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -252,5 +281,7 @@
         private Button btnUpload;
         private TextBox txtLateReturnPenalty;
         private TextBox txtAdditionalCharge;
+        private Label lblAdditionalChargesErr;
+        private Label lblLateReturnPenaltyErr;
     }
 }
