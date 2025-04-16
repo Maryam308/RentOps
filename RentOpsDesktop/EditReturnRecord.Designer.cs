@@ -34,7 +34,7 @@
             lblAdditionalDocument = new Label();
             lblAdditionalCharge = new Label();
             lblLateReturnPenalty = new Label();
-            cmbReturnCondition = new ComboBox();
+            cmbConditionStatus = new ComboBox();
             lblReturnCondition = new Label();
             dtpReturnDate = new DateTimePicker();
             lblReturnDate = new Label();
@@ -43,6 +43,8 @@
             btnSaveChages = new Button();
             btnBack = new Button();
             lblEditReturnRecords = new Label();
+            lblLateReturnPenaltyErr = new Label();
+            lblAdditionalChargesErr = new Label();
             SuspendLayout();
             // 
             // txtAdditionalCharge
@@ -53,6 +55,7 @@
             txtAdditionalCharge.Name = "txtAdditionalCharge";
             txtAdditionalCharge.Size = new Size(165, 32);
             txtAdditionalCharge.TabIndex = 40;
+            txtAdditionalCharge.TextChanged += txtAdditionalCharge_TextChanged;
             // 
             // txtLateReturnPenalty
             // 
@@ -62,6 +65,7 @@
             txtLateReturnPenalty.Name = "txtLateReturnPenalty";
             txtLateReturnPenalty.Size = new Size(165, 32);
             txtLateReturnPenalty.TabIndex = 39;
+            txtLateReturnPenalty.TextChanged += txtLateReturnPenalty_TextChanged;
             // 
             // btnUpload
             // 
@@ -109,14 +113,16 @@
             lblLateReturnPenalty.TabIndex = 35;
             lblLateReturnPenalty.Text = "Late Return Penalty";
             // 
-            // cmbReturnCondition
+            // cmbConditionStatus
             // 
-            cmbReturnCondition.Font = new Font("Segoe UI", 14F);
-            cmbReturnCondition.FormattingEnabled = true;
-            cmbReturnCondition.Location = new Point(282, 300);
-            cmbReturnCondition.Name = "cmbReturnCondition";
-            cmbReturnCondition.Size = new Size(205, 33);
-            cmbReturnCondition.TabIndex = 34;
+            cmbConditionStatus.Font = new Font("Segoe UI", 14F);
+            cmbConditionStatus.FormattingEnabled = true;
+            cmbConditionStatus.Location = new Point(282, 300);
+            cmbConditionStatus.Name = "cmbConditionStatus";
+            cmbConditionStatus.Size = new Size(205, 33);
+            cmbConditionStatus.TabIndex = 34;
+            cmbConditionStatus.SelectedIndexChanged += cmbConditionStatus_SelectedIndexChanged;
+            cmbConditionStatus.SelectionChangeCommitted += cmbConditionStatus_SelectionChangeCommitted;
             // 
             // lblReturnCondition
             // 
@@ -152,6 +158,7 @@
             txtAssociatedTransaction.Font = new Font("Segoe UI", 14F);
             txtAssociatedTransaction.Location = new Point(282, 123);
             txtAssociatedTransaction.Name = "txtAssociatedTransaction";
+            txtAssociatedTransaction.ReadOnly = true;
             txtAssociatedTransaction.Size = new Size(205, 32);
             txtAssociatedTransaction.TabIndex = 30;
             // 
@@ -180,6 +187,7 @@
             btnSaveChages.TabIndex = 28;
             btnSaveChages.Text = "Save Changes";
             btnSaveChages.UseVisualStyleBackColor = false;
+            btnSaveChages.Click += btnSaveChages_Click;
             // 
             // btnBack
             // 
@@ -208,18 +216,40 @@
             lblEditReturnRecords.TabIndex = 26;
             lblEditReturnRecords.Text = "Edit Return Records";
             // 
+            // lblLateReturnPenaltyErr
+            // 
+            lblLateReturnPenaltyErr.AutoSize = true;
+            lblLateReturnPenaltyErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblLateReturnPenaltyErr.ForeColor = Color.Red;
+            lblLateReturnPenaltyErr.Location = new Point(752, 160);
+            lblLateReturnPenaltyErr.Name = "lblLateReturnPenaltyErr";
+            lblLateReturnPenaltyErr.Size = new Size(0, 15);
+            lblLateReturnPenaltyErr.TabIndex = 48;
+            // 
+            // lblAdditionalChargesErr
+            // 
+            lblAdditionalChargesErr.AutoSize = true;
+            lblAdditionalChargesErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblAdditionalChargesErr.ForeColor = Color.Red;
+            lblAdditionalChargesErr.Location = new Point(752, 247);
+            lblAdditionalChargesErr.Name = "lblAdditionalChargesErr";
+            lblAdditionalChargesErr.Size = new Size(0, 15);
+            lblAdditionalChargesErr.TabIndex = 49;
+            // 
             // EditReturnRecord
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
+            Controls.Add(lblAdditionalChargesErr);
+            Controls.Add(lblLateReturnPenaltyErr);
             Controls.Add(txtAdditionalCharge);
             Controls.Add(txtLateReturnPenalty);
             Controls.Add(btnUpload);
             Controls.Add(lblAdditionalDocument);
             Controls.Add(lblAdditionalCharge);
             Controls.Add(lblLateReturnPenalty);
-            Controls.Add(cmbReturnCondition);
+            Controls.Add(cmbConditionStatus);
             Controls.Add(lblReturnCondition);
             Controls.Add(dtpReturnDate);
             Controls.Add(lblReturnDate);
@@ -230,6 +260,7 @@
             Controls.Add(lblEditReturnRecords);
             Name = "EditReturnRecord";
             Text = "EditReturnRecord";
+            Load += EditReturnRecord_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -242,7 +273,7 @@
         private Label lblAdditionalDocument;
         private Label lblAdditionalCharge;
         private Label lblLateReturnPenalty;
-        private ComboBox cmbReturnCondition;
+        private ComboBox cmbConditionStatus;
         private Label lblReturnCondition;
         private DateTimePicker dtpReturnDate;
         private Label lblReturnDate;
@@ -251,5 +282,7 @@
         private Button btnSaveChages;
         private Button btnBack;
         private Label lblEditReturnRecords;
+        private Label lblLateReturnPenaltyErr;
+        private Label lblAdditionalChargesErr;
     }
 }
