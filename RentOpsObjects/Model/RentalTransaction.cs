@@ -28,6 +28,13 @@ public partial class RentalTransaction
     [Column("deposit")]
     public double Deposit { get; set; }
 
+    [Column("employeeID")]
+    public int EmployeeId { get; set; }
+
+    [ForeignKey("EmployeeId")]
+    [InverseProperty("RentalTransactions")]
+    public virtual User Employee { get; set; } = null!;
+
     [ForeignKey("PaymentId")]
     [InverseProperty("RentalTransactions")]
     public virtual Payment? Payment { get; set; }
@@ -38,8 +45,4 @@ public partial class RentalTransaction
 
     [InverseProperty("RentalTransaction")]
     public virtual ICollection<ReturnRecord> ReturnRecords { get; set; } = new List<ReturnRecord>();
-
-    [ForeignKey("RentalTransactionId")]
-    [InverseProperty("RentalTransactions")]
-    public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 }

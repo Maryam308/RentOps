@@ -71,37 +71,32 @@ public partial class RentOpsDBContext : DbContext
     {
         modelBuilder.Entity<Document>(entity =>
         {
-            entity.HasOne(d => d.FileType).WithMany(p => p.Documents).HasConstraintName("FK_Document_FileType");
+            entity.HasOne(d => d.FileType).WithMany(p => p.Documents)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Document_FileType");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Documents).HasConstraintName("FK_Document_User");
-
-            entity.HasMany(d => d.RentalTransactions).WithMany(p => p.Documents)
-                .UsingEntity<Dictionary<string, object>>(
-                    "RentalDocument",
-                    r => r.HasOne<RentalTransaction>().WithMany()
-                        .HasForeignKey("RentalTransactionId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_RentalDocument_RentalTransaction"),
-                    l => l.HasOne<Document>().WithMany()
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_RentalDocument_Document"),
-                    j =>
-                    {
-                        j.HasKey("DocumentId", "RentalTransactionId");
-                        j.ToTable("RentalDocument");
-                        j.IndexerProperty<int>("DocumentId").HasColumnName("documentID");
-                        j.IndexerProperty<int>("RentalTransactionId").HasColumnName("rentalTransactionID");
-                    });
+            entity.HasOne(d => d.User).WithMany(p => p.Documents)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Document_User");
         });
 
         modelBuilder.Entity<Equipment>(entity =>
         {
-            entity.HasOne(d => d.AvailabilityStatus).WithMany(p => p.Equipment).HasConstraintName("FK_Equipment_AvailabilityStatus");
+            entity.HasOne(d => d.AvailabilityStatus).WithMany(p => p.Equipment)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Equipment_AvailabilityStatus");
 
-            entity.HasOne(d => d.ConditionStatus).WithMany(p => p.Equipment).HasConstraintName("FK_Equipment_ConditionStatus");
+            entity.HasOne(d => d.ConditionStatus).WithMany(p => p.Equipment)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Equipment_ConditionStatus");
 
-            entity.HasOne(d => d.EquipmentCategory).WithMany(p => p.Equipment).HasConstraintName("FK_Equipment_EquipmentCategory");
+            entity.HasOne(d => d.EquipmentCategory).WithMany(p => p.Equipment)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Equipment_EquipmentCategory");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Equipment)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Equipment_User");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
@@ -118,38 +113,48 @@ public partial class RentOpsDBContext : DbContext
 
         modelBuilder.Entity<Log>(entity =>
         {
-            entity.Property(e => e.LogTimestamp)
-                .IsRowVersion()
-                .IsConcurrencyToken();
+            entity.HasOne(d => d.LogType).WithMany(p => p.Logs)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Log_LogType");
 
-            entity.HasOne(d => d.LogType).WithMany(p => p.Logs).HasConstraintName("FK_Log_LogType");
+            entity.HasOne(d => d.Source).WithMany(p => p.Logs)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Log_Source");
 
-            entity.HasOne(d => d.Source).WithMany(p => p.Logs).HasConstraintName("FK_Log_Source");
+            entity.HasOne(d => d.User).WithMany(p => p.Logs).HasConstraintName("FK_Log_User");
         });
 
         modelBuilder.Entity<MessageContent>(entity =>
         {
-            entity.HasOne(d => d.MessageType).WithMany(p => p.MessageContents).HasConstraintName("FK_MessageContent_MessageType");
+            entity.HasOne(d => d.MessageType).WithMany(p => p.MessageContents)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_MessageContent_MessageType");
         });
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.Property(e => e.NotificationTimestamp)
-                .IsRowVersion()
-                .IsConcurrencyToken();
+            entity.HasOne(d => d.MessageContent).WithMany(p => p.Notifications)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Notification_MessageContent");
 
-            entity.HasOne(d => d.MessageContent).WithMany(p => p.Notifications).HasConstraintName("FK_Notification_MessageContent");
+            entity.HasOne(d => d.NotificationStatus).WithMany(p => p.Notifications)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Notification_NotificationStatus");
 
-            entity.HasOne(d => d.NotificationStatus).WithMany(p => p.Notifications).HasConstraintName("FK_Notification_NotificationStatus");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Notifications).HasConstraintName("FK_Notification_User");
+            entity.HasOne(d => d.User).WithMany(p => p.Notifications)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Notification_User");
         });
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasOne(d => d.PaymentMethod).WithMany(p => p.Payments).HasConstraintName("FK_Payment_PaymentMethod");
+            entity.HasOne(d => d.PaymentMethod).WithMany(p => p.Payments)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Payment_PaymentMethod");
 
-            entity.HasOne(d => d.PaymentStatus).WithMany(p => p.Payments).HasConstraintName("FK_Payment_PaymentStatus");
+            entity.HasOne(d => d.PaymentStatus).WithMany(p => p.Payments)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Payment_PaymentStatus");
         });
 
         modelBuilder.Entity<RentalRequest>(entity =>
@@ -163,6 +168,10 @@ public partial class RentOpsDBContext : DbContext
 
         modelBuilder.Entity<RentalTransaction>(entity =>
         {
+            entity.HasOne(d => d.Employee).WithMany(p => p.RentalTransactions)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_RentalTransaction_User");
+
             entity.HasOne(d => d.Payment).WithMany(p => p.RentalTransactions).HasConstraintName("FK_RentalTransaction_Payment");
 
             entity.HasOne(d => d.RentalRequest).WithMany(p => p.RentalTransactions).HasConstraintName("FK_RentalTransaction_RentalRequest");
@@ -172,9 +181,13 @@ public partial class RentOpsDBContext : DbContext
         {
             entity.HasOne(d => d.Document).WithMany(p => p.ReturnRecords).HasConstraintName("FK_ReturnRecord_Document");
 
-            entity.HasOne(d => d.RentalTransaction).WithMany(p => p.ReturnRecords).HasConstraintName("FK_ReturnRecord_RentalTransaction");
+            entity.HasOne(d => d.RentalTransaction).WithMany(p => p.ReturnRecords)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ReturnRecord_RentalTransaction");
 
-            entity.HasOne(d => d.ReturnCondition).WithMany(p => p.ReturnRecords).HasConstraintName("FK_ReturnRecord_ReturnCondition");
+            entity.HasOne(d => d.ReturnCondition).WithMany(p => p.ReturnRecords)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ReturnRecord_ReturnCondition");
         });
 
         modelBuilder.Entity<Source>(entity =>
@@ -184,7 +197,11 @@ public partial class RentOpsDBContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasOne(d => d.Role).WithMany(p => p.Users).HasConstraintName("FK_User_Role");
+            entity.Property(e => e.PhoneNumber).IsFixedLength();
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_User_Role");
         });
 
         OnModelCreatingPartial(modelBuilder);

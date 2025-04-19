@@ -14,7 +14,7 @@ public partial class MessageContent
     public int MessageContentId { get; set; }
 
     [Column("messageTypeID")]
-    public int? MessageTypeId { get; set; }
+    public int MessageTypeId { get; set; }
 
     [Column("messageContentText")]
     [StringLength(300)]
@@ -22,7 +22,7 @@ public partial class MessageContent
 
     [ForeignKey("MessageTypeId")]
     [InverseProperty("MessageContents")]
-    public virtual MessageType? MessageType { get; set; }
+    public virtual MessageType MessageType { get; set; } = null!;
 
     [InverseProperty("MessageContent")]
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();

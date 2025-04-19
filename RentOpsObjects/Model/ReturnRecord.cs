@@ -14,19 +14,19 @@ public partial class ReturnRecord
     public int ReturnRecordId { get; set; }
 
     [Column("rentalTransactionID")]
-    public int? RentalTransactionId { get; set; }
+    public int RentalTransactionId { get; set; }
 
     [Column("actualReturnDate")]
     public DateOnly ActualReturnDate { get; set; }
 
     [Column("returnConditionID")]
-    public int? ReturnConditionId { get; set; }
+    public int ReturnConditionId { get; set; }
 
     [Column("lateReturnFee")]
-    public double? LateReturnFee { get; set; }
+    public double LateReturnFee { get; set; }
 
     [Column("additionalCharge")]
-    public double? AdditionalCharge { get; set; }
+    public double AdditionalCharge { get; set; }
 
     [Column("documentID")]
     public int? DocumentId { get; set; }
@@ -37,9 +37,9 @@ public partial class ReturnRecord
 
     [ForeignKey("RentalTransactionId")]
     [InverseProperty("ReturnRecords")]
-    public virtual RentalTransaction? RentalTransaction { get; set; }
+    public virtual RentalTransaction RentalTransaction { get; set; } = null!;
 
     [ForeignKey("ReturnConditionId")]
     [InverseProperty("ReturnRecords")]
-    public virtual ReturnCondition? ReturnCondition { get; set; }
+    public virtual ReturnCondition ReturnCondition { get; set; } = null!;
 }

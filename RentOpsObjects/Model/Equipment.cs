@@ -24,32 +24,36 @@ public partial class Equipment
     public double RentalPrice { get; set; }
 
     [Column("availabilityStatusID")]
-    public int? AvailabilityStatusId { get; set; }
+    public int AvailabilityStatusId { get; set; }
 
     [Column("conditionStatusID")]
-    public int? ConditionStatusId { get; set; }
+    public int ConditionStatusId { get; set; }
 
     [Column("equipmentCategoryID")]
-    public int? EquipmentCategoryId { get; set; }
+    public int EquipmentCategoryId { get; set; }
 
-    [Column("equipmentQuantity")]
-    public int EquipmentQuantity { get; set; }
+    [Column("userID")]
+    public int UserId { get; set; }
 
     [ForeignKey("AvailabilityStatusId")]
     [InverseProperty("Equipment")]
-    public virtual AvailabilityStatus? AvailabilityStatus { get; set; }
+    public virtual AvailabilityStatus AvailabilityStatus { get; set; } = null!;
 
     [ForeignKey("ConditionStatusId")]
     [InverseProperty("Equipment")]
-    public virtual ConditionStatus? ConditionStatus { get; set; }
+    public virtual ConditionStatus ConditionStatus { get; set; } = null!;
 
     [ForeignKey("EquipmentCategoryId")]
     [InverseProperty("Equipment")]
-    public virtual EquipmentCategory? EquipmentCategory { get; set; }
+    public virtual EquipmentCategory EquipmentCategory { get; set; } = null!;
 
     [InverseProperty("Equipment")]
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
     [InverseProperty("Equipment")]
     public virtual ICollection<RentalRequest> RentalRequests { get; set; } = new List<RentalRequest>();
+
+    [ForeignKey("UserId")]
+    [InverseProperty("Equipment")]
+    public virtual User User { get; set; } = null!;
 }

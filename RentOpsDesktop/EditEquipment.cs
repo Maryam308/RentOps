@@ -89,7 +89,7 @@ namespace RentOpsDesktop
                     e.EquipmentName,
                     e.EquipmentDescription,
                     e.RentalPrice,
-                    e.EquipmentQuantity,
+                    //e.EquipmentQuantity,
                     ConditionStatusId = e.ConditionStatusId,
                     AvailabilityStatusId = e.AvailabilityStatusId,
                     EquipmentCategoryId = e.EquipmentCategoryId
@@ -102,7 +102,7 @@ namespace RentOpsDesktop
                 txtEquipmentName.Text = equipment.EquipmentName;
                 txtEquipmentDescription.Text = equipment.EquipmentDescription;
                 txtRentalPrice.Text = equipment.RentalPrice.ToString();
-                txtQuantity.Text = equipment.EquipmentQuantity.ToString();
+                //txtQuantity.Text = equipment.EquipmentQuantity.ToString();
 
                 // Set the selected values for the comboboxes
                 cmbConditionStatus.SelectedValue = equipment.ConditionStatusId;
@@ -129,7 +129,7 @@ namespace RentOpsDesktop
                         equipmentToEdit.EquipmentName = txtEquipmentName.Text;
                         equipmentToEdit.EquipmentDescription = txtEquipmentDescription.Text;
                         equipmentToEdit.RentalPrice = (double)Convert.ToDecimal(txtRentalPrice.Text);
-                        equipmentToEdit.EquipmentQuantity = Convert.ToInt32(txtQuantity.Text);
+                        //equipmentToEdit.EquipmentQuantity = Convert.ToInt32(txtQuantity.Text);
                         equipmentToEdit.ConditionStatusId = Convert.ToInt32(cmbConditionStatus.SelectedValue);
                         equipmentToEdit.AvailabilityStatusId = Convert.ToInt32(cmbAvailabilityStatus.SelectedValue);
                         equipmentToEdit.EquipmentCategoryId = Convert.ToInt32(cmbEquipmentCategory.SelectedValue);

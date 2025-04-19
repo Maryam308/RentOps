@@ -17,31 +17,35 @@ public partial class Log
     public int? UserId { get; set; }
 
     [Column("logTypeID")]
-    public int? LogTypeId { get; set; }
+    public int LogTypeId { get; set; }
 
     [Column("exception")]
     [StringLength(500)]
-    public string Exception { get; set; } = null!;
+    public string? Exception { get; set; }
 
     [Column("userAction")]
     [StringLength(200)]
-    public string UserAction { get; set; } = null!;
+    public string? UserAction { get; set; }
 
     [Column("logTimestamp")]
-    public byte[] LogTimestamp { get; set; } = null!;
+    public DateTime LogTimestamp { get; set; }
 
     [Column("affectedData")]
     [StringLength(200)]
-    public string AffectedData { get; set; } = null!;
+    public string? AffectedData { get; set; }
 
     [Column("sourceID")]
-    public int? SourceId { get; set; }
+    public int SourceId { get; set; }
 
     [ForeignKey("LogTypeId")]
     [InverseProperty("Logs")]
-    public virtual LogType? LogType { get; set; }
+    public virtual LogType LogType { get; set; } = null!;
 
     [ForeignKey("SourceId")]
     [InverseProperty("Logs")]
-    public virtual Source? Source { get; set; }
+    public virtual Source Source { get; set; } = null!;
+
+    [ForeignKey("UserId")]
+    [InverseProperty("Logs")]
+    public virtual User? User { get; set; }
 }

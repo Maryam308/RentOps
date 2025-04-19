@@ -40,7 +40,7 @@ namespace RentOpsDesktop
             cmbReturnCondition.DisplayMember = "ReturnConditionTitle";
             cmbReturnCondition.ValueMember = "ReturnConditionId";
             //select the default
-            cmbReturnCondition.SelectedIndex = 0;
+            //cmbReturnCondition.SelectedIndex = 0;
 
 
         }

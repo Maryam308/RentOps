@@ -14,18 +14,18 @@ public partial class Payment
     public int PaymentId { get; set; }
 
     [Column("paymentStatusID")]
-    public int? PaymentStatusId { get; set; }
+    public int PaymentStatusId { get; set; }
 
     [Column("paymentMethodID")]
-    public int? PaymentMethodId { get; set; }
+    public int PaymentMethodId { get; set; }
 
     [ForeignKey("PaymentMethodId")]
     [InverseProperty("Payments")]
-    public virtual PaymentMethod? PaymentMethod { get; set; }
+    public virtual PaymentMethod PaymentMethod { get; set; } = null!;
 
     [ForeignKey("PaymentStatusId")]
     [InverseProperty("Payments")]
-    public virtual PaymentStatus? PaymentStatus { get; set; }
+    public virtual PaymentStatus PaymentStatus { get; set; } = null!;
 
     [InverseProperty("Payment")]
     public virtual ICollection<RentalTransaction> RentalTransactions { get; set; } = new List<RentalTransaction>();
