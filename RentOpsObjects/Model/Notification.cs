@@ -14,26 +14,26 @@ public partial class Notification
     public int NotificationId { get; set; }
 
     [Column("userID")]
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
     [Column("messageContentID")]
-    public int? MessageContentId { get; set; }
+    public int MessageContentId { get; set; }
 
     [Column("notificationStatusID")]
-    public int? NotificationStatusId { get; set; }
+    public int NotificationStatusId { get; set; }
 
     [Column("notificationTimestamp")]
-    public byte[] NotificationTimestamp { get; set; } = null!;
+    public DateTime NotificationTimestamp { get; set; }
 
     [ForeignKey("MessageContentId")]
     [InverseProperty("Notifications")]
-    public virtual MessageContent? MessageContent { get; set; }
+    public virtual MessageContent MessageContent { get; set; } = null!;
 
     [ForeignKey("NotificationStatusId")]
     [InverseProperty("Notifications")]
-    public virtual NotificationStatus? NotificationStatus { get; set; }
+    public virtual NotificationStatus NotificationStatus { get; set; } = null!;
 
     [ForeignKey("UserId")]
     [InverseProperty("Notifications")]
-    public virtual User? User { get; set; }
+    public virtual User User { get; set; } = null!;
 }

@@ -15,7 +15,7 @@ public partial class NotificationStatus
 
     [Column("notificationStatusTitle")]
     [StringLength(200)]
-    public string? NotificationStatusTitle { get; set; }
+    public string NotificationStatusTitle { get; set; } = null!;
 
     [InverseProperty("NotificationStatus")]
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();

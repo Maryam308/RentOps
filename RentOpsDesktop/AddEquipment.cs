@@ -206,7 +206,7 @@ namespace RentOpsDesktop
                         EquipmentName = txtEquipmentName.Text,
                         EquipmentDescription = txtEquipmentDescription.Text,
                         EquipmentCategoryId = Convert.ToInt32(cmbEquipmentCategory.SelectedValue),
-                        EquipmentQuantity = Convert.ToInt32(txtQuantity.Text),
+                        //EquipmentQuantity = Convert.ToInt32(txtQuantity.Text),
                         RentalPrice = Convert.ToDouble(txtRentalPrice.Text),
                         ConditionStatusId = Convert.ToInt32(cmbConditionStatus.SelectedValue),
                         AvailabilityStatusId = Convert.ToInt32(cmbAvailabilityStatus.SelectedValue)

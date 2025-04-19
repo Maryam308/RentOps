@@ -14,34 +14,33 @@ public partial class Document
     public int DocumentId { get; set; }
 
     [Column("userID")]
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
     [Column("fileName")]
     [StringLength(100)]
     public string FileName { get; set; } = null!;
 
     [Column("uploadDate")]
-    public DateOnly UploadDate { get; set; }
+    public DateTime UploadDate { get; set; }
 
     [Column("fileTypeID")]
-    public int? FileTypeId { get; set; }
+    public int FileTypeId { get; set; }
 
     [Column("storagePath")]
     [StringLength(100)]
     public string StoragePath { get; set; } = null!;
 
+    [Column("fileData")]
+    public byte[] FileData { get; set; } = null!;
+
     [ForeignKey("FileTypeId")]
     [InverseProperty("Documents")]
-    public virtual FileType? FileType { get; set; }
+    public virtual FileType FileType { get; set; } = null!;
 
     [InverseProperty("Document")]
     public virtual ICollection<ReturnRecord> ReturnRecords { get; set; } = new List<ReturnRecord>();
 
     [ForeignKey("UserId")]
     [InverseProperty("Documents")]
-    public virtual User? User { get; set; }
-
-    [ForeignKey("DocumentId")]
-    [InverseProperty("Documents")]
-    public virtual ICollection<RentalTransaction> RentalTransactions { get; set; } = new List<RentalTransaction>();
+    public virtual User User { get; set; } = null!;
 }

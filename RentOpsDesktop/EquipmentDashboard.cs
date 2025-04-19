@@ -80,7 +80,7 @@ namespace RentOpsDesktop
                     EquipmentName = e.EquipmentName, // Select the equipment name
                     EquipmentDescription = e.EquipmentDescription, // Select the equipment description
                     RentalPrice = e.RentalPrice, // Select the rental price
-                    EquipmentQuantity = e.EquipmentQuantity, // Select the equipment quantity
+                    //EquipmentQuantity = e.EquipmentQuantity, // Select the equipment quantity
                     ConditionStatus = context.ConditionStatuses
                         .Where(cs => cs.ConditionStatusId == e.ConditionStatusId)
                         .Select(cs => cs.ConditionStatusTitle)
