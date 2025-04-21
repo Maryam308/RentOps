@@ -25,6 +25,8 @@ public partial class RentOpsDBContext : DbContext
 
     public virtual DbSet<EquipmentCategory> EquipmentCategories { get; set; }
 
+    public virtual DbSet<ExternalCustomer> ExternalCustomers { get; set; }
+
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
     public virtual DbSet<FileType> FileTypes { get; set; }
@@ -97,6 +99,11 @@ public partial class RentOpsDBContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Equipment)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Equipment_User");
+        });
+
+        modelBuilder.Entity<ExternalCustomer>(entity =>
+        {
+            entity.HasKey(e => e.CustomerId).HasName("PK_Customer");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
