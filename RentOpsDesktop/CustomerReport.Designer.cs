@@ -28,12 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerReport));
             lblCustomersReport = new Label();
-            dgvCustomersReport = new DataGridView();
             btnBack = new Button();
             btnGenerateCustomerReport = new Button();
             lblInstruction = new Label();
-            ((System.ComponentModel.ISupportInitialize)dgvCustomersReport).BeginInit();
+            label1 = new Label();
+            comboBox1 = new ComboBox();
+            label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
             SuspendLayout();
             // 
             // lblCustomersReport
@@ -46,17 +50,6 @@
             lblCustomersReport.Size = new Size(276, 42);
             lblCustomersReport.TabIndex = 3;
             lblCustomersReport.Text = "Customers Report";
-            // 
-            // dgvCustomersReport
-            // 
-            dgvCustomersReport.BackgroundColor = Color.WhiteSmoke;
-            dgvCustomersReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvCustomersReport.Location = new Point(480, 106);
-            dgvCustomersReport.Margin = new Padding(3, 2, 3, 2);
-            dgvCustomersReport.Name = "dgvCustomersReport";
-            dgvCustomersReport.RowHeadersWidth = 51;
-            dgvCustomersReport.Size = new Size(410, 320);
-            dgvCustomersReport.TabIndex = 4;
             // 
             // btnBack
             // 
@@ -82,39 +75,91 @@
             btnGenerateCustomerReport.FlatStyle = FlatStyle.Flat;
             btnGenerateCustomerReport.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnGenerateCustomerReport.ForeColor = Color.FromArgb(241, 240, 234);
-            btnGenerateCustomerReport.Location = new Point(97, 137);
+            btnGenerateCustomerReport.Location = new Point(609, 171);
             btnGenerateCustomerReport.Margin = new Padding(0);
             btnGenerateCustomerReport.Name = "btnGenerateCustomerReport";
             btnGenerateCustomerReport.Size = new Size(281, 61);
             btnGenerateCustomerReport.TabIndex = 15;
             btnGenerateCustomerReport.Text = "Generate Customers Report";
             btnGenerateCustomerReport.UseVisualStyleBackColor = false;
+            btnGenerateCustomerReport.Click += btnGenerateCustomerReport_Click;
             // 
             // lblInstruction
             // 
-            lblInstruction.AutoSize = true;
-            lblInstruction.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic);
+            lblInstruction.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblInstruction.ForeColor = SystemColors.ControlDarkDark;
-            lblInstruction.Location = new Point(43, 226);
+            lblInstruction.Location = new Point(60, 181);
             lblInstruction.Name = "lblInstruction";
-            lblInstruction.Size = new Size(303, 19);
+            lblInstruction.Size = new Size(539, 98);
             lblInstruction.TabIndex = 16;
-            lblInstruction.Text = "The report generated contain data about the ...";
+            lblInstruction.Text = resources.GetString("lblInstruction.Text");
+            // 
+            // label1
+            // 
+            label1.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic);
+            label1.ForeColor = SystemColors.ControlDarkDark;
+            label1.Location = new Point(36, 147);
+            label1.Name = "label1";
+            label1.Size = new Size(530, 25);
+            label1.TabIndex = 17;
+            label1.Text = " This report provides a detailed overview of all registered customers, including:\r\n";
+            // 
+            // comboBox1
+            // 
+            comboBox1.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(609, 332);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(281, 38);
+            comboBox1.TabIndex = 18;
+            // 
+            // label2
+            // 
+            label2.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic);
+            label2.ForeColor = SystemColors.ControlDarkDark;
+            label2.Location = new Point(118, 345);
+            label2.Name = "label2";
+            label2.Size = new Size(357, 25);
+            label2.TabIndex = 19;
+            label2.Text = "Choose a report that is generated previously to view.";
+            // 
+            // label3
+            // 
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.Black;
+            label3.Location = new Point(36, 111);
+            label3.Name = "label3";
+            label3.Size = new Size(230, 25);
+            label3.TabIndex = 20;
+            label3.Text = "Generate a Customer Report";
+            // 
+            // label4
+            // 
+            label4.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0);
+            label4.ForeColor = Color.Black;
+            label4.Location = new Point(36, 320);
+            label4.Name = "label4";
+            label4.Size = new Size(351, 25);
+            label4.TabIndex = 21;
+            label4.Text = "View previously generated Customer Reports";
             // 
             // CustomerReport
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(comboBox1);
+            Controls.Add(label1);
             Controls.Add(lblInstruction);
             Controls.Add(btnGenerateCustomerReport);
             Controls.Add(btnBack);
-            Controls.Add(dgvCustomersReport);
             Controls.Add(lblCustomersReport);
             Margin = new Padding(3, 2, 3, 2);
             Name = "CustomerReport";
             Text = "CustomerReport";
-            ((System.ComponentModel.ISupportInitialize)dgvCustomersReport).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -122,9 +167,13 @@
         #endregion
 
         private Label lblCustomersReport;
-        private DataGridView dgvCustomersReport;
         private Button btnBack;
         private Button btnGenerateCustomerReport;
         private Label lblInstruction;
+        private Label label1;
+        private ComboBox comboBox1;
+        private Label label2;
+        private Label label3;
+        private Label label4;
     }
 }
