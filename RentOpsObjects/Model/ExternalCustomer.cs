@@ -28,4 +28,7 @@ public partial class ExternalCustomer
     [Column("phoneNumber")]
     [StringLength(10)]
     public string PhoneNumber { get; set; } = null!;
+
+    [InverseProperty("Customer")]
+    public virtual ICollection<RentalTransaction> RentalTransactions { get; set; } = new List<RentalTransaction>();
 }

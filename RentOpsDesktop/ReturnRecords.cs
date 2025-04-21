@@ -26,9 +26,9 @@ namespace RentOpsDesktop
         {
 
             //select the data 
-            var returnRecords = dbContext.ReturnRecords.Join(dbContext.ReturnConditions,
+            var returnRecords = dbContext.ReturnRecords.Join(dbContext.ConditionStatuses,
                 rr => rr.ReturnConditionId,
-                rc => rc.ReturnConditionId,
+                rc => rc.ConditionStatusId,
                 (returnRecord, ReturnCond) =>
                 new
                 {
@@ -39,7 +39,7 @@ namespace RentOpsDesktop
                     LateReturnFee = returnRecord.LateReturnFee,
                     AdditionalCharge = returnRecord.AdditionalCharge,
                     DocumentID = returnRecord.DocumentId,
-                    ReturnCondition = ReturnCond.ReturnConditionTitle
+                    ReturnCondition = ReturnCond.ConditionStatusTitle
 
 
                 }).OrderByDescending(d => d.ActualReturnDate).ToList();
@@ -52,10 +52,10 @@ namespace RentOpsDesktop
         private void ReturnRecords_Load(object sender, EventArgs e)
         {
             //laod conditions into the combo box
-            var conditions = dbContext.ReturnConditions.ToList();
+            var conditions = dbContext.ConditionStatuses.ToList();
             cmbConditionStatus.DataSource = conditions;
-            cmbConditionStatus.DisplayMember = "ReturnConditionTitle";
-            cmbConditionStatus.ValueMember = "ReturnConditionId";
+            cmbConditionStatus.DisplayMember = "ConditionStatusTitle";
+            cmbConditionStatus.ValueMember = "ConditionStatusId";
             //set selection to -1
             cmbConditionStatus.SelectedIndex = -1;
 
@@ -89,9 +89,9 @@ namespace RentOpsDesktop
                     int returnRecordId = Convert.ToInt32(txtReturnID.Text);
 
                     //get the return record with the ID
-                    var returnRecord = dbContext.ReturnRecords.Where(r => r.ReturnRecordId == returnRecordId).Join(dbContext.ReturnConditions,
+                    var returnRecord = dbContext.ReturnRecords.Where(r => r.ReturnRecordId == returnRecordId).Join(dbContext.ConditionStatuses,
                         rr => rr.ReturnConditionId,
-                        rc => rc.ReturnConditionId,
+                        rc => rc.ConditionStatusId,
                         (returnRecord, ReturnCond) =>
                         new
                         {
@@ -101,7 +101,7 @@ namespace RentOpsDesktop
                             LateReturnFee = returnRecord.LateReturnFee,
                             AdditionalCharge = returnRecord.AdditionalCharge,
                             DocumentID = returnRecord.DocumentId,
-                            ReturnCondition = ReturnCond.ReturnConditionTitle
+                            ReturnCondition = ReturnCond.ConditionStatusTitle
 
 
 
@@ -119,9 +119,9 @@ namespace RentOpsDesktop
                     //get the rental transaction id from the text field
                     int rentalTransactionId = Convert.ToInt32(txtTransactionID.Text);
                     //get the return record with the ID
-                    var returnRecord = dbContext.ReturnRecords.Where(r => r.RentalTransactionId == rentalTransactionId).Join(dbContext.ReturnConditions,
+                    var returnRecord = dbContext.ReturnRecords.Where(r => r.RentalTransactionId == rentalTransactionId).Join(dbContext.ConditionStatuses,
                         rr => rr.ReturnConditionId,
-                        rc => rc.ReturnConditionId,
+                        rc => rc.ConditionStatusId,
                         (returnRecord, ReturnCond) =>
                         new
                         {
@@ -131,7 +131,7 @@ namespace RentOpsDesktop
                             LateReturnFee = returnRecord.LateReturnFee,
                             AdditionalCharge = returnRecord.AdditionalCharge,
                             DocumentID = returnRecord.DocumentId,
-                            ReturnCondition = ReturnCond.ReturnConditionTitle
+                            ReturnCondition = ReturnCond.ConditionStatusTitle
 
                         }).ToList();
 
@@ -192,9 +192,9 @@ namespace RentOpsDesktop
                 //get the selected condition
                 int conditionId = Convert.ToInt32(cmbConditionStatus.SelectedValue);
                 //get the return records with the condition
-                var returnRecords = dbContext.ReturnRecords.Where(r => r.ReturnConditionId == conditionId).Join(dbContext.ReturnConditions,
+                var returnRecords = dbContext.ReturnRecords.Where(r => r.ReturnConditionId == conditionId).Join(dbContext.ConditionStatuses,
                     rr => rr.ReturnConditionId,
-                    rc => rc.ReturnConditionId,
+                    rc => rc.ConditionStatusId,
                     (returnRecord, ReturnCond) =>
                     new
                     {
@@ -204,7 +204,7 @@ namespace RentOpsDesktop
                         LateReturnFee = returnRecord.LateReturnFee,
                         AdditionalCharge = returnRecord.AdditionalCharge,
                         DocumentID = returnRecord.DocumentId,
-                        ReturnCondition = ReturnCond.ReturnConditionTitle
+                        ReturnCondition = ReturnCond.ConditionStatusTitle
                     }).ToList();
                 //show the return record in the data grid view
                 dgvReturnRecords.DataSource = returnRecords;
@@ -216,9 +216,9 @@ namespace RentOpsDesktop
 
 
                 //get the return records of the selected date
-                var returnRecords = dbContext.ReturnRecords.Where(r => r.ActualReturnDate == selectedDate).Join(dbContext.ReturnConditions,
+                var returnRecords = dbContext.ReturnRecords.Where(r => r.ActualReturnDate == selectedDate).Join(dbContext.ConditionStatuses,
                     rr => rr.ReturnConditionId,
-                    rc => rc.ReturnConditionId,
+                    rc => rc.ConditionStatusId,
                     (returnRecord, ReturnCond) =>
                     new
                     {
@@ -228,7 +228,7 @@ namespace RentOpsDesktop
                         LateReturnFee = returnRecord.LateReturnFee,
                         AdditionalCharge = returnRecord.AdditionalCharge,
                         DocumentID = returnRecord.DocumentId,
-                        ReturnCondition = ReturnCond.ReturnConditionTitle
+                        ReturnCondition = ReturnCond.ConditionStatusTitle
                     }).ToList();
                 //show the return record in the data grid view
                 dgvReturnRecords.DataSource = returnRecords;
@@ -241,9 +241,9 @@ namespace RentOpsDesktop
                 DateOnly selectedDate = DateOnly.FromDateTime(dtpActualReturnDate.Value);
 
                 //get the return records with the condition and the date
-                var returnRecords = dbContext.ReturnRecords.Where(r => r.ReturnConditionId == conditionId && r.ActualReturnDate == selectedDate).Join(dbContext.ReturnConditions,
+                var returnRecords = dbContext.ReturnRecords.Where(r => r.ReturnConditionId == conditionId && r.ActualReturnDate == selectedDate).Join(dbContext.ConditionStatuses,
                     rr => rr.ReturnConditionId,
-                    rc => rc.ReturnConditionId,
+                    rc => rc.ConditionStatusId,
                     (returnRecord, ReturnCond) =>
                     new
                     {
@@ -253,7 +253,7 @@ namespace RentOpsDesktop
                         LateReturnFee = returnRecord.LateReturnFee,
                         AdditionalCharge = returnRecord.AdditionalCharge,
                         DocumentID = returnRecord.DocumentId,
-                        ReturnCondition = ReturnCond.ReturnConditionTitle
+                        ReturnCondition = ReturnCond.ConditionStatusTitle
                     }).ToList();
 
                 //show the return record in the data grid view

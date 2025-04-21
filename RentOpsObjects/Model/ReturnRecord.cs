@@ -41,5 +41,5 @@ public partial class ReturnRecord
 
     [ForeignKey("ReturnConditionId")]
     [InverseProperty("ReturnRecords")]
-    public virtual ReturnCondition ReturnCondition { get; set; } = null!;
+    public virtual ConditionStatus ReturnCondition { get; set; } = null!;
 }

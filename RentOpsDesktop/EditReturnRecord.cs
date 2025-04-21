@@ -34,10 +34,10 @@ namespace RentOpsDesktop
         private void EditReturnRecord_Load(object sender, EventArgs e)
         {
             //laod conditions into the combo box
-            var conditions = dbContext.ReturnConditions.ToList();
+            var conditions = dbContext.ConditionStatuses.ToList();
             cmbConditionStatus.DataSource = conditions;
-            cmbConditionStatus.DisplayMember = "ReturnConditionTitle";
-            cmbConditionStatus.ValueMember = "ReturnConditionId";
+            cmbConditionStatus.DisplayMember = "ConditionStatusTitle";
+            cmbConditionStatus.ValueMember = "ConditionStatusId";
 
             //laod the record to edit into the form
             txtAssociatedTransaction.Text = returnRecordToEdit.RentalTransactionId.ToString();

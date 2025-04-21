@@ -53,6 +53,9 @@ public partial class Equipment
     [InverseProperty("Equipment")]
     public virtual ICollection<RentalRequest> RentalRequests { get; set; } = new List<RentalRequest>();
 
+    [InverseProperty("Equipment")]
+    public virtual ICollection<RentalTransaction> RentalTransactions { get; set; } = new List<RentalTransaction>();
+
     [ForeignKey("UserId")]
     [InverseProperty("Equipment")]
     public virtual User User { get; set; } = null!;

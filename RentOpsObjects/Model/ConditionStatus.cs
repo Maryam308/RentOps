@@ -19,4 +19,7 @@ public partial class ConditionStatus
 
     [InverseProperty("ConditionStatus")]
     public virtual ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
+
+    [InverseProperty("ReturnCondition")]
+    public virtual ICollection<ReturnRecord> ReturnRecords { get; set; } = new List<ReturnRecord>();
 }

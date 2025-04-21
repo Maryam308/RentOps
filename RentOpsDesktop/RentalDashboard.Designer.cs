@@ -40,17 +40,17 @@
             btnBack = new Button();
             lblRentalDashboard = new Label();
             groupBox2 = new GroupBox();
-            lblEquipmentCount = new Label();
+            lblTotalIncome = new Label();
             groupBox1 = new GroupBox();
-            label1 = new Label();
+            lblAverageRentalPeriod = new Label();
             groupBox3 = new GroupBox();
-            label2 = new Label();
+            lblAvailableEquipments = new Label();
             groupBox4 = new GroupBox();
-            label3 = new Label();
+            lblTodayRentalRequest = new Label();
             groupBox5 = new GroupBox();
-            label4 = new Label();
+            lblLastMonthRentals = new Label();
             groupBox6 = new GroupBox();
-            label5 = new Label();
+            lblCurrentlyRented = new Label();
             btnRefreshStatistics = new Button();
             btnOverdueReturns = new Button();
             pnlNavigationSideBar.SuspendLayout();
@@ -239,7 +239,7 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(lblEquipmentCount);
+            groupBox2.Controls.Add(lblTotalIncome);
             groupBox2.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
             groupBox2.Location = new Point(249, 120);
             groupBox2.Name = "groupBox2";
@@ -248,19 +248,19 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Total Income";
             // 
-            // lblEquipmentCount
+            // lblTotalIncome
             // 
-            lblEquipmentCount.AutoSize = true;
-            lblEquipmentCount.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            lblEquipmentCount.Location = new Point(88, 42);
-            lblEquipmentCount.Name = "lblEquipmentCount";
-            lblEquipmentCount.Size = new Size(26, 23);
-            lblEquipmentCount.TabIndex = 40;
-            lblEquipmentCount.Text = "10";
+            lblTotalIncome.AutoSize = true;
+            lblTotalIncome.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
+            lblTotalIncome.Location = new Point(88, 42);
+            lblTotalIncome.Name = "lblTotalIncome";
+            lblTotalIncome.Size = new Size(26, 23);
+            lblTotalIncome.TabIndex = 40;
+            lblTotalIncome.Text = "10";
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(lblAverageRentalPeriod);
             groupBox1.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
             groupBox1.Location = new Point(477, 120);
             groupBox1.Name = "groupBox1";
@@ -269,19 +269,19 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Avarage Rental Period";
             // 
-            // label1
+            // lblAverageRentalPeriod
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            label1.Location = new Point(88, 42);
-            label1.Name = "label1";
-            label1.Size = new Size(26, 23);
-            label1.TabIndex = 40;
-            label1.Text = "10";
+            lblAverageRentalPeriod.AutoSize = true;
+            lblAverageRentalPeriod.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
+            lblAverageRentalPeriod.Location = new Point(88, 42);
+            lblAverageRentalPeriod.Name = "lblAverageRentalPeriod";
+            lblAverageRentalPeriod.Size = new Size(26, 23);
+            lblAverageRentalPeriod.TabIndex = 40;
+            lblAverageRentalPeriod.Text = "10";
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(label2);
+            groupBox3.Controls.Add(lblAvailableEquipments);
             groupBox3.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
             groupBox3.Location = new Point(705, 120);
             groupBox3.Name = "groupBox3";
@@ -290,19 +290,19 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Available Equipments";
             // 
-            // label2
+            // lblAvailableEquipments
             // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            label2.Location = new Point(88, 42);
-            label2.Name = "label2";
-            label2.Size = new Size(26, 23);
-            label2.TabIndex = 40;
-            label2.Text = "10";
+            lblAvailableEquipments.AutoSize = true;
+            lblAvailableEquipments.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
+            lblAvailableEquipments.Location = new Point(88, 42);
+            lblAvailableEquipments.Name = "lblAvailableEquipments";
+            lblAvailableEquipments.Size = new Size(26, 23);
+            lblAvailableEquipments.TabIndex = 40;
+            lblAvailableEquipments.Text = "10";
             // 
             // groupBox4
             // 
-            groupBox4.Controls.Add(label3);
+            groupBox4.Controls.Add(lblTodayRentalRequest);
             groupBox4.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
             groupBox4.Location = new Point(705, 230);
             groupBox4.Name = "groupBox4";
@@ -311,19 +311,19 @@
             groupBox4.TabStop = false;
             groupBox4.Text = "Today's Rental Requests";
             // 
-            // label3
+            // lblTodayRentalRequest
             // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            label3.Location = new Point(88, 42);
-            label3.Name = "label3";
-            label3.Size = new Size(26, 23);
-            label3.TabIndex = 40;
-            label3.Text = "10";
+            lblTodayRentalRequest.AutoSize = true;
+            lblTodayRentalRequest.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
+            lblTodayRentalRequest.Location = new Point(88, 42);
+            lblTodayRentalRequest.Name = "lblTodayRentalRequest";
+            lblTodayRentalRequest.Size = new Size(26, 23);
+            lblTodayRentalRequest.TabIndex = 40;
+            lblTodayRentalRequest.Text = "10";
             // 
             // groupBox5
             // 
-            groupBox5.Controls.Add(label4);
+            groupBox5.Controls.Add(lblLastMonthRentals);
             groupBox5.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
             groupBox5.Location = new Point(477, 230);
             groupBox5.Name = "groupBox5";
@@ -332,19 +332,19 @@
             groupBox5.TabStop = false;
             groupBox5.Text = "Last Month's Rentals";
             // 
-            // label4
+            // lblLastMonthRentals
             // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            label4.Location = new Point(88, 42);
-            label4.Name = "label4";
-            label4.Size = new Size(26, 23);
-            label4.TabIndex = 40;
-            label4.Text = "10";
+            lblLastMonthRentals.AutoSize = true;
+            lblLastMonthRentals.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
+            lblLastMonthRentals.Location = new Point(88, 42);
+            lblLastMonthRentals.Name = "lblLastMonthRentals";
+            lblLastMonthRentals.Size = new Size(26, 23);
+            lblLastMonthRentals.TabIndex = 40;
+            lblLastMonthRentals.Text = "10";
             // 
             // groupBox6
             // 
-            groupBox6.Controls.Add(label5);
+            groupBox6.Controls.Add(lblCurrentlyRented);
             groupBox6.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
             groupBox6.Location = new Point(249, 230);
             groupBox6.Name = "groupBox6";
@@ -353,15 +353,15 @@
             groupBox6.TabStop = false;
             groupBox6.Text = "Currently Rented";
             // 
-            // label5
+            // lblCurrentlyRented
             // 
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            label5.Location = new Point(88, 42);
-            label5.Name = "label5";
-            label5.Size = new Size(26, 23);
-            label5.TabIndex = 40;
-            label5.Text = "10";
+            lblCurrentlyRented.AutoSize = true;
+            lblCurrentlyRented.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
+            lblCurrentlyRented.Location = new Point(88, 42);
+            lblCurrentlyRented.Name = "lblCurrentlyRented";
+            lblCurrentlyRented.Size = new Size(26, 23);
+            lblCurrentlyRented.TabIndex = 40;
+            lblCurrentlyRented.Text = "10";
             // 
             // btnRefreshStatistics
             // 
@@ -378,6 +378,7 @@
             btnRefreshStatistics.TabIndex = 58;
             btnRefreshStatistics.Text = "Refresh Statistics";
             btnRefreshStatistics.UseVisualStyleBackColor = false;
+            btnRefreshStatistics.Click += btnRefreshStatistics_Click;
             // 
             // btnOverdueReturns
             // 
@@ -394,6 +395,7 @@
             btnOverdueReturns.TabIndex = 59;
             btnOverdueReturns.Text = "Overdue Returns";
             btnOverdueReturns.UseVisualStyleBackColor = false;
+            btnOverdueReturns.Click += btnOverdueReturns_Click;
             // 
             // RentalDashboard
             // 
@@ -443,17 +445,17 @@
         private Button btnRentalRequests;
         private Button btnEquipmentDashboard;
         private GroupBox groupBox2;
-        private Label lblEquipmentCount;
+        private Label lblTotalIncome;
         private GroupBox groupBox1;
-        private Label label1;
+        private Label lblAverageRentalPeriod;
         private GroupBox groupBox3;
-        private Label label2;
+        private Label lblAvailableEquipments;
         private GroupBox groupBox4;
-        private Label label3;
+        private Label lblTodayRentalRequest;
         private GroupBox groupBox5;
-        private Label label4;
+        private Label lblLastMonthRentals;
         private GroupBox groupBox6;
-        private Label label5;
+        private Label lblCurrentlyRented;
         private Button btnRefreshStatistics;
         private Button btnOverdueReturns;
     }
