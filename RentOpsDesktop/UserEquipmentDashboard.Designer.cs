@@ -416,6 +416,7 @@
             Controls.Add(pnlNavigationSideBar);
             Name = "UserEquipmentDashboard";
             Text = "UserEquipmentDashboard";
+            Load += UserEquipmentDashboard_Load;
             pnlNavigationSideBar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvEquipment).EndInit();
             groupBox1.ResumeLayout(false);
