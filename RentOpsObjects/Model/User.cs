@@ -30,7 +30,7 @@ public partial class User
 
     [Column("phoneNumber")]
     [StringLength(10)]
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = null!;
 
     [InverseProperty("User")]
     public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
