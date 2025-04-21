@@ -31,6 +31,9 @@ public partial class RentalRequest
     [Column("userID")]
     public int? UserId { get; set; }
 
+    [Column("rentalRequestTimestamp")]
+    public DateTime RentalRequestTimestamp { get; set; }
+
     [ForeignKey("EquipmentId")]
     [InverseProperty("RentalRequests")]
     public virtual Equipment? Equipment { get; set; }

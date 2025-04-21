@@ -35,10 +35,10 @@ namespace RentOpsDesktop
         private void AddReturnRecord_Load(object sender, EventArgs e)
         {
             //laod conditions into the combo box
-            var conditions = dbContext.ReturnConditions.ToList();
+            var conditions = dbContext.ConditionStatuses.ToList();
             cmbReturnCondition.DataSource = conditions;
-            cmbReturnCondition.DisplayMember = "ReturnConditionTitle";
-            cmbReturnCondition.ValueMember = "ReturnConditionId";
+            cmbReturnCondition.DisplayMember = "ConditionStatusTitle";
+            cmbReturnCondition.ValueMember = "ConditionStatusId";
             //select the default
             //cmbReturnCondition.SelectedIndex = 0;
 

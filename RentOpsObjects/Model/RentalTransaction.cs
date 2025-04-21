@@ -34,9 +34,29 @@ public partial class RentalTransaction
     [Column("customerID")]
     public int? CustomerId { get; set; }
 
-    [ForeignKey("EmployeeId")]
+    [Column("rentalFee")]
+    public double? RentalFee { get; set; }
+
+    [Column("userID")]
+    public int? UserId { get; set; }
+
+    [Column("equipmentID")]
+    public int? EquipmentId { get; set; }
+
+    [Column("rentalTransactionTimestamp")]
+    public DateTime RentalTransactionTimestamp { get; set; }
+
+    [ForeignKey("CustomerId")]
     [InverseProperty("RentalTransactions")]
+    public virtual ExternalCustomer? Customer { get; set; }
+
+    [ForeignKey("EmployeeId")]
+    [InverseProperty("RentalTransactionEmployees")]
     public virtual User Employee { get; set; } = null!;
+
+    [ForeignKey("EquipmentId")]
+    [InverseProperty("RentalTransactions")]
+    public virtual Equipment? Equipment { get; set; }
 
     [ForeignKey("PaymentId")]
     [InverseProperty("RentalTransactions")]
@@ -48,4 +68,8 @@ public partial class RentalTransaction
 
     [InverseProperty("RentalTransaction")]
     public virtual ICollection<ReturnRecord> ReturnRecords { get; set; } = new List<ReturnRecord>();
+
+    [ForeignKey("UserId")]
+    [InverseProperty("RentalTransactionUsers")]
+    public virtual User? User { get; set; }
 }

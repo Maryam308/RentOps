@@ -34,10 +34,11 @@
             btnGenerateCustomerReport = new Button();
             lblInstruction = new Label();
             label1 = new Label();
-            comboBox1 = new ComboBox();
+            cmbCustomerReports = new ComboBox();
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
+            progressBar1 = new ProgressBar();
             SuspendLayout();
             // 
             // lblCustomersReport
@@ -104,14 +105,15 @@
             label1.TabIndex = 17;
             label1.Text = " This report provides a detailed overview of all registered customers, including:\r\n";
             // 
-            // comboBox1
+            // cmbCustomerReports
             // 
-            comboBox1.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(609, 332);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(281, 38);
-            comboBox1.TabIndex = 18;
+            cmbCustomerReports.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            cmbCustomerReports.FormattingEnabled = true;
+            cmbCustomerReports.Location = new Point(609, 332);
+            cmbCustomerReports.Name = "cmbCustomerReports";
+            cmbCustomerReports.Size = new Size(281, 38);
+            cmbCustomerReports.TabIndex = 18;
+            cmbCustomerReports.SelectedIndexChanged += cmbCustomerReports_SelectedIndexChanged;
             // 
             // label2
             // 
@@ -143,15 +145,26 @@
             label4.TabIndex = 21;
             label4.Text = "View previously generated Customer Reports";
             // 
+            // progressBar1
+            // 
+            progressBar1.ForeColor = SystemColors.ControlDarkDark;
+            progressBar1.Location = new Point(609, 387);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(281, 23);
+            progressBar1.Style = ProgressBarStyle.Marquee;
+            progressBar1.TabIndex = 22;
+            progressBar1.Visible = false;
+            // 
             // CustomerReport
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
+            Controls.Add(progressBar1);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
-            Controls.Add(comboBox1);
+            Controls.Add(cmbCustomerReports);
             Controls.Add(label1);
             Controls.Add(lblInstruction);
             Controls.Add(btnGenerateCustomerReport);
@@ -160,6 +173,7 @@
             Margin = new Padding(3, 2, 3, 2);
             Name = "CustomerReport";
             Text = "CustomerReport";
+            Load += CustomerReport_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -171,9 +185,10 @@
         private Button btnGenerateCustomerReport;
         private Label lblInstruction;
         private Label label1;
-        private ComboBox comboBox1;
+        private ComboBox cmbCustomerReports;
         private Label label2;
         private Label label3;
         private Label label4;
+        private ProgressBar progressBar1;
     }
 }

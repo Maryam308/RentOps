@@ -55,8 +55,6 @@ public partial class RentOpsDBContext : DbContext
 
     public virtual DbSet<RentalTransaction> RentalTransactions { get; set; }
 
-    public virtual DbSet<ReturnCondition> ReturnConditions { get; set; }
-
     public virtual DbSet<ReturnRecord> ReturnRecords { get; set; }
 
     public virtual DbSet<Role> Roles { get; set; }
@@ -175,13 +173,19 @@ public partial class RentOpsDBContext : DbContext
 
         modelBuilder.Entity<RentalTransaction>(entity =>
         {
-            entity.HasOne(d => d.Employee).WithMany(p => p.RentalTransactions)
+            entity.HasOne(d => d.Customer).WithMany(p => p.RentalTransactions).HasConstraintName("FK_RentalTransaction_ExternalCustomer");
+
+            entity.HasOne(d => d.Employee).WithMany(p => p.RentalTransactionEmployees)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_RentalTransaction_User");
+
+            entity.HasOne(d => d.Equipment).WithMany(p => p.RentalTransactions).HasConstraintName("FK_RentalTransaction_Equipment");
 
             entity.HasOne(d => d.Payment).WithMany(p => p.RentalTransactions).HasConstraintName("FK_RentalTransaction_Payment");
 
             entity.HasOne(d => d.RentalRequest).WithMany(p => p.RentalTransactions).HasConstraintName("FK_RentalTransaction_RentalRequest");
+
+            entity.HasOne(d => d.User).WithMany(p => p.RentalTransactionUsers).HasConstraintName("FK_RentalTransaction_UserOptional");
         });
 
         modelBuilder.Entity<ReturnRecord>(entity =>

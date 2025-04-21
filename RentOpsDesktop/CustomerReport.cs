@@ -26,7 +26,7 @@ namespace RentOpsDesktop
         {
             InitializeComponent();
             dbContext = new RentOpsDBContext();
-            
+
         }
 
         private void btnGenerateCustomerReport_Click(object sender, EventArgs e)
@@ -35,7 +35,7 @@ namespace RentOpsDesktop
 
             //fetch current employee name 
             int employeeID = Global.EmployeeID;
-            var employee = dbContext.Users.Find(employeeID); 
+            var employee = dbContext.Users.Find(employeeID);
             string employeeName = employee.FirstName + " " + employee.LastName;
 
 
@@ -47,7 +47,7 @@ namespace RentOpsDesktop
             //Number of Customer Feedbacks on Equipment: 
 
             //fetch statistics from the database
-            int numberOfCustomers = dbContext.ExternalCustomers.Count() + dbContext.Users.Where(i=> i.RoleId == 3).Count();
+            int numberOfCustomers = dbContext.ExternalCustomers.Count() + dbContext.Users.Where(i => i.RoleId == 3).Count();
             int numberOfCustomerFeedbacks = dbContext.Feedbacks.Count();
 
 
@@ -218,7 +218,7 @@ Number of Lost Returns: {numberOfLostReturns}
             newDocument.UploadDate = DateTime.Now;
             newDocument.FileTypeId = 1; //customer report
             newDocument.UserId = employeeID; //current employee
-            
+
             string filename = Path.Combine("Reports", "CustomerReports", $"CustomerReport_{timestamp}.pdf");
             newDocument.StoragePath = filename; //path to the document
             newDocument.FileName = $"CustomerReport_{timestamp}.pdf"; //name of the document
@@ -231,6 +231,60 @@ Number of Lost Returns: {numberOfLostReturns}
             dbContext.SaveChanges();
 
 
+
+        }
+
+        private void CustomerReport_Load(object sender, EventArgs e)
+        {
+            //onload add the documents to the combobox
+            //load document names into combobox
+            cmbCustomerReports.DataSource = dbContext.Documents
+                .Where(d => d.FileTypeId == 1).ToList();
+            cmbCustomerReports.DisplayMember = "FileName";
+            cmbCustomerReports.ValueMember = "DocumentId";
+            cmbCustomerReports.SelectedIndex = -1;
+            cmbCustomerReports.Text = "Select a Customer Report";
+
+        }
+
+        private async void cmbCustomerReports_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // show spinner  
+            progressBar1.Visible = true;
+            cmbCustomerReports.Enabled = false;
+
+            // grab the selected Id
+            var docId = cmbCustomerReports.SelectedValue;
+            
+
+            if (docId != null)
+            {
+                // do the DB + file I/O off the UI thread
+                var tuple = await Task.Run(() => {
+                    using (var ctx = new RentOpsDBContext())
+                    {
+                        var d = ctx.Documents.Find(docId);
+                        if (d == null) return (string)null;
+                        // write to temp file
+                        var tmp = Path.Combine(Path.GetTempPath(), d.FileName + ".pdf");
+                        File.WriteAllBytes(tmp, d.FileData);
+                        return tmp;
+                    }
+                });
+
+                if (tuple != null)
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = tuple,
+                        UseShellExecute = true
+                    });
+                }
+            }
+
+            // hide spinner
+            progressBar1.Visible = false;
+            cmbCustomerReports.Enabled = true;
 
         }
     }
