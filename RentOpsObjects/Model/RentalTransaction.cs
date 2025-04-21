@@ -31,6 +31,9 @@ public partial class RentalTransaction
     [Column("employeeID")]
     public int EmployeeId { get; set; }
 
+    [Column("customerID")]
+    public int? CustomerId { get; set; }
+
     [ForeignKey("EmployeeId")]
     [InverseProperty("RentalTransactions")]
     public virtual User Employee { get; set; } = null!;
