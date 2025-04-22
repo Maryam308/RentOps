@@ -28,24 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dgvRentalReport = new DataGridView();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RentalReports));
             lblRentalReport = new Label();
             btnBack = new Button();
-            btnGenerateRentalReport = new Button();
+            progressBar1 = new ProgressBar();
+            label4 = new Label();
+            label3 = new Label();
+            label2 = new Label();
+            cmbRentalReports = new ComboBox();
+            label1 = new Label();
             lblInstruction = new Label();
-            ((System.ComponentModel.ISupportInitialize)dgvRentalReport).BeginInit();
+            btnGenerateCustomerReport = new Button();
+            dtpPeriodStartDate = new DateTimePicker();
+            label5 = new Label();
             SuspendLayout();
-            // 
-            // dgvRentalReport
-            // 
-            dgvRentalReport.BackgroundColor = Color.WhiteSmoke;
-            dgvRentalReport.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvRentalReport.Location = new Point(466, 105);
-            dgvRentalReport.Margin = new Padding(3, 2, 3, 2);
-            dgvRentalReport.Name = "dgvRentalReport";
-            dgvRentalReport.RowHeadersWidth = 51;
-            dgvRentalReport.Size = new Size(421, 320);
-            dgvRentalReport.TabIndex = 10;
             // 
             // lblRentalReport
             // 
@@ -74,56 +70,149 @@
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
             // 
-            // btnGenerateRentalReport
+            // progressBar1
             // 
-            btnGenerateRentalReport.BackColor = Color.FromArgb(121, 86, 76);
-            btnGenerateRentalReport.BackgroundImageLayout = ImageLayout.None;
-            btnGenerateRentalReport.FlatAppearance.BorderSize = 0;
-            btnGenerateRentalReport.FlatStyle = FlatStyle.Flat;
-            btnGenerateRentalReport.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGenerateRentalReport.ForeColor = Color.FromArgb(241, 240, 234);
-            btnGenerateRentalReport.Location = new Point(88, 143);
-            btnGenerateRentalReport.Margin = new Padding(0);
-            btnGenerateRentalReport.Name = "btnGenerateRentalReport";
-            btnGenerateRentalReport.Size = new Size(281, 61);
-            btnGenerateRentalReport.TabIndex = 14;
-            btnGenerateRentalReport.Text = "Generate Rental Report";
-            btnGenerateRentalReport.UseVisualStyleBackColor = false;
+            progressBar1.ForeColor = SystemColors.ControlDarkDark;
+            progressBar1.Location = new Point(622, 383);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(281, 23);
+            progressBar1.Style = ProgressBarStyle.Marquee;
+            progressBar1.TabIndex = 30;
+            progressBar1.Visible = false;
+            // 
+            // label4
+            // 
+            label4.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0);
+            label4.ForeColor = Color.Black;
+            label4.Location = new Point(49, 316);
+            label4.Name = "label4";
+            label4.Size = new Size(351, 25);
+            label4.TabIndex = 29;
+            label4.Text = "View previously generated Rental Reports";
+            // 
+            // label3
+            // 
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0);
+            label3.ForeColor = Color.Black;
+            label3.Location = new Point(49, 105);
+            label3.Name = "label3";
+            label3.Size = new Size(230, 25);
+            label3.TabIndex = 28;
+            label3.Text = "Generate a Rental Report";
+            // 
+            // label2
+            // 
+            label2.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic);
+            label2.ForeColor = SystemColors.ControlDarkDark;
+            label2.Location = new Point(108, 341);
+            label2.Name = "label2";
+            label2.Size = new Size(357, 25);
+            label2.TabIndex = 27;
+            label2.Text = "Choose a report that is generated previously to view.";
+            // 
+            // cmbRentalReports
+            // 
+            cmbRentalReports.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            cmbRentalReports.FormattingEnabled = true;
+            cmbRentalReports.Location = new Point(622, 328);
+            cmbRentalReports.Name = "cmbRentalReports";
+            cmbRentalReports.Size = new Size(281, 38);
+            cmbRentalReports.TabIndex = 26;
+            cmbRentalReports.SelectedIndexChanged += cmbRentalReports_SelectedIndexChanged;
+            // 
+            // label1
+            // 
+            label1.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic);
+            label1.ForeColor = SystemColors.ControlDarkDark;
+            label1.Location = new Point(49, 180);
+            label1.Name = "label1";
+            label1.Size = new Size(530, 25);
+            label1.TabIndex = 25;
+            label1.Text = "This report provides a detailed overview of all the rentals, including:\r\n";
             // 
             // lblInstruction
             // 
-            lblInstruction.AutoSize = true;
-            lblInstruction.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic);
+            lblInstruction.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblInstruction.ForeColor = SystemColors.ControlDarkDark;
-            lblInstruction.Location = new Point(42, 224);
+            lblInstruction.Location = new Point(73, 205);
             lblInstruction.Name = "lblInstruction";
-            lblInstruction.Size = new Size(303, 19);
-            lblInstruction.TabIndex = 17;
-            lblInstruction.Text = "The report generated contain data about the ...";
+            lblInstruction.Size = new Size(523, 98);
+            lblInstruction.TabIndex = 24;
+            lblInstruction.Text = resources.GetString("lblInstruction.Text");
+            // 
+            // btnGenerateCustomerReport
+            // 
+            btnGenerateCustomerReport.BackColor = Color.FromArgb(121, 86, 76);
+            btnGenerateCustomerReport.BackgroundImageLayout = ImageLayout.None;
+            btnGenerateCustomerReport.FlatAppearance.BorderSize = 0;
+            btnGenerateCustomerReport.FlatStyle = FlatStyle.Flat;
+            btnGenerateCustomerReport.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnGenerateCustomerReport.ForeColor = Color.FromArgb(241, 240, 234);
+            btnGenerateCustomerReport.Location = new Point(622, 197);
+            btnGenerateCustomerReport.Margin = new Padding(0);
+            btnGenerateCustomerReport.Name = "btnGenerateCustomerReport";
+            btnGenerateCustomerReport.Size = new Size(281, 61);
+            btnGenerateCustomerReport.TabIndex = 23;
+            btnGenerateCustomerReport.Text = "Generate Rental Report";
+            btnGenerateCustomerReport.UseVisualStyleBackColor = false;
+            btnGenerateCustomerReport.Click += btnGenerateCustomerReport_Click;
+            // 
+            // dtpPeriodStartDate
+            // 
+            dtpPeriodStartDate.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dtpPeriodStartDate.Location = new Point(637, 143);
+            dtpPeriodStartDate.Name = "dtpPeriodStartDate";
+            dtpPeriodStartDate.ShowCheckBox = true;
+            dtpPeriodStartDate.Size = new Size(246, 33);
+            dtpPeriodStartDate.TabIndex = 31;
+            // 
+            // label5
+            // 
+            label5.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.ForeColor = SystemColors.ControlDarkDark;
+            label5.Location = new Point(49, 134);
+            label5.Name = "label5";
+            label5.Size = new Size(530, 41);
+            label5.TabIndex = 32;
+            label5.Text = "If you selected a date then records for the following 2 weeks will be generated, else the last 10 rentals in the system will be generated.";
             // 
             // RentalReports
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
+            Controls.Add(label5);
+            Controls.Add(dtpPeriodStartDate);
+            Controls.Add(progressBar1);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(cmbRentalReports);
+            Controls.Add(label1);
             Controls.Add(lblInstruction);
-            Controls.Add(btnGenerateRentalReport);
+            Controls.Add(btnGenerateCustomerReport);
             Controls.Add(btnBack);
-            Controls.Add(dgvRentalReport);
             Controls.Add(lblRentalReport);
             Margin = new Padding(3, 2, 3, 2);
             Name = "RentalReports";
             Text = "RentalReports";
-            ((System.ComponentModel.ISupportInitialize)dgvRentalReport).EndInit();
+            Load += RentalReports_Load;
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private DataGridView dgvRentalReport;
         private Label lblRentalReport;
         private Button btnBack;
-        private Button btnGenerateRentalReport;
+        private ProgressBar progressBar1;
+        private Label label4;
+        private Label label3;
+        private Label label2;
+        private ComboBox cmbRentalReports;
+        private Label label1;
         private Label lblInstruction;
+        private Button btnGenerateCustomerReport;
+        private DateTimePicker dtpPeriodStartDate;
+        private Label label5;
     }
 }

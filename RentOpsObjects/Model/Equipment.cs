@@ -48,9 +48,6 @@ public partial class Equipment
     public virtual EquipmentCategory EquipmentCategory { get; set; } = null!;
 
     [InverseProperty("Equipment")]
-    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
-
-    [InverseProperty("Equipment")]
     public virtual ICollection<RentalRequest> RentalRequests { get; set; } = new List<RentalRequest>();
 
     [InverseProperty("Equipment")]

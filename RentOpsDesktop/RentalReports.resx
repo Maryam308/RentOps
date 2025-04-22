@@ -117,4 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblInstruction.Text" xml:space="preserve">
+    <value>	• Rental statistics (number of rental requests, rental transaction, return records, etc.)
+	• User/customer details (id, name, phone number, email)
+	• Employee details (id, name, email)
+	• Rental details (equipment name, rental period, total amount, deposit amount, payment status, payment method)
+	• Return details *if returned* (return record id, return condition, return date, late return fee, additional charge)</value>
+  </data>
 </root>
