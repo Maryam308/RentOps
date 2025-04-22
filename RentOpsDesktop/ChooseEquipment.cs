@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace RentOpsDesktop
 {
-    public partial class AddRentalTransaction : Form
+    public partial class ChooseEquipment : Form
     {
-        public AddRentalTransaction()
+        public ChooseEquipment()
         {
             InitializeComponent();
-        }
-
-        private void btnAddRentalTransaction_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
