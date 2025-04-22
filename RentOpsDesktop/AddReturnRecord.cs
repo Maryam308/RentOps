@@ -75,13 +75,13 @@ namespace RentOpsDesktop
 
         private void cmbReturnCondition_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
             //check if all the fields are valid
-            if ( !validLateReturnFee && !validAdditionalCharge)
+            if (!validLateReturnFee && !validAdditionalCharge)
             {
                 MessageBox.Show("Please fill all the fields correctly");
                 return;
@@ -89,11 +89,11 @@ namespace RentOpsDesktop
 
             //check if the associated rental transaction exist
             var rentalTransaction = dbContext.RentalTransactions.Find(Convert.ToInt32(txtAssociatedTransaction.Text));
-                if (rentalTransaction == null)
-                {
-                    MessageBox.Show("The associated rental transaction does not exist");
-                    return;
-                }
+            if (rentalTransaction == null)
+            {
+                MessageBox.Show("The associated rental transaction does not exist");
+                return;
+            }
 
             //create a new return record
             newReturnRecord.LateReturnFee = Convert.ToDouble(txtLateReturnPenalty.Text);
@@ -109,6 +109,11 @@ namespace RentOpsDesktop
             //close the form
             this.Close();
 
+
+        }
+
+        private void btnUpload_Click(object sender, EventArgs e)
+        {
 
         }
     }

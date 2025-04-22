@@ -12,13 +12,15 @@ using RentOpsObjects.Model;
 
 namespace RentOpsDesktop
 {
+    
     public partial class AddEquipment : Form
     {
+        int currentUserId = 2;
         RentOpsDBContext context;
         bool validEquipmentName = false;
         bool validEquipmentDescription = false;
         bool validEquipmentCategory = false;
-        bool validQuantity = false;
+
         bool validRentalPrice = false;
         bool validConditionStatus = false;
         bool validAvailabilityStatus = false;
@@ -70,7 +72,7 @@ namespace RentOpsDesktop
         private void ValidateForm()
         {
             btnAddEquipment.Enabled = validEquipmentName && validEquipmentDescription && validEquipmentCategory &&
-                                      validQuantity && validRentalPrice && validConditionStatus && validAvailabilityStatus;
+                                       validRentalPrice && validConditionStatus && validAvailabilityStatus;
         }
 
 
@@ -141,17 +143,17 @@ namespace RentOpsDesktop
 
         private void txtQuantity_TextChanged(object sender, EventArgs e)
         {
-            if (!int.TryParse(txtQuantity.Text, out int quantity) || quantity <= 0)
-            {
-                lblQuantityErr.Text = "Quantity must be a positive integer";
-                validQuantity = false;
-            }
-            else
-            {
-                lblQuantityErr.Text = string.Empty;
-                validQuantity = true;
-            }
-            ValidateForm();
+            //if (!int.TryParse(txtQuantity.Text, out int quantity) || quantity <= 0)
+            //{
+            //    lblQuantityErr.Text = "Quantity must be a positive integer";
+            //    validQuantity = false;
+            //}
+            //else
+            //{
+            //    lblQuantityErr.Text = string.Empty;
+            //    validQuantity = true;
+            //}
+            //ValidateForm();
 
         }
 
@@ -197,7 +199,7 @@ namespace RentOpsDesktop
         private void btnAddEquipment_Click(object sender, EventArgs e)
         {
             if (validEquipmentName && validEquipmentDescription && validEquipmentCategory &&
-       validQuantity && validRentalPrice && validConditionStatus && validAvailabilityStatus)
+        validRentalPrice && validConditionStatus && validAvailabilityStatus)
             {
                 try
                 {
@@ -206,10 +208,11 @@ namespace RentOpsDesktop
                         EquipmentName = txtEquipmentName.Text,
                         EquipmentDescription = txtEquipmentDescription.Text,
                         EquipmentCategoryId = Convert.ToInt32(cmbEquipmentCategory.SelectedValue),
-                        //EquipmentQuantity = Convert.ToInt32(txtQuantity.Text),
+                        // EquipmentQuantity = Convert.ToInt32(txtQuantity.Text),
                         RentalPrice = Convert.ToDouble(txtRentalPrice.Text),
                         ConditionStatusId = Convert.ToInt32(cmbConditionStatus.SelectedValue),
-                        AvailabilityStatusId = Convert.ToInt32(cmbAvailabilityStatus.SelectedValue)
+                        AvailabilityStatusId = Convert.ToInt32(cmbAvailabilityStatus.SelectedValue),
+                        UserId = currentUserId
                     };
 
                     MessageBox.Show("Equipment added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -234,15 +237,15 @@ namespace RentOpsDesktop
             txtEquipmentName.Clear();
             txtEquipmentDescription.Clear();
             cmbEquipmentCategory.SelectedItem = null;
-            txtQuantity.Clear();
+            //txtQuantity.Clear();
             txtRentalPrice.Clear();
             cmbConditionStatus.SelectedItem = null;
             cmbAvailabilityStatus.SelectedItem = null;
-
+            
             validEquipmentName = false;
             validEquipmentDescription = false;
             validEquipmentCategory = false;
-            validQuantity = false;
+            //validQuantity = false;
             validRentalPrice = false;
             validConditionStatus = false;
             validAvailabilityStatus = false;
