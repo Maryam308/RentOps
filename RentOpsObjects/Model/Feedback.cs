@@ -13,12 +13,6 @@ public partial class Feedback
     [Column("feedbackID")]
     public int FeedbackId { get; set; }
 
-    [Column("userID")]
-    public int? UserId { get; set; }
-
-    [Column("equipmentID")]
-    public int? EquipmentId { get; set; }
-
     [Column("feedbackTimestamp", TypeName = "datetime")]
     public DateTime FeedbackTimestamp { get; set; }
 
@@ -29,11 +23,10 @@ public partial class Feedback
     [Column("rating")]
     public int Rating { get; set; }
 
-    [ForeignKey("EquipmentId")]
-    [InverseProperty("Feedbacks")]
-    public virtual Equipment? Equipment { get; set; }
+    [Column("rentalTransactionID")]
+    public int RentalTransactionId { get; set; }
 
-    [ForeignKey("UserId")]
+    [ForeignKey("RentalTransactionId")]
     [InverseProperty("Feedbacks")]
-    public virtual User? User { get; set; }
+    public virtual RentalTransaction RentalTransaction { get; set; } = null!;
 }

@@ -39,9 +39,6 @@ public partial class User
     public virtual ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
 
     [InverseProperty("User")]
-    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
-
-    [InverseProperty("User")]
     public virtual ICollection<Log> Logs { get; set; } = new List<Log>();
 
     [InverseProperty("User")]

@@ -35,7 +35,7 @@ public partial class RentalTransaction
     public int? CustomerId { get; set; }
 
     [Column("rentalFee")]
-    public double? RentalFee { get; set; }
+    public double RentalFee { get; set; }
 
     [Column("userID")]
     public int? UserId { get; set; }
@@ -57,6 +57,9 @@ public partial class RentalTransaction
     [ForeignKey("EquipmentId")]
     [InverseProperty("RentalTransactions")]
     public virtual Equipment? Equipment { get; set; }
+
+    [InverseProperty("RentalTransaction")]
+    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
     [ForeignKey("PaymentId")]
     [InverseProperty("RentalTransactions")]

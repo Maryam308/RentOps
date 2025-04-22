@@ -106,9 +106,9 @@ public partial class RentOpsDBContext : DbContext
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasOne(d => d.Equipment).WithMany(p => p.Feedbacks).HasConstraintName("FK_Feedback_Equipment");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Feedbacks).HasConstraintName("FK_Feedback_User");
+            entity.HasOne(d => d.RentalTransaction).WithMany(p => p.Feedbacks)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Feedback_RentalTransaction");
         });
 
         modelBuilder.Entity<FileType>(entity =>
