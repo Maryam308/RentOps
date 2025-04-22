@@ -17,7 +17,7 @@ namespace RentOpsDesktop
         private bool validEquipmentName = false;
         private bool validEquipmentDescription = false;
         private bool validRentalPrice = false;
-        private bool validQuantity = false;
+
         bool validConditionStatus = false;
         bool validAvailabilityStatus = false;
         bool validEquipmentCategory = false;
@@ -34,7 +34,7 @@ namespace RentOpsDesktop
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            EquipmentDashboard equipmentDashboard = new EquipmentDashboard();
+            EquipmentInformation equipmentDashboard = new EquipmentInformation();
             this.Hide(); //hide the current form
             equipmentDashboard.Show(); //show the equipment dashboard
         }
@@ -75,7 +75,7 @@ namespace RentOpsDesktop
         private void ValidateForm()
         {
             btnSaveChanges.Enabled = validEquipmentName && validEquipmentDescription && validEquipmentCategory &&
-                                      validQuantity && validRentalPrice && validConditionStatus && validAvailabilityStatus;
+                                       validRentalPrice && validConditionStatus && validAvailabilityStatus;
         }
 
 
@@ -118,7 +118,7 @@ namespace RentOpsDesktop
         private void btnSaveChanges_Click(object sender, EventArgs e)
         {
             // Check if all fields are valid
-            if (validEquipmentName && validEquipmentDescription && validRentalPrice && validQuantity)
+            if (validEquipmentName && validEquipmentDescription && validRentalPrice )
             {
                 try
                 {
@@ -201,17 +201,17 @@ namespace RentOpsDesktop
 
         private void txtQuantity_TextChanged(object sender, EventArgs e)
         {
-            if (!int.TryParse(txtQuantity.Text, out int quantity) || quantity <= 0)
-            {
-                lblQuantityErr.Text = "Quantity must be a positive integer";
-                validQuantity = false;
-            }
-            else
-            {
-                lblQuantityErr.Text = string.Empty;
-                validQuantity = true;
-            }
-            ValidateForm();
+            //if (!int.TryParse(txtQuantity.Text, out int quantity) || quantity <= 0)
+            //{
+            //    lblQuantityErr.Text = "Quantity must be a positive integer";
+            //    validQuantity = false;
+            //}
+            //else
+            //{
+            //    lblQuantityErr.Text = string.Empty;
+            //    validQuantity = true;
+            //}
+            //ValidateForm();
 
         }
 

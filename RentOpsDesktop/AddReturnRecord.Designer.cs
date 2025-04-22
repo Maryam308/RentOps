@@ -194,6 +194,7 @@
             btnUpload.TabIndex = 23;
             btnUpload.Text = "Upload";
             btnUpload.UseVisualStyleBackColor = false;
+            btnUpload.Click += btnUpload_Click;
             // 
             // txtLateReturnPenalty
             // 

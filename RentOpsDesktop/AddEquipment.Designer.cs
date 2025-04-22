@@ -32,12 +32,10 @@
             cmbConditionStatus = new ComboBox();
             cmbEquipmentCategory = new ComboBox();
             txtRentalPrice = new TextBox();
-            txtQuantity = new TextBox();
             txtEquipmentDescription = new TextBox();
             txtEquipmentName = new TextBox();
             lblConditionStatus = new Label();
             lblRentalPrice = new Label();
-            lblQuantity = new Label();
             lblEquipmentCategory = new Label();
             lblEquipmentDescription = new Label();
             lblEquipmentName = new Label();
@@ -45,7 +43,6 @@
             lblEquipmentNameErr = new Label();
             lblEquipmentDescriptionErr = new Label();
             lblEquipmentCategoryErr = new Label();
-            lblQuantityErr = new Label();
             lblRentalPriceErr = new Label();
             lblConditionStatusErr = new Label();
             lblAvailabilityStatus = new Label();
@@ -59,7 +56,7 @@
             btnAddEquipment.FlatStyle = FlatStyle.Flat;
             btnAddEquipment.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnAddEquipment.ForeColor = Color.White;
-            btnAddEquipment.Location = new Point(271, 547);
+            btnAddEquipment.Location = new Point(271, 496);
             btnAddEquipment.Name = "btnAddEquipment";
             btnAddEquipment.Size = new Size(203, 41);
             btnAddEquipment.TabIndex = 52;
@@ -72,7 +69,7 @@
             cmbConditionStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbConditionStatus.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cmbConditionStatus.FormattingEnabled = true;
-            cmbConditionStatus.Location = new Point(346, 415);
+            cmbConditionStatus.Location = new Point(346, 364);
             cmbConditionStatus.Margin = new Padding(2, 1, 2, 1);
             cmbConditionStatus.Name = "cmbConditionStatus";
             cmbConditionStatus.Size = new Size(373, 36);
@@ -96,24 +93,13 @@
             // txtRentalPrice
             // 
             txtRentalPrice.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtRentalPrice.Location = new Point(346, 350);
+            txtRentalPrice.Location = new Point(346, 299);
             txtRentalPrice.Margin = new Padding(2, 1, 2, 1);
             txtRentalPrice.Name = "txtRentalPrice";
             txtRentalPrice.PlaceholderText = "Enter Rental Price";
             txtRentalPrice.Size = new Size(373, 34);
             txtRentalPrice.TabIndex = 49;
             txtRentalPrice.TextChanged += txtRentalPrice_TextChanged;
-            // 
-            // txtQuantity
-            // 
-            txtQuantity.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtQuantity.Location = new Point(346, 283);
-            txtQuantity.Margin = new Padding(2, 1, 2, 1);
-            txtQuantity.Name = "txtQuantity";
-            txtQuantity.PlaceholderText = "Enter Quantity";
-            txtQuantity.Size = new Size(373, 34);
-            txtQuantity.TabIndex = 48;
-            txtQuantity.TextChanged += txtQuantity_TextChanged;
             // 
             // txtEquipmentDescription
             // 
@@ -141,7 +127,7 @@
             // 
             lblConditionStatus.AutoSize = true;
             lblConditionStatus.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblConditionStatus.Location = new Point(90, 416);
+            lblConditionStatus.Location = new Point(90, 365);
             lblConditionStatus.Margin = new Padding(2, 0, 2, 0);
             lblConditionStatus.Name = "lblConditionStatus";
             lblConditionStatus.Size = new Size(210, 32);
@@ -152,23 +138,12 @@
             // 
             lblRentalPrice.AutoSize = true;
             lblRentalPrice.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblRentalPrice.Location = new Point(139, 350);
+            lblRentalPrice.Location = new Point(139, 299);
             lblRentalPrice.Margin = new Padding(2, 0, 2, 0);
             lblRentalPrice.Name = "lblRentalPrice";
             lblRentalPrice.Size = new Size(157, 32);
             lblRentalPrice.TabIndex = 44;
             lblRentalPrice.Text = "Rental Price:";
-            // 
-            // lblQuantity
-            // 
-            lblQuantity.AutoSize = true;
-            lblQuantity.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblQuantity.Location = new Point(174, 283);
-            lblQuantity.Margin = new Padding(2, 0, 2, 0);
-            lblQuantity.Name = "lblQuantity";
-            lblQuantity.Size = new Size(120, 32);
-            lblQuantity.TabIndex = 43;
-            lblQuantity.Text = "Quantity:";
             // 
             // lblEquipmentCategory
             // 
@@ -241,20 +216,11 @@
             lblEquipmentCategoryErr.Size = new Size(0, 20);
             lblEquipmentCategoryErr.TabIndex = 55;
             // 
-            // lblQuantityErr
-            // 
-            lblQuantityErr.AutoSize = true;
-            lblQuantityErr.ForeColor = Color.Red;
-            lblQuantityErr.Location = new Point(346, 318);
-            lblQuantityErr.Name = "lblQuantityErr";
-            lblQuantityErr.Size = new Size(0, 20);
-            lblQuantityErr.TabIndex = 56;
-            // 
             // lblRentalPriceErr
             // 
             lblRentalPriceErr.AutoSize = true;
             lblRentalPriceErr.ForeColor = Color.Red;
-            lblRentalPriceErr.Location = new Point(346, 385);
+            lblRentalPriceErr.Location = new Point(346, 334);
             lblRentalPriceErr.Name = "lblRentalPriceErr";
             lblRentalPriceErr.Size = new Size(0, 20);
             lblRentalPriceErr.TabIndex = 57;
@@ -263,7 +229,7 @@
             // 
             lblConditionStatusErr.AutoSize = true;
             lblConditionStatusErr.ForeColor = Color.Red;
-            lblConditionStatusErr.Location = new Point(346, 452);
+            lblConditionStatusErr.Location = new Point(346, 401);
             lblConditionStatusErr.Name = "lblConditionStatusErr";
             lblConditionStatusErr.RightToLeft = RightToLeft.No;
             lblConditionStatusErr.Size = new Size(0, 20);
@@ -273,7 +239,7 @@
             // 
             lblAvailabilityStatus.AutoSize = true;
             lblAvailabilityStatus.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblAvailabilityStatus.Location = new Point(81, 473);
+            lblAvailabilityStatus.Location = new Point(81, 422);
             lblAvailabilityStatus.Margin = new Padding(2, 0, 2, 0);
             lblAvailabilityStatus.Name = "lblAvailabilityStatus";
             lblAvailabilityStatus.Size = new Size(217, 32);
@@ -285,7 +251,7 @@
             cmbAvailabilityStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbAvailabilityStatus.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cmbAvailabilityStatus.FormattingEnabled = true;
-            cmbAvailabilityStatus.Location = new Point(346, 484);
+            cmbAvailabilityStatus.Location = new Point(346, 433);
             cmbAvailabilityStatus.Margin = new Padding(2, 1, 2, 1);
             cmbAvailabilityStatus.Name = "cmbAvailabilityStatus";
             cmbAvailabilityStatus.Size = new Size(373, 36);
@@ -297,7 +263,7 @@
             // 
             lblAvailabilityStatusErr.AutoSize = true;
             lblAvailabilityStatusErr.ForeColor = Color.Red;
-            lblAvailabilityStatusErr.Location = new Point(346, 521);
+            lblAvailabilityStatusErr.Location = new Point(346, 470);
             lblAvailabilityStatusErr.Name = "lblAvailabilityStatusErr";
             lblAvailabilityStatusErr.Size = new Size(0, 20);
             lblAvailabilityStatusErr.TabIndex = 61;
@@ -312,7 +278,6 @@
             Controls.Add(lblAvailabilityStatus);
             Controls.Add(lblConditionStatusErr);
             Controls.Add(lblRentalPriceErr);
-            Controls.Add(lblQuantityErr);
             Controls.Add(lblEquipmentCategoryErr);
             Controls.Add(lblEquipmentDescriptionErr);
             Controls.Add(lblEquipmentNameErr);
@@ -320,12 +285,10 @@
             Controls.Add(cmbConditionStatus);
             Controls.Add(cmbEquipmentCategory);
             Controls.Add(txtRentalPrice);
-            Controls.Add(txtQuantity);
             Controls.Add(txtEquipmentDescription);
             Controls.Add(txtEquipmentName);
             Controls.Add(lblConditionStatus);
             Controls.Add(lblRentalPrice);
-            Controls.Add(lblQuantity);
             Controls.Add(lblEquipmentCategory);
             Controls.Add(lblEquipmentDescription);
             Controls.Add(lblEquipmentName);
@@ -344,12 +307,10 @@
         private ComboBox cmbConditionStatus;
         private ComboBox cmbEquipmentCategory;
         private TextBox txtRentalPrice;
-        private TextBox txtQuantity;
         private TextBox txtEquipmentDescription;
         private TextBox txtEquipmentName;
         private Label lblConditionStatus;
         private Label lblRentalPrice;
-        private Label lblQuantity;
         private Label lblEquipmentCategory;
         private Label lblEquipmentDescription;
         private Label lblEquipmentName;
@@ -357,7 +318,6 @@
         private Label lblEquipmentNameErr;
         private Label lblEquipmentDescriptionErr;
         private Label lblEquipmentCategoryErr;
-        private Label lblQuantityErr;
         private Label lblRentalPriceErr;
         private Label lblConditionStatusErr;
         private Label lblAvailabilityStatus;
