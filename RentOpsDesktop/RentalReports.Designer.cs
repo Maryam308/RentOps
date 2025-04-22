@@ -40,6 +40,7 @@
             lblInstruction = new Label();
             btnGenerateCustomerReport = new Button();
             dtpPeriodStartDate = new DateTimePicker();
+            label5 = new Label();
             SuspendLayout();
             // 
             // lblRentalReport
@@ -93,7 +94,7 @@
             // 
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0);
             label3.ForeColor = Color.Black;
-            label3.Location = new Point(49, 107);
+            label3.Location = new Point(49, 105);
             label3.Name = "label3";
             label3.Size = new Size(230, 25);
             label3.TabIndex = 28;
@@ -103,7 +104,7 @@
             // 
             label2.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic);
             label2.ForeColor = SystemColors.ControlDarkDark;
-            label2.Location = new Point(131, 341);
+            label2.Location = new Point(108, 341);
             label2.Name = "label2";
             label2.Size = new Size(357, 25);
             label2.TabIndex = 27;
@@ -123,19 +124,19 @@
             // 
             label1.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold | FontStyle.Italic);
             label1.ForeColor = SystemColors.ControlDarkDark;
-            label1.Location = new Point(49, 143);
+            label1.Location = new Point(49, 180);
             label1.Name = "label1";
             label1.Size = new Size(530, 25);
             label1.TabIndex = 25;
-            label1.Text = " This report provides a detailed overview of all registered customers, including:\r\n";
+            label1.Text = "This report provides a detailed overview of all the rentals, including:\r\n";
             // 
             // lblInstruction
             // 
             lblInstruction.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblInstruction.ForeColor = SystemColors.ControlDarkDark;
-            lblInstruction.Location = new Point(73, 177);
+            lblInstruction.Location = new Point(73, 205);
             lblInstruction.Name = "lblInstruction";
-            lblInstruction.Size = new Size(539, 98);
+            lblInstruction.Size = new Size(523, 98);
             lblInstruction.TabIndex = 24;
             lblInstruction.Text = resources.GetString("lblInstruction.Text");
             // 
@@ -165,11 +166,22 @@
             dtpPeriodStartDate.Size = new Size(246, 33);
             dtpPeriodStartDate.TabIndex = 31;
             // 
+            // label5
+            // 
+            label5.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.ForeColor = SystemColors.ControlDarkDark;
+            label5.Location = new Point(49, 134);
+            label5.Name = "label5";
+            label5.Size = new Size(530, 41);
+            label5.TabIndex = 32;
+            label5.Text = "If you selected a date then records for the following 2 weeks will be generated, else the last 10 rentals in the system will be generated.";
+            // 
             // RentalReports
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
+            Controls.Add(label5);
             Controls.Add(dtpPeriodStartDate);
             Controls.Add(progressBar1);
             Controls.Add(label4);
@@ -201,5 +213,6 @@
         private Label lblInstruction;
         private Button btnGenerateCustomerReport;
         private DateTimePicker dtpPeriodStartDate;
+        private Label label5;
     }
 }
