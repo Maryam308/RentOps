@@ -7,14 +7,115 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.EntityFrameworkCore;
+using RentOpsObjects.Model;
 
 namespace RentOpsDesktop
 {
-    public partial class UpdateRequestStatus: Form
+    public partial class UpdateRequestStatus : Form
     {
-        public UpdateRequestStatus()
+        internal RentalRequest requestToUpdate;
+        int rentalRequestId;
+        RentOpsDBContext context;
+        public UpdateRequestStatus(int rentalRequestId)
         {
             InitializeComponent();
+            this.rentalRequestId = rentalRequestId;
+            context = new RentOpsDBContext();
+        }
+
+        private void LoadRequestData()
+        {
+            if (requestToUpdate != null)
+            {
+                // Find the enriched item
+                var enrichedRequest = context.RentalRequests
+                .Include(r => r.RentalRequestStatus)
+                .Include(r => r.Equipment)
+                .Include(r => r.User) 
+                .FirstOrDefault(r => r.RentalRequestId == rentalRequestId);
+
+
+                if (enrichedRequest != null)
+                {
+                    StringBuilder details = new StringBuilder();
+                    details.AppendLine($"Request ID: {enrichedRequest.RentalRequestId}");
+                    details.AppendLine($"Start Date: {enrichedRequest.RentalStartDate:yyyy-MM-dd}");
+                    details.AppendLine($"Return Date: {enrichedRequest.RentalReturnDate:yyyy-MM-dd}");
+                    details.AppendLine($"Total Cost: {enrichedRequest.RentalTotalCost:C}");
+                    details.AppendLine($"Request Status: {enrichedRequest.RentalRequestStatus.RentalRequestStatusTitle}");
+                    details.AppendLine($"Equipment Name: {enrichedRequest.Equipment.EquipmentName}");
+                    details.AppendLine($"Customer Name: {enrichedRequest.User.FirstName} {enrichedRequest.User.LastName}");
+
+                    lblRequestDetails.Text = details.ToString();
+                }
+                else
+                {
+                    lblRequestDetails.Text = "Request details not found.";
+                }
+            }
+            else
+            {
+                lblRequestDetails.Text = "No request selected.";
+            }
+        }
+
+
+        private void UpdateRequestStatus_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                // Fetch the rental request to update
+                requestToUpdate = context.RentalRequests
+                    .FirstOrDefault(r => r.RentalRequestId == rentalRequestId);
+                LoadRequestData();
+                if (requestToUpdate != null)
+                {
+
+                    // Load all statuses into the list box
+                    var statuses = context.RentalRequestStatuses
+                        .Select(rs => new { rs.RentalRequestStatusId, rs.RentalRequestStatusTitle })
+                        .ToList();
+
+                    lstStatus.DataSource = statuses;
+                    lstStatus.DisplayMember = "RentalRequestStatusTitle";
+                    lstStatus.ValueMember = "RentalRequestStatusId";
+
+                    // Select the current status of the rental request
+                    lstStatus.SelectedValue = requestToUpdate.RentalRequestStatusId;
+                }
+                else
+                {
+                    MessageBox.Show("Rental request not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
+
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Update the rental request status
+                requestToUpdate.RentalRequestStatusId = Convert.ToInt32(lstStatus.SelectedValue);
+
+                // Save changes to the database
+                context.SaveChanges(); // Ensure you save changes to persist the update
+
+                MessageBox.Show("The rental request status has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error updating rental request status: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
