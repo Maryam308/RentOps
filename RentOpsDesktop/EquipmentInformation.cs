@@ -107,7 +107,7 @@ namespace RentOpsDesktop
                         .FirstOrDefault(), // Fetch the equipment category title
                     AddedBy = context.Users
                         .Where(u => u.UserId == e.UserId)
-                        .Select(u => u.FullName)
+                        .Select(u => u.FirstName)
                         .FirstOrDefault() // Fetch the user's full name
                 }).ToList(); // Convert the result to a list
 
@@ -172,7 +172,7 @@ namespace RentOpsDesktop
 
         private void btnBack1_Click(object sender, EventArgs e)
         {
-            EquipmentDashboard equipmentDashboard = new EquipmentDashboard();
+            EquipmentInformation equipmentDashboard = new EquipmentInformation();
             this.Hide();
             equipmentDashboard.Show();
         }
@@ -399,7 +399,7 @@ namespace RentOpsDesktop
                         .FirstOrDefault(),
                     AddedBy = context.Users
                         .Where(u => u.UserId == e.UserId)
-                        .Select(u => u.FullName)
+                        .Select(u => u.FirstName)
                         .FirstOrDefault()
                 }).ToList();
 

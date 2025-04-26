@@ -310,7 +310,7 @@
             Controls.Add(lblRentalOverdue);
             Controls.Add(pnlNavigationSideBar);
             Name = "OverdueReturns";
-            Text = "OverdueReturns";
+            Text = " ";
             Load += OverdueReturns_Load;
             ((System.ComponentModel.ISupportInitialize)dgvReturnRecords).EndInit();
             pnlNavigationSideBar.ResumeLayout(false);

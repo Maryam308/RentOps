@@ -16,6 +16,7 @@ namespace RentOpsDesktop
 
         RentOpsDBContext dbContext;
         internal ReturnRecord newReturnRecord = new ReturnRecord();
+        Document uploadedDocument;
 
         //validation variables 
         bool validLateReturnFee = false;
@@ -104,6 +105,34 @@ namespace RentOpsDesktop
             DateOnly dateOnly = DateOnly.FromDateTime(dtpReturnDate.Value);
             newReturnRecord.ActualReturnDate = dateOnly;
 
+
+            //set the document id to null if no document is uploaded
+            newReturnRecord.DocumentId = null;
+
+
+            //change the condition of the rented equipment to match the return condition
+            var rentedEquipment = dbContext.Equipment.Where(x => x.EquipmentId == rentalTransaction.EquipmentId).ToList();
+            if (rentedEquipment != null)
+            {
+                rentedEquipment[0].ConditionStatusId = newReturnRecord.ReturnConditionId;
+                //update the equipment to set the condition
+                dbContext.Equipment.Update(rentedEquipment[0]);
+
+            }
+
+            // If a document was uploaded, save it and link it
+            if (uploadedDocument != null)
+            {
+                dbContext.Documents.Add(uploadedDocument);
+                newReturnRecord.DocumentId = uploadedDocument.DocumentId;
+            }
+
+
+            //save the changes to the database
+            dbContext.ReturnRecords.Add(newReturnRecord);
+            dbContext.SaveChanges(); // Save changes to the database
+
+
             //set the dialog result to ok
             this.DialogResult = DialogResult.OK;
             //close the form
@@ -114,7 +143,42 @@ namespace RentOpsDesktop
 
         private void btnUpload_Click(object sender, EventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
+            openFileDialog.Title = "Select a PDF Document";
 
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = openFileDialog.FileName;
+                string fileName = Path.GetFileName(filePath);
+                byte[] fileData = File.ReadAllBytes(filePath);
+
+                // Validate file extension
+                if (Path.GetExtension(filePath).ToLower() != ".pdf")
+                {
+                    MessageBox.Show("Please select a valid PDF file.");
+                    return;
+                }
+
+                // Example: You will set actual values for UserId and FileTypeId later
+                int userId = 1; // Replace with actual logged-in user ID or context
+                int fileTypeId = 3; //the id of the damage report files 
+
+                uploadedDocument = new Document
+                {
+                    UserId = userId,
+                    FileName = fileName,
+                    UploadDate = DateTime.Now,
+                    FileTypeId = fileTypeId,
+                    StoragePath = filePath, // Optional
+                    FileData = fileData
+                };
+
+                //change the label to show the file name
+                lblFilename.Text = fileName + $@"
+Uploaded Successfully";
+
+            }
         }
     }
 }

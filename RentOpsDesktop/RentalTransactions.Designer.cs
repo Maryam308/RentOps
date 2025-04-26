@@ -28,9 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            btnFilter = new Button();
-            btnSearch = new Button();
-            dgvReturnRecords = new DataGridView();
+            dgvRentalTransactions = new DataGridView();
             lblReturnRecords = new Label();
             pnlNavigationSideBar = new Panel();
             btnDeleteRentalTransaction = new Button();
@@ -38,62 +36,43 @@
             btnEditRentalTransaction = new Button();
             btnAddnewRentalTransaction = new Button();
             btnBack = new Button();
-            ((System.ComponentModel.ISupportInitialize)dgvReturnRecords).BeginInit();
+            btnReset = new Button();
+            btnFilter = new Button();
+            btnSearch = new Button();
+            txtRequestID = new TextBox();
+            lblRequestID = new Label();
+            txtTransaction = new TextBox();
+            lblTransaction = new Label();
+            dtpTransctionDate = new DateTimePicker();
+            lblPayment = new Label();
+            lblTransctionDateFilter = new Label();
+            cmbPaymentStatus = new ComboBox();
+            lblEquipment = new Label();
+            cmbEquipment = new ComboBox();
+            ((System.ComponentModel.ISupportInitialize)dgvRentalTransactions).BeginInit();
             pnlNavigationSideBar.SuspendLayout();
             SuspendLayout();
             // 
-            // btnFilter
+            // dgvRentalTransactions
             // 
-            btnFilter.BackColor = Color.FromArgb(121, 86, 76);
-            btnFilter.BackgroundImageLayout = ImageLayout.None;
-            btnFilter.FlatAppearance.BorderSize = 0;
-            btnFilter.FlatStyle = FlatStyle.Flat;
-            btnFilter.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnFilter.ForeColor = Color.FromArgb(241, 240, 234);
-            btnFilter.Location = new Point(928, 143);
-            btnFilter.Margin = new Padding(0);
-            btnFilter.Name = "btnFilter";
-            btnFilter.Size = new Size(319, 65);
-            btnFilter.TabIndex = 25;
-            btnFilter.Text = "Filter";
-            btnFilter.UseVisualStyleBackColor = false;
-            // 
-            // btnSearch
-            // 
-            btnSearch.BackColor = Color.FromArgb(121, 86, 76);
-            btnSearch.BackgroundImageLayout = ImageLayout.None;
-            btnSearch.FlatAppearance.BorderSize = 0;
-            btnSearch.FlatStyle = FlatStyle.Flat;
-            btnSearch.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
-            btnSearch.Location = new Point(456, 145);
-            btnSearch.Margin = new Padding(0);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(319, 65);
-            btnSearch.TabIndex = 23;
-            btnSearch.Text = "Search";
-            btnSearch.UseVisualStyleBackColor = false;
-            // 
-            // dgvReturnRecords
-            // 
-            dgvReturnRecords.BackgroundColor = Color.WhiteSmoke;
-            dgvReturnRecords.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvReturnRecords.Location = new Point(374, 250);
-            dgvReturnRecords.Margin = new Padding(4, 5, 4, 5);
-            dgvReturnRecords.Name = "dgvReturnRecords";
-            dgvReturnRecords.RowHeadersWidth = 62;
-            dgvReturnRecords.Size = new Size(969, 480);
-            dgvReturnRecords.TabIndex = 24;
+            dgvRentalTransactions.BackgroundColor = Color.WhiteSmoke;
+            dgvRentalTransactions.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvRentalTransactions.Location = new Point(470, 439);
+            dgvRentalTransactions.Margin = new Padding(5, 6, 5, 6);
+            dgvRentalTransactions.Name = "dgvRentalTransactions";
+            dgvRentalTransactions.RowHeadersWidth = 62;
+            dgvRentalTransactions.Size = new Size(1253, 504);
+            dgvRentalTransactions.TabIndex = 24;
             // 
             // lblReturnRecords
             // 
             lblReturnRecords.AutoSize = true;
             lblReturnRecords.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic);
             lblReturnRecords.ForeColor = Color.FromArgb(135, 66, 62);
-            lblReturnRecords.Location = new Point(671, 35);
-            lblReturnRecords.Margin = new Padding(4, 0, 4, 0);
+            lblReturnRecords.Location = new Point(771, 39);
+            lblReturnRecords.Margin = new Padding(5, 0, 5, 0);
             lblReturnRecords.Name = "lblReturnRecords";
-            lblReturnRecords.Size = new Size(454, 62);
+            lblReturnRecords.Size = new Size(600, 82);
             lblReturnRecords.TabIndex = 22;
             lblReturnRecords.Text = "Rental Transactions";
             // 
@@ -108,7 +87,7 @@
             pnlNavigationSideBar.Location = new Point(0, 0);
             pnlNavigationSideBar.Margin = new Padding(0);
             pnlNavigationSideBar.Name = "pnlNavigationSideBar";
-            pnlNavigationSideBar.Size = new Size(341, 763);
+            pnlNavigationSideBar.Size = new Size(443, 977);
             pnlNavigationSideBar.TabIndex = 21;
             // 
             // btnDeleteRentalTransaction
@@ -119,13 +98,14 @@
             btnDeleteRentalTransaction.FlatStyle = FlatStyle.Flat;
             btnDeleteRentalTransaction.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnDeleteRentalTransaction.ForeColor = Color.White;
-            btnDeleteRentalTransaction.Location = new Point(13, 452);
-            btnDeleteRentalTransaction.Margin = new Padding(4, 3, 4, 3);
+            btnDeleteRentalTransaction.Location = new Point(17, 579);
+            btnDeleteRentalTransaction.Margin = new Padding(5, 4, 5, 4);
             btnDeleteRentalTransaction.Name = "btnDeleteRentalTransaction";
-            btnDeleteRentalTransaction.Size = new Size(317, 63);
+            btnDeleteRentalTransaction.Size = new Size(412, 81);
             btnDeleteRentalTransaction.TabIndex = 18;
             btnDeleteRentalTransaction.Text = "Delete Rental Transaction";
             btnDeleteRentalTransaction.UseVisualStyleBackColor = false;
+            btnDeleteRentalTransaction.Click += btnDeleteRentalTransaction_Click;
             // 
             // btnSelectRecord
             // 
@@ -135,10 +115,10 @@
             btnSelectRecord.FlatStyle = FlatStyle.Flat;
             btnSelectRecord.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold | FontStyle.Italic);
             btnSelectRecord.ForeColor = Color.White;
-            btnSelectRecord.Location = new Point(13, 278);
-            btnSelectRecord.Margin = new Padding(4, 3, 4, 3);
+            btnSelectRecord.Location = new Point(17, 356);
+            btnSelectRecord.Margin = new Padding(5, 4, 5, 4);
             btnSelectRecord.Name = "btnSelectRecord";
-            btnSelectRecord.Size = new Size(287, 63);
+            btnSelectRecord.Size = new Size(373, 81);
             btnSelectRecord.TabIndex = 17;
             btnSelectRecord.Text = "Select a record to:";
             btnSelectRecord.UseVisualStyleBackColor = false;
@@ -151,13 +131,14 @@
             btnEditRentalTransaction.FlatStyle = FlatStyle.Flat;
             btnEditRentalTransaction.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnEditRentalTransaction.ForeColor = Color.White;
-            btnEditRentalTransaction.Location = new Point(24, 371);
-            btnEditRentalTransaction.Margin = new Padding(4, 3, 4, 3);
+            btnEditRentalTransaction.Location = new Point(31, 475);
+            btnEditRentalTransaction.Margin = new Padding(5, 4, 5, 4);
             btnEditRentalTransaction.Name = "btnEditRentalTransaction";
-            btnEditRentalTransaction.Size = new Size(293, 63);
+            btnEditRentalTransaction.Size = new Size(381, 81);
             btnEditRentalTransaction.TabIndex = 12;
             btnEditRentalTransaction.Text = "Edit Rental Transaction";
             btnEditRentalTransaction.UseVisualStyleBackColor = false;
+            btnEditRentalTransaction.Click += btnEditRentalTransaction_Click;
             // 
             // btnAddnewRentalTransaction
             // 
@@ -167,10 +148,10 @@
             btnAddnewRentalTransaction.FlatStyle = FlatStyle.Flat;
             btnAddnewRentalTransaction.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             btnAddnewRentalTransaction.ForeColor = Color.White;
-            btnAddnewRentalTransaction.Location = new Point(4, 145);
-            btnAddnewRentalTransaction.Margin = new Padding(4, 3, 4, 3);
+            btnAddnewRentalTransaction.Location = new Point(5, 186);
+            btnAddnewRentalTransaction.Margin = new Padding(5, 4, 5, 4);
             btnAddnewRentalTransaction.Name = "btnAddnewRentalTransaction";
-            btnAddnewRentalTransaction.Size = new Size(333, 127);
+            btnAddnewRentalTransaction.Size = new Size(433, 163);
             btnAddnewRentalTransaction.TabIndex = 10;
             btnAddnewRentalTransaction.Text = "Add new Rental Transaction";
             btnAddnewRentalTransaction.UseVisualStyleBackColor = false;
@@ -183,37 +164,197 @@
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(44, 35);
-            btnBack.Margin = new Padding(4, 3, 4, 3);
+            btnBack.Location = new Point(57, 45);
+            btnBack.Margin = new Padding(5, 4, 5, 4);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(221, 73);
+            btnBack.Size = new Size(287, 93);
             btnBack.TabIndex = 9;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
             // 
+            // btnReset
+            // 
+            btnReset.BackColor = Color.FromArgb(121, 86, 76);
+            btnReset.BackgroundImageLayout = ImageLayout.None;
+            btnReset.FlatAppearance.BorderSize = 0;
+            btnReset.FlatStyle = FlatStyle.Flat;
+            btnReset.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnReset.ForeColor = Color.FromArgb(241, 240, 234);
+            btnReset.Location = new Point(1522, 67);
+            btnReset.Margin = new Padding(0);
+            btnReset.Name = "btnReset";
+            btnReset.Size = new Size(201, 83);
+            btnReset.TabIndex = 41;
+            btnReset.Text = "Reset";
+            btnReset.UseVisualStyleBackColor = false;
+            btnReset.Click += btnReset_Click;
+            // 
+            // btnFilter
+            // 
+            btnFilter.BackColor = Color.FromArgb(121, 86, 76);
+            btnFilter.BackgroundImageLayout = ImageLayout.None;
+            btnFilter.FlatAppearance.BorderSize = 0;
+            btnFilter.FlatStyle = FlatStyle.Flat;
+            btnFilter.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnFilter.ForeColor = Color.FromArgb(241, 240, 234);
+            btnFilter.Location = new Point(1522, 310);
+            btnFilter.Margin = new Padding(0);
+            btnFilter.Name = "btnFilter";
+            btnFilter.Size = new Size(201, 83);
+            btnFilter.TabIndex = 40;
+            btnFilter.Text = "Filter";
+            btnFilter.UseVisualStyleBackColor = false;
+            btnFilter.Click += btnFilter_Click;
+            // 
+            // btnSearch
+            // 
+            btnSearch.BackColor = Color.FromArgb(121, 86, 76);
+            btnSearch.BackgroundImageLayout = ImageLayout.None;
+            btnSearch.FlatAppearance.BorderSize = 0;
+            btnSearch.FlatStyle = FlatStyle.Flat;
+            btnSearch.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
+            btnSearch.Location = new Point(1522, 193);
+            btnSearch.Margin = new Padding(0);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(201, 83);
+            btnSearch.TabIndex = 39;
+            btnSearch.Text = "Search";
+            btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click += btnSearch_Click;
+            // 
+            // txtRequestID
+            // 
+            txtRequestID.BorderStyle = BorderStyle.FixedSingle;
+            txtRequestID.Location = new Point(762, 222);
+            txtRequestID.Margin = new Padding(6);
+            txtRequestID.Name = "txtRequestID";
+            txtRequestID.Size = new Size(115, 39);
+            txtRequestID.TabIndex = 43;
+            // 
+            // lblRequestID
+            // 
+            lblRequestID.AutoSize = true;
+            lblRequestID.Location = new Point(468, 225);
+            lblRequestID.Margin = new Padding(6, 0, 6, 0);
+            lblRequestID.Name = "lblRequestID";
+            lblRequestID.Size = new Size(282, 32);
+            lblRequestID.TabIndex = 42;
+            lblRequestID.Text = "Rental Request Record ID";
+            // 
+            // txtTransaction
+            // 
+            txtTransaction.BorderStyle = BorderStyle.FixedSingle;
+            txtTransaction.Location = new Point(1307, 218);
+            txtTransaction.Margin = new Padding(6);
+            txtTransaction.Name = "txtTransaction";
+            txtTransaction.Size = new Size(115, 39);
+            txtTransaction.TabIndex = 45;
+            // 
+            // lblTransaction
+            // 
+            lblTransaction.AutoSize = true;
+            lblTransaction.Location = new Point(978, 220);
+            lblTransaction.Margin = new Padding(6, 0, 6, 0);
+            lblTransaction.Name = "lblTransaction";
+            lblTransaction.Size = new Size(317, 32);
+            lblTransaction.TabIndex = 44;
+            lblTransaction.Text = "Rental Transaction Record ID";
+            // 
+            // dtpTransctionDate
+            // 
+            dtpTransctionDate.Checked = false;
+            dtpTransctionDate.Location = new Point(481, 357);
+            dtpTransctionDate.Margin = new Padding(6);
+            dtpTransctionDate.Name = "dtpTransctionDate";
+            dtpTransctionDate.ShowCheckBox = true;
+            dtpTransctionDate.Size = new Size(368, 39);
+            dtpTransctionDate.TabIndex = 49;
+            // 
+            // lblPayment
+            // 
+            lblPayment.AutoSize = true;
+            lblPayment.Location = new Point(866, 317);
+            lblPayment.Margin = new Padding(6, 0, 6, 0);
+            lblPayment.Name = "lblPayment";
+            lblPayment.Size = new Size(270, 32);
+            lblPayment.TabIndex = 48;
+            lblPayment.Text = "Filter by Payment Status";
+            // 
+            // lblTransctionDateFilter
+            // 
+            lblTransctionDateFilter.AutoSize = true;
+            lblTransctionDateFilter.Location = new Point(470, 317);
+            lblTransctionDateFilter.Margin = new Padding(6, 0, 6, 0);
+            lblTransctionDateFilter.Name = "lblTransctionDateFilter";
+            lblTransctionDateFilter.Size = new Size(284, 32);
+            lblTransctionDateFilter.TabIndex = 47;
+            lblTransctionDateFilter.Text = "Filter by Transaction Date";
+            lblTransctionDateFilter.Click += lblReturnDateFilter_Click;
+            // 
+            // cmbPaymentStatus
+            // 
+            cmbPaymentStatus.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbPaymentStatus.FormattingEnabled = true;
+            cmbPaymentStatus.Location = new Point(872, 355);
+            cmbPaymentStatus.Margin = new Padding(6, 4, 6, 4);
+            cmbPaymentStatus.Name = "cmbPaymentStatus";
+            cmbPaymentStatus.Size = new Size(308, 40);
+            cmbPaymentStatus.TabIndex = 46;
+            // 
+            // lblEquipment
+            // 
+            lblEquipment.AutoSize = true;
+            lblEquipment.Location = new Point(1186, 315);
+            lblEquipment.Margin = new Padding(6, 0, 6, 0);
+            lblEquipment.Name = "lblEquipment";
+            lblEquipment.Size = new Size(223, 32);
+            lblEquipment.TabIndex = 51;
+            lblEquipment.Text = "Filter by Equipment";
+            // 
+            // cmbEquipment
+            // 
+            cmbEquipment.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbEquipment.FormattingEnabled = true;
+            cmbEquipment.Location = new Point(1192, 353);
+            cmbEquipment.Margin = new Padding(6, 4, 6, 4);
+            cmbEquipment.Name = "cmbEquipment";
+            cmbEquipment.Size = new Size(292, 40);
+            cmbEquipment.TabIndex = 50;
+            // 
             // RentalTransactions
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1360, 763);
+            ClientSize = new Size(1768, 977);
+            Controls.Add(lblEquipment);
+            Controls.Add(cmbEquipment);
+            Controls.Add(dtpTransctionDate);
+            Controls.Add(lblPayment);
+            Controls.Add(lblTransctionDateFilter);
+            Controls.Add(cmbPaymentStatus);
+            Controls.Add(txtTransaction);
+            Controls.Add(lblTransaction);
+            Controls.Add(txtRequestID);
+            Controls.Add(lblRequestID);
+            Controls.Add(btnReset);
             Controls.Add(btnFilter);
             Controls.Add(btnSearch);
-            Controls.Add(dgvReturnRecords);
+            Controls.Add(dgvRentalTransactions);
             Controls.Add(lblReturnRecords);
             Controls.Add(pnlNavigationSideBar);
+            Margin = new Padding(4);
             Name = "RentalTransactions";
             Text = "RentalTransactions";
-            ((System.ComponentModel.ISupportInitialize)dgvReturnRecords).EndInit();
+            Load += RentalTransactions_Load;
+            ((System.ComponentModel.ISupportInitialize)dgvRentalTransactions).EndInit();
             pnlNavigationSideBar.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private Button btnFilter;
-        private Button btnSearch;
-        private DataGridView dgvReturnRecords;
+        private DataGridView dgvRentalTransactions;
         private Label lblReturnRecords;
         private Panel pnlNavigationSideBar;
         private Button btnDeleteRentalTransaction;
@@ -221,5 +362,18 @@
         private Button btnEditRentalTransaction;
         private Button btnAddnewRentalTransaction;
         private Button btnBack;
+        private Button btnReset;
+        private Button btnFilter;
+        private Button btnSearch;
+        private TextBox txtRequestID;
+        private Label lblRequestID;
+        private TextBox txtTransaction;
+        private Label lblTransaction;
+        private DateTimePicker dtpTransctionDate;
+        private Label lblPayment;
+        private Label lblTransctionDateFilter;
+        private ComboBox cmbPaymentStatus;
+        private Label lblEquipment;
+        private ComboBox cmbEquipment;
     }
 }

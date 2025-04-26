@@ -278,8 +278,7 @@ namespace RentOpsDesktop
 
             if (addReturnRecord.DialogResult == DialogResult.OK)
             {
-                dbContext.ReturnRecords.Add(addReturnRecord.newReturnRecord);
-                dbContext.SaveChanges(); // Save changes to the database
+                
                 RefreshDataGridView(); // Refresh the DataGridView
             }
 

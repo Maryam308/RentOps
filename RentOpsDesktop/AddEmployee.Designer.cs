@@ -74,6 +74,7 @@
             btnBack.TabIndex = 8;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
+            btnBack.Click += btnBack_Click;
             // 
             // btnAddEmployee
             // 
