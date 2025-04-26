@@ -80,6 +80,7 @@
             btnBack.TabIndex = 12;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
+            btnBack.Click += btnBack_Click;
             // 
             // lblAddReturnRecords
             // 
