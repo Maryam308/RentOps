@@ -40,9 +40,9 @@
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 48.2F, FontStyle.Bold);
             lblTitle.ForeColor = Color.FromArgb(135, 66, 62);
-            lblTitle.Location = new Point(583, 164);
+            lblTitle.Location = new Point(510, 123);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(368, 108);
+            lblTitle.Size = new Size(294, 87);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "RentOps";
             // 
@@ -51,18 +51,19 @@
             lblSlogan.AutoSize = true;
             lblSlogan.Font = new Font("Segoe UI Semibold", 15.8000011F, FontStyle.Bold);
             lblSlogan.ForeColor = Color.FromArgb(135, 66, 62);
-            lblSlogan.Location = new Point(546, 313);
+            lblSlogan.Location = new Point(478, 235);
             lblSlogan.Name = "lblSlogan";
-            lblSlogan.Size = new Size(463, 37);
+            lblSlogan.Size = new Size(375, 30);
             lblSlogan.TabIndex = 1;
             lblSlogan.Text = " RentOps, the Smarter Way to Equip.";
             // 
             // picLogo
             // 
             picLogo.Image = Properties.Resources.rentOpsLogo;
-            picLogo.Location = new Point(69, 86);
+            picLogo.Location = new Point(60, 64);
+            picLogo.Margin = new Padding(3, 2, 3, 2);
             picLogo.Name = "picLogo";
-            picLogo.Size = new Size(384, 408);
+            picLogo.Size = new Size(336, 306);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picLogo.TabIndex = 2;
             picLogo.TabStop = false;
@@ -70,11 +71,14 @@
             // btnLogin
             // 
             btnLogin.BackColor = Color.FromArgb(139, 128, 116);
+            btnLogin.FlatAppearance.BorderSize = 0;
+            btnLogin.FlatStyle = FlatStyle.Flat;
             btnLogin.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnLogin.ForeColor = Color.White;
-            btnLogin.Location = new Point(677, 410);
+            btnLogin.Location = new Point(547, 301);
+            btnLogin.Margin = new Padding(3, 2, 3, 2);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(172, 47);
+            btnLogin.Size = new Size(212, 44);
             btnLogin.TabIndex = 7;
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = false;
@@ -82,13 +86,14 @@
             // 
             // Landing
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1088, 611);
+            ClientSize = new Size(952, 458);
             Controls.Add(btnLogin);
             Controls.Add(picLogo);
             Controls.Add(lblSlogan);
             Controls.Add(lblTitle);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "Landing";
             Text = "Landing";
             ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();

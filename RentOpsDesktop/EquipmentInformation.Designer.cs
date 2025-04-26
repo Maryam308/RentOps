@@ -45,6 +45,11 @@
             btnBack1 = new Button();
             label4 = new Label();
             cmbUser = new ComboBox();
+            btnSearch = new Button();
+            label6 = new Label();
+            txtEquipName = new TextBox();
+            label5 = new Label();
+            txtEquipID = new TextBox();
             ((System.ComponentModel.ISupportInitialize)dgvEquipment).BeginInit();
             pnlNavigation.SuspendLayout();
             SuspendLayout();
@@ -57,10 +62,10 @@
             btnReset.FlatStyle = FlatStyle.Flat;
             btnReset.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
             btnReset.ForeColor = Color.FromArgb(241, 240, 234);
-            btnReset.Location = new Point(939, 36);
+            btnReset.Location = new Point(857, 36);
             btnReset.Margin = new Padding(0);
             btnReset.Name = "btnReset";
-            btnReset.Size = new Size(102, 41);
+            btnReset.Size = new Size(184, 41);
             btnReset.TabIndex = 18;
             btnReset.Text = "Reset";
             btnReset.UseVisualStyleBackColor = false;
@@ -70,11 +75,11 @@
             // 
             dgvEquipment.BackgroundColor = Color.WhiteSmoke;
             dgvEquipment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvEquipment.Location = new Point(286, 193);
+            dgvEquipment.Location = new Point(275, 251);
             dgvEquipment.Margin = new Padding(3, 4, 3, 4);
             dgvEquipment.Name = "dgvEquipment";
             dgvEquipment.RowHeadersWidth = 51;
-            dgvEquipment.Size = new Size(775, 389);
+            dgvEquipment.Size = new Size(766, 331);
             dgvEquipment.TabIndex = 20;
             // 
             // lblEquipmentDashboard
@@ -93,9 +98,9 @@
             // 
             cmbConditionStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbConditionStatus.FormattingEnabled = true;
-            cmbConditionStatus.Location = new Point(458, 137);
+            cmbConditionStatus.Location = new Point(419, 137);
             cmbConditionStatus.Name = "cmbConditionStatus";
-            cmbConditionStatus.Size = new Size(153, 28);
+            cmbConditionStatus.Size = new Size(114, 28);
             cmbConditionStatus.TabIndex = 24;
             // 
             // cmbEquipmentCategory
@@ -104,16 +109,16 @@
             cmbEquipmentCategory.FormattingEnabled = true;
             cmbEquipmentCategory.Location = new Point(275, 137);
             cmbEquipmentCategory.Name = "cmbEquipmentCategory";
-            cmbEquipmentCategory.Size = new Size(162, 28);
+            cmbEquipmentCategory.Size = new Size(126, 28);
             cmbEquipmentCategory.TabIndex = 25;
             // 
             // cmbAvailabilityStatus
             // 
             cmbAvailabilityStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbAvailabilityStatus.FormattingEnabled = true;
-            cmbAvailabilityStatus.Location = new Point(656, 137);
+            cmbAvailabilityStatus.Location = new Point(560, 134);
             cmbAvailabilityStatus.Name = "cmbAvailabilityStatus";
-            cmbAvailabilityStatus.Size = new Size(187, 28);
+            cmbAvailabilityStatus.Size = new Size(137, 28);
             cmbAvailabilityStatus.TabIndex = 26;
             // 
             // btnFilter
@@ -124,7 +129,7 @@
             btnFilter.FlatStyle = FlatStyle.Flat;
             btnFilter.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
             btnFilter.ForeColor = Color.FromArgb(241, 240, 234);
-            btnFilter.Location = new Point(823, 36);
+            btnFilter.Location = new Point(939, 119);
             btnFilter.Margin = new Padding(0);
             btnFilter.Name = "btnFilter";
             btnFilter.Size = new Size(102, 41);
@@ -138,27 +143,27 @@
             label1.AutoSize = true;
             label1.Location = new Point(275, 114);
             label1.Name = "label1";
-            label1.Size = new Size(126, 20);
+            label1.Size = new Size(69, 20);
             label1.TabIndex = 27;
-            label1.Text = "Filter by Category";
+            label1.Text = "Category";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(458, 114);
+            label2.Location = new Point(419, 114);
             label2.Name = "label2";
-            label2.Size = new Size(175, 20);
+            label2.Size = new Size(118, 20);
             label2.TabIndex = 28;
-            label2.Text = "Filter by Condition Status";
+            label2.Text = "Condition Status";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(656, 114);
+            label3.Location = new Point(559, 111);
             label3.Name = "label3";
-            label3.Size = new Size(184, 20);
+            label3.Size = new Size(127, 20);
             label3.TabIndex = 29;
-            label3.Text = "Filter by Availability Status";
+            label3.Text = "Availability Status";
             // 
             // pnlNavigation
             // 
@@ -244,25 +249,79 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(877, 114);
+            label4.Location = new Point(714, 111);
             label4.Name = "label4";
-            label4.Size = new Size(95, 20);
+            label4.Size = new Size(38, 20);
             label4.TabIndex = 31;
-            label4.Text = "Filter by User";
+            label4.Text = "User";
             // 
             // cmbUser
             // 
             cmbUser.FormattingEnabled = true;
-            cmbUser.Location = new Point(877, 137);
+            cmbUser.Location = new Point(714, 129);
             cmbUser.Name = "cmbUser";
-            cmbUser.Size = new Size(151, 28);
+            cmbUser.Size = new Size(120, 28);
             cmbUser.TabIndex = 32;
+            // 
+            // btnSearch
+            // 
+            btnSearch.BackColor = Color.FromArgb(121, 86, 76);
+            btnSearch.BackgroundImageLayout = ImageLayout.None;
+            btnSearch.FlatAppearance.BorderSize = 0;
+            btnSearch.FlatStyle = FlatStyle.Flat;
+            btnSearch.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
+            btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
+            btnSearch.Location = new Point(939, 192);
+            btnSearch.Margin = new Padding(0);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(102, 41);
+            btnSearch.TabIndex = 33;
+            btnSearch.Text = "Search";
+            btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click += btnSearch_Click;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(719, 174);
+            label6.Name = "label6";
+            label6.Size = new Size(125, 20);
+            label6.TabIndex = 37;
+            label6.Text = "Equipment Name";
+            // 
+            // txtEquipName
+            // 
+            txtEquipName.Location = new Point(714, 202);
+            txtEquipName.Name = "txtEquipName";
+            txtEquipName.Size = new Size(153, 27);
+            txtEquipName.TabIndex = 36;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(540, 174);
+            label5.Name = "label5";
+            label5.Size = new Size(100, 20);
+            label5.TabIndex = 39;
+            label5.Text = "Equipment ID";
+            // 
+            // txtEquipID
+            // 
+            txtEquipID.Location = new Point(535, 202);
+            txtEquipID.Name = "txtEquipID";
+            txtEquipID.Size = new Size(153, 27);
+            txtEquipID.TabIndex = 38;
             // 
             // EquipmentInformation
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1088, 611);
+            Controls.Add(label5);
+            Controls.Add(txtEquipID);
+            Controls.Add(label6);
+            Controls.Add(txtEquipName);
+            Controls.Add(btnSearch);
             Controls.Add(cmbUser);
             Controls.Add(label4);
             Controls.Add(pnlNavigation);
@@ -306,5 +365,10 @@
         private Button btnBack1;
         private Label label4;
         private ComboBox cmbUser;
+        private Button btnSearch;
+        private Label label6;
+        private TextBox txtEquipName;
+        private Label label5;
+        private TextBox txtEquipID;
     }
 }

@@ -49,8 +49,8 @@ namespace RentOpsDesktop
 
             // Load data to the user combobox
             cmbUser.DataSource = context.Users.ToList();
-            cmbUser.DisplayMember = "FirstName"; // Displaying full name
-            cmbUser.ValueMember = "UserId"; 
+            cmbUser.DisplayMember = "FullName"; // Displaying full name
+            cmbUser.ValueMember = "UserId";
             cmbUser.SelectedItem = null;
 
             RefreshEquipmentGridview();
@@ -107,7 +107,7 @@ namespace RentOpsDesktop
                         .FirstOrDefault(), // Fetch the equipment category title
                     AddedBy = context.Users
                         .Where(u => u.UserId == e.UserId)
-                        .Select(u => u.FirstName)
+                        .Select(u => u.FullName)
                         .FirstOrDefault() // Fetch the user's full name
                 }).ToList(); // Convert the result to a list
 
@@ -135,7 +135,7 @@ namespace RentOpsDesktop
 
         private void btnDeleteEquipment_Click(object sender, EventArgs e)
         {
-            
+
 
         }
 
@@ -165,12 +165,14 @@ namespace RentOpsDesktop
             cmbEquipmentCategory.SelectedItem = null;
             cmbConditionStatus.SelectedItem = null;
             cmbUser.SelectedItem = null;
+            txtEquipID.Text = "";
+            txtEquipName.Text = "";
             RefreshEquipmentGridview();
         }
 
         private void btnBack1_Click(object sender, EventArgs e)
         {
-            EquipmentInformation equipmentDashboard = new EquipmentInformation();
+            EquipmentDashboard equipmentDashboard = new EquipmentDashboard();
             this.Hide();
             equipmentDashboard.Show();
         }
@@ -333,5 +335,82 @@ namespace RentOpsDesktop
                 }
             }
         }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Check if both fields are empty
+                if (string.IsNullOrEmpty(txtEquipID.Text) && string.IsNullOrEmpty(txtEquipName.Text))
+                {
+                    MessageBox.Show("Please enter either an Equipment ID or Equipment Name to search.");
+                    return;
+                }
+
+                // Check if both fields are filled
+                if (!string.IsNullOrEmpty(txtEquipID.Text) && !string.IsNullOrEmpty(txtEquipName.Text))
+                {
+                    MessageBox.Show("Please enter either an Equipment ID or Equipment Name, not both.");
+                    return;
+                }
+
+                // Start with all equipment
+                var equipmentToShow = context.Equipment.AsQueryable();
+
+                // Apply search by Equipment ID if entered
+                if (!string.IsNullOrEmpty(txtEquipID.Text))
+                {
+                    int equipmentId;
+                    if (int.TryParse(txtEquipID.Text, out equipmentId))
+                    {
+                        equipmentToShow = equipmentToShow.Where(e => e.EquipmentId == equipmentId);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter a valid Equipment ID.");
+                        return;
+                    }
+                }
+                // Apply search by Equipment Name if entered
+                else if (!string.IsNullOrEmpty(txtEquipName.Text))
+                {
+                    string equipmentName = txtEquipName.Text.Trim();
+                    equipmentToShow = equipmentToShow.Where(e => e.EquipmentName.Contains(equipmentName));
+                }
+
+                // Fetch the filtered list based on search criteria and select relevant fields
+                var searchedList = equipmentToShow.Select(e => new
+                {
+                    EquipmentID = e.EquipmentId,
+                    EquipmentName = e.EquipmentName,
+                    EquipmentDescription = e.EquipmentDescription,
+                    RentalPrice = e.RentalPrice,
+                    ConditionStatus = context.ConditionStatuses
+                        .Where(cs => cs.ConditionStatusId == e.ConditionStatusId)
+                        .Select(cs => cs.ConditionStatusTitle)
+                        .FirstOrDefault(),
+                    AvailabilityStatus = context.AvailabilityStatuses
+                        .Where(a => a.AvailabilityStatusId == e.AvailabilityStatusId)
+                        .Select(a => a.AvailabilityStatusTitle)
+                        .FirstOrDefault(),
+                    EquipmentCategory = context.EquipmentCategories
+                        .Where(ec => ec.EquipmentCategoryId == e.EquipmentCategoryId)
+                        .Select(ec => ec.EquipmentCategoryTitle)
+                        .FirstOrDefault(),
+                    AddedBy = context.Users
+                        .Where(u => u.UserId == e.UserId)
+                        .Select(u => u.FullName)
+                        .FirstOrDefault()
+                }).ToList();
+
+                // Bind the fetched data to the DataGridView
+                dgvEquipment.DataSource = searchedList;
+            }
+            catch (Exception ex)
+            {
+                // Show error message if an exception occurs
+                MessageBox.Show("Error: " + ex.Message);
+            }
+        }
+        }
     }
-}
