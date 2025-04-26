@@ -38,7 +38,7 @@
             cmbRentalReports = new ComboBox();
             label1 = new Label();
             lblInstruction = new Label();
-            btnGenerateCustomerReport = new Button();
+            btnGenerateRentalReport = new Button();
             dtpPeriodStartDate = new DateTimePicker();
             label5 = new Label();
             SuspendLayout();
@@ -140,22 +140,22 @@
             lblInstruction.TabIndex = 24;
             lblInstruction.Text = resources.GetString("lblInstruction.Text");
             // 
-            // btnGenerateCustomerReport
+            // btnGenerateRentalReport
             // 
-            btnGenerateCustomerReport.BackColor = Color.FromArgb(121, 86, 76);
-            btnGenerateCustomerReport.BackgroundImageLayout = ImageLayout.None;
-            btnGenerateCustomerReport.FlatAppearance.BorderSize = 0;
-            btnGenerateCustomerReport.FlatStyle = FlatStyle.Flat;
-            btnGenerateCustomerReport.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            btnGenerateCustomerReport.ForeColor = Color.FromArgb(241, 240, 234);
-            btnGenerateCustomerReport.Location = new Point(622, 197);
-            btnGenerateCustomerReport.Margin = new Padding(0);
-            btnGenerateCustomerReport.Name = "btnGenerateCustomerReport";
-            btnGenerateCustomerReport.Size = new Size(281, 61);
-            btnGenerateCustomerReport.TabIndex = 23;
-            btnGenerateCustomerReport.Text = "Generate Rental Report";
-            btnGenerateCustomerReport.UseVisualStyleBackColor = false;
-            btnGenerateCustomerReport.Click += btnGenerateCustomerReport_Click;
+            btnGenerateRentalReport.BackColor = Color.FromArgb(121, 86, 76);
+            btnGenerateRentalReport.BackgroundImageLayout = ImageLayout.None;
+            btnGenerateRentalReport.FlatAppearance.BorderSize = 0;
+            btnGenerateRentalReport.FlatStyle = FlatStyle.Flat;
+            btnGenerateRentalReport.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnGenerateRentalReport.ForeColor = Color.FromArgb(241, 240, 234);
+            btnGenerateRentalReport.Location = new Point(622, 197);
+            btnGenerateRentalReport.Margin = new Padding(0);
+            btnGenerateRentalReport.Name = "btnGenerateRentalReport";
+            btnGenerateRentalReport.Size = new Size(281, 61);
+            btnGenerateRentalReport.TabIndex = 23;
+            btnGenerateRentalReport.Text = "Generate Rental Report";
+            btnGenerateRentalReport.UseVisualStyleBackColor = false;
+            btnGenerateRentalReport.Click += btnGenerateRentalReport_Click;
             // 
             // dtpPeriodStartDate
             // 
@@ -190,7 +190,7 @@
             Controls.Add(cmbRentalReports);
             Controls.Add(label1);
             Controls.Add(lblInstruction);
-            Controls.Add(btnGenerateCustomerReport);
+            Controls.Add(btnGenerateRentalReport);
             Controls.Add(btnBack);
             Controls.Add(lblRentalReport);
             Margin = new Padding(3, 2, 3, 2);
@@ -211,7 +211,7 @@
         private ComboBox cmbRentalReports;
         private Label label1;
         private Label lblInstruction;
-        private Button btnGenerateCustomerReport;
+        private Button btnGenerateRentalReport;
         private DateTimePicker dtpPeriodStartDate;
         private Label label5;
     }
