@@ -15,12 +15,12 @@ namespace RentOpsDesktop
     public partial class OverdueReturns : Form
     {
         RentOpsDBContext dbContext;
-
+        int currentEmployeeId;
         public OverdueReturns()
         {
             InitializeComponent();
             dbContext = new RentOpsDBContext();
-
+            currentEmployeeId = Global.EmployeeID; // Get the global employee ID
         }
 
 
@@ -30,7 +30,7 @@ namespace RentOpsDesktop
 
             //select the data filtering the overdue returns that are not yet returned 
             var returnRecords = dbContext.RentalTransactions
-                .Where(x => x.ReturnDate < DateOnly.FromDateTime(DateTime.Now))
+                .Where(x => x.ReturnDate < DateOnly.FromDateTime(DateTime.Now) && x.EmployeeId == currentEmployeeId)
                 .OrderByDescending(d => d.ReturnDate)
                 .Select(r => new
                 {

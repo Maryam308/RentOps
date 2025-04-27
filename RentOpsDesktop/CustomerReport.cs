@@ -22,7 +22,7 @@ namespace RentOpsDesktop
     public partial class CustomerReport : Form
     {
         RentOpsDBContext dbContext;
-
+        bool isLoaded;
         public CustomerReport()
         {
             InitializeComponent();
@@ -32,7 +32,7 @@ namespace RentOpsDesktop
 
         private void btnGenerateCustomerReport_Click(object sender, EventArgs e)
         {
-            
+
             try
             {
                 //will generate pdf report about customers
@@ -262,9 +262,9 @@ Number of Lost Returns: {numberOfLostReturns}
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        
 
-            }
+
+        }
 
         private void CustomerReport_Load(object sender, EventArgs e)
         {
@@ -277,48 +277,77 @@ Number of Lost Returns: {numberOfLostReturns}
             cmbCustomerReports.SelectedIndex = -1;
             cmbCustomerReports.Text = "Select a Customer Report";
 
+            isLoaded = true; // Set the flag to true after loading the form
+
         }
 
         private async void cmbCustomerReports_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //// show spinner  
-            //progressBar1.Visible = true;
-            //cmbCustomerReports.Enabled = false;
+            if (!isLoaded) return; // Prevent action if form is not fully loaded
 
-            //// grab the selected Id
-            //int docId = (int)cmbCustomerReports.SelectedValue;
+            // Show spinner  
+            progressBar1.Visible = true;
+            cmbCustomerReports.Enabled = false;
 
+            // Grab the selected document
+            var selectedDoc = cmbCustomerReports.SelectedItem as Document;
+            int docId = selectedDoc?.DocumentId ?? 0;
 
-            //if (docId != null && docId != 0 && docId != -1)
-            //{
-            //    // do the DB + file I/O off the UI thread
-            //    var tuple = await Task.Run(() =>
-            //    {
-            //        using (var ctx = new RentOpsDBContext())
-            //        {
-            //            var d = ctx.Documents.Find(docId);
-            //            if (d == null) return (string)null;
-            //            // write to temp file
-            //            var tmp = Path.Combine(Path.GetTempPath(), d.FileName + ".pdf");
-            //            File.WriteAllBytes(tmp, d.FileData);
-            //            return tmp;
-            //        }
-            //    });
+            if (docId > 0)
+            {
+                // Perform DB and file I/O off the UI thread
+                var filePath = await Task.Run(() =>
+                {
+                    using (var ctx = new RentOpsDBContext())
+                    {
+                        var d = ctx.Documents.Find(docId);
+                        if (d == null) return null;
 
-            //    if (tuple != null)
-            //    {
-            //        Process.Start(new ProcessStartInfo
-            //        {
-            //            FileName = tuple,
-            //            UseShellExecute = true
-            //        });
-            //    }
-            //}
+                        // Create temp file path
+                        var tmp = Path.Combine(Path.GetTempPath(), d.FileName + ".pdf");
 
-            //// hide spinner
-            //progressBar1.Visible = false;
-            //cmbCustomerReports.Enabled = true;
+                        // Ensure file is properly closed before writing
+                        using (var fs = new FileStream(tmp, FileMode.Create, FileAccess.Write, FileShare.None))
+                        {
+                            fs.Write(d.FileData, 0, d.FileData.Length);
+                        }
 
+                        return tmp;
+                    }
+                });
+
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    try
+                    {
+                        await Task.Delay(500); // Small delay to ensure file is ready
+                        Process.Start(new ProcessStartInfo
+                        {
+                            FileName = filePath,
+                            UseShellExecute = true,
+                            Verb = "open"
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error opening file: {ex.Message}");
+                    }
+                }
+            }
+
+            // Hide spinner
+            progressBar1.Visible = false;
+            cmbCustomerReports.Enabled = true;
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            //back to reports screen
+            
+            Reports screen = new Reports();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
+            this.Hide();
+            screen.Show();
         }
     }
 }
