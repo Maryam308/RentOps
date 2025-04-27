@@ -30,7 +30,7 @@
         {
             lblReport = new Label();
             btnCustomerReports = new Button();
-            btnReturnReports = new Button();
+            btnRentalHistoryReports = new Button();
             btnBack = new Button();
             SuspendLayout();
             // 
@@ -60,22 +60,24 @@
             btnCustomerReports.TabIndex = 14;
             btnCustomerReports.Text = "Customer Reports";
             btnCustomerReports.UseVisualStyleBackColor = false;
+            btnCustomerReports.Click += btnCustomerReports_Click;
             // 
-            // btnReturnReports
+            // btnRentalHistoryReports
             // 
-            btnReturnReports.BackColor = Color.FromArgb(121, 86, 76);
-            btnReturnReports.BackgroundImageLayout = ImageLayout.None;
-            btnReturnReports.FlatAppearance.BorderSize = 0;
-            btnReturnReports.FlatStyle = FlatStyle.Flat;
-            btnReturnReports.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            btnReturnReports.ForeColor = Color.FromArgb(241, 240, 234);
-            btnReturnReports.Location = new Point(516, 159);
-            btnReturnReports.Margin = new Padding(0);
-            btnReturnReports.Name = "btnReturnReports";
-            btnReturnReports.Size = new Size(325, 225);
-            btnReturnReports.TabIndex = 15;
-            btnReturnReports.Text = "Return Reports";
-            btnReturnReports.UseVisualStyleBackColor = false;
+            btnRentalHistoryReports.BackColor = Color.FromArgb(121, 86, 76);
+            btnRentalHistoryReports.BackgroundImageLayout = ImageLayout.None;
+            btnRentalHistoryReports.FlatAppearance.BorderSize = 0;
+            btnRentalHistoryReports.FlatStyle = FlatStyle.Flat;
+            btnRentalHistoryReports.Font = new Font("Segoe UI", 21.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
+            btnRentalHistoryReports.ForeColor = Color.FromArgb(241, 240, 234);
+            btnRentalHistoryReports.Location = new Point(516, 159);
+            btnRentalHistoryReports.Margin = new Padding(0);
+            btnRentalHistoryReports.Name = "btnRentalHistoryReports";
+            btnRentalHistoryReports.Size = new Size(325, 225);
+            btnRentalHistoryReports.TabIndex = 15;
+            btnRentalHistoryReports.Text = "Rental History Reports";
+            btnRentalHistoryReports.UseVisualStyleBackColor = false;
+            btnRentalHistoryReports.Click += btnRentalHistoryReports_Click;
             // 
             // btnBack
             // 
@@ -99,7 +101,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
             Controls.Add(btnBack);
-            Controls.Add(btnReturnReports);
+            Controls.Add(btnRentalHistoryReports);
             Controls.Add(btnCustomerReports);
             Controls.Add(lblReport);
             Margin = new Padding(3, 2, 3, 2);
@@ -113,7 +115,7 @@
 
         private Label lblReport;
         private Button btnCustomerReports;
-        private Button btnReturnReports;
+        private Button btnRentalHistoryReports;
         private Button btnBack;
     }
 }

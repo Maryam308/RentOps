@@ -65,7 +65,7 @@ namespace RentOpsDesktop
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 Login loginForm = new Login();
                 this.Hide(); //hide the current form
@@ -81,7 +81,12 @@ namespace RentOpsDesktop
             {
                 MessageBox.Show("Error logging out: " + ex.Message);
             }
-       
+
+
+        }
+
+        private void btnEquipmentInformation_Click(object sender, EventArgs e)
+        {
 
         }
     }

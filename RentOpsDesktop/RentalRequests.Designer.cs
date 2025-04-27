@@ -54,10 +54,10 @@
             btnSearch.FlatStyle = FlatStyle.Flat;
             btnSearch.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
             btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
-            btnSearch.Location = new Point(923, 112);
+            btnSearch.Location = new Point(808, 84);
             btnSearch.Margin = new Padding(0);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(115, 38);
+            btnSearch.Size = new Size(101, 28);
             btnSearch.TabIndex = 18;
             btnSearch.Text = "Search";
             btnSearch.UseVisualStyleBackColor = false;
@@ -67,11 +67,10 @@
             // 
             dgvRentalRequests.BackgroundColor = Color.WhiteSmoke;
             dgvRentalRequests.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvRentalRequests.Location = new Point(303, 168);
-            dgvRentalRequests.Margin = new Padding(3, 4, 3, 4);
+            dgvRentalRequests.Location = new Point(265, 126);
             dgvRentalRequests.Name = "dgvRentalRequests";
             dgvRentalRequests.RowHeadersWidth = 62;
-            dgvRentalRequests.Size = new Size(745, 416);
+            dgvRentalRequests.Size = new Size(652, 312);
             dgvRentalRequests.TabIndex = 20;
             // 
             // pnlNavigationSideBar
@@ -82,7 +81,7 @@
             pnlNavigationSideBar.Location = new Point(1, 0);
             pnlNavigationSideBar.Margin = new Padding(0);
             pnlNavigationSideBar.Name = "pnlNavigationSideBar";
-            pnlNavigationSideBar.Size = new Size(269, 610);
+            pnlNavigationSideBar.Size = new Size(235, 458);
             pnlNavigationSideBar.TabIndex = 19;
             // 
             // btnUpdateRentalRequest
@@ -93,10 +92,10 @@
             btnUpdateRentalRequest.FlatStyle = FlatStyle.Flat;
             btnUpdateRentalRequest.Font = new Font("Segoe UI Semibold", 13F, FontStyle.Bold);
             btnUpdateRentalRequest.ForeColor = Color.White;
-            btnUpdateRentalRequest.Location = new Point(3, 106);
+            btnUpdateRentalRequest.Location = new Point(3, 80);
             btnUpdateRentalRequest.Margin = new Padding(3, 2, 3, 2);
             btnUpdateRentalRequest.Name = "btnUpdateRentalRequest";
-            btnUpdateRentalRequest.Size = new Size(266, 50);
+            btnUpdateRentalRequest.Size = new Size(229, 38);
             btnUpdateRentalRequest.TabIndex = 17;
             btnUpdateRentalRequest.Text = "Update Rental Request";
             btnUpdateRentalRequest.TextAlign = ContentAlignment.MiddleLeft;
@@ -111,10 +110,10 @@
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(35, 28);
+            btnBack.Location = new Point(31, 21);
             btnBack.Margin = new Padding(3, 2, 3, 2);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(177, 58);
+            btnBack.Size = new Size(155, 44);
             btnBack.TabIndex = 9;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
@@ -125,9 +124,9 @@
             lblRentalDashboard.AutoSize = true;
             lblRentalDashboard.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic);
             lblRentalDashboard.ForeColor = Color.FromArgb(135, 66, 62);
-            lblRentalDashboard.Location = new Point(303, 25);
+            lblRentalDashboard.Location = new Point(265, 19);
             lblRentalDashboard.Name = "lblRentalDashboard";
-            lblRentalDashboard.Size = new Size(311, 52);
+            lblRentalDashboard.Size = new Size(251, 42);
             lblRentalDashboard.TabIndex = 17;
             lblRentalDashboard.Text = "Rental Requests";
             lblRentalDashboard.Click += lblRentalDashboard_Click;
@@ -140,10 +139,10 @@
             btnFilter.FlatStyle = FlatStyle.Flat;
             btnFilter.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
             btnFilter.ForeColor = Color.FromArgb(241, 240, 234);
-            btnFilter.Location = new Point(632, 112);
+            btnFilter.Location = new Point(553, 84);
             btnFilter.Margin = new Padding(0);
             btnFilter.Name = "btnFilter";
-            btnFilter.Size = new Size(115, 36);
+            btnFilter.Size = new Size(101, 27);
             btnFilter.TabIndex = 21;
             btnFilter.Text = "Filter";
             btnFilter.UseVisualStyleBackColor = false;
@@ -157,10 +156,10 @@
             btnReset.FlatStyle = FlatStyle.Flat;
             btnReset.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
             btnReset.ForeColor = Color.FromArgb(241, 240, 234);
-            btnReset.Location = new Point(923, 28);
+            btnReset.Location = new Point(808, 21);
             btnReset.Margin = new Padding(0);
             btnReset.Name = "btnReset";
-            btnReset.Size = new Size(115, 36);
+            btnReset.Size = new Size(101, 27);
             btnReset.TabIndex = 22;
             btnReset.Text = "Reset";
             btnReset.UseVisualStyleBackColor = false;
@@ -170,26 +169,27 @@
             // 
             cmbEquipmentName.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbEquipmentName.FormattingEnabled = true;
-            cmbEquipmentName.Location = new Point(303, 120);
+            cmbEquipmentName.Location = new Point(265, 90);
+            cmbEquipmentName.Margin = new Padding(3, 2, 3, 2);
             cmbEquipmentName.Name = "cmbEquipmentName";
-            cmbEquipmentName.Size = new Size(162, 28);
+            cmbEquipmentName.Size = new Size(142, 23);
             cmbEquipmentName.TabIndex = 26;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(303, 98);
+            label1.Location = new Point(265, 74);
             label1.Name = "label1";
-            label1.Size = new Size(125, 20);
+            label1.Size = new Size(100, 15);
             label1.TabIndex = 28;
             label1.Text = "Equipment Name";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(479, 97);
+            label2.Location = new Point(419, 73);
             label2.Name = "label2";
-            label2.Size = new Size(106, 20);
+            label2.Size = new Size(84, 15);
             label2.TabIndex = 29;
             label2.Text = "Request Status";
             label2.TextAlign = ContentAlignment.BottomCenter;
@@ -198,32 +198,34 @@
             // 
             cmbRequestStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbRequestStatus.FormattingEnabled = true;
-            cmbRequestStatus.Location = new Point(479, 120);
+            cmbRequestStatus.Location = new Point(419, 90);
+            cmbRequestStatus.Margin = new Padding(3, 2, 3, 2);
             cmbRequestStatus.Name = "cmbRequestStatus";
-            cmbRequestStatus.Size = new Size(125, 28);
+            cmbRequestStatus.Size = new Size(110, 23);
             cmbRequestStatus.TabIndex = 30;
             // 
             // lblRequestId
             // 
             lblRequestId.AutoSize = true;
-            lblRequestId.Location = new Point(788, 100);
+            lblRequestId.Location = new Point(690, 75);
             lblRequestId.Name = "lblRequestId";
-            lblRequestId.Size = new Size(81, 20);
+            lblRequestId.Size = new Size(63, 15);
             lblRequestId.TabIndex = 31;
             lblRequestId.Text = "Request ID";
             // 
             // txtRequestID
             // 
-            txtRequestID.Location = new Point(788, 121);
+            txtRequestID.Location = new Point(690, 91);
+            txtRequestID.Margin = new Padding(3, 2, 3, 2);
             txtRequestID.Name = "txtRequestID";
-            txtRequestID.Size = new Size(108, 27);
+            txtRequestID.Size = new Size(95, 23);
             txtRequestID.TabIndex = 32;
             // 
             // RentalRequests
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1088, 610);
+            ClientSize = new Size(952, 458);
             Controls.Add(txtRequestID);
             Controls.Add(lblRequestId);
             Controls.Add(cmbRequestStatus);

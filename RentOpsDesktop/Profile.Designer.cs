@@ -83,6 +83,7 @@
             btnEquipmentInformation.TabIndex = 28;
             btnEquipmentInformation.Text = "Equipment Information";
             btnEquipmentInformation.UseVisualStyleBackColor = false;
+            btnEquipmentInformation.Click += btnEquipmentInformation_Click;
             // 
             // btnReturnRecords
             // 
