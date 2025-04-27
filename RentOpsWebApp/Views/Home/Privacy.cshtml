@@ -1,6 +1,124 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+
+    .privacy-header {
+        background-color: #e8f5f9; /* Light blue shade from Flatly */
+        padding: 2rem;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+
+        .privacy-header h2 {
+            color: #2c3e50; /* Flatly dark heading color */
+        }
+
+    .privacy-nav {
+        position: sticky;
+        top: 1rem;
+    }
+
+    .privacy-content section {
+        margin-bottom: 4rem; /* Space between sections */
+        padding-top: 2rem; /* Ensures scroll stops slightly below top */
+        border-top: 1px solid #ddd; /* Optional visual separation */
+    }
+
+    .privacy-content h5 {
+        margin-top: 1rem;
+        color: #2c3e50;
+    }
+
+    .privacy-content p, .privacy-content li {
+        color: #4f5d73; /* Softer text color */
+    }
+</style>
+
+<div class="privacy-header">
+    <h2>Privacy Policy</h2>
+    <p class="text-muted">How RentOpsWebApp handles your data</p>
+    <p class="text-muted"><small>Last updated: 27/4/2025</small></p>
+</div>
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Sidebar Navigation with list-group -->
+        <div class="col-md-3 privacy-sidebar">
+            <div class="list-group privacy-nav">
+                <a href="#info" class="list-group-item list-group-item-action">1. Information We Collect</a>
+                <a href="#usage" class="list-group-item list-group-item-action">2. How We Use Your Information</a>
+                <a href="#security" class="list-group-item list-group-item-action">3. Data Security</a>
+                <a href="#sharing" class="list-group-item list-group-item-action">4. Sharing Your Information</a>
+                <a href="#rights" class="list-group-item list-group-item-action">5. Your Rights</a>
+                <a href="#retention" class="list-group-item list-group-item-action">6. Data Retention</a>
+                <a href="#updates" class="list-group-item list-group-item-action">7. Changes to This Policy</a>
+                <a href="#contact" class="list-group-item list-group-item-action">8. Contact Us</a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 privacy-content">
+            <p>At <strong>RentOpsWebApp</strong>, we value your privacy and are committed to protecting your personal data in compliance with Bahrain's Personal Data Protection Law (PDPL). This Privacy Policy outlines how we collect, use, disclose, and safeguard your data when using our services.</p>
+
+            <section id="info">
+                <h5>Information We Collect</h5>
+                <ul>
+                    <li><strong>Personal Info:</strong> Name, phone number, and email address.</li>
+                    <li><strong>Login Credentials:</strong> Managed securely with ASP.NET Core Identity.</li>
+                    <li><strong>Rental Records:</strong> Requests, transactions, and feedback.</li>
+                    <li><strong>Payments:</strong> Secure billing and transaction data.</li>
+                    <li><strong>Device Info:</strong> Browser type, IP address, and usage patterns.</li>
+                </ul>
+            </section>
+
+            <section id="usage">
+                <h5>How We Use Your Information</h5>
+                <ul>
+                    <li>To manage secure login and account access.</li>
+                    <li>To process equipment rentals and communicate updates.</li>
+                    <li>To improve our system and services.</li>
+                    <li>To fulfill legal obligations or business needs.</li>
+                </ul>
+            </section>
+
+            <section id="security">
+                <h5>Data Security</h5>
+                <p>We use ASP.NET Core Identity and secure encryption to protect your data. Passwords are hashed, and payment information is processed via encrypted gateways that comply with industry standards.</p>
+            </section>
+
+            <section id="sharing">
+                <h5>Sharing Your Information</h5>
+                <p>We do not sell or rent your data. We may share your information with trusted partners solely for service delivery, or as required by Bahraini law.</p>
+            </section>
+
+            <section id="rights">
+                <h5>Your Rights</h5>
+                <p>You have the right to access, correct, or delete your data. You can also withdraw consent to certain data uses, subject to legal or contractual obligations.</p>
+            </section>
+
+            <section id="retention">
+                <h5>Data Retention</h5>
+                <p>We retain your data only as long as necessary for legal, security, or operational needs, after which it is securely deleted.</p>
+            </section>
+
+            <section id="updates">
+                <h5>Changes to This Policy</h5>
+                <p>This policy may be updated periodically. Any changes will be posted on this page with a new effective date.</p>
+            </section>
+
+            <section id="contact">
+                <h5>Contact Us</h5>
+                <p>If you have any concerns or requests regarding your privacy, please contact us at:</p>
+                <ul>
+                    <li><strong>Email:</strong> [Insert Email]</li>
+                    <li><strong>Phone:</strong> [Insert Phone Number]</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>

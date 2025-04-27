@@ -9,23 +9,72 @@
     <link rel="stylesheet" href="~/RentOpsWebApp.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <header> 
+        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RentOpsWebApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/WebAppLogo.png" alt="RentOps Logo" class="me-1" style="border-radius: 50%; width: 40px; height: 40px;">
+                    RentOps
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Notification" asp-action="Notification">Notifications</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Equipment" asp-action="Equipment">Equipment</a>
+                        </li>                        
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Dashboard" asp-action="Dashboard">Dashboard</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="AuditLog" asp-action="AuditLog">Audit Logs</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Rental Details</a>
+                            <div class="dropdown-menu">
+
+                                <a class="nav-link" asp-area="" asp-controller="RentalRequest" asp-action="RentalRequest">Rental Requests</a>
+                                <a class="nav-link" asp-area="" asp-controller="RentalTransaction" asp-action="RentalTransaction">Rental Transactions</a>
+                                <a class="nav-link" asp-area="" asp-controller="ReturnRecord" asp-action="ReturnRecord">Return Records</a>
+
+                            </div>
+                        </li>
+                        
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Rentals</a>
+                            <div class="dropdown-menu">
+                                
+                                <a class="dropdown-item" asp-area="" asp-controller="MyRentalRequest" asp-action="MyRentalRequest">My Rental Request</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction">My Rental Transactions</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="MyReturnRecord" asp-action="MyReturnRecord">My Return Records</a>
+                               
+                            </div>
                         </li>
                     </ul>
+                    <div class="d-flex">
+                        <!--drop down with two options logout and profile-->
+						<div class="dropdown">
+							<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+								User
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
+								<li><a class="dropdown-item" asp-area="" asp-controller="Profile" asp-action="Profile">Profile</a></li>
+							</ul>
+                    </div>
                 </div>
             </div>
         </nav>
