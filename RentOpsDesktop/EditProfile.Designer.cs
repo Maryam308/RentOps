@@ -111,6 +111,7 @@
             btnEquipmentInformation.TabIndex = 28;
             btnEquipmentInformation.Text = "Equipment Information";
             btnEquipmentInformation.UseVisualStyleBackColor = false;
+            btnEquipmentInformation.Click += btnEquipmentInformation_Click;
             // 
             // btnReturnRecords
             // 
@@ -128,6 +129,7 @@
             btnReturnRecords.TabIndex = 27;
             btnReturnRecords.Text = "Return Records";
             btnReturnRecords.UseVisualStyleBackColor = false;
+            btnReturnRecords.Click += btnReturnRecords_Click;
             // 
             // btnRentalTransactions
             // 
@@ -145,6 +147,7 @@
             btnRentalTransactions.TabIndex = 26;
             btnRentalTransactions.Text = "Rental Transactions";
             btnRentalTransactions.UseVisualStyleBackColor = false;
+            btnRentalTransactions.Click += btnRentalTransactions_Click;
             // 
             // btnRentalDashboard
             // 
@@ -163,6 +166,7 @@
             btnRentalDashboard.Text = "Rental Dashboard";
             btnRentalDashboard.TextAlign = ContentAlignment.MiddleLeft;
             btnRentalDashboard.UseVisualStyleBackColor = false;
+            btnRentalDashboard.Click += btnRentalDashboard_Click;
             // 
             // btnLogout
             // 
@@ -198,6 +202,7 @@
             btnRentalRequests.TabIndex = 22;
             btnRentalRequests.Text = "Rental Requests";
             btnRentalRequests.UseVisualStyleBackColor = false;
+            btnRentalRequests.Click += btnRentalRequests_Click;
             // 
             // btnEquipmentDashboard
             // 
@@ -215,6 +220,7 @@
             btnEquipmentDashboard.TabIndex = 21;
             btnEquipmentDashboard.Text = "Equipment Dashboard";
             btnEquipmentDashboard.UseVisualStyleBackColor = false;
+            btnEquipmentDashboard.Click += btnEquipmentDashboard_Click;
             // 
             // picLogo
             // 
