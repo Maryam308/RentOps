@@ -37,10 +37,10 @@ namespace RentOpsDesktop
                     .FirstOrDefault();
 
                 //Display the employee details in the text boxes
-                //txtFirstName.Text = employee.FirstName;
-                //txtLastName.Text = employee.LastName;
+                txtFirstName.Text = employee.FirstName;
+                txtLastName.Text = employee.LastName;
                 txtEmail.Text = employee.Email;
-                //txtPhone.Text = employee.PhoneNumber.ToString();
+                txtPhone.Text = employee.PhoneNumber.ToString();
             }
             catch (Exception ex)
             {

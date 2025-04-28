@@ -63,8 +63,9 @@
             panel1.Controls.Add(btnEquipmentDashboard);
             panel1.Controls.Add(picLogo);
             panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(5, 5, 5, 5);
             panel1.Name = "panel1";
-            panel1.Size = new Size(267, 612);
+            panel1.Size = new Size(434, 979);
             panel1.TabIndex = 0;
             // 
             // btnEquipmentInformation
@@ -75,9 +76,10 @@
             btnEquipmentInformation.FlatStyle = FlatStyle.Flat;
             btnEquipmentInformation.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnEquipmentInformation.ForeColor = Color.White;
-            btnEquipmentInformation.Location = new Point(13, 439);
+            btnEquipmentInformation.Location = new Point(21, 702);
+            btnEquipmentInformation.Margin = new Padding(5, 5, 5, 5);
             btnEquipmentInformation.Name = "btnEquipmentInformation";
-            btnEquipmentInformation.Size = new Size(230, 51);
+            btnEquipmentInformation.Size = new Size(374, 82);
             btnEquipmentInformation.TabIndex = 28;
             btnEquipmentInformation.Text = "Equipment Information";
             btnEquipmentInformation.UseVisualStyleBackColor = false;
@@ -91,9 +93,10 @@
             btnReturnRecords.FlatStyle = FlatStyle.Flat;
             btnReturnRecords.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnReturnRecords.ForeColor = Color.White;
-            btnReturnRecords.Location = new Point(23, 379);
+            btnReturnRecords.Location = new Point(37, 606);
+            btnReturnRecords.Margin = new Padding(5, 5, 5, 5);
             btnReturnRecords.Name = "btnReturnRecords";
-            btnReturnRecords.Size = new Size(206, 51);
+            btnReturnRecords.Size = new Size(335, 82);
             btnReturnRecords.TabIndex = 27;
             btnReturnRecords.Text = "Return Records";
             btnReturnRecords.UseVisualStyleBackColor = false;
@@ -107,9 +110,10 @@
             btnRentalTransactions.FlatStyle = FlatStyle.Flat;
             btnRentalTransactions.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnRentalTransactions.ForeColor = Color.White;
-            btnRentalTransactions.Location = new Point(23, 319);
+            btnRentalTransactions.Location = new Point(37, 510);
+            btnRentalTransactions.Margin = new Padding(5, 5, 5, 5);
             btnRentalTransactions.Name = "btnRentalTransactions";
-            btnRentalTransactions.Size = new Size(206, 51);
+            btnRentalTransactions.Size = new Size(335, 82);
             btnRentalTransactions.TabIndex = 26;
             btnRentalTransactions.Text = "Rental Transactions";
             btnRentalTransactions.UseVisualStyleBackColor = false;
@@ -123,12 +127,12 @@
             btnRentalDashboard.FlatStyle = FlatStyle.Flat;
             btnRentalDashboard.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             btnRentalDashboard.ForeColor = Color.FromArgb(135, 66, 62);
-            btnRentalDashboard.Location = new Point(11, 201);
+            btnRentalDashboard.Location = new Point(18, 322);
+            btnRentalDashboard.Margin = new Padding(5, 5, 5, 5);
             btnRentalDashboard.Name = "btnRentalDashboard";
-            btnRentalDashboard.Size = new Size(253, 51);
+            btnRentalDashboard.Size = new Size(411, 82);
             btnRentalDashboard.TabIndex = 25;
             btnRentalDashboard.Text = "Rental Dashboard";
-            btnRentalDashboard.TextAlign = ContentAlignment.MiddleLeft;
             btnRentalDashboard.UseVisualStyleBackColor = false;
             btnRentalDashboard.Click += btnRentalDashboard_Click;
             // 
@@ -140,9 +144,10 @@
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(23, 541);
+            btnLogout.Location = new Point(37, 866);
+            btnLogout.Margin = new Padding(5, 5, 5, 5);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(207, 53);
+            btnLogout.Size = new Size(336, 85);
             btnLogout.TabIndex = 24;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = false;
@@ -156,9 +161,10 @@
             btnRentalRequests.FlatStyle = FlatStyle.Flat;
             btnRentalRequests.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnRentalRequests.ForeColor = Color.White;
-            btnRentalRequests.Location = new Point(23, 259);
+            btnRentalRequests.Location = new Point(37, 414);
+            btnRentalRequests.Margin = new Padding(5, 5, 5, 5);
             btnRentalRequests.Name = "btnRentalRequests";
-            btnRentalRequests.Size = new Size(206, 51);
+            btnRentalRequests.Size = new Size(335, 82);
             btnRentalRequests.TabIndex = 22;
             btnRentalRequests.Text = "Rental Requests";
             btnRentalRequests.UseVisualStyleBackColor = false;
@@ -172,9 +178,10 @@
             btnEquipmentDashboard.FlatStyle = FlatStyle.Flat;
             btnEquipmentDashboard.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             btnEquipmentDashboard.ForeColor = Color.White;
-            btnEquipmentDashboard.Location = new Point(13, 155);
+            btnEquipmentDashboard.Location = new Point(21, 248);
+            btnEquipmentDashboard.Margin = new Padding(5, 5, 5, 5);
             btnEquipmentDashboard.Name = "btnEquipmentDashboard";
-            btnEquipmentDashboard.Size = new Size(253, 51);
+            btnEquipmentDashboard.Size = new Size(411, 82);
             btnEquipmentDashboard.TabIndex = 21;
             btnEquipmentDashboard.Text = "Equipment Dashboard";
             btnEquipmentDashboard.UseVisualStyleBackColor = false;
@@ -183,9 +190,10 @@
             // picLogo
             // 
             picLogo.Image = Properties.Resources.rentOpsLogo;
-            picLogo.Location = new Point(65, 12);
+            picLogo.Location = new Point(106, 19);
+            picLogo.Margin = new Padding(5, 5, 5, 5);
             picLogo.Name = "picLogo";
-            picLogo.Size = new Size(121, 120);
+            picLogo.Size = new Size(197, 192);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picLogo.TabIndex = 4;
             picLogo.TabStop = false;
@@ -195,9 +203,10 @@
             lblProfile.AutoSize = true;
             lblProfile.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0, true);
             lblProfile.ForeColor = Color.FromArgb(135, 66, 62);
-            lblProfile.Location = new Point(367, 55);
+            lblProfile.Location = new Point(596, 88);
+            lblProfile.Margin = new Padding(5, 0, 5, 0);
             lblProfile.Name = "lblProfile";
-            lblProfile.Size = new Size(210, 52);
+            lblProfile.Size = new Size(328, 82);
             lblProfile.TabIndex = 2;
             lblProfile.Text = "My Profile";
             // 
@@ -206,9 +215,10 @@
             lblFirstName.AutoSize = true;
             lblFirstName.Font = new Font("Segoe UI", 17.8000011F);
             lblFirstName.ForeColor = Color.Black;
-            lblFirstName.Location = new Point(358, 160);
+            lblFirstName.Location = new Point(582, 256);
+            lblFirstName.Margin = new Padding(5, 0, 5, 0);
             lblFirstName.Name = "lblFirstName";
-            lblFirstName.Size = new Size(160, 41);
+            lblFirstName.Size = new Size(255, 65);
             lblFirstName.TabIndex = 8;
             lblFirstName.Text = "First Name";
             // 
@@ -217,9 +227,10 @@
             lblPhone.AutoSize = true;
             lblPhone.Font = new Font("Segoe UI", 17.8000011F);
             lblPhone.ForeColor = Color.Black;
-            lblPhone.Location = new Point(367, 364);
+            lblPhone.Location = new Point(596, 582);
+            lblPhone.Margin = new Padding(5, 0, 5, 0);
             lblPhone.Name = "lblPhone";
-            lblPhone.Size = new Size(220, 41);
+            lblPhone.Size = new Size(349, 65);
             lblPhone.TabIndex = 9;
             lblPhone.Text = "Phone Number";
             // 
@@ -228,9 +239,10 @@
             lblEmail.AutoSize = true;
             lblEmail.Font = new Font("Segoe UI", 17.8000011F);
             lblEmail.ForeColor = Color.Black;
-            lblEmail.Location = new Point(367, 467);
+            lblEmail.Location = new Point(596, 747);
+            lblEmail.Margin = new Padding(5, 0, 5, 0);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(88, 41);
+            lblEmail.Size = new Size(141, 65);
             lblEmail.TabIndex = 10;
             lblEmail.Text = "Email";
             // 
@@ -240,9 +252,10 @@
             btnEditProfile.FlatStyle = FlatStyle.Flat;
             btnEditProfile.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnEditProfile.ForeColor = Color.White;
-            btnEditProfile.Location = new Point(879, 32);
+            btnEditProfile.Location = new Point(1428, 51);
+            btnEditProfile.Margin = new Padding(5, 5, 5, 5);
             btnEditProfile.Name = "btnEditProfile";
-            btnEditProfile.Size = new Size(177, 59);
+            btnEditProfile.Size = new Size(288, 94);
             btnEditProfile.TabIndex = 29;
             btnEditProfile.Text = "Edit Profile";
             btnEditProfile.UseVisualStyleBackColor = false;
@@ -252,40 +265,44 @@
             // 
             txtEmail.BorderStyle = BorderStyle.FixedSingle;
             txtEmail.Font = new Font("Segoe UI", 14F);
-            txtEmail.Location = new Point(630, 471);
+            txtEmail.Location = new Point(1024, 754);
+            txtEmail.Margin = new Padding(5, 5, 5, 5);
             txtEmail.Name = "txtEmail";
             txtEmail.ReadOnly = true;
-            txtEmail.Size = new Size(369, 39);
+            txtEmail.Size = new Size(598, 57);
             txtEmail.TabIndex = 13;
             // 
             // txtPhone
             // 
             txtPhone.BorderStyle = BorderStyle.FixedSingle;
             txtPhone.Font = new Font("Segoe UI", 14F);
-            txtPhone.Location = new Point(630, 368);
+            txtPhone.Location = new Point(1024, 589);
+            txtPhone.Margin = new Padding(5, 5, 5, 5);
             txtPhone.Name = "txtPhone";
             txtPhone.ReadOnly = true;
-            txtPhone.Size = new Size(369, 39);
+            txtPhone.Size = new Size(598, 57);
             txtPhone.TabIndex = 12;
             // 
             // txtFirstName
             // 
             txtFirstName.BorderStyle = BorderStyle.FixedSingle;
             txtFirstName.Font = new Font("Segoe UI", 14F);
-            txtFirstName.Location = new Point(630, 163);
+            txtFirstName.Location = new Point(1024, 261);
+            txtFirstName.Margin = new Padding(5, 5, 5, 5);
             txtFirstName.Name = "txtFirstName";
             txtFirstName.ReadOnly = true;
-            txtFirstName.Size = new Size(369, 39);
+            txtFirstName.Size = new Size(598, 57);
             txtFirstName.TabIndex = 11;
             // 
             // txtLastName
             // 
             txtLastName.BorderStyle = BorderStyle.FixedSingle;
             txtLastName.Font = new Font("Segoe UI", 14F);
-            txtLastName.Location = new Point(630, 265);
+            txtLastName.Location = new Point(1024, 424);
+            txtLastName.Margin = new Padding(5, 5, 5, 5);
             txtLastName.Name = "txtLastName";
             txtLastName.ReadOnly = true;
-            txtLastName.Size = new Size(369, 39);
+            txtLastName.Size = new Size(598, 57);
             txtLastName.TabIndex = 31;
             // 
             // lblLastName
@@ -293,17 +310,18 @@
             lblLastName.AutoSize = true;
             lblLastName.Font = new Font("Segoe UI", 17.8000011F);
             lblLastName.ForeColor = Color.Black;
-            lblLastName.Location = new Point(367, 261);
+            lblLastName.Location = new Point(596, 418);
+            lblLastName.Margin = new Padding(5, 0, 5, 0);
             lblLastName.Name = "lblLastName";
-            lblLastName.Size = new Size(152, 41);
+            lblLastName.Size = new Size(240, 65);
             lblLastName.TabIndex = 30;
             lblLastName.Text = "Username";
             // 
             // Profile
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1088, 611);
+            ClientSize = new Size(1768, 978);
             Controls.Add(txtLastName);
             Controls.Add(lblLastName);
             Controls.Add(btnEditProfile);
@@ -315,6 +333,7 @@
             Controls.Add(lblFirstName);
             Controls.Add(lblProfile);
             Controls.Add(panel1);
+            Margin = new Padding(5, 5, 5, 5);
             Name = "Profile";
             Text = "Profile";
             Load += Profile_Load;
