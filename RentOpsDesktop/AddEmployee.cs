@@ -15,7 +15,7 @@ namespace RentOpsDesktop
     public partial class AddEmployee : Form
     {
         //Declaring database context object
-        private RentOpsDBContext dBContext;
+        private RentOpsDBContext dbContext;
 
 
         bool isFirstNameValid;
@@ -28,11 +28,12 @@ namespace RentOpsDesktop
             InitializeComponent();
 
             //Initializing database context object
-            dBContext = new RentOpsDBContext();
+            dbContext = new RentOpsDBContext();
         }
 
         private void AddEmployee_Load(object sender, EventArgs e)
         {
+            validatePassword();
 
         }
 
@@ -40,23 +41,42 @@ namespace RentOpsDesktop
         {
             try
             {
-
                 validateInput();
+
+                // Stop further execution if validation failed
+                if (!isFirstNameValid || !isLastNameValid || !isEmailValid || !isPhoneNumberValid || !isPasswordValid)
+                {
+                    return;
+                }
+
+                // Check if user already exists in the database
+                var existingUser = dbContext.Users.FirstOrDefault(u =>
+                    u.FirstName == txtFirstName.Text.Trim() &&
+                    u.LastName == txtLastName.Text.Trim() &&
+                    u.Email == txtEmail.Text.Trim() &&
+                    u.PhoneNumber == txtPhone.Text.Trim() &&
+                    u.RoleId == 2 // Employee role ID
+                );
+
+                if (existingUser != null)
+                {
+                    MessageBox.Show($"User already exists in the system with ID: {existingUser.UserId}", "Duplicate User", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
                 //Creating a new employee object
                 User employee = new User
                 {
-                    //FirstName = txtFirstName.Text.Trim(),
-                    //LastName = txtLastName.Text.Trim(),
+                    FirstName = txtFirstName.Text.Trim(),
+                    LastName = txtLastName.Text.Trim(),
                     Email = txtEmail.Text.Trim(),
-                    //PhoneNumber = txtPhone.Text.Trim(),
-                    RoleId = 2 // Assuming 2 is the role ID for employees
-
+                    PhoneNumber = txtPhone.Text.Trim(),
+                    RoleId = 2, // Assuming 2 is the role ID for employees
                 };
 
                 //Adding the employee to the database and saving the changes
-                dBContext.Users.Add(employee);
-                dBContext.SaveChanges();
+                dbContext.Users.Add(employee);
+                dbContext.SaveChanges();
 
                 //Displaying a success message
                 MessageBox.Show("Employee added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -69,22 +89,37 @@ namespace RentOpsDesktop
 
         private void validateInput()
         {
-
-            //Validate that all fields are filled
-            if (string.IsNullOrWhiteSpace(txtFirstName.Text) || string.IsNullOrWhiteSpace(txtLastName.Text) || string.IsNullOrWhiteSpace(txtEmail.Text))
+            // Validate that all fields are filled
+            if (string.IsNullOrWhiteSpace(txtFirstName.Text) ||
+                string.IsNullOrWhiteSpace(txtLastName.Text) ||
+                string.IsNullOrWhiteSpace(txtEmail.Text) ||
+                string.IsNullOrWhiteSpace(txtPhone.Text) ||
+                string.IsNullOrWhiteSpace(txtPassword.Text))
             {
                 MessageBox.Show("Please fill in all fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            //Validate the input is correct
+            // Validate password is not empty
+            if (string.IsNullOrWhiteSpace(txtPassword.Text))
+            {
+                lblPasswordError.Text = "Password cannot be empty.";
+                isPasswordValid = false;
+            }
+            else
+            {
+                lblPasswordError.Text = "";
+                isPasswordValid = true;
+            }
 
+            // Validate the input is correct
             if (!isFirstNameValid || !isLastNameValid || !isEmailValid || !isPhoneNumberValid || !isPasswordValid)
             {
                 MessageBox.Show("Please correct the highlighted errors.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
         }
+
 
         private void txtFirstName_TextChanged(object sender, EventArgs e)
         {
@@ -106,14 +141,14 @@ namespace RentOpsDesktop
         {
             //Validate that the last name input is only letters and at least 3 characters long
             string pattern = @"^[a-zA-Z]{3,}$";
-            if (!Regex.IsMatch(txtFirstName.Text, pattern))
+            if (!Regex.IsMatch(txtLastName.Text, pattern))
             {
-                lblFirstNameError.Text = "Invalid Name";
+                lblLastNameError.Text = "Invalid Name";
                 isLastNameValid = false;
             }
             else
             {
-                lblFirstNameError.Text = "";
+                lblLastNameError.Text = "";
                 isLastNameValid = true;
             }
         }
@@ -155,6 +190,21 @@ namespace RentOpsDesktop
 
         private void btnBack_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void validatePassword()
+        {
+            if (txtPassword.Text.Trim() == "")
+            {
+                lblPasswordError.Text = "Password cannot be empty!";
+                isPasswordValid = false;
+            }
+            else
+            {
+                lblPasswordError.Text = "";
+                isPasswordValid = true;
+            }
 
         }
     }

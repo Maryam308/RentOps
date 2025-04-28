@@ -54,9 +54,10 @@
             lblAddEmployee.AutoSize = true;
             lblAddEmployee.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0, true);
             lblAddEmployee.ForeColor = Color.FromArgb(135, 66, 62);
-            lblAddEmployee.Location = new Point(358, 16);
+            lblAddEmployee.Location = new Point(665, 34);
+            lblAddEmployee.Margin = new Padding(6, 0, 6, 0);
             lblAddEmployee.Name = "lblAddEmployee";
-            lblAddEmployee.Size = new Size(224, 42);
+            lblAddEmployee.Size = new Size(442, 82);
             lblAddEmployee.TabIndex = 3;
             lblAddEmployee.Text = "Add Employee";
             // 
@@ -67,10 +68,10 @@
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(40, 23);
-            btnBack.Margin = new Padding(3, 2, 3, 2);
+            btnBack.Location = new Point(74, 49);
+            btnBack.Margin = new Padding(6, 4, 6, 4);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(151, 35);
+            btnBack.Size = new Size(280, 75);
             btnBack.TabIndex = 8;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
@@ -83,10 +84,10 @@
             btnAddEmployee.FlatStyle = FlatStyle.Flat;
             btnAddEmployee.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnAddEmployee.ForeColor = Color.White;
-            btnAddEmployee.Location = new Point(761, 388);
-            btnAddEmployee.Margin = new Padding(3, 2, 3, 2);
+            btnAddEmployee.Location = new Point(1413, 828);
+            btnAddEmployee.Margin = new Padding(6, 4, 6, 4);
             btnAddEmployee.Name = "btnAddEmployee";
-            btnAddEmployee.Size = new Size(179, 44);
+            btnAddEmployee.Size = new Size(332, 94);
             btnAddEmployee.TabIndex = 9;
             btnAddEmployee.Text = "Add Employee";
             btnAddEmployee.UseVisualStyleBackColor = false;
@@ -95,30 +96,30 @@
             // txtEmail
             // 
             txtEmail.Font = new Font("Segoe UI", 14F);
-            txtEmail.Location = new Point(431, 290);
-            txtEmail.Margin = new Padding(3, 2, 3, 2);
+            txtEmail.Location = new Point(800, 619);
+            txtEmail.Margin = new Padding(6, 4, 6, 4);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(323, 32);
+            txtEmail.Size = new Size(596, 57);
             txtEmail.TabIndex = 19;
             txtEmail.TextChanged += txtEmail_TextChanged;
             // 
             // txtPhone
             // 
             txtPhone.Font = new Font("Segoe UI", 14F);
-            txtPhone.Location = new Point(431, 234);
-            txtPhone.Margin = new Padding(3, 2, 3, 2);
+            txtPhone.Location = new Point(800, 499);
+            txtPhone.Margin = new Padding(6, 4, 6, 4);
             txtPhone.Name = "txtPhone";
-            txtPhone.Size = new Size(323, 32);
+            txtPhone.Size = new Size(596, 57);
             txtPhone.TabIndex = 18;
             txtPhone.TextChanged += txtPhone_TextChanged;
             // 
             // txtFirstName
             // 
             txtFirstName.Font = new Font("Segoe UI", 14F);
-            txtFirstName.Location = new Point(431, 124);
-            txtFirstName.Margin = new Padding(3, 2, 3, 2);
+            txtFirstName.Location = new Point(800, 265);
+            txtFirstName.Margin = new Padding(6, 4, 6, 4);
             txtFirstName.Name = "txtFirstName";
-            txtFirstName.Size = new Size(323, 32);
+            txtFirstName.Size = new Size(596, 57);
             txtFirstName.TabIndex = 17;
             txtFirstName.TextChanged += txtFirstName_TextChanged;
             // 
@@ -127,9 +128,10 @@
             lblEmail.AutoSize = true;
             lblEmail.Font = new Font("Segoe UI", 17.8000011F);
             lblEmail.ForeColor = Color.Black;
-            lblEmail.Location = new Point(200, 286);
+            lblEmail.Location = new Point(371, 610);
+            lblEmail.Margin = new Padding(6, 0, 6, 0);
             lblEmail.Name = "lblEmail";
-            lblEmail.Size = new Size(71, 32);
+            lblEmail.Size = new Size(141, 65);
             lblEmail.TabIndex = 16;
             lblEmail.Text = "Email";
             // 
@@ -138,9 +140,10 @@
             lblPhone.AutoSize = true;
             lblPhone.Font = new Font("Segoe UI", 17.8000011F);
             lblPhone.ForeColor = Color.Black;
-            lblPhone.Location = new Point(200, 231);
+            lblPhone.Location = new Point(371, 493);
+            lblPhone.Margin = new Padding(6, 0, 6, 0);
             lblPhone.Name = "lblPhone";
-            lblPhone.Size = new Size(177, 32);
+            lblPhone.Size = new Size(349, 65);
             lblPhone.TabIndex = 15;
             lblPhone.Text = "Phone Number";
             // 
@@ -149,19 +152,20 @@
             lblFirstName.AutoSize = true;
             lblFirstName.Font = new Font("Segoe UI", 17.8000011F);
             lblFirstName.ForeColor = Color.Black;
-            lblFirstName.Location = new Point(200, 119);
+            lblFirstName.Location = new Point(371, 254);
+            lblFirstName.Margin = new Padding(6, 0, 6, 0);
             lblFirstName.Name = "lblFirstName";
-            lblFirstName.Size = new Size(129, 32);
+            lblFirstName.Size = new Size(255, 65);
             lblFirstName.TabIndex = 14;
             lblFirstName.Text = "First Name";
             // 
             // txtLastName
             // 
             txtLastName.Font = new Font("Segoe UI", 14F);
-            txtLastName.Location = new Point(431, 179);
-            txtLastName.Margin = new Padding(3, 2, 3, 2);
+            txtLastName.Location = new Point(800, 382);
+            txtLastName.Margin = new Padding(6, 4, 6, 4);
             txtLastName.Name = "txtLastName";
-            txtLastName.Size = new Size(323, 32);
+            txtLastName.Size = new Size(596, 57);
             txtLastName.TabIndex = 21;
             txtLastName.TextChanged += txtLastName_TextChanged;
             // 
@@ -170,30 +174,31 @@
             lblLastName.AutoSize = true;
             lblLastName.Font = new Font("Segoe UI", 17.8000011F);
             lblLastName.ForeColor = Color.Black;
-            lblLastName.Location = new Point(200, 175);
+            lblLastName.Location = new Point(371, 373);
+            lblLastName.Margin = new Padding(6, 0, 6, 0);
             lblLastName.Name = "lblLastName";
-            lblLastName.Size = new Size(126, 32);
+            lblLastName.Size = new Size(250, 65);
             lblLastName.TabIndex = 20;
             lblLastName.Text = "Last Name";
             // 
             // txtPassword
             // 
             txtPassword.Font = new Font("Segoe UI", 14F);
-            txtPassword.Location = new Point(431, 345);
-            txtPassword.Margin = new Padding(3, 2, 3, 2);
+            txtPassword.Location = new Point(800, 736);
+            txtPassword.Margin = new Padding(6, 4, 6, 4);
             txtPassword.Name = "txtPassword";
-            txtPassword.Size = new Size(323, 32);
+            txtPassword.Size = new Size(596, 57);
             txtPassword.TabIndex = 23;
-            txtPassword.Visible = false;
             // 
             // lblPassword
             // 
             lblPassword.AutoSize = true;
             lblPassword.Font = new Font("Segoe UI", 17.8000011F);
             lblPassword.ForeColor = Color.Black;
-            lblPassword.Location = new Point(200, 342);
+            lblPassword.Location = new Point(371, 730);
+            lblPassword.Margin = new Padding(6, 0, 6, 0);
             lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(111, 32);
+            lblPassword.Size = new Size(225, 65);
             lblPassword.TabIndex = 22;
             lblPassword.Text = "Password";
             // 
@@ -202,10 +207,10 @@
             lblFirstNameError.AutoSize = true;
             lblFirstNameError.Font = new Font("Segoe UI", 7.875F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblFirstNameError.ForeColor = Color.Red;
-            lblFirstNameError.Location = new Point(442, 158);
-            lblFirstNameError.Margin = new Padding(2, 0, 2, 0);
+            lblFirstNameError.Location = new Point(821, 337);
+            lblFirstNameError.Margin = new Padding(4, 0, 4, 0);
             lblFirstNameError.Name = "lblFirstNameError";
-            lblFirstNameError.Size = new Size(10, 13);
+            lblFirstNameError.Size = new Size(19, 30);
             lblFirstNameError.TabIndex = 25;
             lblFirstNameError.Text = " ";
             // 
@@ -214,10 +219,10 @@
             lblLastNameError.AutoSize = true;
             lblLastNameError.Font = new Font("Segoe UI", 7.875F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblLastNameError.ForeColor = Color.Red;
-            lblLastNameError.Location = new Point(442, 213);
-            lblLastNameError.Margin = new Padding(2, 0, 2, 0);
+            lblLastNameError.Location = new Point(821, 454);
+            lblLastNameError.Margin = new Padding(4, 0, 4, 0);
             lblLastNameError.Name = "lblLastNameError";
-            lblLastNameError.Size = new Size(10, 13);
+            lblLastNameError.Size = new Size(19, 30);
             lblLastNameError.TabIndex = 26;
             lblLastNameError.Text = " ";
             // 
@@ -226,10 +231,10 @@
             lblPhoneNumberError.AutoSize = true;
             lblPhoneNumberError.Font = new Font("Segoe UI", 7.875F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblPhoneNumberError.ForeColor = Color.Red;
-            lblPhoneNumberError.Location = new Point(442, 268);
-            lblPhoneNumberError.Margin = new Padding(2, 0, 2, 0);
+            lblPhoneNumberError.Location = new Point(821, 572);
+            lblPhoneNumberError.Margin = new Padding(4, 0, 4, 0);
             lblPhoneNumberError.Name = "lblPhoneNumberError";
-            lblPhoneNumberError.Size = new Size(10, 13);
+            lblPhoneNumberError.Size = new Size(19, 30);
             lblPhoneNumberError.TabIndex = 27;
             lblPhoneNumberError.Text = " ";
             // 
@@ -238,10 +243,10 @@
             lblEmailError.AutoSize = true;
             lblEmailError.Font = new Font("Segoe UI", 7.875F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblEmailError.ForeColor = Color.Red;
-            lblEmailError.Location = new Point(442, 324);
-            lblEmailError.Margin = new Padding(2, 0, 2, 0);
+            lblEmailError.Location = new Point(821, 691);
+            lblEmailError.Margin = new Padding(4, 0, 4, 0);
             lblEmailError.Name = "lblEmailError";
-            lblEmailError.Size = new Size(10, 13);
+            lblEmailError.Size = new Size(19, 30);
             lblEmailError.TabIndex = 28;
             lblEmailError.Text = " ";
             // 
@@ -250,17 +255,17 @@
             lblPasswordError.AutoSize = true;
             lblPasswordError.Font = new Font("Segoe UI", 7.875F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblPasswordError.ForeColor = Color.Red;
-            lblPasswordError.Location = new Point(442, 379);
-            lblPasswordError.Margin = new Padding(2, 0, 2, 0);
+            lblPasswordError.Location = new Point(821, 809);
+            lblPasswordError.Margin = new Padding(4, 0, 4, 0);
             lblPasswordError.Name = "lblPasswordError";
-            lblPasswordError.Size = new Size(0, 13);
+            lblPasswordError.Size = new Size(0, 30);
             lblPasswordError.TabIndex = 29;
             // 
             // AddEmployee
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(952, 458);
+            ClientSize = new Size(1768, 977);
             Controls.Add(lblPasswordError);
             Controls.Add(lblEmailError);
             Controls.Add(lblPhoneNumberError);
@@ -279,7 +284,7 @@
             Controls.Add(btnAddEmployee);
             Controls.Add(btnBack);
             Controls.Add(lblAddEmployee);
-            Margin = new Padding(3, 2, 3, 2);
+            Margin = new Padding(6, 4, 6, 4);
             Name = "AddEmployee";
             Text = "AddEmployee";
             Load += AddEmployee_Load;
