@@ -1,0 +1,85 @@
+﻿@using RentOpsObjects.Model;
+@model IEnumerable<EquipmentCategory>; 
+@{
+	ViewData["Title"] = "ManageCategories";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ManageCategories</h1>
+<br />
+<div class="container p-3">
+	<div class="row pt-4">
+		<div class="col-8">
+			<!-- Add Category button -->
+			<form method="post" asp-action="AddCategory">
+				<button type="submit" class="btn btn-primary">Add Category</button>
+			</form>
+
+		</div>
+	</div>
+
+	<!-- Modal HTML is always here -->
+	<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<form method="post" asp-action="SubmitModal">
+					<div class="modal-header">
+						<h5 class="modal-title" id="myModalLabel">Modal Title</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+
+					<div class="modal-body">
+						<div class="mb-3">
+							<label for="inputField" class="form-label">Enter Category Title:</label>
+							<input type="text" class="form-control" id="inputField" name="categoryTitle" placeholder="Enter Category Title">
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Save</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	@if (ViewBag.ShowModal == true)
+	{
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+				myModal.show();
+			});
+		</script>
+	}
+	
+
+<!--table of categories with edit button-->
+<table class="table">
+	<thead>
+		<tr>
+			<th>Category ID</th>
+			<th>Category Title</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var category in Model)
+		{
+			<tr>
+				<td>@category.EquipmentCategoryId</td>
+				<td>@category.EquipmentCategoryTitle</td>
+				<td>
+					<!-- Edit button -->
+					<a asp-controller="Equipment" asp-action="EditCategory" asp-route-id="@category.EquipmentCategoryId" class="btn btn-primary">Edit</a>
+					<!-- Delete button -->
+					<a asp-controller="Equipment" asp-action="DeleteCategory" asp-route-id="@category.EquipmentCategoryId" class="btn btn-danger">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+
+	</table>
+
+
