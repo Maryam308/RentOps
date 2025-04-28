@@ -1,12 +1,13 @@
-﻿
+﻿@using RentOpsWebApp.ViewModels
+@model RentalDashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <br />
 <h1>Dashboard</h1>
-<br/>
-
+<br />
 <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item" role="presentation">
         <a class="nav-link active" data-bs-toggle="tab" href="#EquipmentDashboard" aria-selected="true" role="tab">Equipment Dashboard</a>
@@ -14,16 +15,78 @@
     <li class="nav-item" role="presentation">
         <a class="nav-link" data-bs-toggle="tab" href="#RentalDashboard" aria-selected="false" tabindex="-1" role="tab">Rental Dashboard</a>
     </li>
-    
 </ul>
+
 <div id="myTabContent" class="tab-content">
     <div class="tab-pane fade show active" id="EquipmentDashboard" role="tabpanel">
-        <!--EquipmentDashboard content-->
-		<p>Welcome to the Equipment Dashboard!</p>
-
+        <!-- EquipmentDashboard content -->
+        <p>Welcome to the Equipment Dashboard!</p>
     </div>
+
     <div class="tab-pane fade" id="RentalDashboard" role="tabpanel">
-        <!--RentalDashboard content-->
-		<p>Welcome to the Rental Dashboard!</p>
+        <!-- RentalDashboard content -->
+        <h2 class="mt-5 mb-5 text-center text-primary">Rental Dashboard</h2>
+
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-md-4 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header">Total Income</div>
+                        <div class="card-body text-center">
+                            <h4 class="card-title">@Model.TotalIncome</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header">Average Rental Period</div>
+                        <div class="card-body text-center">
+                            <h4 class="card-title">@Model.AverageRentalPeriod</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header">Available Equipments</div>
+                        <div class="card-body text-center">
+                            <h4 class="card-title">@Model.AvailableEquipments</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5 mt-5">
+                <div class="col-md-4 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header">Currently Rented</div>
+                        <div class="card-body text-center">
+                            <h4 class="card-title">@Model.CurrentlyRented</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header">Last Month's Rentals</div>
+                        <div class="card-body text-center">
+                            <h4 class="card-title">@Model.LastMonthRentals</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header">Today's Rental Requests</div>
+                        <div class="card-body text-center">
+                            <h4 class="card-title">@Model.TodayRentalRequests</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-6 text-center">
+                    <button class="btn btn-primary btn-lg w-100">Refresh Statistics</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

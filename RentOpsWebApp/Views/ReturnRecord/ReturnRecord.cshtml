@@ -1,4 +1,5 @@
-﻿@model IEnumerable<RentOpsObjects.Model.ReturnRecord>;
+﻿@using RentOpsWebApp.ViewModels;
+@model ReturnRecordViewModel;
 
 @{
     ViewData["Title"] = "ReturnRecord";
@@ -17,44 +18,57 @@
         </div>
     }
 }
+
 <!-- a container with padding of 3.. This div is closed at the end of the page-->
 <div class="container p-3">
-    <!-- a row with padding-top of 4-->
-    <div class="row pt-4">
-        <!-- divide up the row into 2 blocks of 8 & 2 columns = total 12 as per bootstrap standard-->
-        <div class="col-8">
+	<!-- a row with padding-top of 4-->
+	<div class="row pt-4">
+		<!-- divide up the row into 2 blocks of 8 & 2 columns = total 12 as per bootstrap standard-->
+		<div class="col-8">
 
-            @*The input & select controls name tag decide the name of the URL parameters that will be added
-            Then remember that anything that goes in the URL, can be read in the method parameters*@
+			<form asp-controller="ReturnRecord" asp-action="ReturnRecord" method="get">
+				<div class="input-group">
+					return record ID:
 
-            <form asp-controller="ReturnRecord" asp-action="ReturnRecord" method="get">
-                Return Record ID:
-                
-                <input type="text" name="SearchString" value="@Context.Request.Query["SearchString"].ToString()" />
+					<input type="text" name="SearchReturnRecordId" value="@Context.Request.Query["SearchReturnRecordId"].ToString()" style="width: 60px;" />
 
-                Return Transaction ID:
+					Rental Transaction Id:
 
-                <input type="text" name="SearchString" value="@Context.Request.Query["SearchString"].ToString()" />
-                
-                <select class="form-select"  name="SearchCategory" asp-items="@ViewBag.catList">
-                    <option value="">All</option>
-                </select>
-                
-                <input type="submit" value="Search" />
-                <a asp-controller="Product" asp-action="Index" class="btn btn-outline-danger">Clear</a>
-            </form>
+					<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" />
 
-        </div>
+					Actual Return Date:
+					<input type="date" name="searchActualReturnDate" value="@Context.Request.Query["searchActualReturnDate"].ToString()">
 
-        <!--create button-->
-        <div class="col-4 text-end">
-            <!--text end aligns the button to the right side-->
-            <a asp-controller="Product" asp-action="Create" class="btn btn-primary">
-                <i class="bi bi-plus-square-fill"></i>&nbsp; Create Product
-            </a>
-        </div>
 
-    </div>
+				</div>
+
+				Return Condition:
+				<div class="input-group">
+					<select asp-for="SearchConditionStatus"
+							asp-items="@Model.conditionStatuses
+                               .Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+							class="form-select">
+						<option value="" disabled selected>Select a Condition</option>
+					</select>
+				</div>
+
+				
+				<input type="submit" value="Search" class="btn btn-secondary" />
+				<a asp-controller="ReturnRecord" asp-action="ReturnRecord" class="btn btn-outline-danger">Clear</a>
+			</form>
+
+		</div>
+
+		<!--create button-->
+		<div class="col-4 text-end">
+			<!--text end aligns the button to the right side-->
+			<a asp-controller="Equipment" asp-action="AddEquipment" class="btn btn-primary">
+				<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
+			</a>
+			
+		</div>
+
+	</div>
 
 
     <!------------------------------------------------------------------------------>
@@ -75,7 +89,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach (var record in Model)
+		@foreach (var record in Model.returnRecords)
 		{
              <tr class="text-center">
 				<td>@record.ReturnRecordId</td>
@@ -92,4 +106,4 @@
 			</tr>
 		}
 	</tbody>
-
+	</table>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
+using RentOpsWebApp.ViewModels;
 
 namespace RentOpsWebApp.Controllers
 {
@@ -18,10 +19,10 @@ namespace RentOpsWebApp.Controllers
         {
             return View();
         }
-        public IActionResult RentalTransaction()
+        public IActionResult RentalTransaction(string searchRentalTransactionId, string SearchRentalRequestId, string searchEmployeeId, string SearchEquipment, string SearchTransactionDate)
         {
-            
-            var rentalTransactions = _context.RentalTransactions
+
+            IEnumerable<RentalTransaction> rentalTransactions = _context.RentalTransactions
                 .Include(rt => rt.Equipment)
                 .Include(rt => rt.Employee)
                 .Include(rt => rt.RentalRequest)
@@ -32,8 +33,65 @@ namespace RentOpsWebApp.Controllers
                 .Where(rt => rt.CustomerId == null)
                 .ToList();
 
+            //filtering system
 
-            return View(rentalTransactions);
+            //If return record id is used, we filter the list retrieved above
+            if (!String.IsNullOrEmpty(searchRentalTransactionId))
+            {
+                rentalTransactions = rentalTransactions.Where(p =>
+                    p.RentalTransactionId == Convert.ToInt32(searchRentalTransactionId)
+                );
+            }
+
+            if (!String.IsNullOrEmpty(SearchRentalRequestId))
+            {
+                rentalTransactions = rentalTransactions.Where(p =>
+                    p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId)
+                );
+            }
+
+            if (!String.IsNullOrEmpty(searchEmployeeId))
+            {
+                rentalTransactions = rentalTransactions.Where(p =>
+                    p.EmployeeId == Convert.ToInt32(searchEmployeeId)
+                );
+            }
+
+            if (!String.IsNullOrEmpty(SearchEquipment))
+            {
+                rentalTransactions = rentalTransactions.Where(p =>
+                    p.EquipmentId == Convert.ToInt32(SearchEquipment)
+                );
+            }
+
+           /* 
+            if (!String.IsNullOrEmpty(SearchPayment))
+            {
+                rentalTransactions = rentalTransactions.Where(p =>
+                    p.PaymentId == Convert.ToInt32(SearchPayment)
+                );
+            }
+           */
+
+            if (!string.IsNullOrEmpty(SearchTransactionDate))
+            {
+                DateTime searchTimestamp;
+                if (DateTime.TryParse(SearchTransactionDate, out searchTimestamp))
+                {
+                    rentalTransactions = rentalTransactions.Where(p => p.RentalTransactionTimestamp.Date == searchTimestamp.Date );
+                }
+            }
+
+
+
+
+            var rentalTransactionViewModel = new RentalTransactionViewModel
+            {
+                rentalTransactions = rentalTransactions,
+                equipmentTitle = _context.Equipment.ToList(),
+            };
+
+            return View(rentalTransactionViewModel);
         }
     }
 }
