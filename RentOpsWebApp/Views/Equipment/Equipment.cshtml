@@ -1,8 +1,127 @@
-﻿
+﻿@using RentOpsWebApp.ViewModels;
+@model EquipmentViewModel;
 @{
     ViewData["Title"] = "Equipment";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Equipment</h1>
+
+
+<br />
+
+<!-- a container with padding of 3.. This div is closed at the end of the page-->
+<div class="container p-3">
+    <!-- a row with padding-top of 4-->
+    <div class="row pt-4">
+        <!-- divide up the row into 2 blocks of 8 & 2 columns = total 12 as per bootstrap standard-->
+        <div class="col-8">
+			
+			<form asp-controller="Equipment" asp-action="Equipment" method="get">
+				<div class="input-group">
+					Equipment ID:
+
+				<input type="text" name="SearchEquipmentId" value="@Context.Request.Query["SearchEquipmentId"].ToString()"  style="width: 60px;"/>
+
+				Equipment Name:
+
+				<input type="text" name="SearchEquipmentName" value="@Context.Request.Query["SearchEquipmentName"].ToString()" />
+			</div>
+
+				Equipment Category:
+                <div class="input-group">
+                   <select asp-for="SearchCategory"
+                           asp-items="@Model.EquipmentCategories
+                               .Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
+                           class="form-select">
+                       <option value="" disabled selected>Select a category</option>
+                   </select>
+                </div> 
+
+				Equipment Availability:
+				<div class="input-group">
+					<select asp-for="SearchAvailability"
+							asp-items="@Model.EquipmentAvailability
+                               .Select(i => new SelectListItem { Text = i.AvailabilityStatusTitle, Value = i.AvailabilityStatusId.ToString() })"
+							class="form-select">
+						<option value="" disabled selected>Select a Status</option>
+					</select>
+				</div>
+
+				Equipment Condition:
+				<div class="input-group">
+					<select asp-for="SearchCondition"
+							asp-items="@Model.EquipmentStatuses
+                               .Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+							class="form-select">
+						<option value="" disabled selected>Select a Condition</option>
+					</select>
+				</div>
+
+                <input type="submit" value="Search" class="btn btn-secondary"/>
+				<a asp-controller="Equipment" asp-action="Equipment" class="btn btn-outline-danger">Clear</a>
+            </form>
+
+        </div>
+
+        <!--create button-->
+        <div class="col-4 text-end">
+            <!--text end aligns the button to the right side-->
+			<a asp-controller="Equipment" asp-action="AddEquipment" class="btn btn-primary">
+				<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
+			</a>
+			<a asp-controller="Equipment" asp-action="ManageCategories" class="btn btn-danger">
+				Manage Equipment Categories
+			</a>
+        </div>
+
+    </div>
+
+
+    <!------------------------------------------------------------------------------>
+
+
+<!--Equipment Table-->
+
+<table class="table table-striped">
+	<thead>
+		<tr class="text-center">
+			<th>Equipment ID</th>
+			<th>Equipment Name</th>
+			<th>Equipment Description</th>
+			<th>Equipment Category</th>
+			<th>Equipment Status</th>
+			<th>Availability</th>
+			<th>Rental Price</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var record in Model.Equipment)
+		{
+			<tr class="text-center">
+				<td>@record.EquipmentId</td>
+				<td>@record.EquipmentName</td>
+				<td>@record.EquipmentCategory.EquipmentCategoryTitle</td>
+				<td>@record.ConditionStatus.ConditionStatusTitle</td>
+				<td>@record.AvailabilityStatus.AvailabilityStatusTitle</td>
+				<td>@record.RentalPrice</td>
+
+				<!--if role is customer-->
+				<td>
+					<a asp-action="Request" asp-route-id="@record.EquipmentId" class="btn btn-primary">Request for Rental</a>
+				</td>
+
+				<!--if role is admin or manager-->
+				<td> 
+					<a asp-action="Edit" asp-route-id="@record.EquipmentId" class="btn btn-primary">Edit</a> 
+				 	<a asp-action="Delete" asp-route-id="@record.EquipmentId" class="btn btn-danger">Delete</a> 
+				</td> 
+
+
+
+
+			</tr>
+		}
+	</tbody>
 
