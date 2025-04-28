@@ -48,9 +48,10 @@ namespace RentOpsDesktop
         }
 
         //a function to load the data into the datagridview
-        private void RefreshDataGridView() {
+        private void RefreshDataGridView()
+        {
 
-            
+
 
             // Fetch the filtered equipment list and select relevant fields
             var equipmentList = dbContext.Equipment.Where(e => e.UserId == userId).Select(e => new
@@ -82,7 +83,8 @@ namespace RentOpsDesktop
 
 
         //function to load statistics 
-        private void LoadStatistics() {
+        private void LoadStatistics()
+        {
 
             // Fetch the total number of current user equipment 
             var totalEquipment = dbContext.Equipment.Where(e => e.UserId == userId).Count();
@@ -125,6 +127,48 @@ namespace RentOpsDesktop
 
         }
 
+        private void btnEquipmentDashboard_Click(object sender, EventArgs e)
+        {
+            //Hide the current form and navigate to the EquipmentDashboard form
+            this.Hide(); //hide the current form
+            UserEquipmentDashboard equipmentDashboardForm = new UserEquipmentDashboard();
+            equipmentDashboardForm.Show(); //show EquipmentDashboard form
+        }
 
+        private void btnRentalDashboard_Click(object sender, EventArgs e)
+        {
+            //Hide the current form and navigate to the rentaldashboard form
+            this.Hide(); //hide the current form
+            RentalDashboard screen = new RentalDashboard();
+            screen.Show();
+        }
+
+        private void btnRentalRequests_Click(object sender, EventArgs e)
+        {
+            this.Hide(); //hide the current form
+            RentalRequests screen = new RentalRequests();
+            screen.Show();
+        }
+
+        private void btnRentalTransactions_Click(object sender, EventArgs e)
+        {
+            this.Hide(); //hide the current form
+            RentalTransactions screen = new RentalTransactions();
+            screen.Show();
+        }
+
+        private void btnReturnRecords_Click(object sender, EventArgs e)
+        {
+            this.Hide(); //hide the current form
+            ReturnRecords screen = new ReturnRecords();
+            screen.Show();
+        }
+
+        private void btnEquipmentInformation_Click(object sender, EventArgs e)
+        {
+            this.Hide(); //hide the current form
+            EquipmentInformation screen = new EquipmentInformation();
+            screen.Show();
+        }
     }
 }
