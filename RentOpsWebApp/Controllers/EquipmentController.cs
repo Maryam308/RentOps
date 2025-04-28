@@ -46,7 +46,9 @@ namespace RentOpsWebApp.Controllers
             {
                 ModelState.AddModelError("newEquipment.RentalPrice", "Rental Price must be greater than 0.");
             }
-            
+            model.newEquipment.UserId = 1; // Set the UserId to 1 for now, as we don't have user authentication yet.
+            //check if modelstate is valid
+            Console.WriteLine("ModelState is valid: " + ModelState.IsValid);
 
             if (ModelState.IsValid)
             {
@@ -143,8 +145,6 @@ namespace RentOpsWebApp.Controllers
             //If equipment name filter is used, we filter the list retrieved above
             if (!String.IsNullOrEmpty(SearchEquipmentName))
             {
-                //You can try to make it case insensitive here. This is left for you to optionally do.
-
                 equipmentList = equipmentList.Where(p =>
                     p.EquipmentName != null && p.EquipmentName.Contains(SearchEquipmentName, StringComparison.OrdinalIgnoreCase)
                 );
