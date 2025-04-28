@@ -87,7 +87,46 @@ namespace RentOpsDesktop
 
         private void btnEquipmentInformation_Click(object sender, EventArgs e)
         {
+            this.Hide(); //hide the current form
+            EquipmentInformation screen = new EquipmentInformation();
+            screen.Show();
+        }
 
+        private void btnEquipmentDashboard_Click(object sender, EventArgs e)
+        {
+            //Hide the current form and navigate to the EquipmentDashboard form
+            this.Hide(); //hide the current form
+            UserEquipmentDashboard equipmentDashboardForm = new UserEquipmentDashboard();
+            equipmentDashboardForm.Show(); //show EquipmentDashboard form
+        }
+
+        private void btnRentalDashboard_Click(object sender, EventArgs e)
+        {
+            //Hide the current form and navigate to the rentaldashboard form
+            this.Hide(); //hide the current form
+            RentalDashboard screen = new RentalDashboard();
+            screen.Show();
+        }
+
+        private void btnRentalRequests_Click(object sender, EventArgs e)
+        {
+            this.Hide(); //hide the current form
+            RentalRequests screen = new RentalRequests();
+            screen.Show();
+        }
+
+        private void btnRentalTransactions_Click(object sender, EventArgs e)
+        {
+            this.Hide(); //hide the current form
+            RentalTransactions screen = new RentalTransactions();
+            screen.Show();
+        }
+
+        private void btnReturnRecords_Click(object sender, EventArgs e)
+        {
+            this.Hide(); //hide the current form
+            ReturnRecords screen = new ReturnRecords();
+            screen.Show();
         }
     }
 }
