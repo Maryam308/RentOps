@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
+using RentOpsWebApp.ViewModels;
+using System.Collections.Generic;
 
 namespace RentOpsWebApp.Controllers
 {
@@ -18,16 +20,47 @@ namespace RentOpsWebApp.Controllers
         {
             return View();
         }
-        public IActionResult RentalRequest()
+        public IActionResult RentalRequest(string SearchRentalRequestId, string SearchRentalRequestStatusId, string searchequipmentId)
         {
-            var rentalRequestsList = _context.RentalRequests
+            IEnumerable<RentalRequest> rentalRequestsList = _context.RentalRequests
                 .Include(r => r.RentalRequestStatus)
                 .Include(r => r.Equipment)
                 .Include(r => r.User)
                 .OrderByDescending(r => r.RentalStartDate)
                 .ToList();
 
-            return View(rentalRequestsList);
+            //filtering system
+
+            //If id is used, we filter the list retrieved above
+            if (!String.IsNullOrEmpty(SearchRentalRequestId))
+            {
+                rentalRequestsList = rentalRequestsList.Where(p =>
+                    p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId)
+                );
+            }
+
+            if (!String.IsNullOrEmpty(searchequipmentId))
+            {
+                rentalRequestsList = rentalRequestsList.Where(p =>
+                    p.EquipmentId == Convert.ToInt32(searchequipmentId)
+                );
+            }
+
+            if (!String.IsNullOrEmpty(SearchRentalRequestStatusId))
+            {
+                rentalRequestsList = rentalRequestsList.Where(p =>
+                    p.RentalRequestStatusId == Convert.ToInt32(SearchRentalRequestStatusId)
+                );
+            }
+
+            var rentalRequestViewModel = new RentalRequestViewModel
+            {
+                rentalRequests = rentalRequestsList,
+                rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
+                equipmentTitle = _context.Equipment.ToList(),
+            };
+
+            return View(rentalRequestViewModel);
         }
     }
 }

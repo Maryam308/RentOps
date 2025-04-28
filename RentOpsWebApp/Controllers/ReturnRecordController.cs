@@ -7,7 +7,7 @@ namespace RentOpsWebApp.Controllers
 {
     public class ReturnRecordController : Controller
     {
-        private readonly RentOpsDBContext _context;
+        private  RentOpsDBContext _context;
 
         public ReturnRecordController(RentOpsDBContext context)
         {
