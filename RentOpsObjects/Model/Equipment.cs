@@ -37,17 +37,17 @@ public partial class Equipment
 
     [ForeignKey("AvailabilityStatusId")]
     [InverseProperty("Equipment")]
-    public virtual AvailabilityStatus AvailabilityStatus { get; set; } = null!;
+    public virtual AvailabilityStatus? AvailabilityStatus { get; set; } //= null!;
 
     [ForeignKey("ConditionStatusId")]
     [InverseProperty("Equipment")]
-    public virtual ConditionStatus ConditionStatus { get; set; } = null!;
+    public virtual ConditionStatus? ConditionStatus { get; set; } //= null!;
 
     [ForeignKey("EquipmentCategoryId")]
     [InverseProperty("Equipment")]
-    public virtual EquipmentCategory EquipmentCategory { get; set; } = null!;
+    public virtual EquipmentCategory? EquipmentCategory { get; set; } //= null!;
 
-    [InverseProperty("Equipment")]
+    [InverseProperty("Equipment")] 
     public virtual ICollection<RentalRequest> RentalRequests { get; set; } = new List<RentalRequest>();
 
     [InverseProperty("Equipment")]
@@ -55,5 +55,5 @@ public partial class Equipment
 
     [ForeignKey("UserId")]
     [InverseProperty("Equipment")]
-    public virtual User User { get; set; } = null!;
+    public virtual User? User { get; set; } //= null!;
 }
