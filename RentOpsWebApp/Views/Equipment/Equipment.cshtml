@@ -7,8 +7,17 @@
 
 <h1>Equipment</h1>
 
+<!--Check if there is a success message to display-->
 
-<br />
+@{
+	if (TempData["CreateSuccess"] != null)
+	{
+		<div class="alert alert-success" role="alert">
+			@TempData["CreateSuccess"].ToString()
+		</div>
+	}
+}
+
 
 <!-- a container with padding of 3.. This div is closed at the end of the page-->
 <div class="container p-3">
@@ -114,8 +123,8 @@
 
 				<!--if role is admin or manager-->
 				<td> 
-					<a asp-action="Edit" asp-route-id="@record.EquipmentId" class="btn btn-primary">Edit</a> 
-				 	<a asp-action="Delete" asp-route-id="@record.EquipmentId" class="btn btn-danger">Delete</a> 
+						<a asp-action="Edit" asp-route-id="@record.EquipmentId" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
+						<a asp-action="Delete" asp-route-id="@record.EquipmentId" class="btn btn-danger"><i class="bi bi-trash-fill"></i>Delete</a>
 				</td> 
 
 

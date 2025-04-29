@@ -1,0 +1,85 @@
+﻿@using RentOpsWebApp.ViewModels;
+@model EquipmentViewModel;
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Edit Equipment</h3>
+            <h4>Are you sure you want to delete this Equipment?</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                <div class="form-group" hidden>
+                    <label asp-for="newEquipment.EquipmentId"></label>
+                    <input asp-for="newEquipment.EquipmentId" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="newEquipment.EquipmentId" class="text-danger"></span>
+                </div>
+                <!-- Equipment Name -->
+                <div class="form-group mb-3">
+                    <label asp-for="newEquipment.EquipmentName" class="form-label">Equipment Name</label>
+                    <input asp-for="newEquipment.EquipmentName" class="form-control" />
+                    <span asp-validation-for="newEquipment.EquipmentName" class="text-danger"></span>
+                </div>
+
+                <!-- Equipment Description -->
+                <div class="form-group mb-3">
+                    <label asp-for="newEquipment.EquipmentDescription" class="form-label">Equipment Description</label>
+                    <input asp-for="newEquipment.EquipmentDescription" class="form-control" />
+                    <span asp-validation-for="newEquipment.EquipmentDescription" class="text-danger"></span>
+                </div>
+
+                <!-- Equipment Category Dropdown -->
+                <div class="form-group mb-3">
+                    <label asp-for="newEquipment.EquipmentCategoryId" class="form-label">Equipment Category</label>
+                    <select asp-for="newEquipment.EquipmentCategoryId"
+                            asp-items="@Model.EquipmentCategories.Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
+                            class="form-select">
+                        <option value="">-- Select Category --</option>
+                    </select>
+                    <span asp-validation-for="newEquipment.EquipmentCategoryId" class="text-danger"></span>
+                </div>
+
+                <!-- Rental Price -->
+                <div class="form-group mb-3">
+                    <label asp-for="newEquipment.RentalPrice" class="form-label">Rental Price</label>
+                    <input asp-for="newEquipment.RentalPrice" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="newEquipment.RentalPrice" class="text-danger"></span>
+                </div>
+
+                <!-- Condition Status Dropdown -->
+                <div class="form-group mb-3">
+                    <label asp-for="newEquipment.ConditionStatusId" class="form-label">Condition Status</label>
+                    <select asp-for="newEquipment.ConditionStatusId"
+                            asp-items="@Model.EquipmentStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+                            class="form-select">
+                        <option value="">-- Select Condition --</option>
+                    </select>
+                    <span asp-validation-for="newEquipment.ConditionStatusId" class="text-danger"></span>
+                </div>
+
+                <!-- Availability Status Dropdown -->
+                <div class="form-group mb-4">
+                    <label asp-for="newEquipment.AvailabilityStatusId" class="form-label">Availability Status</label>
+                    <select asp-for="newEquipment.AvailabilityStatusId"
+                            asp-items="@Model.EquipmentAvailability.Select(i => new SelectListItem { Text = i.AvailabilityStatusTitle, Value = i.AvailabilityStatusId.ToString() })"
+                            class="form-select">
+                        <option value="">-- Select Availability --</option>
+                    </select>
+                    <span asp-validation-for="newEquipment.AvailabilityStatusId" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-danger">Save Changes</button>
+
+                <!--Add a Link to go back to the list without deleting-->
+                <a asp-controller="Equipment" asp-action="Equipment" class="btn btn-secondary" style="width:180px">Back to List</a>
+
+            </form>
+        </div>
+    </div>
+</div>

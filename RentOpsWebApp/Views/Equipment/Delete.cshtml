@@ -1,0 +1,76 @@
+﻿@using RentOpsWebApp.ViewModels;
+@model EquipmentViewModel;
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Delete Equipment</h3>
+            <h4>Are you sure you want to delete this Equipment?</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Delete" method="post">
+                <div class="form-group" hidden>
+                    <label asp-for="newEquipment.EquipmentId"></label>
+                    <input asp-for="newEquipment.EquipmentId" class="form-control" hidden readonly="readonly" />
+                </div>
+                <!-- Equipment Name -->
+                <div class="form-group mb-3">
+                    <label asp-for="newEquipment.EquipmentName" class="form-label">Equipment Name</label>
+                    <input disabled asp-for="newEquipment.EquipmentName" class="form-control" />
+                </div>
+
+                <!-- Equipment Description -->
+                <div class="form-group mb-3">
+                    <label asp-for="newEquipment.EquipmentDescription" class="form-label">Equipment Description</label>
+                    <input disabled asp-for="newEquipment.EquipmentDescription" class="form-control" />
+                </div>
+
+                <!-- Equipment Category Dropdown -->
+                <div class="form-group mb-3">
+                    <label asp-for="newEquipment.EquipmentCategoryId" class="form-label">Equipment Category</label>
+                    <select disabled asp-for="newEquipment.EquipmentCategoryId"
+                            asp-items="@Model.EquipmentCategories.Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
+                            class="form-select">
+                        <option disabled value="0">-- Select Category --</option>
+                    </select>
+                </div>
+
+                <!-- Rental Price -->
+                <div class="form-group mb-3">
+                    <label asp-for="newEquipment.RentalPrice" class="form-label">Rental Price</label>
+                    <input disabled asp-for="newEquipment.RentalPrice" class="form-control" type="number" step="0.01" />
+                </div>
+
+                <!-- Condition Status Dropdown -->
+                <div class="form-group mb-3">
+                    <label asp-for="newEquipment.ConditionStatusId" class="form-label">Condition Status</label>
+                    <select disabled asp-for="newEquipment.ConditionStatusId"
+                            asp-items="@Model.EquipmentStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+                            class="form-select">
+                        <option disabled value="0">-- Select Condition --</option>
+                    </select>
+                </div>
+
+                <!-- Availability Status Dropdown -->
+                <div class="form-group mb-4">
+                    <label asp-for="newEquipment.AvailabilityStatusId" class="form-label">Availability Status</label>
+                    <select disabled asp-for="newEquipment.AvailabilityStatusId"
+                            asp-items="@Model.EquipmentAvailability.Select(i => new SelectListItem { Text = i.AvailabilityStatusTitle, Value = i.AvailabilityStatusId.ToString() })"
+                            class="form-select">
+                        <option disabled value="0">-- Select Availability --</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-danger">Delete</button>
+
+                <!--Add a Link to go back to the list without deleting-->
+                <a asp-controller="Equipment" asp-action="Equipment" class="btn btn-secondary" style="width:180px">Back to List</a>
+
+            </form>
+        </div>
+    </div>
+</div>
