@@ -118,7 +118,7 @@ namespace RentOpsDesktop
         private void btnSaveChanges_Click(object sender, EventArgs e)
         {
             // Check if all fields are valid
-            if (validEquipmentName && validEquipmentDescription && validRentalPrice )
+            if (validEquipmentName && validEquipmentDescription && validRentalPrice)
             {
                 try
                 {
@@ -237,48 +237,55 @@ namespace RentOpsDesktop
 
         private void cmbEquipmentCategory_SelectedIndexChanged(object sender, EventArgs e)
         {
-                if (cmbEquipmentCategory.SelectedItem == null)
-                {
-                    lblEquipmentCategoryErr.Text = "Please select an equipment category";
-                    validEquipmentCategory = false;
-                }
-                else
-                {
-                    lblEquipmentCategoryErr.Text = string.Empty;
-                    validEquipmentCategory = true;
-                }         
+            if (cmbEquipmentCategory.SelectedItem == null)
+            {
+                lblEquipmentCategoryErr.Text = "Please select an equipment category";
+                validEquipmentCategory = false;
+            }
+            else
+            {
+                lblEquipmentCategoryErr.Text = string.Empty;
+                validEquipmentCategory = true;
+            }
             ValidateForm();
         }
 
         private void cmbConditionStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
-                if (cmbConditionStatus.SelectedItem == null)
-                {
-                    lblConditionStatusErr.Text = "Please select a condition status";
-                    validConditionStatus = false;
-                }
-                else
-                {
-                    lblConditionStatusErr.Text = string.Empty;
-                    validConditionStatus = true;
-                }
-          
+            if (cmbConditionStatus.SelectedItem == null)
+            {
+                lblConditionStatusErr.Text = "Please select a condition status";
+                validConditionStatus = false;
+            }
+            else
+            {
+                lblConditionStatusErr.Text = string.Empty;
+                validConditionStatus = true;
+            }
+
             ValidateForm();
         }
 
         private void cmbAvailabilityStatus_SelectedIndexChanged(object sender, EventArgs e)
         {
-                if (cmbAvailabilityStatus.SelectedItem == null)
-                {
-                    lblAvailabilityStatusErr.Text = "Please select availability status";
-                    validAvailabilityStatus = false;
-                }
-                else
-                {
-                    lblAvailabilityStatusErr.Text = string.Empty;
-                    validAvailabilityStatus = true;
-                }
+            if (cmbAvailabilityStatus.SelectedItem == null)
+            {
+                lblAvailabilityStatusErr.Text = "Please select availability status";
+                validAvailabilityStatus = false;
+            }
+            else
+            {
+                lblAvailabilityStatusErr.Text = string.Empty;
+                validAvailabilityStatus = true;
+            }
             ValidateForm();
+        }
+
+        private void btnBack_Click_1(object sender, EventArgs e)
+        {
+            //close the current form
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

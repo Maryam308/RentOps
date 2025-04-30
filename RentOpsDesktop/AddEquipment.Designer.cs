@@ -48,6 +48,7 @@
             lblAvailabilityStatus = new Label();
             cmbAvailabilityStatus = new ComboBox();
             lblAvailabilityStatusErr = new Label();
+            btnBack = new Button();
             SuspendLayout();
             // 
             // btnAddEquipment
@@ -269,11 +270,29 @@
             lblAvailabilityStatusErr.Size = new Size(0, 15);
             lblAvailabilityStatusErr.TabIndex = 61;
             // 
+            // btnBack
+            // 
+            btnBack.BackColor = Color.FromArgb(139, 128, 116);
+            btnBack.BackgroundImageLayout = ImageLayout.None;
+            btnBack.FlatAppearance.BorderSize = 0;
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            btnBack.ForeColor = Color.White;
+            btnBack.Location = new Point(23, 20);
+            btnBack.Margin = new Padding(3, 2, 3, 2);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(155, 44);
+            btnBack.TabIndex = 62;
+            btnBack.Text = "Back";
+            btnBack.UseVisualStyleBackColor = false;
+            btnBack.Click += btnBack_Click_1;
+            // 
             // AddEquipment
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
+            Controls.Add(btnBack);
             Controls.Add(lblAvailabilityStatusErr);
             Controls.Add(cmbAvailabilityStatus);
             Controls.Add(lblAvailabilityStatus);
@@ -324,5 +343,6 @@
         private Label lblAvailabilityStatus;
         private ComboBox cmbAvailabilityStatus;
         private Label lblAvailabilityStatusErr;
+        private Button btnBack;
     }
 }

@@ -204,6 +204,7 @@
             btnBack.TabIndex = 83;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
+            btnBack.Click += btnBack_Click;
             // 
             // groupBox1
             // 

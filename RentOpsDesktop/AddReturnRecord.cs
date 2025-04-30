@@ -183,7 +183,9 @@ Uploaded Successfully";
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-
+            //back to the return record form
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }
