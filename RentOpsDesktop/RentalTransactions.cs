@@ -41,8 +41,8 @@ namespace RentOpsDesktop
                 //check the return date
                 if (dtpTransctionDate.Checked)
                 {
-                    DateOnly selectedDate = DateOnly.FromDateTime(dtpTransctionDate.Value);
-                    rentalTransactions = rentalTransactions.Where(r => r.ReturnDate == selectedDate);
+                    DateTime selectedDate = dtpTransctionDate.Value;
+                    rentalTransactions = rentalTransactions.Where(r => r.RentalTransactionTimestamp.Date == selectedDate.Date);
                 }
 
                 //check if equipment is selected to filter

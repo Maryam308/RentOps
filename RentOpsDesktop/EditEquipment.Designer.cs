@@ -48,6 +48,7 @@
             lblEquipmentCategoryErr = new Label();
             lblConditionStatusErr = new Label();
             lblAvailabilityStatusErr = new Label();
+            btnBack = new Button();
             SuspendLayout();
             // 
             // btnSaveChanges
@@ -265,11 +266,29 @@
             lblAvailabilityStatusErr.Size = new Size(0, 15);
             lblAvailabilityStatusErr.TabIndex = 46;
             // 
+            // btnBack
+            // 
+            btnBack.BackColor = Color.FromArgb(139, 128, 116);
+            btnBack.BackgroundImageLayout = ImageLayout.None;
+            btnBack.FlatAppearance.BorderSize = 0;
+            btnBack.FlatStyle = FlatStyle.Flat;
+            btnBack.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+            btnBack.ForeColor = Color.White;
+            btnBack.Location = new Point(21, 22);
+            btnBack.Margin = new Padding(3, 2, 3, 2);
+            btnBack.Name = "btnBack";
+            btnBack.Size = new Size(155, 44);
+            btnBack.TabIndex = 47;
+            btnBack.Text = "Back";
+            btnBack.UseVisualStyleBackColor = false;
+            btnBack.Click += btnBack_Click_1;
+            // 
             // EditEquipmentInformation
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
+            Controls.Add(btnBack);
             Controls.Add(lblAvailabilityStatusErr);
             Controls.Add(lblConditionStatusErr);
             Controls.Add(lblEquipmentCategoryErr);
@@ -320,5 +339,6 @@
         private Label lblEquipmentCategoryErr;
         private Label lblConditionStatusErr;
         private Label lblAvailabilityStatusErr;
+        private Button btnBack;
     }
 }

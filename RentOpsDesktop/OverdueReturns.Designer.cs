@@ -54,11 +54,10 @@
             // 
             dgvReturnRecords.BackgroundColor = Color.WhiteSmoke;
             dgvReturnRecords.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvReturnRecords.Location = new Point(286, 248);
-            dgvReturnRecords.Margin = new Padding(3, 4, 3, 4);
+            dgvReturnRecords.Location = new Point(250, 186);
             dgvReturnRecords.Name = "dgvReturnRecords";
             dgvReturnRecords.RowHeadersWidth = 51;
-            dgvReturnRecords.Size = new Size(775, 335);
+            dgvReturnRecords.Size = new Size(678, 251);
             dgvReturnRecords.TabIndex = 24;
             // 
             // lblRentalOverdue
@@ -66,9 +65,9 @@
             lblRentalOverdue.AutoSize = true;
             lblRentalOverdue.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic);
             lblRentalOverdue.ForeColor = Color.FromArgb(135, 66, 62);
-            lblRentalOverdue.Location = new Point(464, 21);
+            lblRentalOverdue.Location = new Point(406, 16);
             lblRentalOverdue.Name = "lblRentalOverdue";
-            lblRentalOverdue.Size = new Size(304, 52);
+            lblRentalOverdue.Size = new Size(244, 42);
             lblRentalOverdue.TabIndex = 22;
             lblRentalOverdue.Text = "Rental Overdue";
             // 
@@ -80,11 +79,12 @@
             btnAddRecord.FlatStyle = FlatStyle.Flat;
             btnAddRecord.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             btnAddRecord.ForeColor = Color.White;
-            btnAddRecord.Location = new Point(3, 116);
+            btnAddRecord.Location = new Point(3, 87);
+            btnAddRecord.Margin = new Padding(3, 2, 3, 2);
             btnAddRecord.Name = "btnAddRecord";
-            btnAddRecord.Size = new Size(253, 51);
+            btnAddRecord.Size = new Size(221, 38);
             btnAddRecord.TabIndex = 10;
-            btnAddRecord.Text = "Add New Record";
+            btnAddRecord.Text = "Add Return Record";
             btnAddRecord.UseVisualStyleBackColor = false;
             btnAddRecord.Click += btnAddRecord_Click;
             // 
@@ -96,9 +96,10 @@
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(35, 28);
+            btnBack.Location = new Point(31, 21);
+            btnBack.Margin = new Padding(3, 2, 3, 2);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(177, 59);
+            btnBack.Size = new Size(155, 44);
             btnBack.TabIndex = 9;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
@@ -112,7 +113,7 @@
             pnlNavigationSideBar.Location = new Point(0, -1);
             pnlNavigationSideBar.Margin = new Padding(0);
             pnlNavigationSideBar.Name = "pnlNavigationSideBar";
-            pnlNavigationSideBar.Size = new Size(259, 611);
+            pnlNavigationSideBar.Size = new Size(227, 458);
             pnlNavigationSideBar.TabIndex = 21;
             // 
             // btnReset
@@ -123,10 +124,10 @@
             btnReset.FlatStyle = FlatStyle.Flat;
             btnReset.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnReset.ForeColor = Color.FromArgb(241, 240, 234);
-            btnReset.Location = new Point(935, 21);
+            btnReset.Location = new Point(818, 16);
             btnReset.Margin = new Padding(0);
             btnReset.Name = "btnReset";
-            btnReset.Size = new Size(123, 52);
+            btnReset.Size = new Size(108, 39);
             btnReset.TabIndex = 50;
             btnReset.Text = "Reset";
             btnReset.UseVisualStyleBackColor = false;
@@ -135,18 +136,17 @@
             // txtTransactionID
             // 
             txtTransactionID.BorderStyle = BorderStyle.FixedSingle;
-            txtTransactionID.Location = new Point(495, 118);
-            txtTransactionID.Margin = new Padding(3, 4, 3, 4);
+            txtTransactionID.Location = new Point(433, 88);
             txtTransactionID.Name = "txtTransactionID";
-            txtTransactionID.Size = new Size(72, 27);
+            txtTransactionID.Size = new Size(63, 23);
             txtTransactionID.TabIndex = 49;
             // 
             // lblRentalTransaction
             // 
             lblRentalTransaction.AutoSize = true;
-            lblRentalTransaction.Location = new Point(331, 119);
+            lblRentalTransaction.Location = new Point(290, 89);
             lblRentalTransaction.Name = "lblRentalTransaction";
-            lblRentalTransaction.Size = new Size(149, 20);
+            lblRentalTransaction.Size = new Size(118, 15);
             lblRentalTransaction.TabIndex = 47;
             lblRentalTransaction.Text = "Rental Transaction ID";
             // 
@@ -158,10 +158,10 @@
             btnFilter.FlatStyle = FlatStyle.Flat;
             btnFilter.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnFilter.ForeColor = Color.FromArgb(241, 240, 234);
-            btnFilter.Location = new Point(935, 173);
+            btnFilter.Location = new Point(818, 130);
             btnFilter.Margin = new Padding(0);
             btnFilter.Name = "btnFilter";
-            btnFilter.Size = new Size(123, 52);
+            btnFilter.Size = new Size(108, 39);
             btnFilter.TabIndex = 42;
             btnFilter.Text = "Filter";
             btnFilter.UseVisualStyleBackColor = false;
@@ -175,10 +175,10 @@
             btnSearch.FlatStyle = FlatStyle.Flat;
             btnSearch.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
-            btnSearch.Location = new Point(935, 100);
+            btnSearch.Location = new Point(818, 75);
             btnSearch.Margin = new Padding(0);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(123, 52);
+            btnSearch.Size = new Size(108, 39);
             btnSearch.TabIndex = 41;
             btnSearch.Text = "Search";
             btnSearch.UseVisualStyleBackColor = false;
@@ -187,10 +187,10 @@
             // lblEquipment
             // 
             lblEquipment.AutoSize = true;
-            lblEquipment.Location = new Point(738, 158);
+            lblEquipment.Location = new Point(646, 118);
             lblEquipment.Margin = new Padding(4, 0, 4, 0);
             lblEquipment.Name = "lblEquipment";
-            lblEquipment.Size = new Size(138, 20);
+            lblEquipment.Size = new Size(110, 15);
             lblEquipment.TabIndex = 59;
             lblEquipment.Text = "Filter by Equipment";
             // 
@@ -198,39 +198,39 @@
             // 
             cmbEquipment.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbEquipment.FormattingEnabled = true;
-            cmbEquipment.Location = new Point(742, 182);
+            cmbEquipment.Location = new Point(649, 136);
             cmbEquipment.Margin = new Padding(4, 2, 4, 2);
             cmbEquipment.Name = "cmbEquipment";
-            cmbEquipment.Size = new Size(181, 28);
+            cmbEquipment.Size = new Size(159, 23);
             cmbEquipment.TabIndex = 58;
             // 
             // dtpTransctionDate
             // 
             dtpTransctionDate.Checked = false;
-            dtpTransctionDate.Location = new Point(304, 184);
-            dtpTransctionDate.Margin = new Padding(4);
+            dtpTransctionDate.Location = new Point(266, 138);
+            dtpTransctionDate.Margin = new Padding(4, 3, 4, 3);
             dtpTransctionDate.Name = "dtpTransctionDate";
             dtpTransctionDate.ShowCheckBox = true;
-            dtpTransctionDate.Size = new Size(228, 27);
+            dtpTransctionDate.Size = new Size(200, 23);
             dtpTransctionDate.TabIndex = 57;
             // 
             // lblPayment
             // 
             lblPayment.AutoSize = true;
-            lblPayment.Location = new Point(541, 159);
+            lblPayment.Location = new Point(473, 119);
             lblPayment.Margin = new Padding(4, 0, 4, 0);
             lblPayment.Name = "lblPayment";
-            lblPayment.Size = new Size(166, 20);
+            lblPayment.Size = new Size(134, 15);
             lblPayment.TabIndex = 56;
             lblPayment.Text = "Filter by Payment Status";
             // 
             // lblTransctionDateFilter
             // 
             lblTransctionDateFilter.AutoSize = true;
-            lblTransctionDateFilter.Location = new Point(297, 159);
+            lblTransctionDateFilter.Location = new Point(260, 119);
             lblTransctionDateFilter.Margin = new Padding(4, 0, 4, 0);
             lblTransctionDateFilter.Name = "lblTransctionDateFilter";
-            lblTransctionDateFilter.Size = new Size(177, 20);
+            lblTransctionDateFilter.Size = new Size(140, 15);
             lblTransctionDateFilter.TabIndex = 55;
             lblTransctionDateFilter.Text = "Filter by Transaction Date";
             // 
@@ -238,36 +238,36 @@
             // 
             cmbPaymentStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbPaymentStatus.FormattingEnabled = true;
-            cmbPaymentStatus.Location = new Point(545, 183);
+            cmbPaymentStatus.Location = new Point(477, 137);
             cmbPaymentStatus.Margin = new Padding(4, 2, 4, 2);
             cmbPaymentStatus.Name = "cmbPaymentStatus";
-            cmbPaymentStatus.Size = new Size(191, 28);
+            cmbPaymentStatus.Size = new Size(168, 23);
             cmbPaymentStatus.TabIndex = 54;
             // 
             // txtRequestID
             // 
             txtRequestID.BorderStyle = BorderStyle.FixedSingle;
-            txtRequestID.Location = new Point(804, 118);
-            txtRequestID.Margin = new Padding(4);
+            txtRequestID.Location = new Point(704, 88);
+            txtRequestID.Margin = new Padding(4, 3, 4, 3);
             txtRequestID.Name = "txtRequestID";
-            txtRequestID.Size = new Size(72, 27);
+            txtRequestID.Size = new Size(63, 23);
             txtRequestID.TabIndex = 53;
             // 
             // lblRequestID
             // 
             lblRequestID.AutoSize = true;
-            lblRequestID.Location = new Point(618, 120);
+            lblRequestID.Location = new Point(541, 90);
             lblRequestID.Margin = new Padding(4, 0, 4, 0);
             lblRequestID.Name = "lblRequestID";
-            lblRequestID.Size = new Size(178, 20);
+            lblRequestID.Size = new Size(139, 15);
             lblRequestID.TabIndex = 52;
             lblRequestID.Text = "Rental Request Record ID";
             // 
             // OverdueReturns
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1088, 611);
+            ClientSize = new Size(952, 458);
             Controls.Add(lblEquipment);
             Controls.Add(cmbEquipment);
             Controls.Add(dtpTransctionDate);
@@ -284,7 +284,6 @@
             Controls.Add(dgvReturnRecords);
             Controls.Add(lblRentalOverdue);
             Controls.Add(pnlNavigationSideBar);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "OverdueReturns";
             Text = " ";
             Load += OverdueReturns_Load;

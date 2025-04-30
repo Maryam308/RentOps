@@ -12,7 +12,7 @@ using RentOpsObjects.Model;
 
 namespace RentOpsDesktop
 {
-    
+
     public partial class AddEquipment : Form
     {
         int currentUserId = 2;
@@ -44,7 +44,7 @@ namespace RentOpsDesktop
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-           
+
         }
 
         private void LoadData()
@@ -241,7 +241,7 @@ namespace RentOpsDesktop
             txtRentalPrice.Clear();
             cmbConditionStatus.SelectedItem = null;
             cmbAvailabilityStatus.SelectedItem = null;
-            
+
             validEquipmentName = false;
             validEquipmentDescription = false;
             validEquipmentCategory = false;
@@ -292,6 +292,13 @@ namespace RentOpsDesktop
         {
             hasInteractedWithAvailabilityStatus = true;
             cmbAvailabilityStatus_SelectedIndexChanged(sender, e);
+        }
+
+        private void btnBack_Click_1(object sender, EventArgs e)
+        {
+            //close the form
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

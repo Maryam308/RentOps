@@ -44,8 +44,8 @@ namespace RentOpsDesktop
                 //check the return date
                 if (dtpTransctionDate.Checked)
                 {
-                    DateOnly selectedDate = DateOnly.FromDateTime(dtpTransctionDate.Value);
-                    rentalTransactions = rentalTransactions.Where(r => r.ReturnDate == selectedDate);
+                    DateTime selectedDate = dtpTransctionDate.Value;
+                    rentalTransactions = rentalTransactions.Where(r => r.RentalTransactionTimestamp.Date == selectedDate.Date);
                 }
 
                 //check if equipment is selected to filter
@@ -136,51 +136,72 @@ namespace RentOpsDesktop
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            //validate that the search field is not empty
-            if (txtTransactionID.Text == "")
+            //validate that not both text fields are filled
+            if (txtRequestID.Text != "" && txtTransactionID.Text != "")
             {
-                MessageBox.Show("Please fill the field.");
+                MessageBox.Show("Please fill only one field");
+                //reset the text fields
+                txtRequestID.Text = "";
+                txtTransactionID.Text = "";
                 return;
             }
 
             try
             {
-                if (txtTransactionID.Text != "")
+                var rentalTransactions = dbContext.RentalTransactions
+                .Include(rt => rt.Equipment)
+                .Include(rt => rt.Employee)
+                .Where(rt => rt.EmployeeId == currentEmployeeId)
+                .OrderByDescending(rt => rt.RentalTransactionTimestamp)
+                .Select(rt => new
                 {
+                    rt.RentalTransactionId,
+                    rt.PickupDate,
+                    rt.ReturnDate,
+                    rt.Deposit,
+                    rt.RentalFee,
+                    rt.RentalTransactionTimestamp,
+                    rt.PaymentId,
+                    rt.RentalRequestId,
+                    rt.EmployeeId,
+                    rt.EquipmentId,
+                    EquipmentName = rt.Equipment != null ? rt.Equipment.EquipmentName : "N/A",
+                    EmployeeName = rt.Employee != null ? rt.Employee.FirstName + " " + rt.Employee.LastName : "N/A"
+                })
+                .ToList();
 
-                    //get the rental transaction id from the text field
-                    int rentalTransactionId = Convert.ToInt32(txtTransactionID.Text);
-                    //get the return record with the ID
-                    var returnRecord = dbContext.ReturnRecords.Where(r => r.RentalTransactionId == rentalTransactionId).Join(dbContext.ConditionStatuses,
-                        rr => rr.ReturnConditionId,
-                        rc => rc.ConditionStatusId,
-                        (returnRecord, ReturnCond) =>
-                        new
-                        {
-                            ReturnRecordID = returnRecord.ReturnRecordId,
-                            RentalTransactionID = returnRecord.RentalTransactionId,
-                            ActualReturnDate = returnRecord.ActualReturnDate,
-                            LateReturnFee = returnRecord.LateReturnFee,
-                            AdditionalCharge = returnRecord.AdditionalCharge,
-                            DocumentID = returnRecord.DocumentId,
-                            ReturnCondition = ReturnCond.ConditionStatusTitle
+                //if the request ID is filled
+                if (txtRequestID.Text != "")
+                {
+                    //get the return record id from the text field
+                    int requestRecordID = Convert.ToInt32(txtRequestID.Text);
 
-                        }).ToList();
+                    var record = rentalTransactions.Where(rt => rt.RentalRequestId == requestRecordID)
+                       .ToList();
 
-                    //show the return record in the data grid view
-                    dgvReturnRecords.DataSource = returnRecord;
-
+                    //refresh the data grid view
+                    dgvReturnRecords.DataSource = record;
                 }
-                
-
+                else if (txtTransactionID.Text != "")
+                {
+                    //get the transaction id from the text field
+                    int transactionID = Convert.ToInt32(txtTransactionID.Text);
+                    var record = rentalTransactions.Where(rt => rt.RentalTransactionId == transactionID)
+                       .ToList();
+                    //refresh the data grid view
+                    dgvReturnRecords.DataSource = record;
+                }
+                else
+                {
+                    MessageBox.Show("Please fill one of the fields");
+                    return;
+                }
             }
+
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("An error occurred while searching: " + ex.Message);
             }
-
-
-
         }
 
         private void btnReset_Click(object sender, EventArgs e)
