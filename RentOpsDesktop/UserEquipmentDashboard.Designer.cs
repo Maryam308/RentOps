@@ -38,7 +38,6 @@
             btnRentalRequests = new Button();
             btnEquipmentDashboard = new Button();
             btnBack = new Button();
-            btnSearch = new Button();
             btnUpdateEquipment = new Button();
             btnReset = new Button();
             dgvEquipment = new DataGridView();
@@ -53,6 +52,7 @@
             lblDamagedEquipment = new Label();
             groupBox4 = new GroupBox();
             lblAvailableForRental = new Label();
+            btnSearch = new Button();
             pnlNavigationSideBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvEquipment).BeginInit();
             groupBox1.SuspendLayout();
@@ -222,22 +222,6 @@
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
             // 
-            // btnSearch
-            // 
-            btnSearch.BackColor = Color.FromArgb(121, 86, 76);
-            btnSearch.BackgroundImageLayout = ImageLayout.None;
-            btnSearch.FlatAppearance.BorderSize = 0;
-            btnSearch.FlatStyle = FlatStyle.Flat;
-            btnSearch.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
-            btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
-            btnSearch.Location = new Point(487, 219);
-            btnSearch.Margin = new Padding(0);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(102, 41);
-            btnSearch.TabIndex = 30;
-            btnSearch.Text = "Search";
-            btnSearch.UseVisualStyleBackColor = false;
-            // 
             // btnUpdateEquipment
             // 
             btnUpdateEquipment.BackColor = Color.FromArgb(121, 86, 76);
@@ -404,6 +388,23 @@
             lblAvailableForRental.TabIndex = 40;
             lblAvailableForRental.Text = "10";
             // 
+            // btnSearch
+            // 
+            btnSearch.BackColor = Color.FromArgb(121, 86, 76);
+            btnSearch.BackgroundImageLayout = ImageLayout.None;
+            btnSearch.FlatAppearance.BorderSize = 0;
+            btnSearch.FlatStyle = FlatStyle.Flat;
+            btnSearch.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
+            btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
+            btnSearch.Location = new Point(487, 219);
+            btnSearch.Margin = new Padding(0);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(102, 41);
+            btnSearch.TabIndex = 30;
+            btnSearch.Text = "Search";
+            btnSearch.UseVisualStyleBackColor = false;
+            btnSearch.Click += btnSearch_Click;
+            // 
             // UserEquipmentDashboard
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -451,7 +452,6 @@
         private Button btnRentalRequests;
         private Button btnEquipmentDashboard;
         private Button btnBack;
-        private Button btnSearch;
         private Button btnUpdateEquipment;
         private Button btnReset;
         private DataGridView dgvEquipment;
@@ -466,5 +466,6 @@
         private Label lblDamagedEquipment;
         private GroupBox groupBox4;
         private Label lblAvailableForRental;
+        private Button btnSearch;
     }
 }

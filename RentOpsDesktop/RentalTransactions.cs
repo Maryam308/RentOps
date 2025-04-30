@@ -29,38 +29,110 @@ namespace RentOpsDesktop
         private void RefreshDataGridView()
         {
 
-            //select the data 
-            // Select data from RentalTransaction with joins (assuming tables exist for referenced IDs)
-            // Select data from RentalTransaction without joining userID or customerID
-            var rentalTransactions = dbContext.RentalTransactions
-                .Include(rt => rt.Equipment)
-                .Include(rt => rt.Employee)
-                .OrderByDescending(rt => rt.RentalTransactionTimestamp)
-                .Select(rt => new
-                {
-                    rt.RentalTransactionId,
-                    rt.PickupDate,
-                    rt.ReturnDate,
-                    rt.Deposit,
-                    rt.RentalFee,
-                    rt.RentalTransactionTimestamp,
-                    rt.PaymentId,
-                    rt.RentalRequestId,
-                    rt.EmployeeId,
-                    rt.EquipmentId,
-                    EquipmentName = rt.Equipment != null ? rt.Equipment.EquipmentName : "N/A",
-                    EmployeeName = rt.Employee != null ? rt.Employee.FirstName + " " + rt.Employee.LastName : "N/A"
-                })
-                .ToList();
+            try
+            {
+                //select the overdue transactions that do not have a return record and its retuned date is less than the current date
 
-            dgvRentalTransactions.DataSource = rentalTransactions;
+                //select as queryable
+                IEnumerable<RentalTransaction> rentalTransactions = dbContext.RentalTransactions.AsQueryable();
+
+                //check if filters apply
+
+                //check the return date
+                if (dtpTransctionDate.Checked)
+                {
+                    DateOnly selectedDate = DateOnly.FromDateTime(dtpTransctionDate.Value);
+                    rentalTransactions = rentalTransactions.Where(r => r.ReturnDate == selectedDate);
+                }
+
+                //check if equipment is selected to filter
+                if (cmbEquipment.SelectedIndex != -1)
+                {
+
+                    //filter the rental transactions by equipment id
+                    int equipmentId = (int)cmbEquipment.SelectedValue;
+                    rentalTransactions = rentalTransactions.Where(r => r.EquipmentId == equipmentId);
+
+                }
+
+                //check if payment status is selected to filter
+                if (cmbPaymentStatus.SelectedIndex != -1)
+                {
+                    //filter the rental transactions by payment status
+                    string paymentStatus = cmbPaymentStatus.SelectedItem.ToString();
+                    if (paymentStatus == "Paid")
+                    {
+                        rentalTransactions = rentalTransactions.Where(r => r.PaymentId != null);
+                    }
+                    else if (paymentStatus == "Not Paid")
+                    {
+                        rentalTransactions = rentalTransactions.Where(r => r.PaymentId == null);
+                    }
+                }
+
+                var filteredTransactions = rentalTransactions.ToList();
+
+                var rentalTransactionsList = filteredTransactions.Select(rt => new
+                {
+                    RentalTransactionId = rt.RentalTransactionId,
+                    PickupDate = rt.PickupDate,
+                    ReturnDate = rt.ReturnDate,
+                    Deposit = rt.Deposit,
+                    RentalFee = rt.RentalFee,
+                    RentalTransactionTimestamp = rt.RentalTransactionTimestamp,
+                    PaymentId = rt.PaymentId,
+                    RentalRequestId = rt.RentalRequestId,
+                    EmployeeId = rt.EmployeeId,
+                    EquipmentId = rt.EquipmentId,
+                    EquipmentName = dbContext.Equipment
+                        .Where(e => e.EquipmentId == rt.EquipmentId)
+                        .Select(e => e.EquipmentName)
+                        .FirstOrDefault(),
+                    EmployeeName = dbContext.Users
+                        .Where(emp => emp.UserId == rt.EmployeeId)
+                        .Select(emp => emp.FirstName + " " + emp.LastName)
+                        .FirstOrDefault()
+                }).OrderByDescending(d => d.ReturnDate).ToList();
+
+
+                dgvRentalTransactions.DataSource = rentalTransactionsList;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
 
 
         }
 
         private void RentalTransactions_Load(object sender, EventArgs e)
         {
-            RefreshDataGridView();
+            try
+            {
+                //laod conditions into the combo box
+
+                //load the equipment names 
+                cmbEquipment.DataSource = dbContext.Equipment.ToList();
+                cmbEquipment.DisplayMember = "EquipmentName";
+                cmbEquipment.ValueMember = "EquipmentId";
+                cmbEquipment.SelectedIndex = -1;
+
+                //load into the payment cmbo box a paid and not paid options
+                cmbPaymentStatus.Items.Add("Paid");
+                cmbPaymentStatus.Items.Add("Not Paid");
+                cmbPaymentStatus.SelectedIndex = -1;
+                //set the -1 index to placeholder
+                cmbPaymentStatus.Text = "Select Payment Status";
+
+                //load into the data grid view
+                RefreshDataGridView();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
 
         private void lblReturnDateFilter_Click(object sender, EventArgs e)
@@ -176,118 +248,11 @@ namespace RentOpsDesktop
                 MessageBox.Show("Please select at least one filter");
                 return;
             }
-
-            try
+            else
             {
-                var rentalTransactions = dbContext.RentalTransactions
-                .Include(rt => rt.Equipment)
-                .Include(rt => rt.Employee)
-                .OrderByDescending(rt => rt.RentalTransactionTimestamp)
-                .Select(rt => new
-                {
-                    rt.RentalTransactionId,
-                    rt.PickupDate,
-                    rt.ReturnDate,
-                    rt.Deposit,
-                    rt.RentalFee,
-                    rt.RentalTransactionTimestamp,
-                    rt.PaymentId,
-                    rt.RentalRequestId,
-                    rt.EmployeeId,
-                    rt.EquipmentId,
-                    EquipmentName = rt.Equipment != null ? rt.Equipment.EquipmentName : "N/A",
-                    EmployeeName = rt.Employee != null ? rt.Employee.FirstName + " " + rt.Employee.LastName : "N/A"
-                })
-                .ToList();
-
-                //First scenario: only one date is selected
-                if (dtpTransctionDate.Checked == true && cmbEquipment.SelectedIndex == -1 && cmbPaymentStatus.SelectedIndex == -1)
-                {
-                    DateTime selectedDate = dtpTransctionDate.Value.Date;
-
-                    var record = rentalTransactions.Where(rt => rt.RentalTransactionTimestamp.Date == selectedDate)
-                        .ToList();
-                    //refresh the data grid view
-                    dgvRentalTransactions.DataSource = record;
-                }
-
-                //Second scenario: only one equipment is selected
-                else if (cmbEquipment.SelectedIndex != -1 && dtpTransctionDate.Checked == false && cmbPaymentStatus.SelectedIndex == -1)
-                {
-                    int equipmentID = Convert.ToInt32(cmbEquipment.SelectedValue);
-                    var record = rentalTransactions.Where(rt => rt.EquipmentId == equipmentID)
-                        .ToList();
-                    //refresh the data grid view
-                    dgvRentalTransactions.DataSource = record;
-                }
-
-                //Third scenario: only one payment status is selected
-                else if (cmbPaymentStatus.SelectedIndex != -1 && dtpTransctionDate.Checked == false && cmbEquipment.SelectedIndex == -1)
-                {
-                    int paymentStatusID = Convert.ToInt32(cmbPaymentStatus.SelectedValue);
-                    var record = rentalTransactions.Where(rt => rt.PaymentId == paymentStatusID)
-                        .ToList();
-                    //refresh the data grid view
-                    dgvRentalTransactions.DataSource = record;
-                }
-
-                // Fourth scenario: date and payment status are selected
-                else if (dtpTransctionDate.Checked == true && cmbPaymentStatus.SelectedIndex != -1 && cmbEquipment.SelectedIndex == -1)
-                {
-                    DateTime selectedDate = dtpTransctionDate.Value.Date;
-                    int paymentStatusID = Convert.ToInt32(cmbPaymentStatus.SelectedValue);
-                    var record = rentalTransactions.Where(rt => rt.RentalTransactionTimestamp.Date == selectedDate && rt.PaymentId == paymentStatusID)
-                        .ToList();
-                    //refresh the data grid view
-                    dgvRentalTransactions.DataSource = record;
-                }
-
-                // Fifth scenario: date and equipment are selected
-                else if (dtpTransctionDate.Checked == true && cmbEquipment.SelectedIndex != -1 && cmbPaymentStatus.SelectedIndex == -1)
-                {
-                    DateTime selectedDate = dtpTransctionDate.Value.Date;
-                    int equipmentID = Convert.ToInt32(cmbEquipment.SelectedValue);
-                    var record = rentalTransactions.Where(rt => rt.RentalTransactionTimestamp.Date == selectedDate && rt.EquipmentId == equipmentID)
-                        .ToList();
-                    //refresh the data grid view
-                    dgvRentalTransactions.DataSource = record;
-                }
-
-                // Sixth scenario: equipment and payment status are selected
-                else if (cmbEquipment.SelectedIndex != -1 && cmbPaymentStatus.SelectedIndex != -1 && dtpTransctionDate.Checked == false)
-                {
-                    int equipmentID = Convert.ToInt32(cmbEquipment.SelectedValue);
-                    int paymentStatusID = Convert.ToInt32(cmbPaymentStatus.SelectedValue);
-                    var record = rentalTransactions.Where(rt => rt.EquipmentId == equipmentID && rt.PaymentId == paymentStatusID)
-                        .ToList();
-                    //refresh the data grid view
-                    dgvRentalTransactions.DataSource = record;
-                }
-
-                // Seventh scenario: all filters are selected
-                else if (dtpTransctionDate.Checked == true && cmbEquipment.SelectedIndex != -1 && cmbPaymentStatus.SelectedIndex != -1)
-                {
-                    DateTime selectedDate = dtpTransctionDate.Value.Date;
-                    int equipmentID = Convert.ToInt32(cmbEquipment.SelectedValue);
-                    int paymentStatusID = Convert.ToInt32(cmbPaymentStatus.SelectedValue);
-                    var record = rentalTransactions.Where(rt => rt.RentalTransactionTimestamp.Date == selectedDate && rt.EquipmentId == equipmentID && rt.PaymentId == paymentStatusID)
-                        .ToList();
-                    //refresh the data grid view
-                    dgvRentalTransactions.DataSource = record;
-                }
-                else
-                {
-                    MessageBox.Show("Please select at least one filter");
-                    return;
-                }
-
+                //refresh the data grid view
+                RefreshDataGridView();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("An error occurred while filtering: " + ex.Message);
-            }
-
-
 
         }
 
