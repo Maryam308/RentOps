@@ -24,43 +24,80 @@ namespace RentOpsDesktop
         //a function to refresh the data grid view 
         private void RefreshDataGridView()
         {
+            try {
 
-            //select the data 
-            var returnRecords = dbContext.ReturnRecords.Join(dbContext.ConditionStatuses,
-                rr => rr.ReturnConditionId,
-                rc => rc.ConditionStatusId,
-                (returnRecord, ReturnCond) =>
-                new
+                var returnRecords = dbContext.ReturnRecords.AsQueryable();
+
+                //check for filters
+                if (cmbConditionStatus.SelectedValue != null)
                 {
+                    //get the selected condition
+                    int conditionId = Convert.ToInt32(cmbConditionStatus.SelectedValue);
+                    //get the return records with the condition
+                    returnRecords = returnRecords.Where(r => r.ReturnConditionId == conditionId);
+                }
 
-                    ReturnRecordID = returnRecord.ReturnRecordId,
-                    RentalTransactionID = returnRecord.RentalTransactionId,
-                    ActualReturnDate = returnRecord.ActualReturnDate,
-                    LateReturnFee = returnRecord.LateReturnFee,
-                    AdditionalCharge = returnRecord.AdditionalCharge,
-                    DocumentID = returnRecord.DocumentId,
-                    ReturnCondition = ReturnCond.ConditionStatusTitle
+                if (dtpActualReturnDate.Checked == true)
+                {
+                    //get the selected date
+                    DateOnly selectedDate = DateOnly.FromDateTime(dtpActualReturnDate.Value);
+                    //get the return records of the selected date
+                    returnRecords = returnRecords.Where(r => r.ActualReturnDate == selectedDate);
+                }
+
+                
+                //select the full recordds
+
+                var returnRecordslist = returnRecords.Join(dbContext.ConditionStatuses,
+                    rr => rr.ReturnConditionId,
+                    rc => rc.ConditionStatusId,
+                    (returnRecord, ReturnCond) =>
+                    new
+                    {
+                        ReturnRecordID = returnRecord.ReturnRecordId,
+                        RentalTransactionID = returnRecord.RentalTransactionId,
+                        ActualReturnDate = returnRecord.ActualReturnDate,
+                        LateReturnFee = returnRecord.LateReturnFee,
+                        AdditionalCharge = returnRecord.AdditionalCharge,
+                        DocumentID = returnRecord.DocumentId,
+                        ReturnCondition = ReturnCond.ConditionStatusTitle
+                    }).OrderByDescending(d => d.ActualReturnDate).ToList();
 
 
-                }).OrderByDescending(d => d.ActualReturnDate).ToList();
+                dgvReturnRecords.DataSource = returnRecordslist;
+            
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
 
-            dgvReturnRecords.DataSource = returnRecords;
+            
 
 
         }
 
         private void ReturnRecords_Load(object sender, EventArgs e)
         {
-            //laod conditions into the combo box
-            var conditions = dbContext.ConditionStatuses.ToList();
-            cmbConditionStatus.DataSource = conditions;
-            cmbConditionStatus.DisplayMember = "ConditionStatusTitle";
-            cmbConditionStatus.ValueMember = "ConditionStatusId";
-            //set selection to -1
-            cmbConditionStatus.SelectedIndex = -1;
+            try { 
+                //laod conditions into the combo box
+                var conditions = dbContext.ConditionStatuses.ToList();
+                cmbConditionStatus.DataSource = conditions;
+                cmbConditionStatus.DisplayMember = "ConditionStatusTitle";
+                cmbConditionStatus.ValueMember = "ConditionStatusId";
+                //set selection to -1
+                cmbConditionStatus.SelectedIndex = -1;
 
-            //load into the data grid view
-            RefreshDataGridView();
+                //load into the data grid view
+                RefreshDataGridView();
+            
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
+            
         }
 
         private void lblReturnID_Click(object sender, EventArgs e)
@@ -79,38 +116,27 @@ namespace RentOpsDesktop
                 txtTransactionID.Text = "";
                 return;
             }
+            //validate that not both text fields are empty
+            if (txtReturnID.Text == "" && txtTransactionID.Text == "")
+            {
+                MessageBox.Show("Please fill one field");
+                return;
+            }
 
             try
             {
+                var returnRecords = dbContext.ReturnRecords.AsQueryable();
+
+                
+
+
                 //if the return ID is filled
                 if (txtReturnID.Text != "")
                 {
                     //get the return record id from the text field
                     int returnRecordId = Convert.ToInt32(txtReturnID.Text);
-
-                    //get the return record with the ID
-                    var returnRecord = dbContext.ReturnRecords.Where(r => r.ReturnRecordId == returnRecordId).Join(dbContext.ConditionStatuses,
-                        rr => rr.ReturnConditionId,
-                        rc => rc.ConditionStatusId,
-                        (returnRecord, ReturnCond) =>
-                        new
-                        {
-                            ReturnRecordID = returnRecord.ReturnRecordId,
-                            RentalTransactionID = returnRecord.RentalTransactionId,
-                            ActualReturnDate = returnRecord.ActualReturnDate,
-                            LateReturnFee = returnRecord.LateReturnFee,
-                            AdditionalCharge = returnRecord.AdditionalCharge,
-                            DocumentID = returnRecord.DocumentId,
-                            ReturnCondition = ReturnCond.ConditionStatusTitle
-
-
-
-                        }).ToList();
-
-                    //show the return record in the data grid view
-                    dgvReturnRecords.DataSource = returnRecord;
-
-
+                    //get the return records with the condition
+                    returnRecords = returnRecords.Where(r => r.ReturnRecordId == returnRecordId);
 
                 }
                 else if (txtTransactionID.Text != "")
@@ -119,31 +145,33 @@ namespace RentOpsDesktop
                     //get the rental transaction id from the text field
                     int rentalTransactionId = Convert.ToInt32(txtTransactionID.Text);
                     //get the return record with the ID
-                    var returnRecord = dbContext.ReturnRecords.Where(r => r.RentalTransactionId == rentalTransactionId).Join(dbContext.ConditionStatuses,
-                        rr => rr.ReturnConditionId,
-                        rc => rc.ConditionStatusId,
-                        (returnRecord, ReturnCond) =>
-                        new
-                        {
-                            ReturnRecordID = returnRecord.ReturnRecordId,
-                            RentalTransactionID = returnRecord.RentalTransactionId,
-                            ActualReturnDate = returnRecord.ActualReturnDate,
-                            LateReturnFee = returnRecord.LateReturnFee,
-                            AdditionalCharge = returnRecord.AdditionalCharge,
-                            DocumentID = returnRecord.DocumentId,
-                            ReturnCondition = ReturnCond.ConditionStatusTitle
+                    returnRecords = returnRecords.Where(r => r.RentalTransactionId == rentalTransactionId);
 
-                        }).ToList();
-
-                    //show the return record in the data grid view
-                    dgvReturnRecords.DataSource = returnRecord;
 
                 }
-                else
-                {
-                    MessageBox.Show("Please fill one field");
-                    return;
-                }
+
+
+
+                //select the full recordds and set the data source
+                var returnRecordslist = returnRecords.Join(dbContext.ConditionStatuses,
+                    rr => rr.ReturnConditionId,
+                    rc => rc.ConditionStatusId,
+                    (returnRecord, ReturnCond) =>
+                    new
+                    {
+                        ReturnRecordID = returnRecord.ReturnRecordId,
+                        RentalTransactionID = returnRecord.RentalTransactionId,
+                        ActualReturnDate = returnRecord.ActualReturnDate,
+                        LateReturnFee = returnRecord.LateReturnFee,
+                        AdditionalCharge = returnRecord.AdditionalCharge,
+                        DocumentID = returnRecord.DocumentId,
+                        ReturnCondition = ReturnCond.ConditionStatusTitle
+                    }).OrderByDescending(d => d.ActualReturnDate).ToList();
+
+
+                dgvReturnRecords.DataSource = returnRecordslist;
+
+
 
             }
             catch (Exception ex)
@@ -185,83 +213,7 @@ namespace RentOpsDesktop
                 return;
             }
 
-            //if only the condition is selected
-            if (cmbConditionStatus.SelectedIndex != -1 && dtpActualReturnDate.Checked == false)
-            {
-
-                //get the selected condition
-                int conditionId = Convert.ToInt32(cmbConditionStatus.SelectedValue);
-                //get the return records with the condition
-                var returnRecords = dbContext.ReturnRecords.Where(r => r.ReturnConditionId == conditionId).Join(dbContext.ConditionStatuses,
-                    rr => rr.ReturnConditionId,
-                    rc => rc.ConditionStatusId,
-                    (returnRecord, ReturnCond) =>
-                    new
-                    {
-                        ReturnRecordID = returnRecord.ReturnRecordId,
-                        RentalTransactionID = returnRecord.RentalTransactionId,
-                        ActualReturnDate = returnRecord.ActualReturnDate,
-                        LateReturnFee = returnRecord.LateReturnFee,
-                        AdditionalCharge = returnRecord.AdditionalCharge,
-                        DocumentID = returnRecord.DocumentId,
-                        ReturnCondition = ReturnCond.ConditionStatusTitle
-                    }).ToList();
-                //show the return record in the data grid view
-                dgvReturnRecords.DataSource = returnRecords;
-            }
-            else if (cmbConditionStatus.SelectedIndex == -1 && dtpActualReturnDate.Checked == true)
-            {
-                //get the selected date
-                DateOnly selectedDate = DateOnly.FromDateTime(dtpActualReturnDate.Value);
-
-
-                //get the return records of the selected date
-                var returnRecords = dbContext.ReturnRecords.Where(r => r.ActualReturnDate == selectedDate).Join(dbContext.ConditionStatuses,
-                    rr => rr.ReturnConditionId,
-                    rc => rc.ConditionStatusId,
-                    (returnRecord, ReturnCond) =>
-                    new
-                    {
-                        ReturnRecordID = returnRecord.ReturnRecordId,
-                        RentalTransactionID = returnRecord.RentalTransactionId,
-                        ActualReturnDate = returnRecord.ActualReturnDate,
-                        LateReturnFee = returnRecord.LateReturnFee,
-                        AdditionalCharge = returnRecord.AdditionalCharge,
-                        DocumentID = returnRecord.DocumentId,
-                        ReturnCondition = ReturnCond.ConditionStatusTitle
-                    }).ToList();
-                //show the return record in the data grid view
-                dgvReturnRecords.DataSource = returnRecords;
-            }//else if both are selected for the filter
-            else if (cmbConditionStatus.SelectedIndex != -1 && dtpActualReturnDate.Checked == true)
-            {
-                //get the selected condition
-                int conditionId = Convert.ToInt32(cmbConditionStatus.SelectedValue);
-                //get the selected date
-                DateOnly selectedDate = DateOnly.FromDateTime(dtpActualReturnDate.Value);
-
-                //get the return records with the condition and the date
-                var returnRecords = dbContext.ReturnRecords.Where(r => r.ReturnConditionId == conditionId && r.ActualReturnDate == selectedDate).Join(dbContext.ConditionStatuses,
-                    rr => rr.ReturnConditionId,
-                    rc => rc.ConditionStatusId,
-                    (returnRecord, ReturnCond) =>
-                    new
-                    {
-                        ReturnRecordID = returnRecord.ReturnRecordId,
-                        RentalTransactionID = returnRecord.RentalTransactionId,
-                        ActualReturnDate = returnRecord.ActualReturnDate,
-                        LateReturnFee = returnRecord.LateReturnFee,
-                        AdditionalCharge = returnRecord.AdditionalCharge,
-                        DocumentID = returnRecord.DocumentId,
-                        ReturnCondition = ReturnCond.ConditionStatusTitle
-                    }).ToList();
-
-                //show the return record in the data grid view
-                dgvReturnRecords.DataSource = returnRecords;
-
-
-            }
-
+            RefreshDataGridView(); // Refresh the DataGridView
         }
 
         private void dtpReturnDate_ValueChanged(object sender, EventArgs e)

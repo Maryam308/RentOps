@@ -51,32 +51,41 @@ namespace RentOpsDesktop
         private void RefreshDataGridView()
         {
 
-
-
-            // Fetch the filtered equipment list and select relevant fields
-            var equipmentList = dbContext.Equipment.Where(e => e.UserId == userId).Select(e => new
+            try
             {
-                EquipmentID = e.EquipmentId, // Select the equipment ID
-                EquipmentName = e.EquipmentName, // Select the equipment name
-                EquipmentDescription = e.EquipmentDescription, // Select the equipment description
-                RentalPrice = e.RentalPrice, // Select the rental price
-                                             //EquipmentQuantity = e.EquipmentQuantity, // Select the equipment quantity
-                ConditionStatus = dbContext.ConditionStatuses
-                    .Where(cs => cs.ConditionStatusId == e.ConditionStatusId)
-                    .Select(cs => cs.ConditionStatusTitle)
-                    .FirstOrDefault(), // Fetch the condition status title
-                AvailabilityStatus = dbContext.AvailabilityStatuses
-                    .Where(a => a.AvailabilityStatusId == e.AvailabilityStatusId)
-                    .Select(a => a.AvailabilityStatusTitle)
-                    .FirstOrDefault(), // Fetch the availability status title
-                EquipmentCategory = dbContext.EquipmentCategories
-                    .Where(ec => ec.EquipmentCategoryId == e.EquipmentCategoryId)
-                    .Select(ec => ec.EquipmentCategoryTitle)
-                    .FirstOrDefault() // Fetch the equipment category title
-            }).ToList(); // Convert the result to a list
 
-            // Bind the fetched data to the DataGridView
-            dgvEquipment.DataSource = equipmentList;
+                // Fetch the filtered equipment list and select relevant fields
+                var equipmentList = dbContext.Equipment.Where(e => e.UserId == userId).Select(e => new
+                {
+                    EquipmentID = e.EquipmentId, // Select the equipment ID
+                    EquipmentName = e.EquipmentName, // Select the equipment name
+                    EquipmentDescription = e.EquipmentDescription, // Select the equipment description
+                    RentalPrice = e.RentalPrice, // Select the rental price
+                    ConditionStatus = dbContext.ConditionStatuses
+                        .Where(cs => cs.ConditionStatusId == e.ConditionStatusId)
+                        .Select(cs => cs.ConditionStatusTitle)
+                        .FirstOrDefault(), // Fetch the condition status title
+                    AvailabilityStatus = dbContext.AvailabilityStatuses
+                        .Where(a => a.AvailabilityStatusId == e.AvailabilityStatusId)
+                        .Select(a => a.AvailabilityStatusTitle)
+                        .FirstOrDefault(), // Fetch the availability status title
+                    EquipmentCategory = dbContext.EquipmentCategories
+                        .Where(ec => ec.EquipmentCategoryId == e.EquipmentCategoryId)
+                        .Select(ec => ec.EquipmentCategoryTitle)
+                        .FirstOrDefault() // Fetch the equipment category title
+                }).ToList(); // Convert the result to a list
+
+                // Bind the fetched data to the DataGridView
+                dgvEquipment.DataSource = equipmentList;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
 
 
         }
@@ -86,43 +95,54 @@ namespace RentOpsDesktop
         private void LoadStatistics()
         {
 
-            // Fetch the total number of current user equipment 
-            var totalEquipment = dbContext.Equipment.Where(e => e.UserId == userId).Count();
+            try
+            {
+
+                // Fetch the total number of current user equipment 
+                var totalEquipment = dbContext.Equipment.Where(e => e.UserId == userId).Count();
 
 
-            //fetch frequently rented equipment object
-            var frequentlyRentedEquipment = dbContext.RentalTransactions
-                .GroupBy(rt => rt.EquipmentId)
-                .Select(g => new
-                {
-                    EquipmentId = g.Key,
-                    EquipmentName = dbContext.Equipment
-                        .Where(e => e.EquipmentId == g.Key)
-                        .Select(e => e.EquipmentName)
-                        .FirstOrDefault(),
-                    RentalCount = g.Count()
-                })
-                .OrderByDescending(g => g.RentalCount)
-                .FirstOrDefault();
+                //fetch frequently rented equipment object
+                var frequentlyRentedEquipment = dbContext.RentalTransactions
+                    .Where(rt => rt.UserId == userId)
+                    .GroupBy(rt => rt.EquipmentId)
+                    .Select(g => new
+                    {
+                        EquipmentId = g.Key,
+                        EquipmentName = dbContext.Equipment
+                            .Where(e => e.EquipmentId == g.Key)
+                            .Select(e => e.EquipmentName)
+                            .FirstOrDefault(),
+                        RentalCount = g.Count()
+                    })
+                    .OrderByDescending(g => g.RentalCount)
+                    .FirstOrDefault();
 
-            //fetch the frequently rented equipment name
-            var frequentlyRentedEquipmentName = frequentlyRentedEquipment != null ? frequentlyRentedEquipment.EquipmentName : "";
+                //fetch the frequently rented equipment name
+                var frequentlyRentedEquipmentName = frequentlyRentedEquipment != null ? frequentlyRentedEquipment.EquipmentName : "";
 
-            //fech the number of the damaged equipment
-            var damagedEquipment = dbContext.Equipment.Where(e => e.UserId == userId)
-                .Count(e => e.ConditionStatusId == 2); // Assuming 2 is the ID for damaged status
-
-
-            // Fetch the total number of available equipment
-            var availableEquipment = dbContext.Equipment.Where(e => e.UserId == userId)
-                .Count(e => e.AvailabilityStatusId == 1); // Assuming 1 is the ID for available status
+                //fech the number of the damaged equipment
+                var damagedEquipment = dbContext.Equipment.Where(e => e.UserId == userId)
+                    .Count(e => e.ConditionStatusId == 2); // Assuming 2 is the ID for damaged status
 
 
-            //display the statistics in the labels
-            lblEquipmentCount.Text = totalEquipment.ToString();
-            lblDamagedEquipment.Text = damagedEquipment.ToString();
-            lblAvailableForRental.Text = availableEquipment.ToString();
-            lblFrequentlyRented.Text = frequentlyRentedEquipmentName;
+                // Fetch the total number of available equipment
+                var availableEquipment = dbContext.Equipment.Where(e => e.UserId == userId)
+                    .Count(e => e.AvailabilityStatusId == 1); // Assuming 1 is the ID for available status
+
+
+                //display the statistics in the labels
+                lblEquipmentCount.Text = totalEquipment.ToString();
+                lblDamagedEquipment.Text = damagedEquipment.ToString();
+                lblAvailableForRental.Text = availableEquipment.ToString();
+                lblFrequentlyRented.Text = frequentlyRentedEquipmentName;
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
 
 
         }
@@ -169,6 +189,11 @@ namespace RentOpsDesktop
             this.Hide(); //hide the current form
             EquipmentInformation screen = new EquipmentInformation();
             screen.Show();
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

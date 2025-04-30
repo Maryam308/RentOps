@@ -28,86 +28,124 @@ namespace RentOpsDesktop
         private void RefreshDataGridView()
         {
 
-            //select the data filtering the overdue returns that are not yet returned 
-            var returnRecords = dbContext.RentalTransactions
-                .Where(x => x.ReturnDate < DateOnly.FromDateTime(DateTime.Now) && x.EmployeeId == currentEmployeeId)
-                .OrderByDescending(d => d.ReturnDate)
-                .Select(r => new
+            try {
+
+
+                //select the overdue transactions that do not have a return record and its retuned date is less than the current date
+
+                //select as queryable
+                IEnumerable<RentalTransaction> rentalTransactions = dbContext.RentalTransactions
+                    .Where(x => x.ReturnDate < DateOnly.FromDateTime(DateTime.Now) && x.EmployeeId == currentEmployeeId)
+                    .OrderByDescending(d => d.ReturnDate)
+                    .AsQueryable();
+
+                //check if filters apply
+
+                //check the return date
+                if (dtpTransctionDate.Checked)
                 {
-                    r.RentalTransactionId,
-                    r.PickupDate,
-                    r.ReturnDate,
-                    r.PaymentId,
-                    r.RentalRequestId,
-                    r.Deposit
-                })
-                .ToList();
+                    DateOnly selectedDate = DateOnly.FromDateTime(dtpTransctionDate.Value);
+                    rentalTransactions = rentalTransactions.Where(r => r.ReturnDate == selectedDate);
+                }
 
-            dgvReturnRecords.DataSource = returnRecords;
+                //check if equipment is selected to filter
+                if (cmbEquipment.SelectedIndex != -1) {
 
+                    //filter the rental transactions by equipment id
+                    int equipmentId = (int)cmbEquipment.SelectedValue;
+                    rentalTransactions = rentalTransactions.Where(r => r.EquipmentId == equipmentId);
+
+                }
+
+                //check if payment status is selected to filter
+                if (cmbPaymentStatus.SelectedIndex != -1)
+                {
+                    //filter the rental transactions by payment status
+                    string paymentStatus = cmbPaymentStatus.SelectedItem.ToString();
+                    if (paymentStatus == "Paid")
+                    {
+                        rentalTransactions = rentalTransactions.Where(r => r.PaymentId != null);
+                    }
+                    else if (paymentStatus == "Not Paid")
+                    {
+                        rentalTransactions = rentalTransactions.Where(r => r.PaymentId == null);
+                    }
+                }
+
+                //check if the equipment is selected to filter
+                var overdueTransactions = rentalTransactions.Select(rt => new
+                {
+                    RentalTransactionId = rt.RentalTransactionId,
+                    PickupDate = rt.PickupDate,
+                    ReturnDate = rt.ReturnDate,
+                    Deposit = rt.Deposit,
+                    RentalFee = rt.RentalFee,
+                    RentalTransactionTimestamp = rt.RentalTransactionTimestamp,
+                    PaymentId = rt.PaymentId,
+                    RentalRequestId = rt.RentalRequestId,
+                    EmployeeId = rt.EmployeeId,
+                    EquipmentId = rt.EquipmentId,
+                    EquipmentName = dbContext.Equipment
+                        .Where(e => e.EquipmentId == rt.EquipmentId)
+                        .Select(e => e.EquipmentName)
+                        .FirstOrDefault(), // Fetch Equipment Name
+                    EmployeeName = dbContext.Users
+                        .Where(emp => emp.UserId == rt.EmployeeId)
+                        .Select(emp => emp.FirstName + " " + emp.LastName)
+                        .FirstOrDefault() // Fetch Employee Full Name
+                                }).ToList(); // Convert the result to a list
+
+                dgvReturnRecords.DataSource = overdueTransactions;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
 
         }
 
         private void OverdueReturns_Load(object sender, EventArgs e)
         {
-            //laod conditions into the combo box
-            var conditions = dbContext.ConditionStatuses.ToList();
-            cmbConditionStatus.DataSource = conditions;
-            cmbConditionStatus.DisplayMember = "ConditionStatusTitle";
-            cmbConditionStatus.ValueMember = "ConditionStatusId";
-            //set selection to -1
-            cmbConditionStatus.SelectedIndex = -1;
+            try {
+                //laod conditions into the combo box
 
-            //load into the data grid view
-            RefreshDataGridView();
+                //load the equipment names 
+                cmbEquipment.DataSource = dbContext.Equipment.ToList();
+                cmbEquipment.DisplayMember = "EquipmentName";
+                cmbEquipment.ValueMember = "EquipmentId";
+                cmbEquipment.SelectedIndex = -1;
+
+                //load into the payment cmbo box a paid and not paid options
+                cmbPaymentStatus.Items.Add("Paid");
+                cmbPaymentStatus.Items.Add("Not Paid");
+                cmbPaymentStatus.SelectedIndex = -1;
+                //set the -1 index to placeholder
+                cmbPaymentStatus.Text = "Select Payment Status";
+
+                //load into the data grid view
+                RefreshDataGridView();
+            
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+            
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            //validate that not both text fields are filled
-            if (txtReturnID.Text != "" && txtTransactionID.Text != "")
+            //validate that the search field is not empty
+            if (txtTransactionID.Text == "")
             {
-                MessageBox.Show("Please fill only one field");
-                //reset the text fields
-                txtReturnID.Text = "";
-                txtTransactionID.Text = "";
+                MessageBox.Show("Please fill the field.");
                 return;
             }
 
             try
             {
-                //if the return ID is filled
-                if (txtReturnID.Text != "")
-                {
-                    //get the return record id from the text field
-                    int returnRecordId = Convert.ToInt32(txtReturnID.Text);
-
-                    //get the return record with the ID
-                    var returnRecord = dbContext.ReturnRecords.Where(r => r.ReturnRecordId == returnRecordId).Join(dbContext.ConditionStatuses,
-                        rr => rr.ReturnConditionId,
-                        rc => rc.ConditionStatusId,
-                        (returnRecord, ReturnCond) =>
-                        new
-                        {
-                            ReturnRecordID = returnRecord.ReturnRecordId,
-                            RentalTransactionID = returnRecord.RentalTransactionId,
-                            ActualReturnDate = returnRecord.ActualReturnDate,
-                            LateReturnFee = returnRecord.LateReturnFee,
-                            AdditionalCharge = returnRecord.AdditionalCharge,
-                            DocumentID = returnRecord.DocumentId,
-                            ReturnCondition = ReturnCond.ConditionStatusTitle
-
-
-
-                        }).ToList();
-
-                    //show the return record in the data grid view
-                    dgvReturnRecords.DataSource = returnRecord;
-
-
-
-                }
-                else if (txtTransactionID.Text != "")
+                if (txtTransactionID.Text != "")
                 {
 
                     //get the rental transaction id from the text field
@@ -133,11 +171,7 @@ namespace RentOpsDesktop
                     dgvReturnRecords.DataSource = returnRecord;
 
                 }
-                else
-                {
-                    MessageBox.Show("Please fill one field");
-                    return;
-                }
+                
 
             }
             catch (Exception ex)
@@ -151,20 +185,15 @@ namespace RentOpsDesktop
 
         private void btnReset_Click(object sender, EventArgs e)
         {
-            //reset the text fields
-            txtReturnID.Text = "";
+            //reset the text field
             txtTransactionID.Text = "";
 
             //reset the combo boxes
-            cmbConditionStatus.SelectedIndex = -1;
-
-            //if the dtp is checked then set the date and then uncheck it 
-            if (dtpActualReturnDate.Checked == true)
-            {
-                dtpActualReturnDate.Value = DateTime.Now;
-                dtpActualReturnDate.Checked = false;
-            }
-
+            cmbEquipment.SelectedIndex = -1;
+            cmbPaymentStatus.SelectedIndex = -1;
+            cmbPaymentStatus.Text = "Select Payment Status";
+            dtpTransctionDate.Value = DateTime.Now; // Reset to current date
+            dtpTransctionDate.Checked = false; // Uncheck the date picker
 
             //reset the dgv
             RefreshDataGridView();
@@ -172,87 +201,16 @@ namespace RentOpsDesktop
 
         private void btnFilter_Click(object sender, EventArgs e)
         {
-            //check if one filter at least is choosen
-            if (cmbConditionStatus.SelectedIndex == -1 && dtpActualReturnDate.Checked == false)
+            //if no filters are selected, show message 
+            if (cmbEquipment.SelectedIndex == -1 && cmbPaymentStatus.SelectedIndex == -1 && dtpTransctionDate.Checked == false)
             {
-                MessageBox.Show("Please select at least one filter");
+                MessageBox.Show("Please select at least one filter.");
                 return;
             }
+            else {
 
-            //if only the condition is selected
-            if (cmbConditionStatus.SelectedIndex != -1 && dtpActualReturnDate.Checked == false)
-            {
-
-                //get the selected condition
-                int conditionId = Convert.ToInt32(cmbConditionStatus.SelectedValue);
-                //get the return records with the condition
-                var returnRecords = dbContext.ReturnRecords.Where(r => r.ReturnConditionId == conditionId).Join(dbContext.ConditionStatuses,
-                    rr => rr.ReturnConditionId,
-                    rc => rc.ConditionStatusId,
-                    (returnRecord, ReturnCond) =>
-                    new
-                    {
-                        ReturnRecordID = returnRecord.ReturnRecordId,
-                        RentalTransactionID = returnRecord.RentalTransactionId,
-                        ActualReturnDate = returnRecord.ActualReturnDate,
-                        LateReturnFee = returnRecord.LateReturnFee,
-                        AdditionalCharge = returnRecord.AdditionalCharge,
-                        DocumentID = returnRecord.DocumentId,
-                        ReturnCondition = ReturnCond.ConditionStatusTitle
-                    }).ToList();
-                //show the return record in the data grid view
-                dgvReturnRecords.DataSource = returnRecords;
-            }
-            else if (cmbConditionStatus.SelectedIndex == -1 && dtpActualReturnDate.Checked == true)
-            {
-                //get the selected date
-                DateOnly selectedDate = DateOnly.FromDateTime(dtpActualReturnDate.Value);
-
-
-                //get the return records of the selected date
-                var returnRecords = dbContext.ReturnRecords.Where(r => r.ActualReturnDate == selectedDate).Join(dbContext.ConditionStatuses,
-                    rr => rr.ReturnConditionId,
-                    rc => rc.ConditionStatusId,
-                    (returnRecord, ReturnCond) =>
-                    new
-                    {
-                        ReturnRecordID = returnRecord.ReturnRecordId,
-                        RentalTransactionID = returnRecord.RentalTransactionId,
-                        ActualReturnDate = returnRecord.ActualReturnDate,
-                        LateReturnFee = returnRecord.LateReturnFee,
-                        AdditionalCharge = returnRecord.AdditionalCharge,
-                        DocumentID = returnRecord.DocumentId,
-                        ReturnCondition = ReturnCond.ConditionStatusTitle
-                    }).ToList();
-                //show the return record in the data grid view
-                dgvReturnRecords.DataSource = returnRecords;
-            }//else if both are selected for the filter
-            else if (cmbConditionStatus.SelectedIndex != -1 && dtpActualReturnDate.Checked == true)
-            {
-                //get the selected condition
-                int conditionId = Convert.ToInt32(cmbConditionStatus.SelectedValue);
-                //get the selected date
-                DateOnly selectedDate = DateOnly.FromDateTime(dtpActualReturnDate.Value);
-
-                //get the return records with the condition and the date
-                var returnRecords = dbContext.ReturnRecords.Where(r => r.ReturnConditionId == conditionId && r.ActualReturnDate == selectedDate).Join(dbContext.ConditionStatuses,
-                    rr => rr.ReturnConditionId,
-                    rc => rc.ConditionStatusId,
-                    (returnRecord, ReturnCond) =>
-                    new
-                    {
-                        ReturnRecordID = returnRecord.ReturnRecordId,
-                        RentalTransactionID = returnRecord.RentalTransactionId,
-                        ActualReturnDate = returnRecord.ActualReturnDate,
-                        LateReturnFee = returnRecord.LateReturnFee,
-                        AdditionalCharge = returnRecord.AdditionalCharge,
-                        DocumentID = returnRecord.DocumentId,
-                        ReturnCondition = ReturnCond.ConditionStatusTitle
-                    }).ToList();
-
-                //show the return record in the data grid view
-                dgvReturnRecords.DataSource = returnRecords;
-
+                //call the refresh method to filter the data grid view
+                RefreshDataGridView();
 
             }
         }
@@ -273,134 +231,13 @@ namespace RentOpsDesktop
 
         }
 
-        private void btnEditReturnRecord_Click(object sender, EventArgs e)
+        private void btnBack_Click(object sender, EventArgs e)
         {
-            // Check if the DataGridView is empty
-            if (dgvReturnRecords.Rows.Count == 0)
-            {
-                MessageBox.Show("No Return Records available to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // Ensure a row is selected
-            if (dgvReturnRecords.SelectedRows.Count == 0 && dgvReturnRecords.SelectedCells.Count == 0)
-            {
-                MessageBox.Show("Please select a record to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // Get the selected row
-            DataGridViewRow selectedRow;
-            if (dgvReturnRecords.SelectedRows.Count > 0)
-            {
-                selectedRow = dgvReturnRecords.SelectedRows[0];
-            }
-            else
-            {
-                int rowIndex = dgvReturnRecords.SelectedCells[0].RowIndex;
-                selectedRow = dgvReturnRecords.Rows[rowIndex];
-            }
-
-            // Check if the selected row is the empty default row
-            if (selectedRow.IsNewRow || selectedRow.Cells["ReturnRecordID"].Value == null)
-            {
-                MessageBox.Show("This row is empty. Please select a valid Record to edit.", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Get the ID of the selected equipment
-            int selectedReturnID = Convert.ToInt32(selectedRow.Cells["ReturnRecordID"].Value);
-
-            // Confirm the edit action
-            DialogResult result = MessageBox.Show($"Are you sure you want to edit the equipment with ID {selectedReturnID}?", "Confirm Edit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                //find the object 
-                ReturnRecord returnRecordToEdit = dbContext.ReturnRecords.Find(selectedReturnID);
-
-                try
-                {
-                    // Pass the object to the edit screen constructor and show the form
-                    EditReturnRecord editReturnRecord = new EditReturnRecord(returnRecordToEdit);
-                    editReturnRecord.StartPosition = FormStartPosition.CenterScreen; // Center the form
-                    editReturnRecord.ShowDialog();
-
-                    if (editReturnRecord.DialogResult == DialogResult.OK)
-                    {
-                        dbContext.ReturnRecords.Update(editReturnRecord.returnRecordToEdit);
-                        dbContext.SaveChanges(); // Save changes to the database
-                        RefreshDataGridView(); // Refresh the DataGridVi
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-
-
-            }
-
-        }
-
-        private void btnDeleteReturnRecord_Click(object sender, EventArgs e)
-        {
-            // Check if the DataGridView is empty
-            if (dgvReturnRecords.Rows.Count == 0)
-            {
-                MessageBox.Show("No Return Records available to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // Ensure a row is selected
-            if (dgvReturnRecords.SelectedRows.Count == 0 && dgvReturnRecords.SelectedCells.Count == 0)
-            {
-                MessageBox.Show("Please select a record to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // Get the selected row
-            DataGridViewRow selectedRow;
-            if (dgvReturnRecords.SelectedRows.Count > 0)
-            {
-                selectedRow = dgvReturnRecords.SelectedRows[0];
-            }
-            else
-            {
-                int rowIndex = dgvReturnRecords.SelectedCells[0].RowIndex;
-                selectedRow = dgvReturnRecords.Rows[rowIndex];
-            }
-
-            // Check if the selected row is the empty default row
-            if (selectedRow.IsNewRow || selectedRow.Cells["ReturnRecordID"].Value == null)
-            {
-                MessageBox.Show("This row is empty. Please select a valid Record to delete.", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Get the ID of the selected equipment
-            int selectedReturnID = Convert.ToInt32(selectedRow.Cells["ReturnRecordID"].Value);
-
-            // Confirm the edit action
-            DialogResult result = MessageBox.Show($"Are you sure you want to delete the return record with ID {selectedReturnID}?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                //find the object 
-                ReturnRecord returnRecordToRemove = dbContext.ReturnRecords.Find(selectedReturnID);
-
-                try
-                {
-                    dbContext.ReturnRecords.Remove(returnRecordToRemove);
-                    dbContext.SaveChanges(); // Save changes to the database
-                    RefreshDataGridView(); // Refresh the DataGridVi  
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-
-
-            }
+            //go back to the rental dashboard
+            RentalDashboard rentalDashboard = new RentalDashboard();
+            rentalDashboard.StartPosition = FormStartPosition.CenterScreen; // Center the form
+            rentalDashboard.Show();
+            this.Hide(); // Hide the current form
         }
     }
 }

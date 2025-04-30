@@ -11,7 +11,7 @@ namespace RentOpsDesktop
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            CustomerReport screen = new CustomerReport();
+            RentalTransactions screen = new RentalTransactions();
             screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             Application.Run(screen);
 
