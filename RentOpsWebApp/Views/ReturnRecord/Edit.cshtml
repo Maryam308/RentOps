@@ -1,0 +1,85 @@
+﻿@using RentOpsWebApp.ViewModels;
+@model ReturnRecordViewModel;
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Edit Return Record</h3>
+            <h4>Edit the record as needed, then save changes.</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+				<!-- Hidden field for ReturnRecordId -->
+                <div class="form-group" hidden>
+                    <label asp-for="theReturnRecord.ReturnRecordId"></label>
+                    <input asp-for="theReturnRecord.ReturnRecordId" class="form-control" hidden readonly="readonly" />
+                </div>
+                <!-- Rental Transaction -->
+                <div class="form-group mb-3">
+                    <label asp-for="theReturnRecord.RentalTransactionId" class="form-label">Associated Rental Transaction ID</label>
+                    <select asp-for="theReturnRecord.RentalTransactionId"
+                            asp-items="@Model.rentalTransactions.Select(i => new SelectListItem { Text = i.RentalTransactionId.ToString() + " | at" + i.RentalTransactionTimestamp.Date, Value = i.RentalTransactionId.ToString() })"
+                            class="form-select">
+                        <option value="">-- Select a Transaction --</option>
+                    </select>
+                    <span asp-validation-for="theReturnRecord.RentalTransactionId" class="text-danger"></span>
+                </div>
+
+                <!-- Actual Return Date -->
+                <div class="form-group mb-3">
+                    <label asp-for="theReturnRecord.ActualReturnDate" class="form-label">Equipment Description</label>
+                    <input asp-for="theReturnRecord.ActualReturnDate" class="form-control" type="date" />
+                    <span asp-validation-for="theReturnRecord.ActualReturnDate" class="text-danger"></span>
+                </div>
+
+                <!-- Return Conditions Dropdown -->
+                <div class="form-group mb-3">
+                    <label asp-for="theReturnRecord.ReturnConditionId" class="form-label">Equipment Category</label>
+                    <select asp-for="theReturnRecord.ReturnConditionId"
+                            asp-items="@Model.conditionStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+                            class="form-select">
+                        <option value="">-- Select Category --</option>
+                    </select>
+                    <span asp-validation-for="theReturnRecord.ReturnConditionId" class="text-danger"></span>
+                </div>
+
+                <!-- Late Return Fee -->
+                <div class="form-group mb-3">
+                    <label asp-for="theReturnRecord.LateReturnFee" class="form-label">Late Return Fee</label>
+                    <input asp-for="theReturnRecord.LateReturnFee" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="theReturnRecord.LateReturnFee" class="text-danger"></span>
+                </div>
+
+                <!-- Additional Charge -->
+                <div class="form-group mb-3">
+                    <label asp-for="theReturnRecord.AdditionalCharge" class="form-label">Late Return Fee</label>
+                    <input asp-for="theReturnRecord.AdditionalCharge" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="theReturnRecord.AdditionalCharge" class="text-danger"></span>
+                </div>
+
+
+                <!-- Additional Documents - Damage Report -- should be uploaded to the documents -->
+                <div>
+                    <label asp-for="theReturnRecord.DocumentId" class="form-label mt-4">Default file input example</label>
+                    <input asp-for="theReturnRecord.DocumentId" class="form-control" type="file" id="formFile">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+
