@@ -1,0 +1,79 @@
+﻿@using RentOpsWebApp.ViewModels;
+@model ReturnRecordViewModel;
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Delete Return Record</h3>
+            <h4>Are you sure you want to delete this Return Record?</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Delete" method="post">
+                <!--Return record ID-->
+                <div class="form-group" hidden>
+                    <label asp-for="theReturnRecord.ReturnRecordId"></label>
+                    <input asp-for="theReturnRecord.ReturnRecordId" class="form-control" hidden readonly="readonly" />
+                </div>
+                <!-- Rental Transaction -->
+                <div class="form-group mb-3">                    
+                    <label asp-for="theReturnRecord.RentalTransactionId" class="form-label">Associated Rental Transaction ID</label>
+                    <select disabled asp-for="theReturnRecord.RentalTransactionId"
+                            asp-items="@Model.rentalTransactions.Select(i => new SelectListItem { Text = i.RentalTransactionId.ToString() + i.RentalTransactionTimestamp.Date, Value = i.RentalTransactionId.ToString() })"
+                            class="form-select">
+                        <option disabled value="0">-- Select a Transaction --</option>
+                    </select>
+                </div>
+
+                <!-- Actual Return Date -->
+                <div class="form-group mb-3">
+                    <label asp-for="theReturnRecord.ActualReturnDate" class="form-label">Equipment Description</label>
+                    <input disabled asp-for="theReturnRecord.ActualReturnDate" class="form-control" type="date" />
+                </div>
+
+                <!-- Return Conditions Dropdown -->
+                <div class="form-group mb-3">
+                    <label asp-for="theReturnRecord.ReturnConditionId" class="form-label">Equipment Category</label>
+                    <select disabled asp-for="theReturnRecord.ReturnConditionId"
+                            asp-items="@Model.conditionStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+                            class="form-select">
+                        <option disabled value="">-- Select Category --</option>
+                    </select>
+                </div>
+
+                <!-- Late Return Fee -->
+                <div class="form-group mb-3">
+                    <label asp-for="theReturnRecord.LateReturnFee" class="form-label">Late Return Fee</label>
+                    <input disabled asp-for="theReturnRecord.LateReturnFee" class="form-control" type="number" step="0.01" />
+                </div>
+
+                <!-- Additional Charge -->
+                <div class="form-group mb-3">
+                    <label asp-for="theReturnRecord.AdditionalCharge" class="form-label">Late Return Fee</label>
+                    <input disabled asp-for="theReturnRecord.AdditionalCharge" class="form-control" type="number" step="0.01" />
+                    <span asp-validation-for="theReturnRecord.AdditionalCharge" class="text-danger"></span>
+                </div>
+    
+
+                <!-- Additional Documents - Damage Report -- should be uploaded to the documents -->
+                <div>
+                    <label asp-for="theReturnRecord.DocumentId" class="form-label mt-4">Default file input example</label>
+                    <input disabled asp-for="theReturnRecord.DocumentId" class="form-control" type="file" id="formFile">
+                </div>
+
+                <button type="submit" class="btn btn-danger">Delete</button>
+
+                <!--Add a Link to go back to the list without deleting-->
+                <a asp-controller="ReturnRecord" asp-action="ReturnRecord" class="btn btn-secondary" style="width:180px">Back to List</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+

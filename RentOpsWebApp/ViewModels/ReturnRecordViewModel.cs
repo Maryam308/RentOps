@@ -8,12 +8,17 @@ namespace RentOpsWebApp.ViewModels
 
         public IEnumerable<ConditionStatus>? conditionStatuses { get; set; }
 
+        public IEnumerable<RentalTransaction>? rentalTransactions { get; set; }
+
         public string? SearchReturnRecordId { get; set; }
 
         public string? SearchRentalTransactionId { get; set; }
 
         public string? SearchConditionStatus { get; set; }
         public string? SearchActualReturnDate { get; set; }
+
+        //object used for crud operations
+        public ReturnRecord theReturnRecord { get; set; }
 
     }
 }

@@ -37,9 +37,9 @@ public partial class ReturnRecord
 
     [ForeignKey("RentalTransactionId")]
     [InverseProperty("ReturnRecords")]
-    public virtual RentalTransaction RentalTransaction { get; set; } = null!;
+    public virtual RentalTransaction? RentalTransaction { get; set; }// = null!;
 
     [ForeignKey("ReturnConditionId")]
     [InverseProperty("ReturnRecords")]
-    public virtual ConditionStatus ReturnCondition { get; set; } = null!;
+    public virtual ConditionStatus? ReturnCondition { get; set; } //= null!;
 }

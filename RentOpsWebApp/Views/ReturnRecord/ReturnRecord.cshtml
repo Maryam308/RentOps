@@ -62,7 +62,7 @@
 		<!--create button-->
 		<div class="col-4 text-end">
 			<!--text end aligns the button to the right side-->
-			<a asp-controller="Equipment" asp-action="AddEquipment" class="btn btn-primary">
+			<a asp-controller="ReturnRecord" asp-action="Create" class="btn btn-primary">
 				<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
 			</a>
 			
@@ -98,10 +98,11 @@
 				<td>@record.AdditionalCharge</td>
 				<td>@record.LateReturnFee</td>
 				<td>@record.DocumentId</td>
-				<td>@record.ReturnCondition.ConditionStatusTitle</td>
+				<td>@record.ReturnCondition.ConditionStatusTitle </td>
 				<td>
-					<a asp-action="Edit" asp-route-id="@record.ReturnRecordId" class="btn btn-primary">Edit</a>
-					<a asp-action="Delete" asp-route-id="@record.ReturnRecordId" class="btn btn-danger">Delete</a>
+						<a asp-action="Edit" asp-route-id="@record.ReturnRecordId" class="btn btn-primary"><i class="bi bi-pencil-square"></i>Edit</a>
+
+						<a asp-action="Delete" asp-route-id="@record.ReturnRecordId" class="btn btn-danger"><i class="bi bi-trash-fill"></i>Delete</a>
 				</td>
 			</tr>
 		}
