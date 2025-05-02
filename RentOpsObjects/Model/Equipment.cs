@@ -47,7 +47,7 @@ public partial class Equipment
     [InverseProperty("Equipment")]
     public virtual EquipmentCategory? EquipmentCategory { get; set; } //= null!;
 
-    [InverseProperty("Equipment")] 
+    [InverseProperty("Equipment")]
     public virtual ICollection<RentalRequest> RentalRequests { get; set; } = new List<RentalRequest>();
 
     [InverseProperty("Equipment")]
@@ -55,5 +55,5 @@ public partial class Equipment
 
     [ForeignKey("UserId")]
     [InverseProperty("Equipment")]
-    public virtual User? User { get; set; } //= null!;
+    public virtual User? User { get; set; } 
 }

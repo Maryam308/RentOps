@@ -26,6 +26,9 @@ public partial class Feedback
     [Column("rentalTransactionID")]
     public int RentalTransactionId { get; set; }
 
+    [Column("isHidden")]
+    public bool IsHidden { get; set; }
+
     [ForeignKey("RentalTransactionId")]
     [InverseProperty("Feedbacks")]
     public virtual RentalTransaction RentalTransaction { get; set; } = null!;
