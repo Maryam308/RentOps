@@ -31,5 +31,5 @@ public partial class Feedback
 
     [ForeignKey("RentalTransactionId")]
     [InverseProperty("Feedbacks")]
-    public virtual RentalTransaction RentalTransaction { get; set; } = null!;
+    public virtual RentalTransaction? RentalTransaction { get; set; } //= null!;
 }

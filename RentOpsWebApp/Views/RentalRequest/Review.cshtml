@@ -5,6 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+
+    //check tempdata for success message
+    if (TempData["Error"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["Error"]
+        </div>
+    }
+
+}
 
 <div class="card border-light mt-5 mb-3 w-100">
     <div class="card-header">
@@ -53,6 +64,9 @@
         <div class="card-body">
             <form asp-action="Review" method="post">
                 @Html.AntiForgeryToken()
+                <!--Add the rental request id in a hidden field-->
+				@* <input type="hidden" asp-for="RentalRequest.RentalRequestId" /> *@
+                <input type="hidden" name="RentalRequest.RentalRequestId" value="@Model.RentalRequest.RentalRequestId" />
                 <!--display the equipment name in readonly input field-->
                 <div class="form-group" >
                     <label disabled asp-for="RentalRequest.Equipment.EquipmentName"></label>
@@ -63,6 +77,7 @@
                 <div class="form-group mb-3">
                     <label disabled asp-for="RentalRequest.RentalStartDate" class="form-label">Pickup Date</label>
                     <input disabled asp-for="RentalRequest.RentalStartDate" class="form-control" type="date" id="PickupDate" />
+
                 </div>
 
                 <!-- Rental Request End Date -->

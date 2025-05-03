@@ -27,6 +27,8 @@ namespace RentOpsWebApp.ViewModels
         //rental request object for the request form 
         public RentalRequest RentalRequest { get; set; } = new RentalRequest();
 
+        //feedbacks related to the equipment
+        public IEnumerable<Feedback>? EquipmentFeedbacks { get; set; }
 
     }
 }
