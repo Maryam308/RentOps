@@ -48,6 +48,14 @@
 					</select>
 				</div>
 
+				Payment Status:
+				<div class="input-group">
+					<select asp-for="SearchPayment" class="form-select">
+						<option value="" disabled selected>Select a Payment Status</option>
+						<option value="Paid">Paid</option>
+						<option value="Not Paid">Not Paid</option>
+					</select>
+				</div>
 
 				<input type="submit" value="Search" class="btn btn-secondary" />
 				<a asp-controller="RentalTransaction" asp-action="RentalTransaction" class="btn btn-outline-danger">Clear</a>

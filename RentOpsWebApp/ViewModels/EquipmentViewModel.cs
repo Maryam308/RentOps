@@ -22,7 +22,10 @@ namespace RentOpsWebApp.ViewModels
         public string? SearchCondition { get; set; }
 
         // For form binding:
-        public Equipment newEquipment { get; set; } = new Equipment();
+        public Equipment NewEquipment { get; set; } = new Equipment();
+
+        //rental request object for the request form 
+        public RentalRequest RentalRequest { get; set; } = new RentalRequest();
 
 
     }
