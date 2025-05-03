@@ -407,6 +407,35 @@ namespace RentOpsWebApp.Controllers
             }
         }
 
+        //get to navigate to the feedback page
+        public IActionResult Details(int? id)
+        {
+            if (id == null || id == 0)
+                return NotFound();
 
-    }
+            var equipmentObject = _context.Equipment.Include(e => e.AvailabilityStatus).Include(e => e.ConditionStatus).Include(e => e.EquipmentCategory).FirstOrDefault(e => e.EquipmentId == id);
+           
+            if (equipmentObject == null)
+                return NotFound();
+
+            // Fetch feedbacks and execute the query immediately
+            var allFeedbacks = _context.Feedbacks
+                .Include(f => f.RentalTransaction)
+                .Where(f => f.RentalTransaction != null && f.RentalTransaction.EquipmentId == id) ;
+
+            var viewmodel = new EquipmentViewModel
+            {
+                NewEquipment = equipmentObject,
+                EquipmentCategories = _context.EquipmentCategories,
+                EquipmentAvailability = _context.AvailabilityStatuses,
+                EquipmentStatuses = _context.ConditionStatuses,
+                EquipmentFeedbacks = allFeedbacks.ToList(),
+            };
+
+            return View(viewmodel);
+
+        }
+
+
+        }
 }

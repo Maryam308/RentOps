@@ -1,8 +1,8 @@
 ﻿@using RentOpsWebApp.ViewModels;
 @model RentalRequestViewModel;
 @{
-    ViewData["Title"] = "RentalRequest";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+		ViewData["Title"] = "RentalRequest";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
@@ -13,6 +13,14 @@
 		<div class="alert alert-success" role="alert">
 			@TempData["CreateSuccess"]
 		</div>
+	}
+	else if (TempData["Rejected"] != null)
+	{
+
+		<div class="alert alert-danger" role="alert">
+			@TempData["Rejected"]
+		</div>
+	
 	}
 
 }

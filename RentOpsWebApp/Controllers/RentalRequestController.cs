@@ -9,7 +9,7 @@ namespace RentOpsWebApp.Controllers
     public class RentalRequestController : Controller
     {
 
-        private readonly RentOpsDBContext _context;
+        private  RentOpsDBContext _context;
 
         public RentalRequestController(RentOpsDBContext context)
         {
@@ -72,6 +72,7 @@ namespace RentOpsWebApp.Controllers
                 .Include(r => r.Equipment)
                 .Include(r => r.User)
                 .FirstOrDefault(r => r.RentalRequestId == id);
+
             if (rentalRequest == null)
             {
                 return NotFound();
@@ -88,97 +89,74 @@ namespace RentOpsWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Review(RentalRequestViewModel model)
         {
-               
-
-            if (!ModelState.IsValid)
-            {
-                TempData["Error"] = "Something went wrong while creating the rental request.";
-                return RedirectToAction("Review", new { id = model.RentalRequest.EquipmentId });
-            }
-
+            
             try
             {
-
-
-                if (model.RentalRequest.RentalRequestStatusId == 2)
+                if (model.RentalRequest.RentalRequestId == 0) // Check if ID was passed
                 {
+                    TempData["Error"] = "Invalid Rental Request ID.";
+                    return RedirectToAction("RentalRequest");
+                }
 
-                    //update the rental request status
-                    var rentalRequest = _context.RentalRequests
-                        .Include(r => r.RentalRequestStatus)
-                        .Include(r => r.Equipment)
-                        .Include(r => r.User)
-                        .FirstOrDefault(r => r.RentalRequestId == model.RentalRequest.RentalRequestId);
+                RentalRequest rentalRequest = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == model.RentalRequest.RentalRequestId);
 
-                    if (rentalRequest == null)
-                    {
+                if (!ModelState.IsValid)
+                {
+                    TempData["Error"] = "Something went wrong while creating the rental request.";
+                    return RedirectToAction("Review", new { id = model.RentalRequest.RentalRequestId });
+                }
 
-                        TempData["Error"] = "Rental request not found.";
-                        return RedirectToAction("Review", new { id = model.RentalRequest.EquipmentId });
 
-                    }
+                if (rentalRequest == null)
+                {
+                    TempData["Error"] = "Rental request not found.";
+                    return RedirectToAction("Review", new { id = model.RentalRequest.EquipmentId });
+                }
 
-                    // Update the rental request status
-                    rentalRequest.RentalRequestStatusId = 2;
+                //  Handle Pending Requests
+                if (model.RentalRequest.RentalRequestStatusId == 1)
+                {
+                    return RedirectToAction("RentalRequest"); // Go to Rental Requests view  
+                }
 
-                    // Update in the database
-                    _context.RentalRequests.Update(rentalRequest);
+                //  Handle Rejected Requests
+                if (model.RentalRequest.RentalRequestStatusId == 3)
+                {
+                    rentalRequest.RentalRequestStatusId = 3; // Update status to Rejected
+                    _context.Entry(rentalRequest).Property(r => r.RentalRequestStatusId).IsModified = true;
                     _context.SaveChanges();
 
-                    // If the request is approved, create a transaction
-                    if (rentalRequest.RentalRequestStatusId == 2)
+                    TempData["Rejected"] = "Rental request has been rejected.";
+                    return RedirectToAction("RentalRequest"); // Go to Rental Requests view  
+                }
+
+                // Handle Approved Requests
+                if (model.RentalRequest.RentalRequestStatusId == 2)
+                {
+                    rentalRequest.RentalRequestStatusId = 2; // Update status to Approved
+                    _context.Entry(rentalRequest).Property(r => r.RentalRequestStatusId).IsModified = true;
+                    _context.SaveChanges();
+
+                    // Create a transaction
+                    var transaction = new RentalTransaction
                     {
-                        RentalTransaction transaction;
-
-                        //assign the values to the already created transaction from the model
-                        transaction = model.NewRentalTransaction;
-                        transaction.RentalTransactionTimestamp = DateTime.Now;
-                        transaction.RentalRequestId = rentalRequest.RentalRequestId;
-                        transaction.EquipmentId = rentalRequest.EquipmentId;
-                        transaction.RentalFee = model.RentalRequest.RentalTotalCost;
-                        transaction.EmployeeId = 1; // You might want to set this based on business logic
-                        transaction.PaymentId = null;
-
-
-                        _context.RentalTransactions.Add(transaction);
-                        _context.SaveChanges();
-
-                        TempData["CreateSuccess"] = "Rental Request Approved! A transaction has been created.";
-                    }
-
-                    var rentalRequestViewModel = new RentalRequestViewModel
-                    {
-                        rentalRequests = _context.RentalRequests
-                            .Include(r => r.RentalRequestStatus)
-                            .Include(r => r.Equipment)
-                            .Include(r => r.User)
-                            .OrderByDescending(r => r.RentalStartDate)
-                            .ToList(),
-                        rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
-                        equipmentTitle = _context.Equipment.ToList(),
+                        RentalTransactionTimestamp = DateTime.Now,
+                        RentalRequestId = rentalRequest.RentalRequestId,
+                        EquipmentId = rentalRequest.EquipmentId,
+                        PickupDate = rentalRequest.RentalStartDate,
+                        ReturnDate = rentalRequest.RentalReturnDate ,
+                        RentalFee = model.RentalRequest.RentalTotalCost,
+                        EmployeeId = 1, // You might want to fetch this dynamically
+                        PaymentId = null
                     };
 
-                    return View("RentalRequest", rentalRequestViewModel);
+                    _context.RentalTransactions.Add(transaction);
+                    _context.SaveChanges();
 
+                    TempData["CreateSuccess"] = "Rental Request Approved! A transaction has been created.";
                 }
-                else {
 
-                    
-                    var rentalRequestViewModel = new RentalRequestViewModel
-                    {
-                        rentalRequests = _context.RentalRequests
-                            .Include(r => r.RentalRequestStatus)
-                            .Include(r => r.Equipment)
-                            .Include(r => r.User)
-                            .OrderByDescending(r => r.RentalStartDate)
-                            .ToList(),
-                        rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
-                        equipmentTitle = _context.Equipment.ToList(),
-                    };
-
-                    return View("RentalRequest",rentalRequestViewModel);
-
-                }
+                return RedirectToAction("RentalRequest"); // Go to Rental Requests view
             }
             catch (Exception ex)
             {

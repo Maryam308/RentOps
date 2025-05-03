@@ -102,6 +102,8 @@
 			<th>Equipment Status</th>
 			<th>Availability</th>
 			<th>Rental Price</th>
+			<th>Details & Reviews</th>
+			<th></th>
 			<th></th>
 		</tr>
 	</thead>
@@ -111,10 +113,12 @@
 			<tr class="text-center">
 				<td>@record.EquipmentId</td>
 				<td>@record.EquipmentName</td>
+				<td style="font-size:medium">@record.EquipmentDescription</td>
 				<td>@record.EquipmentCategory.EquipmentCategoryTitle</td>
 				<td>@record.ConditionStatus.ConditionStatusTitle</td>
 				<td>@record.AvailabilityStatus.AvailabilityStatusTitle</td>
 				<td>@record.RentalPrice</td>
+					<td><a asp-action="Details" asp-route-id="@record.EquipmentId">Info</a></td>
 
 				<!--if role is customer-->
 				<td>

@@ -1,0 +1,59 @@
+﻿@using RentOpsWebApp.ViewModels;
+@model EquipmentViewModel;
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="container mt-4">
+    <!-- Equipment Details -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+			<h3>@Model.NewEquipment?.EquipmentName</h3>
+        </div>
+        <div class="card-body">
+            
+            <p><strong>Category:</strong> @Model.NewEquipment?.EquipmentCategory?.EquipmentCategoryTitle</p>
+            <p><strong>Status:</strong> @Model.NewEquipment?.ConditionStatus?.ConditionStatusTitle </p>
+            <p><strong>Availability:</strong> @Model.NewEquipment?.AvailabilityStatus?.AvailabilityStatusTitle</p>
+            <p><strong>Description:</strong> @Model.NewEquipment?.EquipmentDescription"</p>
+        </div>
+    </div>
+
+    <!-- Feedback Section -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h4>Customer Feedback</h4>
+        </div>
+        <div class="card-body">
+            @if (Model.EquipmentFeedbacks.Any())
+            {
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Rating</th>
+                            <th>Timestamp</th>
+                            <th>Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var feedback in Model.EquipmentFeedbacks)
+                        {
+                            <tr>
+                                <td>@feedback.Rating / 5</td>
+                                <td>@feedback.FeedbackTimestamp.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td>@feedback.CommentText</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No feedback available for this equipment.</p>
+            }
+        </div>
+    </div>
+</div>
+

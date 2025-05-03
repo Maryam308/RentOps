@@ -126,10 +126,9 @@ namespace RentOpsWebApp.Areas.Identity.Pages.Account
 
             if (!_roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
             {
-                _roleManager.CreateAsync(new IdentityRole("SuperAdmin")).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole("Admin")).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole("Sales")).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole("Viewer")).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole("Manager")).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole("Rental User")).GetAwaiter().GetResult();
             }
 
             ReturnUrl = returnUrl;
@@ -158,6 +157,15 @@ namespace RentOpsWebApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    if (Input.Role == null || Input.Role == "0")
+                    {
+                        await _userManager.AddToRoleAsync(user, "Viewer"); // If no role was selected, assign the user as a Viewer
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, Input.Role); // If a role was selected, assign it to the user
+                    }
+
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
