@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
+using Microsoft.AspNetCore.Identity;
+using RentOpsWebApp.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,15 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<RentOpsDBContext>(options => options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+
+//Inject Identity Database Context
+builder.Services.AddDbContext<RentOpsWebAppContext>(options => options.UseSqlServer(
+    builder.Configuration.GetConnectionString("IdentityContextConnection")
+    ));
+
+builder.Services.AddDefaultIdentity<IdentityUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<RentOpsWebAppContext>();
 
 
 var app = builder.Build();
@@ -26,11 +38,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication(); ;
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapRazorPages();
 app.Run();
