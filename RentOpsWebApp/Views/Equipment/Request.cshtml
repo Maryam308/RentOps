@@ -1,0 +1,153 @@
+﻿@using RentOpsWebApp.ViewModels;
+@model EquipmentViewModel
+@{
+    ViewData["Title"] = "Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!--Check if there is a success message to display-->
+@{
+    if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["Error"].ToString()
+        </div>
+    }
+}
+
+<div class="card border-light mt-5 mb-3 w-100">
+    <div class="card-header">
+        <h3>Equipment Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!--Equipment Id-->
+            <div class="col-md-6 mb-3">
+                <label asp-for="NewEquipment.EquipmentId" class="form-label">Equipment ID</label>
+                <input asp-for="NewEquipment.EquipmentId"  type="text" class="form-control" value="@Model.NewEquipment.EquipmentId" disabled>
+            </div>
+            <!--Equipment Name-->
+            <div class="col-md-6 mb-3">
+                <label asp-for="NewEquipment.EquipmentName" class="form-label">Equipment Name</label>
+                <input asp-for="NewEquipment.EquipmentName" type="text" class="form-control" value="@Model.NewEquipment.EquipmentName" disabled>
+            </div>
+            <!--Equipment Description-->
+            <div class="col-md-12 mb-3">
+                <label asp-for="NewEquipment.EquipmentDescription" class="form-label">Description</label>
+                <textarea asp-for="NewEquipment.EquipmentDescription" class="form-control" rows="2" disabled>@Model.NewEquipment.EquipmentDescription</textarea>
+            </div>
+            <!--Equipment Rental price-->
+            <div class="col-md-6 mb-3">
+                <label asp-for="NewEquipment.RentalPrice" class="form-label">Rental Price (Day)</label>
+                <input asp-for="NewEquipment.RentalPrice" type="text" class="form-control" value="@Model.NewEquipment.RentalPrice" disabled>
+            </div>
+            <!--Equipment Category-->
+            <div class="col-md-6 mb-3">
+                <label asp-for="NewEquipment.EquipmentCategoryId" class="form-label">Equipment Category</label>
+                <select disabled asp-for="NewEquipment.EquipmentCategoryId"
+                asp-items="@Model.EquipmentCategories.Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
+                class="form-select">
+                    <option disabled value="">-- Select Category --</option>
+                </select>
+            </div>
+            <!--Equipment Condition-->
+            <div class="col-md-6 mb-3">
+                <label asp-for="NewEquipment.ConditionStatusId" class="form-label">Equipment Condition</label>
+                <select disabled asp-for="NewEquipment.ConditionStatusId"
+                asp-items="@Model.EquipmentStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+                class="form-select">
+                    <option disabled value="">-- Select Category --</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Form to add rental details including start to end and cost-->
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Request for Rental</h3>
+            <h4>Fill in the details and request the equipment for rental.</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Request" method="post">
+                @Html.AntiForgeryToken()
+                <!--add the equipment id from a hidden field-->
+                <div class="form-group" hidden>
+                    <label asp-for="NewEquipment.EquipmentId"></label>
+                    <input asp-for="NewEquipment.EquipmentId" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="NewEquipment.EquipmentId" class="text-danger"></span>
+                </div>
+                <!-- Rental Request Start Date -->
+                <div class="form-group mb-3">
+                    <label asp-for="RentalRequest.RentalStartDate" class="form-label">Pickup Date</label>
+                    <input asp-for="RentalRequest.RentalStartDate" class="form-control" type="date" id="PickupDate" value="@DateTime.UtcNow.ToString("yyyy-MM-dd")" required />
+                    <span asp-validation-for="RentalRequest.RentalStartDate" class="text-danger"></span>
+                </div>
+
+                <!-- Rental Request End Date -->
+                <div class="form-group mb-3">
+                    <label asp-for="RentalRequest.RentalReturnDate" class="form-label">Return Date</label>
+                    <input asp-for="RentalRequest.RentalReturnDate" class="form-control" type="date" id="ReturnDate"  value="@DateTime.UtcNow.ToString("yyyy-MM-dd")" required />
+                    <span asp-validation-for="RentalRequest.RentalReturnDate" class="text-danger"></span>
+                </div>
+
+                <!-- Total Cost (Disabled) -->
+                <div class="form-group mb-3">
+                    <label asp-for="RentalRequest.RentalTotalCost" class="form-label">Total Cost</label>
+                    <input asp-for="RentalRequest.RentalTotalCost" type="text" class="form-control" id="TotalCost" name="TotalCost"  readonly />
+                    <!-- Hidden field to ensure value is submitted -->
+                    <input type="hidden" asp-for="RentalRequest.RentalTotalCost" id="HiddenTotalCost" />
+
+                </div>
+
+                <button type="submit" class="btn btn-info">Request Equipment</button>
+
+                <!--Add a Link to go back to the list without deleting--> 
+                <a asp-controller="Equipment" asp-action="Equipment" class="btn btn-secondary" style="width:180px">Back to List</a>
+
+            </form>
+        </div>
+    </div>
+</div>
+<!--JS function to dynamically update the rental cost -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fix ID binding
+        const startDate = document.getElementById("PickupDate");
+        const endDate = document.getElementById("ReturnDate");
+        const totalCost = document.getElementById("TotalCost");
+        const rentalPrice = parseFloat(@Model.NewEquipment.RentalPrice); // Ensure it's a valid number
+
+                function calculateCost() {
+        if (startDate.value && endDate.value) {
+            const start = new Date(startDate.value);
+            const end = new Date(endDate.value);
+            const days = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+
+            if (days > 0) {
+                let cost = (days * rentalPrice).toFixed(2);
+                totalCost.value = cost;  // Display clean numeric value
+                document.getElementById("HiddenTotalCost").value = cost; // Ensure hidden field gets updated
+            } else {
+                totalCost.value = "Invalid dates";
+            }
+        }
+    }
+
+        // Attach event listeners
+        startDate.addEventListener("change", calculateCost);
+        endDate.addEventListener("change", calculateCost);
+    });
+</script>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

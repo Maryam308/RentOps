@@ -3,6 +3,7 @@ using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Abstractions;
 
 namespace RentOpsWebApp.Controllers
 {
@@ -42,17 +43,17 @@ namespace RentOpsWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult AddEquipment(EquipmentViewModel model)
         {
-            if (model.newEquipment.RentalPrice <= 0)
+            if (model.NewEquipment.RentalPrice <= 0)
             {
                 ModelState.AddModelError("newEquipment.RentalPrice", "Rental Price must be greater than 0.");
             }
             
-            model.newEquipment.UserId = 1; // Set the UserId to 1 for now, as we don't have user authentication yet.
+            model.NewEquipment.UserId = 1; // Set the UserId to 1 for now, as we don't have user authentication yet.
             //check if modelstate is valid
 
             if (ModelState.IsValid)
             {
-                _context.Equipment.Add(model.newEquipment);
+                _context.Equipment.Add(model.NewEquipment);
                 _context.SaveChanges();
 
                 TempData["CreateSuccess"] = "Equipment added successfully.";
@@ -74,7 +75,7 @@ namespace RentOpsWebApp.Controllers
                     EquipmentCategories = _context.EquipmentCategories.ToList(),
                     EquipmentAvailability = _context.AvailabilityStatuses.ToList(),
                     EquipmentStatuses = _context.ConditionStatuses.ToList(),
-                    newEquipment = model.newEquipment // so the input stays
+                    NewEquipment = model.NewEquipment // so the input stays
                 };
 
                 return View("Equipment", viewmodel);
@@ -213,7 +214,7 @@ namespace RentOpsWebApp.Controllers
 
             var viewmodel = new EquipmentViewModel
             {
-                newEquipment = equipmentObject,
+                NewEquipment = equipmentObject,
                 //get all equipment categories from the database
                 EquipmentCategories = _context.EquipmentCategories,
                 //get all equipment availability statuses from the database
@@ -262,7 +263,7 @@ namespace RentOpsWebApp.Controllers
 
             var viewmodel = new EquipmentViewModel
             {
-                newEquipment = equipmentObject,
+                NewEquipment = equipmentObject,
                 //get all equipment categories from the database
                 EquipmentCategories = _context.EquipmentCategories,
                 //get all equipment availability statuses from the database
@@ -279,20 +280,20 @@ namespace RentOpsWebApp.Controllers
         public IActionResult Edit(EquipmentViewModel toEditEquipment)
         {
             //check if the id is null or 0
-            if (toEditEquipment.newEquipment.RentalPrice <= 0)
+            if (toEditEquipment.NewEquipment.RentalPrice <= 0)
             {
                 ModelState.AddModelError("newEquipment.RentalPrice", "Rental Price must be greater than 0.");
             }
 
 
             //as a placeholder, we will set the user id to 1
-            toEditEquipment.newEquipment.UserId = 1;
+            toEditEquipment.NewEquipment.UserId = 1;
 
             //check if modelstate is valid
             if (ModelState.IsValid)
             {
                 //update the equipment object in the database and save changes
-                _context.Equipment.Update(toEditEquipment.newEquipment);
+                _context.Equipment.Update(toEditEquipment.NewEquipment);
                 _context.SaveChanges();
 
                 //add success message to tempdata
@@ -318,13 +319,92 @@ namespace RentOpsWebApp.Controllers
                     EquipmentCategories = _context.EquipmentCategories.ToList(),
                     EquipmentAvailability = _context.AvailabilityStatuses.ToList(),
                     EquipmentStatuses = _context.ConditionStatuses.ToList(),
-                    newEquipment = toEditEquipment.newEquipment // so the input stays
+                    NewEquipment = toEditEquipment.NewEquipment // so the input stays
                 };
 
                 return View("Equipment", viewmodel);
 
             }
 
+        }
+
+        //get to navigate to the request page
+        public IActionResult Request(int? id)
+        {
+            //check if the id is null or 0
+            if (id == null || id == 0)
+                return NotFound();
+
+            //find the equipment object in the database
+            var equipmentObject = _context.Equipment.Find(id);
+
+            //check if the equipment object is null
+            if (equipmentObject == null)
+                return NotFound();
+
+            var viewmodel = new EquipmentViewModel
+            {
+                NewEquipment = equipmentObject,
+                //get all equipment categories from the database
+                EquipmentCategories = _context.EquipmentCategories,
+                //get all equipment availability statuses from the database
+                EquipmentAvailability = _context.AvailabilityStatuses,
+                //get all equipment condition statuses from the database
+                EquipmentStatuses = _context.ConditionStatuses,
+
+            };
+            return View(viewmodel);
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Request(EquipmentViewModel model)
+        {
+           
+
+            if (model.RentalRequest.RentalStartDate >= model.RentalRequest.RentalReturnDate)
+            {
+                ModelState.AddModelError("RentalRequest.RentalReturnDate", "Pickup date must be before return date.");
+                
+            } 
+            
+            model.RentalRequest.UserId = 1; // Set the UserId to 1 for now, as we don't have user authentication yet.
+            model.RentalRequest.EquipmentId = model.NewEquipment.EquipmentId; // Set the EquipmentId to the selected equipment
+            model.RentalRequest.RentalRequestTimestamp = DateTime.Now; // Set the RentalRequestTimestamp to the current date and time
+            model.RentalRequest.RentalRequestStatusId = 1; // Set the RentalRequestStatusId to 1 
+
+            // Remove validation errors for Equipment
+            ModelState.Remove("NewEquipment");
+            ModelState.Remove("NewEquipment.EquipmentName");
+            ModelState.Remove("NewEquipment.EquipmentDescription");
+            ModelState.Remove("NewEquipment.RentalPrice");
+
+
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Something went wrong, Check your data and try again.";
+                return RedirectToAction("Request", new { id = model.NewEquipment.EquipmentId });
+
+            }
+
+            try
+            {
+
+                // Save to database
+                _context.RentalRequests.Add(model.RentalRequest);
+                _context.SaveChanges();
+                TempData["CreateSuccess"] = "Rental Request Created Successfully.";
+
+                return RedirectToAction("Equipment");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Something went wrong while creating the rental request. Please try again.";
+                Console.WriteLine(ex.Message);
+                return View(model);
+            }
         }
 
 

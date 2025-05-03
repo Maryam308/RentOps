@@ -17,5 +17,7 @@ namespace RentOpsWebApp.ViewModels
         public string? SearchEquipmentId { get; set; }
 
 
+        public RentalRequest RentalRequest { get; set; } = new RentalRequest();
+
     }
 }

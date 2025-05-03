@@ -19,7 +19,7 @@ namespace RentOpsWebApp.Controllers
         {
             return View();
         }
-        public IActionResult RentalTransaction(string searchRentalTransactionId, string SearchRentalRequestId, string searchEmployeeId, string SearchEquipment, string SearchTransactionDate)
+        public IActionResult RentalTransaction(string searchRentalTransactionId, string SearchRentalRequestId, string searchEmployeeId, string SearchEquipment, string SearchTransactionDate, string SearchPayment)
         {
 
             IEnumerable<RentalTransaction> rentalTransactions = _context.RentalTransactions
@@ -64,14 +64,26 @@ namespace RentOpsWebApp.Controllers
                 );
             }
 
-           /* 
+
             if (!String.IsNullOrEmpty(SearchPayment))
             {
-                rentalTransactions = rentalTransactions.Where(p =>
-                    p.PaymentId == Convert.ToInt32(SearchPayment)
-                );
+
+                //if searchpayment is = paid then we filter the list to show only the paid transactions
+                if (SearchPayment == "Paid")
+                {
+                    rentalTransactions = rentalTransactions.Where(p =>
+                        p.Payment != null
+                    );
+                }
+                else if (SearchPayment == "Not Paid") {
+
+                    rentalTransactions = rentalTransactions.Where(p =>
+                        p.Payment == null
+                    );
+
+                }
             }
-           */
+
 
             if (!string.IsNullOrEmpty(SearchTransactionDate))
             {

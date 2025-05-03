@@ -17,7 +17,7 @@ public partial class RentalRequest
     public DateOnly RentalStartDate { get; set; }
 
     [Column("rentalReturnDate")]
-    public DateOnly? RentalReturnDate { get; set; }
+    public DateOnly RentalReturnDate { get; set; }
 
     [Column("rentalTotalCost")]
     public double RentalTotalCost { get; set; }

@@ -14,25 +14,25 @@
         <div class="card-body">
             <form asp-action="Delete" method="post">
                 <div class="form-group" hidden>
-                    <label asp-for="newEquipment.EquipmentId"></label>
-                    <input asp-for="newEquipment.EquipmentId" class="form-control" hidden readonly="readonly" />
+                    <label asp-for="NewEquipment.EquipmentId"></label>
+                    <input asp-for="NewEquipment.EquipmentId" class="form-control" hidden readonly="readonly" />
                 </div>
                 <!-- Equipment Name -->
                 <div class="form-group mb-3">
-                    <label asp-for="newEquipment.EquipmentName" class="form-label">Equipment Name</label>
-                    <input disabled asp-for="newEquipment.EquipmentName" class="form-control" />
+                    <label asp-for="NewEquipment.EquipmentName" class="form-label">Equipment Name</label>
+                    <input disabled asp-for="NewEquipment.EquipmentName" class="form-control" />
                 </div>
 
                 <!-- Equipment Description -->
                 <div class="form-group mb-3">
-                    <label asp-for="newEquipment.EquipmentDescription" class="form-label">Equipment Description</label>
-                    <input disabled asp-for="newEquipment.EquipmentDescription" class="form-control" />
+                    <label asp-for="NewEquipment.EquipmentDescription" class="form-label">Equipment Description</label>
+                    <input disabled asp-for="NewEquipment.EquipmentDescription" class="form-control" />
                 </div>
 
                 <!-- Equipment Category Dropdown -->
                 <div class="form-group mb-3">
-                    <label asp-for="newEquipment.EquipmentCategoryId" class="form-label">Equipment Category</label>
-                    <select disabled asp-for="newEquipment.EquipmentCategoryId"
+                    <label asp-for="NewEquipment.EquipmentCategoryId" class="form-label">Equipment Category</label>
+                    <select disabled asp-for="NewEquipment.EquipmentCategoryId"
                             asp-items="@Model.EquipmentCategories.Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
                             class="form-select">
                         <option disabled value="0">-- Select Category --</option>
@@ -41,14 +41,14 @@
 
                 <!-- Rental Price -->
                 <div class="form-group mb-3">
-                    <label asp-for="newEquipment.RentalPrice" class="form-label">Rental Price</label>
-                    <input disabled asp-for="newEquipment.RentalPrice" class="form-control" type="number" step="0.01" />
+                    <label asp-for="NewEquipment.RentalPrice" class="form-label">Rental Price</label>
+                    <input disabled asp-for="NewEquipment.RentalPrice" class="form-control" type="number" step="0.01" />
                 </div>
 
                 <!-- Condition Status Dropdown -->
                 <div class="form-group mb-3">
-                    <label asp-for="newEquipment.ConditionStatusId" class="form-label">Condition Status</label>
-                    <select disabled asp-for="newEquipment.ConditionStatusId"
+                    <label asp-for="NewEquipment.ConditionStatusId" class="form-label">Condition Status</label>
+                    <select disabled asp-for="NewEquipment.ConditionStatusId"
                             asp-items="@Model.EquipmentStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
                             class="form-select">
                         <option disabled value="0">-- Select Condition --</option>
@@ -57,8 +57,8 @@
 
                 <!-- Availability Status Dropdown -->
                 <div class="form-group mb-4">
-                    <label asp-for="newEquipment.AvailabilityStatusId" class="form-label">Availability Status</label>
-                    <select disabled asp-for="newEquipment.AvailabilityStatusId"
+                    <label asp-for="NewEquipment.AvailabilityStatusId" class="form-label">Availability Status</label>
+                    <select disabled asp-for="NewEquipment.AvailabilityStatusId"
                             asp-items="@Model.EquipmentAvailability.Select(i => new SelectListItem { Text = i.AvailabilityStatusTitle, Value = i.AvailabilityStatusId.ToString() })"
                             class="form-select">
                         <option disabled value="0">-- Select Availability --</option>

@@ -62,5 +62,31 @@ namespace RentOpsWebApp.Controllers
 
             return View(rentalRequestViewModel);
         }
+
+
+        //get to navigate to the review page
+        public IActionResult Review(int id)
+        {
+            var rentalRequest = _context.RentalRequests
+                .Include(r => r.RentalRequestStatus)
+                .Include(r => r.Equipment)
+                .Include(r => r.User)
+                .FirstOrDefault(r => r.RentalRequestId == id);
+            if (rentalRequest == null)
+            {
+                return NotFound();
+            }
+            var rentalRequestViewModel = new RentalRequestViewModel
+            {
+                RentalRequest = rentalRequest,
+                rentalRequestStatuses = _context.RentalRequestStatuses.ToList(), 
+            };
+            return View(rentalRequestViewModel);
+        }
+
+
+
+
+
     }
 }
