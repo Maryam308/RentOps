@@ -19,5 +19,8 @@ namespace RentOpsWebApp.ViewModels
 
         public RentalRequest RentalRequest { get; set; } = new RentalRequest();
 
+
+        public RentalTransaction NewRentalTransaction { get; set; } = new RentalTransaction();
+
     }
 }

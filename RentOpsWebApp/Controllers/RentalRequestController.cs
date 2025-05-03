@@ -84,7 +84,109 @@ namespace RentOpsWebApp.Controllers
             return View(rentalRequestViewModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Review(RentalRequestViewModel model)
+        {
+               
 
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Something went wrong while creating the rental request.";
+                return RedirectToAction("Review", new { id = model.RentalRequest.EquipmentId });
+            }
+
+            try
+            {
+
+
+                if (model.RentalRequest.RentalRequestStatusId == 2)
+                {
+
+                    //update the rental request status
+                    var rentalRequest = _context.RentalRequests
+                        .Include(r => r.RentalRequestStatus)
+                        .Include(r => r.Equipment)
+                        .Include(r => r.User)
+                        .FirstOrDefault(r => r.RentalRequestId == model.RentalRequest.RentalRequestId);
+
+                    if (rentalRequest == null)
+                    {
+
+                        TempData["Error"] = "Rental request not found.";
+                        return RedirectToAction("Review", new { id = model.RentalRequest.EquipmentId });
+
+                    }
+
+                    // Update the rental request status
+                    rentalRequest.RentalRequestStatusId = 2;
+
+                    // Update in the database
+                    _context.RentalRequests.Update(rentalRequest);
+                    _context.SaveChanges();
+
+                    // If the request is approved, create a transaction
+                    if (rentalRequest.RentalRequestStatusId == 2)
+                    {
+                        RentalTransaction transaction;
+
+                        //assign the values to the already created transaction from the model
+                        transaction = model.NewRentalTransaction;
+                        transaction.RentalTransactionTimestamp = DateTime.Now;
+                        transaction.RentalRequestId = rentalRequest.RentalRequestId;
+                        transaction.EquipmentId = rentalRequest.EquipmentId;
+                        transaction.RentalFee = model.RentalRequest.RentalTotalCost;
+                        transaction.EmployeeId = 1; // You might want to set this based on business logic
+                        transaction.PaymentId = null;
+
+
+                        _context.RentalTransactions.Add(transaction);
+                        _context.SaveChanges();
+
+                        TempData["CreateSuccess"] = "Rental Request Approved! A transaction has been created.";
+                    }
+
+                    var rentalRequestViewModel = new RentalRequestViewModel
+                    {
+                        rentalRequests = _context.RentalRequests
+                            .Include(r => r.RentalRequestStatus)
+                            .Include(r => r.Equipment)
+                            .Include(r => r.User)
+                            .OrderByDescending(r => r.RentalStartDate)
+                            .ToList(),
+                        rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
+                        equipmentTitle = _context.Equipment.ToList(),
+                    };
+
+                    return View("RentalRequest", rentalRequestViewModel);
+
+                }
+                else {
+
+                    
+                    var rentalRequestViewModel = new RentalRequestViewModel
+                    {
+                        rentalRequests = _context.RentalRequests
+                            .Include(r => r.RentalRequestStatus)
+                            .Include(r => r.Equipment)
+                            .Include(r => r.User)
+                            .OrderByDescending(r => r.RentalStartDate)
+                            .ToList(),
+                        rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
+                        equipmentTitle = _context.Equipment.ToList(),
+                    };
+
+                    return View("RentalRequest",rentalRequestViewModel);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "An error occurred while processing the rental request.";
+                Console.WriteLine(ex.Message);
+                return RedirectToAction("Review", new { id = model.RentalRequest.EquipmentId });
+            }
+        }
 
 
 

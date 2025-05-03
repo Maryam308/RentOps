@@ -5,8 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Rental Requests</h1>
-<br/>
+@{
+
+	//check tempdata for success message
+	if (TempData["CreateSuccess"] != null)
+	{
+		<div class="alert alert-success" role="alert">
+			@TempData["CreateSuccess"]
+		</div>
+	}
+
+}
 
 <!-- a container with padding of 3.. This div is closed at the end of the page-->
 <div class="container p-3">
