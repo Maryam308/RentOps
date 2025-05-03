@@ -5,6 +5,45 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+<div class="card border-light mt-5 mb-3 w-100">
+    <div class="card-header">
+        <h3>Customer Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- Requester Details -->
+            <div class="form-group col-md-6 mb-3">
+                <label disabled asp-for="RentalRequest.User.UserId" class="form-label">User ID</label>
+                <input disabled asp-for="RentalRequest.User.UserId" class="form-control" readonly="readonly" />
+            </div>
+
+            <div class="form-group col-md-6 mb-3">
+                <label disabled asp-for="RentalRequest.User.FirstName" class="form-label">First Name</label>
+                <input disabled asp-for="RentalRequest.User.FirstName" class="form-control" readonly="readonly" />
+            </div>
+
+            <div class="form-group col-md-6 mb-3">
+                <label disabled asp-for="RentalRequest.User.LastName" class="form-label">Last Name</label>
+                <input disabled asp-for="RentalRequest.User.LastName" class="form-control" readonly="readonly" />
+            </div>
+
+            <div class="form-group col-md-6 mb-3">
+                <label disabled asp-for="RentalRequest.User.PhoneNumber" class="form-label">Phone Number</label>
+                <input disabled asp-for="RentalRequest.User.PhoneNumber" class="form-control" readonly="readonly" />
+            </div>
+
+            <div class="form-group col-md-6 mb-3">
+                <label disabled asp-for="RentalRequest.User.Email" class="form-label">Email Address</label>
+                <input disabled asp-for="RentalRequest.User.Email" class="form-control" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <div class="container mt-5">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
@@ -16,56 +55,26 @@
                 @Html.AntiForgeryToken()
                 <!--display the equipment name in readonly input field-->
                 <div class="form-group" >
-                    <label asp-for="RentalRequest.Equipment.EquipmentName"></label>
-                    <input asp-for="RentalRequest.Equipment.EquipmentName" class="form-control" readonly="readonly" />
-                    <span asp-validation-for="RentalRequest.Equipment.EquipmentName" class="text-danger"></span>
+                    <label disabled asp-for="RentalRequest.Equipment.EquipmentName"></label>
+                    <input disabled asp-for="RentalRequest.Equipment.EquipmentName" class="form-control" readonly="readonly" />
                 </div>
-                <!-- Requester Details -->
-                <div class="form-group mb-3">
-                    <label asp-for="RentalRequest.User.UserId" class="form-label">User ID</label>
-                    <input asp-for="RentalRequest.User.UserId" class="form-control" readonly="readonly" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="RentalRequest.User.FirstName" class="form-label">First Name</label>
-                    <input asp-for="RentalRequest.User.FirstName" class="form-control" readonly="readonly" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="RentalRequest.User.LastName" class="form-label">Last Name</label>
-                    <input asp-for="RentalRequest.User.LastName" class="form-control" readonly="readonly" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="RentalRequest.User.PhoneNumber" class="form-label">Phone Number</label>
-                    <input asp-for="RentalRequest.User.PhoneNumber" class="form-control" readonly="readonly" />
-                </div>
-
-                <div class="form-group mb-3">
-                    <label asp-for="RentalRequest.User.Email" class="form-label">Email Address</label>
-                    <input asp-for="RentalRequest.User.Email" class="form-control" readonly="readonly" />
-                </div>
-
 
                 <!-- Rental Request Start Date -->
                 <div class="form-group mb-3">
-                    <label asp-for="RentalRequest.RentalStartDate" class="form-label">Pickup Date</label>
-                    <input asp-for="RentalRequest.RentalStartDate" class="form-control" type="date" id="PickupDate" />
-                    <span asp-validation-for="RentalRequest.RentalStartDate" class="text-danger"></span>
+                    <label disabled asp-for="RentalRequest.RentalStartDate" class="form-label">Pickup Date</label>
+                    <input disabled asp-for="RentalRequest.RentalStartDate" class="form-control" type="date" id="PickupDate" />
                 </div>
 
                 <!-- Rental Request End Date -->
                 <div class="form-group mb-3">
-                    <label asp-for="RentalRequest.RentalReturnDate" class="form-label">Return Date</label>
-                    <input asp-for="RentalRequest.RentalReturnDate" class="form-control" type="date" id="ReturnDate"  />
-                    <span asp-validation-for="RentalRequest.RentalReturnDate" class="text-danger"></span>
+                    <label disabled asp-for="RentalRequest.RentalReturnDate" class="form-label">Return Date</label>
+                    <input disabled asp-for="RentalRequest.RentalReturnDate" class="form-control" type="date" id="ReturnDate" />
                 </div>
 
                 <!-- Total Cost -->
                 <div class="form-group mb-3">
-                    <label asp-for="RentalRequest.RentalTotalCost" class="form-label">Total Cost</label>
-                    <input asp-for="RentalRequest.RentalTotalCost" type="text" class="form-control" id="TotalCost" name="TotalCost"/>
-                    <span asp-validation-for="RentalRequest.RentalTotalCost" class="text-danger"></span>
+                    <label disabled asp-for="RentalRequest.RentalTotalCost" class="form-label">Total Cost</label>
+                    <input disabled asp-for="RentalRequest.RentalTotalCost" type="text" class="form-control" id="TotalCost" name="TotalCost" />
                 </div>
 
 				<!-- Rental Request Status -->
