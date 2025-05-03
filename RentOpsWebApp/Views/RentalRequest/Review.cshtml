@@ -51,7 +51,7 @@
             <h4>Fill in the details and request the equipment for rental.</h4>
         </div>
         <div class="card-body">
-            <form asp-action="Request" method="post">
+            <form asp-action="Review" method="post">
                 @Html.AntiForgeryToken()
                 <!--display the equipment name in readonly input field-->
                 <div class="form-group" >
@@ -75,6 +75,12 @@
                 <div class="form-group mb-3">
                     <label disabled asp-for="RentalRequest.RentalTotalCost" class="form-label">Total Cost</label>
                     <input disabled asp-for="RentalRequest.RentalTotalCost" type="text" class="form-control" id="TotalCost" name="TotalCost" />
+                </div>
+
+                <!-- Requested Deposit -->
+                <div class="form-group mb-3">
+                    <label asp-for="NewRentalTransaction.Deposit" class="form-label">Deposit</label>
+                    <input asp-for="NewRentalTransaction.Deposit" type="text" class="form-control" />
                 </div>
 
 				<!-- Rental Request Status -->

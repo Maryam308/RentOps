@@ -52,7 +52,7 @@ public partial class RentalTransaction
 
     [ForeignKey("EmployeeId")]
     [InverseProperty("RentalTransactionEmployees")]
-    public virtual User Employee { get; set; } = null!;
+    public virtual User? Employee { get; set; } //= null!;
 
     [ForeignKey("EquipmentId")]
     [InverseProperty("RentalTransactions")]
