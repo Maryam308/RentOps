@@ -1,9 +1,171 @@
-﻿
+﻿@using RentOpsWebApp.ViewModels;
+@model RentalTransactionViewModel;
 @{
     ViewData["Title"] = "MyRentalTransaction";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>MyRentalTransaction</h1>
+<br />
+
+<!-- a container with padding of 3.. This div is closed at the end of the page-->
+<div class="container p-3">
+	<!-- a row with padding-top of 4-->
+	<div class="row pt-4">
+		<!-- divide up the row into 2 blocks of 8 & 2 columns = total 12 as per bootstrap standard-->
+		<div class="col-8">
+
+			<form asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction" method="get">
+				<div class="input-group">
+					Rental Transaction Id:
+
+					<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" style="width: 60px;" />
+
+					Rental Request Id:
+
+					<input type="text" name="SearchRentalRequestId" value="@Context.Request.Query["SearchRentalRequestId"].ToString()" />
+
+
+					Employee Id:
+
+					<input type="text" name="SearchEmployeeId" value="@Context.Request.Query["SearchEmployeeId"].ToString()" />
+
+					Transaction Date:
+					<input type="date" name="SearchTransactionDate" value="@Context.Request.Query["SearchTransactionDate"].ToString()">
+
+
+
+
+				</div>
+
+				Equipment Name:
+				<div class="input-group">
+					<select asp-for="SearchEquipment"
+							asp-items="@Model.equipmentTitle
+                               .Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
+							class="form-select">
+						<option value="" disabled selected>Select an Equipment</option>
+					</select>
+				</div>
+
+				Payment Status:
+				<div class="input-group">
+					<select asp-for="SearchPayment" class="form-select">
+						<option value="" disabled selected>Select a Payment Status</option>
+						<option value="Paid">Paid</option>
+						<option value="Not Paid">Not Paid</option>
+					</select>
+				</div>
+
+				<input type="submit" value="Search" class="btn btn-secondary" />
+				<a asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction" class="btn btn-outline-danger">Clear</a>
+			</form>
+
+		</div>
+
+
+		<h2>Website Rental Requests</h2>
+
+		<table class="table table-striped">
+			<thead>
+				<tr class="text-center">
+					<th>Rental Transaction ID</th>
+					<th>Rental Transaction TimeStamp</th>
+					<th>Rental Request ID</th>
+					<th>Employee ID</th>
+					<th>Employee Name</th>
+					<th>Customer ID</th>
+					<th>Customer Name</th>
+					<th>Rental Fee</th>
+					<th>Pickup Date</th>
+					<th>Return Date</th>
+					<th>Equipment Name</th>
+					<th>Payment Status</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var record in Model.rentalTransactions)
+				{
+					@if (record.UserId == null && record.RentalRequest != null)
+					{
+
+						<tr class="text-center">
+							<td>@record.RentalTransactionId</td>
+							<td>@record.RentalTransactionTimestamp</td>
+							<td>@record.RentalRequestId</td>
+							<td>@record.EmployeeId</td>
+							<td>@record.Employee.FirstName @record.Employee.LastName</td>
+							<td>@record.RentalRequest.UserId </td>
+							<td>@record.RentalRequest.User.FirstName @record.RentalRequest.User.LastName </td>
+							<td>@record.RentalFee</td>
+							<td>@record.PickupDate</td>
+							<td>@record.ReturnDate</td>
+							<td>@record.Equipment.EquipmentName</td>
+							<td>
+								@(record.PaymentId == null ? "Not Paid" : "Paid")
+							</td>
+							<td>
+								<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
+								@* <a asp-action="Delete" asp-route-id="@record.RentalRequestId" class="btn btn-danger">Delete</a> *@
+							</td>
+						</tr>
+					}}
+			</tbody>
+
+		</table>
+
+
+		<br />
+		<br />
+		<h3>External Rental Requests</h3>
+		<br />
+
+		<table class="table table-striped">
+			<thead>
+				<tr class="text-center">
+					<th>Rental Transaction ID</th>
+					<th>Rental Transaction TimeStamp</th>
+					<th>Employee ID</th>
+					<th>Employee Name</th>
+					<th>Customer ID</th>
+					<th>Customer Name</th>
+					<th>Rental Fee</th>
+					<th>Pickup Date</th>
+					<th>Return Date</th>
+					<th>Equipment Name</th>
+					<th>Payment Status</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var record in Model.rentalTransactions)
+				{
+					@if (record.UserId != null && record.RentalRequest == null)
+					{
+
+						<tr class="text-center">
+							<td>@record.RentalTransactionId</td>
+							<td>@record.RentalTransactionTimestamp</td>
+							<td>@record.EmployeeId</td>
+							<td>@record.Employee.FirstName @record.Employee.LastName</td>
+							<td>@record.UserId </td>
+							<td>@record.User.FirstName @record.User.LastName </td>
+							<td>@record.RentalFee</td>
+							<td>@record.PickupDate</td>
+							<td>@record.ReturnDate</td>
+							<td>@record.Equipment.EquipmentName</td>
+							<td>
+								@(record.PaymentId == null ? "Not Paid" : "Paid")
+							</td>
+							<td>
+								<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
+								@* <a asp-action="Delete" asp-route-id="@record.RentalRequestId" class="btn btn-danger">Delete</a> *@
+							</td>
+						</tr>
+					}		}
+			</tbody>
+		</table>
+
 
 
