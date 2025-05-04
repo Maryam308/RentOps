@@ -1,4 +1,6 @@
-﻿@{
+﻿@using RentOpsWebApp.ViewModels
+@model HomeViewModel
+@{
     ViewData["Title"] = "Home";
 }
 
@@ -105,7 +107,7 @@
 </style>
 
 
-<div id="heroCarousel" class="carousel slide hero-slider" data-ride="carousel">
+<div id="heroCarousel" class="carousel slide hero-slider my-4" data-ride="carousel" >
     <ol class="carousel-indicators">
         <li data-target="#heroCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#heroCarousel" data-slide-to="1"></li>
@@ -161,10 +163,10 @@
         </div>
     </div>
 
-    <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev" style="top: 40%;">
+    <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev" style="margin-top: 0px ;">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     </a>
-    <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next" style="top: 40%;">
+    <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next" style="margin-top: 0px ;">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
     </a>
 </div>
@@ -199,7 +201,7 @@
             <div class="card border-primary">
                 <div class="card-header">Total Customers</div>
                 <div class="card-body">
-                    <h4 class="card-title">150</h4> <!-- Replace with query -->
+                    <h4 class="card-title">@Model.TotalCustomers</h4> <!-- Replace with query -->
                     <p class="card-text">Registered customers using our services.</p>
                 </div>
             </div>
@@ -208,7 +210,7 @@
             <div class="card border-success">
                 <div class="card-header">Total Employees</div>
                 <div class="card-body">
-                    <h4 class="card-title">25</h4> <!-- Replace with query -->
+                    <h4 class="card-title">@Model.TotalEmployees</h4> <!-- Replace with query -->
                     <p class="card-text">Dedicated employees supporting operations.</p>
                 </div>
             </div>
@@ -217,7 +219,7 @@
             <div class="card border-info">
                 <div class="card-header">Total Rentals</div>
                 <div class="card-body">
-                    <h4 class="card-title">320</h4> <!-- Replace with query -->
+                    <h4 class="card-title">@Model.TotalRentals</h4> <!-- Replace with query -->
                     <p class="card-text">Completed equipment rental transactions.</p>
                 </div>
             </div>
@@ -226,7 +228,7 @@
             <div class="card border-warning">
                 <div class="card-header">Total Equipment</div>
                 <div class="card-body">
-                    <h4 class="card-title">80</h4> <!-- Replace with query -->
+                    <h4 class="card-title">@Model.TotalEquipments</h4> <!-- Replace with query -->
                     <p class="card-text">Available equipment across all categories.</p>
                 </div>
             </div>
