@@ -20,44 +20,138 @@ namespace RentOpsWebApp.Controllers
         }
         public IActionResult Dashboard()
         {
-            int currentUserId = 2; // Replace with your actual logic
+            int currentUserId = 9; // Replace with your actual logic
 
+
+            //Equipmint Dashboard
+
+
+            // Fetch the total number of current user equipment 
+            var totalEquipment = _context.Equipment.Count();
+            //fetch frequently rented equipment object
+            var frequentlyRentedEquipment = _context.RentalTransactions
+                .GroupBy(rt => rt.EquipmentId)
+                .Select(g => new
+                {
+                    EquipmentId = g.Key,
+                    EquipmentName = _context.Equipment
+                        .Where(e => e.EquipmentId == g.Key)
+                        .Select(e => e.EquipmentName)
+                        .FirstOrDefault(),
+                    RentalCount = g.Count()
+                })
+                .OrderByDescending(g => g.RentalCount)
+                .FirstOrDefault();
+
+            //fetch the frequently rented equipment name
+            var frequentlyRentedEquipmentName = frequentlyRentedEquipment != null ? frequentlyRentedEquipment.EquipmentName : "";
+
+            //fech the number of the damaged equipment
+            var damagedEquipment = _context.Equipment
+                .Count(e => e.ConditionStatusId == 2); // Assuming 2 is the ID for damaged status
+
+
+            // Fetch the total number of available equipment
+            var availableEquipment = _context.Equipment
+                .Count(e => e.AvailabilityStatusId == 1); // Assuming 1 is the ID for available status
+
+            //Fetch the number of the rental requests for Heavy Machineries
+            var heavyMachineryRequestCount = _context.RentalRequests
+                .Where(rr => rr.Equipment.EquipmentCategory.EquipmentCategoryTitle == "Heavy Machinery")
+                .Count();
+
+            // Power Tools
+            var powerToolsRequestCount = _context.RentalRequests
+                .Where(rr => rr.Equipment.EquipmentCategory.EquipmentCategoryTitle == "Power Tools")
+                .Count();
+
+            // Safety Equipment
+            var safetyEquipmentRequestCount = _context.RentalRequests
+                .Where(rr => rr.Equipment.EquipmentCategory.EquipmentCategoryTitle == "Safety Equipment")
+                .Count();
+
+            // Surveying Instruments
+            var surveyingInstrumentsRequestCount = _context.RentalRequests
+                .Where(rr => rr.Equipment.EquipmentCategory.EquipmentCategoryTitle == "Surveying Instruments")
+                .Count();
+
+            // Ladders & Scaffolding
+            var laddersScaffoldingRequestCount = _context.RentalRequests
+                .Where(rr => rr.Equipment.EquipmentCategory.EquipmentCategoryTitle == "Ladders & Scaffolding")
+                .Count();
+
+            // Concrete Equipment
+            var concreteEquipmentRequestCount = _context.RentalRequests
+                .Where(rr => rr.Equipment.EquipmentCategory.EquipmentCategoryTitle == "Concrete Equipment")
+                .Count();
+
+            // Fetch the number of the damage reports
+            var damageReportsCount = _context.Documents
+                .Count(d => d.FileTypeId == 3);
+
+
+
+            //Rental Dashboard
             var totalIncome = _context.RentalTransactions
                 .Include(i => i.Equipment)
                 .ThenInclude(t => t.RentalRequests)
-                .Where(r => r.Equipment.UserId == currentUserId || r.RentalRequest.Equipment.UserId == currentUserId).Sum(k => k.RentalFee);
+                .Sum(k => k.RentalFee);
 
             var averageRentalPeriod = _context.RentalTransactions
                 .Include(r => r.Equipment)
                 .Include(r => r.RentalRequest)
-                .Where(r => r.Equipment.UserId == currentUserId || r.RentalRequest.Equipment.UserId == currentUserId)
+                .Where(r => r.RentalRequest.Equipment.UserId == currentUserId)
                 .Select(r => EF.Functions.DateDiffDay(r.PickupDate, r.ReturnDate))
                 .Average();
 
             var availableEquipments = _context.Equipment
                 .Include(i => i.AvailabilityStatus)
-                .Where(r => r.UserId == currentUserId && r.AvailabilityStatus.AvailabilityStatusTitle == "Available")
+                .Where(r => r.AvailabilityStatus.AvailabilityStatusTitle == "Available")
                 .Count();
 
             var todayRentalRequests = _context.RentalRequests
                 .Include(i => i.Equipment)
                 .ThenInclude(t => t.RentalRequests)
-                .Where(r => r.Equipment.UserId == currentUserId && r.RentalRequestTimestamp == DateTime.Now.Date)
+                .Where(r => r.RentalRequestTimestamp == DateTime.Now.Date)
                 .Count();
 
 
             var lastMonthRentals = _context.RentalTransactions
                 .Include(i => i.Equipment)
                 .ThenInclude(t => t.RentalRequests)
-                .Where(r => r.Equipment.UserId == currentUserId && r.RentalTransactionTimestamp.Month == DateTime.Now.Month)
+                .Where(r => r.RentalTransactionTimestamp.Month == DateTime.Now.Month)
                 .Count();
 
             //fetch the active rentals to a variable
             var activeRentals = _context.RentalTransactions
                 .Include(i => i.Equipment)
                 .ThenInclude(t => t.RentalRequests)
-                .Where(r => r.Equipment.UserId == currentUserId && r.PickupDate <= DateOnly.FromDateTime(DateTime.Today.Date) && r.ReturnDate >= DateOnly.FromDateTime(DateTime.Today.Date))
+                .Where(r => r.PickupDate <= DateOnly.FromDateTime(DateTime.Today.Date) && r.ReturnDate >= DateOnly.FromDateTime(DateTime.Today.Date))
                 .ToList();
+
+            //fetch the number of pending requests
+            var pendingRequestCount = _context.RentalRequests
+                .Count(r => r.RentalRequestStatusId == 1);
+
+            //fetch the number of the completed requests
+            var completedRequestCount = _context.RentalRequests
+                .Count(r => r.RentalRequestStatusId == 2 || r.RentalRequestStatusId == 3);
+
+            //fetch the number of the approved requests
+            var approvedRequestCount = _context.RentalRequests
+                .Count(r => r.RentalRequestStatusId == 2);
+
+            //fetch the number of the rejected requests
+            var rejectedRequestCount = _context.RentalRequests
+                .Count(r => r.RentalRequestStatusId == 3);
+
+            //fetch the number of the overdue requests
+            int overdueCount = _context.RentalTransactions
+                .Where(x => x.ReturnDate < DateOnly.FromDateTime(DateTime.Now))
+                .Count();
+
+
+
 
             //loop through the active rentals and get the equipment id and mark it as rented
             foreach (var rental in activeRentals)
@@ -75,21 +169,39 @@ namespace RentOpsWebApp.Controllers
 
             var currentlyRented = _context.Equipment
                 .Include(i => i.AvailabilityStatus)
-                .Where(r => r.UserId == currentUserId && r.AvailabilityStatus.AvailabilityStatusTitle == "Rented")
+                .Where(r => r.AvailabilityStatus.AvailabilityStatusTitle == "Rented")
                 .Count();
 
-            var viewModel = new RentalDashboardViewModel
+            var viewModel = new UnifiedDashboardViewModel
             {
                 TotalIncome = Convert.ToDecimal(totalIncome),
                 AverageRentalPeriod = Convert.ToDouble(averageRentalPeriod),
                 AvailableEquipments = Convert.ToInt32(availableEquipments),
                 TodayRentalRequests = Convert.ToInt32(todayRentalRequests),
                 LastMonthRentals = Convert.ToInt32(lastMonthRentals),
-                CurrentlyRented = Convert.ToInt32(currentlyRented)
+                CurrentlyRented = Convert.ToInt32(currentlyRented),
+                EquipmentCount = Convert.ToInt32(totalEquipment),
+                FrequentlyRented = frequentlyRentedEquipmentName,
+                DamagedEquipment = Convert.ToInt32(damagedEquipment),
+                AvailableForRental = Convert.ToInt32(availableEquipment),
+                PenndingRequests = Convert.ToInt32(pendingRequestCount),
+                CompletedRequests = Convert.ToInt32(completedRequestCount),
+                ApprovedRequests = Convert.ToInt32(approvedRequestCount),
+                RejectedRequests = Convert.ToInt32(rejectedRequestCount),
+                OverdueRequests = Convert.ToInt32(overdueCount),
+                HeavyMachineryRequests = Convert.ToInt32(heavyMachineryRequestCount),
+                PowerToolsRequests = Convert.ToInt32(powerToolsRequestCount),
+                SaftyEquipmentsRequests = Convert.ToInt32(safetyEquipmentRequestCount),
+                SurveyingInstrumentsRequests = Convert.ToInt32(surveyingInstrumentsRequestCount),
+                LaddersAndScaffoldingRequests = Convert.ToInt32(laddersScaffoldingRequestCount),
+                ConcreteEquipmentRequests = Convert.ToInt32(concreteEquipmentRequestCount),
+                DamageReports = Convert.ToInt32(damageReportsCount),
+
             };
 
 
-            return View(viewModel); ;
+            return View(viewModel); 
+
         }
 
 

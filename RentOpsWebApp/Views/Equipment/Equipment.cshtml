@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Equipment</h1>
+<h1 class="mt-2">Equipment List</h1>
 
 <!--Check if there is a success message to display-->
 
@@ -19,67 +19,59 @@
 }
 
 
-<!-- a container with padding of 3.. This div is closed at the end of the page-->
-<div class="container p-3">
-    <!-- a row with padding-top of 4-->
-    <div class="row pt-4">
-        <!-- divide up the row into 2 blocks of 8 & 2 columns = total 12 as per bootstrap standard-->
-        <div class="col-8">
+<div class="container px-0">
+    <div class="row pt-2">
+        <div class="col-8 p-3">
 			
 			<form asp-controller="Equipment" asp-action="Equipment" method="get">
 				<div class="input-group">
-					Equipment ID:
 
-				<input type="text" name="SearchEquipmentId" value="@Context.Request.Query["SearchEquipmentId"].ToString()"  style="width: 60px;"/>
+					<input type="text" name="SearchEquipmentId" value="@Context.Request.Query["SearchEquipmentId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Equipment ID" />
 
-				Equipment Name:
-
-				<input type="text" name="SearchEquipmentName" value="@Context.Request.Query["SearchEquipmentName"].ToString()" />
+					<input type="text" name="SearchEquipmentName" value="@Context.Request.Query["SearchEquipmentName"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Equipment Name" />
 			</div>
 
-				Equipment Category:
-                <div class="input-group">
+				
+                <div class="input-group pt-2">
                    <select asp-for="SearchCategory"
                            asp-items="@Model.EquipmentCategories
                                .Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
-                           class="form-select">
-                       <option value="" disabled selected>Select a category</option>
+                           class="form-select mb-3 mx-4">
+                       <option value="" disabled selected>Select an Equipment Category</option>
                    </select>
                 </div> 
 
-				Equipment Availability:
 				<div class="input-group">
 					<select asp-for="SearchAvailability"
 							asp-items="@Model.EquipmentAvailability
                                .Select(i => new SelectListItem { Text = i.AvailabilityStatusTitle, Value = i.AvailabilityStatusId.ToString() })"
-							class="form-select">
-						<option value="" disabled selected>Select a Status</option>
+							class="form-select mb-3 mx-4">
+						<option value="" disabled selected>Select an Availability Status</option>
 					</select>
 				</div>
 
-				Equipment Condition:
 				<div class="input-group">
 					<select asp-for="SearchCondition"
 							asp-items="@Model.EquipmentStatuses
                                .Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
-							class="form-select">
-						<option value="" disabled selected>Select a Condition</option>
+							class="form-select mb-3 mx-4">
+						<option value="" disabled selected>Select a ConditionStatus </option>
 					</select>
 				</div>
-
-                <input type="submit" value="Search" class="btn btn-secondary"/>
-				<a asp-controller="Equipment" asp-action="Equipment" class="btn btn-outline-danger">Clear</a>
-            </form>
+				<div class="align-items-end text-end pe-2" >
+				<input type="submit" value="Search" class="px-4 btn btn-secondary" />
+				<a asp-controller="Equipment" asp-action="Equipment" class="px-4 btn btn-danger m-2">Clear</a>
+				</div>
+			</form>
 
         </div>
 
-        <!--create button-->
-        <div class="col-4 text-end">
-            <!--text end aligns the button to the right side-->
-			<a asp-controller="Equipment" asp-action="AddEquipment" class="btn btn-primary">
+		<div class="col-4 text-start ">
+			<a asp-controller="Equipment" asp-action="AddEquipment"  class="btn btn-primary my-2" >
 				<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
 			</a>
-			<a asp-controller="Equipment" asp-action="ManageCategories" class="btn btn-danger">
+			<br/>
+			<a asp-controller="Equipment" asp-action="ManageCategories" class="btn btn-primary my-2">
 				Manage Equipment Categories
 			</a>
         </div>
@@ -94,7 +86,7 @@
 
 <table class="table table-striped">
 	<thead>
-		<tr class="text-center">
+			<tr class="text-center table-primary">
 			<th>Equipment ID</th>
 			<th>Equipment Name</th>
 			<th>Equipment Description</th>

@@ -1,5 +1,5 @@
 ﻿@using RentOpsWebApp.ViewModels
-@model RentalDashboardViewModel
+@model UnifiedDashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,6 +8,7 @@
 <br />
 <h1>Dashboard</h1>
 <br />
+
 <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item" role="presentation">
         <a class="nav-link active" data-bs-toggle="tab" href="#EquipmentDashboard" aria-selected="true" role="tab">Equipment Dashboard</a>
@@ -18,37 +19,142 @@
 </ul>
 
 <div id="myTabContent" class="tab-content">
+    <!-- Equipment Dashboard Tab -->
     <div class="tab-pane fade show active" id="EquipmentDashboard" role="tabpanel">
-        <!-- EquipmentDashboard content -->
-        <p>Welcome to the Equipment Dashboard!</p>
+        <h2 class="mt-5 mb-5 text-center text-primary">Equipment Dashboard</h2>
+
+        <div class="row mb-5 text-center">
+            <div class="col-md-2 flex-grow-1 mx-2">
+                <div class="card border-primary h-100">
+                    <div class="card-header">Equipment Count</div>
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <h4 class="card-title">@Model.EquipmentCount</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 flex-grow-1 mx-2">
+                <div class="card border-primary h-100">
+                    <div class="card-header">Frequently Rented</div>
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <h4 class="card-title">@Model.FrequentlyRented</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 flex-grow-1 mx-2">
+                <div class="card border-primary h-100">
+                    <div class="card-header">Damaged Equipment</div>
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <h4 class="card-title">@Model.DamagedEquipment</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 flex-grow-1 mx-2">
+                <div class="card border-primary h-100">
+                    <div class="card-header">Available for Rental</div>
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <h4 class="card-title">@Model.AvailableForRental</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 flex-grow-1 mx-2">
+                <div class="card border-primary h-100">
+                    <div class="card-header">Number Of Damage Reports</div>
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <h4 class="card-title">@Model.DamageReports</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <div class="card border-primary h-100">
+                    <div class="card-header">Requests Per Category</div>
+                    <div class="card-body">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-center">
+                            <div class="col d-flex justify-content-center">
+                                <div class="card border-secondary h-100 w-100 text-center">
+                                    <div class="card-header">Heavy Machinery</div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">@Model.HeavyMachineryRequests</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-center">
+                                <div class="card border-secondary h-100 w-100 text-center">
+                                    <div class="card-header">Power Tools</div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">@Model.PowerToolsRequests</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-center">
+                                <div class="card border-secondary h-100 w-100 text-center">
+                                    <div class="card-header">Safety Equipment</div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">@Model.SaftyEquipmentsRequests</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-center">
+                                <div class="card border-secondary h-100 w-100 text-center">
+                                    <div class="card-header">Surveying Instruments</div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">@Model.SurveyingInstrumentsRequests</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-center">
+                                <div class="card border-secondary h-100 w-100 text-center">
+                                    <div class="card-header">Ladders & Scaffolding</div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">@Model.LaddersAndScaffoldingRequests</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex justify-content-center">
+                                <div class="card border-secondary h-100 w-100 text-center">
+                                    <div class="card-header">Concrete Equipment</div>
+                                    <div class="card-body">
+                                        <h4 class="card-title">@Model.ConcreteEquipmentRequests</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- inner row -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+    <!-- Rental Dashboard Tab -->
     <div class="tab-pane fade" id="RentalDashboard" role="tabpanel">
-        <!-- RentalDashboard content -->
         <h2 class="mt-5 mb-5 text-center text-primary">Rental Dashboard</h2>
 
         <div class="container">
             <div class="row mb-5">
                 <div class="col-md-4 mb-4">
                     <div class="card border-primary h-100">
-                        <div class="card-header">Total Income</div>
-                        <div class="card-body text-center">
+                        <div class="card-header text-center">Total Income</div>
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <h4 class="card-title">@Model.TotalIncome</h4>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="card border-primary h-100">
-                        <div class="card-header">Average Rental Period</div>
-                        <div class="card-body text-center">
+                        <div class="card-header text-center">Average Rental Period</div>
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <h4 class="card-title">@Model.AverageRentalPeriod</h4>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="card border-primary h-100">
-                        <div class="card-header">Available Equipments</div>
-                        <div class="card-body text-center">
+                        <div class="card-header text-center">Available Equipments</div>
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <h4 class="card-title">@Model.AvailableEquipments</h4>
                         </div>
                     </div>
@@ -58,35 +164,68 @@
             <div class="row mb-5 mt-5">
                 <div class="col-md-4 mb-4">
                     <div class="card border-primary h-100">
-                        <div class="card-header">Currently Rented</div>
-                        <div class="card-body text-center">
+                        <div class="card-header text-center">Currently Rented</div>
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <h4 class="card-title">@Model.CurrentlyRented</h4>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="card border-primary h-100">
-                        <div class="card-header">Last Month's Rentals</div>
-                        <div class="card-body text-center">
+                        <div class="card-header text-center">Last Month's Rentals</div>
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <h4 class="card-title">@Model.LastMonthRentals</h4>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">
                     <div class="card border-primary h-100">
-                        <div class="card-header">Today's Rental Requests</div>
-                        <div class="card-body text-center">
+                        <div class="card-header text-center">Today's Rental Requests</div>
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
                             <h4 class="card-title">@Model.TodayRentalRequests</h4>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row justify-content-center mt-5">
-                <div class="col-md-6 text-center">
-                    <button class="btn btn-primary btn-lg w-100">Refresh Statistics</button>
+            <div class="row mb-5">
+                <div class="col-md-4 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header text-center">Number of Requests Pending</div>
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                            <h4 class="card-title">@Model.PenndingRequests</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header text-center">Number of Requests Completed</div>
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                            <h4 class="card-title">@Model.CompletedRequests</h4>
+                            <h4 class="card-title" style="color: green">Approved: @Model.ApprovedRequests</h4>
+                            <h4 class="card-title" style="color: red">Rejected: @Model.RejectedRequests</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card border-primary h-100">
+                        <div class="card-header text-center">Number of Overdue Requests</div>
+                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                            <h4 class="card-title">@Model.OverdueRequests</h4>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+    </div>
+
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 text-center">
+            <button class="btn btn-primary btn-lg w-100">Refresh Statistics</button>
+        </div>
+    </div>
+</div>
     </div>
 </div>
