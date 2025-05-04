@@ -32,18 +32,44 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th>Feedback ID</th>
+                            <th>Transaction ID</th>
+                            <th>Is Hidden</th>
                             <th>Rating</th>
                             <th>Timestamp</th>
                             <th>Comments</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var feedback in Model.EquipmentFeedbacks)
                         {
+
+                            // Check if the feedback is hidden and also add that if only the user is customer
+							@* if (feedback.IsHidden) *@
+							@* { *@
+							@* 	continue; // Skip this feedback *@
+							@* } *@
                             <tr>
+                                <td>@feedback.FeedbackId</td>
+                                <td>@feedback.RentalTransactionId</td>
+                                <td>@(feedback.IsHidden == true ? "Yes" : "No")</td>
                                 <td>@feedback.Rating / 5</td>
                                 <td>@feedback.FeedbackTimestamp.ToString("yyyy-MM-dd HH:mm")</td>
                                 <td>@feedback.CommentText</td>
+
+                                <!--if the user is not customer -->
+								@if (User.IsInRole("Admin"))
+								{
+									<td>
+										<form asp-action="DeleteFeedback" method="post">
+											<input type="hidden" name="feedbackId" value="@feedback.FeedbackId" />
+											<button type="submit" class="btn btn-danger btn-sm">Delete</button>
+										</form>
+									</td>
+								}
+
+
                             </tr>
                         }
                     </tbody>
