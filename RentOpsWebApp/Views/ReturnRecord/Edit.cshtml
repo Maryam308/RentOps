@@ -13,11 +13,11 @@
             <h4>Edit the record as needed, then save changes.</h4>
         </div>
         <div class="card-body">
-            <form asp-action="Edit" method="post">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
 				<!-- Hidden field for ReturnRecordId -->
                 <div class="form-group" hidden>
                     <label asp-for="theReturnRecord.ReturnRecordId"></label>
-                    <input asp-for="theReturnRecord.ReturnRecordId" class="form-control" hidden readonly="readonly" />
+                    <input type="hidden" asp-for="theReturnRecord.ReturnRecordId" />
                 </div>
                 <!-- Rental Transaction -->
                 <div class="form-group mb-3">
@@ -64,10 +64,23 @@
 
 
                 <!-- Additional Documents - Damage Report -- should be uploaded to the documents -->
-                <div>
-                    <label asp-for="theReturnRecord.DocumentId" class="form-label mt-4">Default file input example</label>
-                    <input asp-for="theReturnRecord.DocumentId" class="form-control" type="file" id="formFile">
-                </div>
+                <!-- File Upload Input (optional replacement) --> <div class="mb-3">
+                    <label asp-for="UploadedFile" class="form-label">Replace Document (optional)</label> 
+                    <input asp-for="UploadedFile" class="form-control" type="file" accept=".pdf" /> 
+                    <span asp-validation-for="UploadedFile" class="text-danger"></span> 
+                    </div>
+
+                @if (Model.theReturnRecord.DocumentId != null)
+                {
+                    <div class="mb-3">
+                        <label class="form-label">Existing Document:</label>
+                        <div>
+                            <a asp-controller="ReturnRecord" asp-action="Download" asp-route-id="@Model.theReturnRecord.DocumentId" class="btn btn-outline-primary btn-sm" target="_blank">
+                                Download Attached PDF
+                            </a>
+                        </div>
+                    </div>
+                }
 
                 <button type="submit" class="btn btn-primary">Save Changes</button>
             </form>

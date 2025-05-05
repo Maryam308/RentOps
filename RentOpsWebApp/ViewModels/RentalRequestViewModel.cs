@@ -9,6 +9,7 @@ namespace RentOpsWebApp.ViewModels
         public IEnumerable<RentalRequestStatus>? rentalRequestStatuses { get; set; }
 
         public IEnumerable<Equipment>? equipmentTitle { get; set; }
+        public IFormFile? UploadedAgreement { get; set; } // agreements are allowed to be uploaded from the manager / admin side and the customer can download them and replace them as well
 
         public string? SearchRentalRequestId { get; set; }
 

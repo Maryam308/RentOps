@@ -91,44 +91,71 @@ namespace RentOpsWebApp.Controllers
 
 
 
-        //create method
+        // Fix for CS1983 and CS0161: Update the method signature to return Task<IActionResult> and ensure all code paths return a value.
         [HttpPost]
-        public IActionResult Create(ReturnRecord theReturnRecord)
+        public async Task<IActionResult> Create(ReturnRecordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                //if there is a document attached to the return record it should be added to the database
-                if (theReturnRecord.Document != null)
+                IEnumerable<ReturnRecord> returnRecords = _context.ReturnRecords
+                    .Include(e => e.ReturnCondition)
+                    .Include(e => e.RentalTransaction)
+                    .Include(e => e.Document)
+                    .OrderByDescending(d => d.ActualReturnDate)
+                    .ToList();
+
+                var returnRecordViewModel = new ReturnRecordViewModel
                 {
-                    _context.Documents.Add(theReturnRecord.Document);
-                    _context.SaveChanges();
-                    theReturnRecord.DocumentId = theReturnRecord.Document.DocumentId;
-                }
+                    returnRecords = returnRecords,
+                    conditionStatuses = _context.ConditionStatuses.ToList(),
+                };
 
-                try {
+                return View(returnRecordViewModel);
+            }
 
-                    //add the return record object to the database
-                    _context.ReturnRecords.Add(theReturnRecord);
-                        _context.SaveChanges();
+            try
+            {
+                var returnRecord = model.theReturnRecord;
 
-                    //add success message to tempdata
-                    TempData["CreateSuccess"] = "Return Record Created Successfully.";
-
-
-                }
-                catch (Exception ex)
+                if (model.UploadedFile != null && model.UploadedFile.Length > 0)
                 {
-                    
-                    //log the error
-                    Console.WriteLine(ex.Message);
+                    if (Path.GetExtension(model.UploadedFile.FileName).ToLower() != ".pdf")
+                    {
+                        ModelState.AddModelError("UploadedFile", "Only PDF files are allowed.");
+                        return View(model);
+                    }
+
+                    using var memoryStream = new MemoryStream();
+                    await model.UploadedFile.CopyToAsync(memoryStream);
+
+                    var document = new Document
+                    {
+                        UserId = 1, // Replace with actual user context
+                        FileName = model.UploadedFile.FileName,
+                        UploadDate = DateTime.UtcNow,
+                        FileTypeId = 3, 
+                        StoragePath = "",
+                        FileData = memoryStream.ToArray()
+                    };
+
+                    _context.Documents.Add(document);
+                    await _context.SaveChangesAsync();
+
+                    returnRecord.DocumentId = document.DocumentId;
                 }
 
-                
+                _context.ReturnRecords.Add(returnRecord);
+                await _context.SaveChangesAsync();
+
+                TempData["CreateSuccess"] = "Return Record Created Successfully.";
                 return RedirectToAction("ReturnRecord");
             }
-            else
+            catch (Exception ex)
             {
-                return View(theReturnRecord);
+                // Log the error
+                Console.WriteLine(ex.Message);
+                // Optionally, return an error view or message
+                return View(model);
             }
         }
 
@@ -211,43 +238,93 @@ namespace RentOpsWebApp.Controllers
 
         //post edit method
         [HttpPost]
-        public IActionResult Edit(ReturnRecord theReturnRecord)
+        public async Task<IActionResult> Edit(ReturnRecordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
+                IEnumerable<ReturnRecord> returnRecords = _context.ReturnRecords
+                    .Include(e => e.ReturnCondition)
+                    .Include(e => e.RentalTransaction)
+                    .Include(e => e.Document)
+                    .OrderByDescending(d => d.ActualReturnDate)
+                    .ToList();
+
+                var returnRecordViewModel = new ReturnRecordViewModel
                 {
-
-                    //update the return record object
-                    _context.ReturnRecords.Update(theReturnRecord);
-                    _context.SaveChanges();
-
-                    //add success message to tempdata
-                    TempData["CreateSuccess"] = "Return Record Updated Successfully.";
-
-                }
-                catch (Exception ex)
-                {
-                    //log the error
-                    Console.WriteLine(ex.Message);
-                } 
-                
-                return RedirectToAction("ReturnRecord");
-
-            }
-            else
-            {
-                //if the model state is not valid, return the view with the model
-                var viewmodel = new ReturnRecordViewModel
-                {
-                    theReturnRecord = theReturnRecord,
+                    returnRecords = returnRecords,
                     conditionStatuses = _context.ConditionStatuses.ToList(),
-                    rentalTransactions = _context.RentalTransactions.ToList(),
                 };
-                return View("ReturnRecord",viewmodel);
+
+                return View(returnRecordViewModel);
             }
-           
+
+            try
+            {
+                var returnRecord = model.theReturnRecord;
+
+                if (model.UploadedFile != null && model.UploadedFile.Length > 0)
+                {
+                    if (Path.GetExtension(model.UploadedFile.FileName).ToLower() != ".pdf")
+                    {
+                        ModelState.AddModelError("UploadedFile", "Only PDF files are allowed.");
+                        return View(model);
+                    }
+
+                    using var memoryStream = new MemoryStream();
+                    await model.UploadedFile.CopyToAsync(memoryStream);
+
+                    var document = new Document
+                    {
+                        UserId = 1, // Replace with actual user context
+                        FileName = model.UploadedFile.FileName,
+                        UploadDate = DateTime.UtcNow,
+                        FileTypeId = 3,
+                        StoragePath = "",
+                        FileData = memoryStream.ToArray()
+                    };
+
+                    _context.Documents.Add(document);
+                    await _context.SaveChangesAsync();
+
+                    returnRecord.DocumentId = document.DocumentId;
+                }
+
+                _context.ReturnRecords.Update(returnRecord);
+                await _context.SaveChangesAsync();
+
+                TempData["CreateSuccess"] = "Return Record Updatedd Successfully.";
+                return RedirectToAction("ReturnRecord");
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                Console.WriteLine(ex.Message);
+                // Optionally, return an error view or message
+                return View(model);
+            }
 
         }
+
+        //a method to download a document
+        public async Task<IActionResult> Download(int id)
+        {
+            var document = await _context.Documents.FindAsync(id);
+
+
+            if (document == null)
+            {
+                return NotFound();
+            }
+
+            // Return the file as a downloadable response
+            return File(
+                fileContents: document.FileData,
+                contentType: "application/pdf", // Assuming all stored files are PDFs
+                fileDownloadName: document.FileName
+            );
+
+        }
+
+
         }
 }

@@ -87,7 +87,7 @@ namespace RentOpsWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Review(RentalRequestViewModel model)
+        public async Task<IActionResult> Review(RentalRequestViewModel model)
         {
             
             try
@@ -136,7 +136,8 @@ namespace RentOpsWebApp.Controllers
                     rentalRequest.RentalRequestStatusId = 2; // Update status to Approved
                     _context.Entry(rentalRequest).Property(r => r.RentalRequestStatusId).IsModified = true;
                     _context.SaveChanges();
-
+                    
+                    
                     // Create a transaction
                     var transaction = new RentalTransaction
                     {
@@ -149,6 +150,40 @@ namespace RentOpsWebApp.Controllers
                         EmployeeId = 1, // You might want to fetch this dynamically
                         PaymentId = null
                     };
+
+                    //check if in the model there is an agreement uploaded
+                    if (model.UploadedAgreement != null && model.UploadedAgreement.Length > 0)
+                    {
+                        if (Path.GetExtension(model.UploadedAgreement.FileName).ToLower() != ".pdf")
+                        {
+                            ModelState.AddModelError("UploadedFile", "Only PDF files are allowed.");
+                            return View(model);
+                        }
+
+                        using var memoryStream = new MemoryStream();
+                        await model.UploadedAgreement.CopyToAsync(memoryStream);
+
+                        var document = new Document
+                        {
+                            UserId = 1, // Replace with actual user context
+                            FileName = model.UploadedAgreement.FileName,
+                            UploadDate = DateTime.UtcNow,
+                            FileTypeId = 4,
+                            StoragePath = "",
+                            FileData = memoryStream.ToArray()
+                        };
+
+                        _context.Documents.Add(document);
+                        await _context.SaveChangesAsync();
+
+
+                        //add the rental transaction id and the document id to the rentaldocument table
+                        transaction.Documents = new List<Document>
+                        {
+                            document
+                        };
+
+                    }
 
                     _context.RentalTransactions.Add(transaction);
                     _context.SaveChanges();

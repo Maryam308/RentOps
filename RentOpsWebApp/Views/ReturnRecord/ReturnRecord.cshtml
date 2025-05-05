@@ -6,9 +6,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Return Records</h1>
-
-<!------------------------------------------------------------------------------>
 
 @{
     if (TempData["CreateSuccess"] != null)
@@ -19,51 +16,60 @@
     }
 }
 
-<!-- a container with padding of 3.. This div is closed at the end of the page-->
 <div class="container p-3">
-	<!-- a row with padding-top of 4-->
+	<h1 class="m-2">Return Records</h1>
 	<div class="row pt-4">
-		<!-- divide up the row into 2 blocks of 8 & 2 columns = total 12 as per bootstrap standard-->
 		<div class="col-8">
 
-			<form asp-controller="ReturnRecord" asp-action="ReturnRecord" method="get">
-				<div class="input-group">
-					return record ID:
 
-					<input type="text" name="SearchReturnRecordId" value="@Context.Request.Query["SearchReturnRecordId"].ToString()" style="width: 60px;" />
+			<div class="card border-primary mx-5 mb-2">
+				<div class="card-header p-3"><h4>Search & Filter Return Records</h4></div>
+				<div class="card-body p-4">
 
-					Rental Transaction Id:
+					<form asp-controller="ReturnRecord" asp-action="ReturnRecord" method="get">
+						<div class="input-group">
 
-					<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" />
+							<input type="text" name="SearchReturnRecordId" value="@Context.Request.Query["SearchReturnRecordId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Return Record ID" />
 
-					Actual Return Date:
-					<input type="date" name="searchActualReturnDate" value="@Context.Request.Query["searchActualReturnDate"].ToString()">
+							<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Rental Transaction ID" />
 
+						</div>
 
-				</div>
+						<div class="input-group pt-2">
+							
+							Actual Return Date:
 
-				Return Condition:
-				<div class="input-group">
-					<select asp-for="SearchConditionStatus"
-							asp-items="@Model.conditionStatuses
+							<input type="date" class="form-control mb-3 mx-4" name="searchActualReturnDate" value="@Context.Request.Query["searchActualReturnDate"].ToString()">
+
+						</div>
+
+						<div class="input-group">
+							<select asp-for="SearchConditionStatus"
+									asp-items="@Model.conditionStatuses
                                .Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
-							class="form-select">
-						<option value="" disabled selected>Select a Condition</option>
-					</select>
-				</div>
+									class="form-select  mb-3 mx-4">
+								<option value="" disabled selected>Select a Return Condition</option>
+							</select>
+						</div>
 
-				
-				<input type="submit" value="Search" class="btn btn-secondary" />
-				<a asp-controller="ReturnRecord" asp-action="ReturnRecord" class="btn btn-outline-danger">Clear</a>
-			</form>
+
+						<div class="align-items-end text-end pe-2">
+							<input type="submit" value="Search" class="px-4 btn btn-secondary" />
+							<a asp-controller="Equipment" asp-action="Equipment" class="px-4 btn btn-danger m-2">Clear</a>
+						</div>
+
+					</form>
+
+				</div>
+			</div>
 
 		</div>
 
 		<!--create button-->
-		<div class="col-4 text-end">
+		<div class="col-4 text-center">
 			<!--text end aligns the button to the right side-->
 			<a asp-controller="ReturnRecord" asp-action="Create" class="btn btn-primary">
-				<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
+				<i class="bi bi-plus-square-fill"></i>&nbsp; Add Return Record
 			</a>
 			
 		</div>
@@ -71,12 +77,11 @@
 	</div>
 
 
-    <!------------------------------------------------------------------------------>
 
 
-<table class="table table-striped">
+<table class="table table-striped mt-2">
 	<thead>
-            <tr class="text-center">
+            <tr class="text-center table-primary">
 			<th>Return Record ID</th>
 			<th>Rental Transaction ID</th>
 			<th>Actual Return Date</th>
@@ -108,3 +113,4 @@
 		}
 	</tbody>
 	</table>
+	</div>

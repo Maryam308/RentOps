@@ -10,6 +10,8 @@ namespace RentOpsWebApp.ViewModels
 
         public IEnumerable<RentalTransaction>? rentalTransactions { get; set; }
 
+        public IFormFile? UploadedFile { get; set; } // Document to be uploaded
+
         public string? SearchReturnRecordId { get; set; }
 
         public string? SearchRentalTransactionId { get; set; }

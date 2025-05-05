@@ -22,14 +22,18 @@
 <div class="container px-0">
     <div class="row pt-2">
         <div class="col-8 p-3">
+
+			<div class="card border-primary mx-5 mb-2">
+				<div class="card-header p-3"><h4>Search & Filter Equipment</h4></div>
+				<div class="card-body p-4">
 			
-			<form asp-controller="Equipment" asp-action="Equipment" method="get">
-				<div class="input-group">
+					<form asp-controller="Equipment" asp-action="Equipment" method="get">
+						<div class="input-group">
 
-					<input type="text" name="SearchEquipmentId" value="@Context.Request.Query["SearchEquipmentId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Equipment ID" />
+							<input type="text" name="SearchEquipmentId" value="@Context.Request.Query["SearchEquipmentId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Equipment ID" />
 
-					<input type="text" name="SearchEquipmentName" value="@Context.Request.Query["SearchEquipmentName"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Equipment Name" />
-			</div>
+							<input type="text" name="SearchEquipmentName" value="@Context.Request.Query["SearchEquipmentName"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Equipment Name" />
+						</div>
 
 				
                 <div class="input-group pt-2">
@@ -64,9 +68,11 @@
 				</div>
 			</form>
 
-        </div>
+				</div>
+			</div>
+		</div>
 
-		<div class="col-4 text-start ">
+		<div class="col-4 text-center mt-5 ">
 			<a asp-controller="Equipment" asp-action="AddEquipment"  class="btn btn-primary my-2" >
 				<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
 			</a>
@@ -76,7 +82,11 @@
 			</a>
         </div>
 
-    </div>
+		
+		</div>
+	
+
+    
 
 
     <!------------------------------------------------------------------------------>
@@ -130,3 +140,4 @@
 		}
 	</tbody>
 
+</div>

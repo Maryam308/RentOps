@@ -78,6 +78,25 @@ public partial class RentOpsDBContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Documents)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Document_User");
+
+            entity.HasMany(d => d.RentalTransactions).WithMany(p => p.Documents)
+                .UsingEntity<Dictionary<string, object>>(
+                    "RentalDocument",
+                    r => r.HasOne<RentalTransaction>().WithMany()
+                        .HasForeignKey("RentalTransactionId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK_RentalDocument_RentalTransaction"),
+                    l => l.HasOne<Document>().WithMany()
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK_RentalDocument_Document"),
+                    j =>
+                    {
+                        j.HasKey("DocumentId", "RentalTransactionId");
+                        j.ToTable("RentalDocument");
+                        j.IndexerProperty<int>("DocumentId").HasColumnName("documentID");
+                        j.IndexerProperty<int>("RentalTransactionId").HasColumnName("rentalTransactionID");
+                    });
         });
 
         modelBuilder.Entity<Equipment>(entity =>

@@ -75,4 +75,8 @@ public partial class RentalTransaction
     [ForeignKey("UserId")]
     [InverseProperty("RentalTransactionUsers")]
     public virtual User? User { get; set; }
+
+    [ForeignKey("RentalTransactionId")]
+    [InverseProperty("RentalTransactions")]
+    public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
 }
