@@ -5,61 +5,73 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>RentalTransaction</h1>
-<br />
+<h1 class="mt-2">RentalTransaction</h1>
 
-<!-- a container with padding of 3.. This div is closed at the end of the page-->
-<div class="container p-3">
-	<!-- a row with padding-top of 4-->
-	<div class="row pt-4">
-		<!-- divide up the row into 2 blocks of 8 & 2 columns = total 12 as per bootstrap standard-->
-		<div class="col-8">
-
-			<form asp-controller="RentalTransaction" asp-action="RentalTransaction" method="get">
-				<div class="input-group">
-					Rental Transaction Id:
-
-					<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" style="width: 60px;" />
-
-					Rental Request Id:
-
-					<input type="text" name="SearchRentalRequestId" value="@Context.Request.Query["SearchRentalRequestId"].ToString()" />
+@{
+	//will be used to display success message for editting 
+	if (TempData["Success"] != null)
+	{
+		<div class="alert alert-success" role="alert">
+			@TempData["Success"].ToString()
+		</div>
+	}
+}
 
 
-					Employee Id:
+<div class="container px-0">
+	<div class="row pt-2">
+		<div class="p-3">
 
-					<input type="text" name="SearchEmployeeId" value="@Context.Request.Query["SearchEmployeeId"].ToString()" />
+			<div class="card border-primary mx-3">
+				<div class="card-header p-3"><h4>Search & Filter Transaction</h4></div>
+				<div class="card-body p-4">
+					<form asp-controller="RentalTransaction" asp-action="RentalTransaction" method="get">
+						<div class="input-group">
 
-					Transaction Date:
-					<input type="date" name="SearchTransactionDate" value="@Context.Request.Query["SearchTransactionDate"].ToString()">
+							<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Rental Transaction Id" />
+
+							<input type="text" name="SearchRentalRequestId" value="@Context.Request.Query["SearchRentalRequestId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Rental Request Id" />
+
+							<input type="text" name="SearchEmployeeId" value="@Context.Request.Query["SearchEmployeeId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Employee Id" />
+
+						</div>
 
 
+						<div class="input-group pt-2">
+							Transaction Date:
 
+							<input type="date" class="form-control mb-3 mx-4" name="SearchTransactionDate" value="@Context.Request.Query["SearchTransactionDate"].ToString()">
+						</div>
 
-				</div>
-
-				Equipment Name:
-				<div class="input-group">
-					<select asp-for="SearchEquipment"
-							asp-items="@Model.equipmentTitle
+						Equipment Name: <br />
+						<div class="input-group">
+							<select asp-for="SearchEquipment"
+									asp-items="@Model.equipmentTitle
                                .Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
-							class="form-select">
-						<option value="" disabled selected>Select an Equipment</option>
-					</select>
-				</div>
+									class="form-select mb-3 mx-4">
+								<option value="" disabled selected>Select an Equipment</option>
+							</select>
+						</div>
 
-				Payment Status:
-				<div class="input-group">
-					<select asp-for="SearchPayment" class="form-select">
-						<option value="" disabled selected>Select a Payment Status</option>
-						<option value="Paid">Paid</option>
-						<option value="Not Paid">Not Paid</option>
-					</select>
-				</div>
+						Payment Status:<br />
+						<div class="input-group">
+							<select asp-for="SearchPayment" class="form-select mb-3 mx-4">
+								<option value="" disabled selected>Select a Payment Status</option>
+								<option value="Paid">Paid</option>
+								<option value="Not Paid">Not Paid</option>
+							</select>
+						</div>
+						<div class="align-items-end text-end pe-2">
 
-				<input type="submit" value="Search" class="btn btn-secondary" />
-				<a asp-controller="RentalTransaction" asp-action="RentalTransaction" class="btn btn-outline-danger">Clear</a>
-			</form>
+							<input type="submit" value="Search" class="px-4 btn btn-secondary" />
+							<a asp-controller="RentalTransaction" asp-action="RentalTransaction" class="px-4 btn btn-danger m-2">Clear</a>
+
+						</div>
+					</form>
+
+
+				</div>
+			</div>
 
 		</div>
 
@@ -68,7 +80,7 @@
 
 <table class="table table-striped">
 	<thead>
-		<tr class="text-center">
+		<tr class="text-center table-primary">
 			<th>Rental Transaction ID</th>
 			<th>Rental Transaction TimeStamp</th>
 			<th>Rental Request ID</th>
@@ -107,7 +119,7 @@
 				</td>
 				<td>
 					<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
-					@* <a asp-action="Delete" asp-route-id="@record.RentalRequestId" class="btn btn-danger">Delete</a> *@
+					
 				</td>
 			</tr>
 			}}
@@ -116,14 +128,12 @@
 	</table>
 
 
-<br />
-<br />
-<h3>External Rental Requests</h3>
-<br />
+<h3 class="my-3">External Rental Requests</h3>
+
 	
 	<table class="table table-striped">
 		<thead>
-			<tr class="text-center">
+			<tr class="text-center table-primary">
 				<th>Rental Transaction ID</th>
 				<th>Rental Transaction TimeStamp</th>
 				<th>Employee ID</th>
@@ -160,7 +170,7 @@
 						</td>
 						<td>
 							<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
-							@* <a asp-action="Delete" asp-route-id="@record.RentalRequestId" class="btn btn-danger">Delete</a> *@
+							
 						</td>
 					</tr>
 				}		}

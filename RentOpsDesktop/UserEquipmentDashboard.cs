@@ -104,7 +104,7 @@ namespace RentOpsDesktop
 
                 //fetch frequently rented equipment object
                 var frequentlyRentedEquipment = dbContext.RentalTransactions
-                    .Where(rt => rt.UserId == userId)
+                    .Where(rt => rt.EmployeeId == userId)
                     .GroupBy(rt => rt.EquipmentId)
                     .Select(g => new
                     {

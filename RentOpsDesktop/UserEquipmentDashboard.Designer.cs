@@ -39,11 +39,8 @@
             btnEquipmentDashboard = new Button();
             btnBack = new Button();
             btnUpdateEquipment = new Button();
-            btnReset = new Button();
             dgvEquipment = new DataGridView();
             lblEquipmentDashboard = new Label();
-            txtReturnID = new TextBox();
-            lblReturnID = new Label();
             lblFrequentlyRented = new Label();
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
@@ -52,7 +49,6 @@
             lblDamagedEquipment = new Label();
             groupBox4 = new GroupBox();
             lblAvailableForRental = new Label();
-            btnSearch = new Button();
             pnlNavigationSideBar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvEquipment).BeginInit();
             groupBox1.SuspendLayout();
@@ -238,22 +234,6 @@
             btnUpdateEquipment.Text = "Update Equipment";
             btnUpdateEquipment.UseVisualStyleBackColor = false;
             // 
-            // btnReset
-            // 
-            btnReset.BackColor = Color.FromArgb(121, 86, 76);
-            btnReset.BackgroundImageLayout = ImageLayout.None;
-            btnReset.FlatAppearance.BorderSize = 0;
-            btnReset.FlatStyle = FlatStyle.Flat;
-            btnReset.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
-            btnReset.ForeColor = Color.FromArgb(241, 240, 234);
-            btnReset.Location = new Point(607, 219);
-            btnReset.Margin = new Padding(0);
-            btnReset.Name = "btnReset";
-            btnReset.Size = new Size(102, 41);
-            btnReset.TabIndex = 27;
-            btnReset.Text = "Reset";
-            btnReset.UseVisualStyleBackColor = false;
-            // 
             // dgvEquipment
             // 
             dgvEquipment.BackgroundColor = Color.WhiteSmoke;
@@ -275,24 +255,6 @@
             lblEquipmentDashboard.Size = new Size(428, 52);
             lblEquipmentDashboard.TabIndex = 31;
             lblEquipmentDashboard.Text = "Equipment Dashboard";
-            // 
-            // txtReturnID
-            // 
-            txtReturnID.BorderStyle = BorderStyle.FixedSingle;
-            txtReturnID.Location = new Point(314, 225);
-            txtReturnID.Margin = new Padding(3, 4, 3, 4);
-            txtReturnID.Name = "txtReturnID";
-            txtReturnID.Size = new Size(72, 27);
-            txtReturnID.TabIndex = 38;
-            // 
-            // lblReturnID
-            // 
-            lblReturnID.AutoSize = true;
-            lblReturnID.Location = new Point(295, 203);
-            lblReturnID.Name = "lblReturnID";
-            lblReturnID.Size = new Size(121, 20);
-            lblReturnID.TabIndex = 37;
-            lblReturnID.Text = "Rental Record ID";
             // 
             // lblFrequentlyRented
             // 
@@ -388,23 +350,6 @@
             lblAvailableForRental.TabIndex = 40;
             lblAvailableForRental.Text = "10";
             // 
-            // btnSearch
-            // 
-            btnSearch.BackColor = Color.FromArgb(121, 86, 76);
-            btnSearch.BackgroundImageLayout = ImageLayout.None;
-            btnSearch.FlatAppearance.BorderSize = 0;
-            btnSearch.FlatStyle = FlatStyle.Flat;
-            btnSearch.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
-            btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
-            btnSearch.Location = new Point(487, 219);
-            btnSearch.Margin = new Padding(0);
-            btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(102, 41);
-            btnSearch.TabIndex = 30;
-            btnSearch.Text = "Search";
-            btnSearch.UseVisualStyleBackColor = false;
-            btnSearch.Click += btnSearch_Click;
-            // 
             // UserEquipmentDashboard
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -414,12 +359,8 @@
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
-            Controls.Add(txtReturnID);
-            Controls.Add(lblReturnID);
             Controls.Add(lblEquipmentDashboard);
-            Controls.Add(btnSearch);
             Controls.Add(btnUpdateEquipment);
-            Controls.Add(btnReset);
             Controls.Add(dgvEquipment);
             Controls.Add(pnlNavigationSideBar);
             Margin = new Padding(3, 4, 3, 4);
@@ -453,11 +394,8 @@
         private Button btnEquipmentDashboard;
         private Button btnBack;
         private Button btnUpdateEquipment;
-        private Button btnReset;
         private DataGridView dgvEquipment;
         private Label lblEquipmentDashboard;
-        private TextBox txtReturnID;
-        private Label lblReturnID;
         private Label lblFrequentlyRented;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
@@ -466,6 +404,5 @@
         private Label lblDamagedEquipment;
         private GroupBox groupBox4;
         private Label lblAvailableForRental;
-        private Button btnSearch;
     }
 }
