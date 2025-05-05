@@ -22,7 +22,7 @@
 		<div class="col-8">
 
 
-			<div class="card border-primary mx-5 mb-2">
+			<div class="card border-primary mx-4 mb-2">
 				<div class="card-header p-3"><h4>Search & Filter Return Records</h4></div>
 				<div class="card-body p-4">
 
@@ -66,9 +66,9 @@
 		</div>
 
 		<!--create button-->
-		<div class="col-4 text-center">
+		<div class="col-4 text-center mt-3">
 			<!--text end aligns the button to the right side-->
-			<a asp-controller="ReturnRecord" asp-action="Create" class="btn btn-primary">
+			<a asp-controller="ReturnRecord" asp-action="Create" class="p-3 mt-5 px-5 btn btn-primary">
 				<i class="bi bi-plus-square-fill"></i>&nbsp; Add Return Record
 			</a>
 			
@@ -79,7 +79,7 @@
 
 
 
-<table class="table table-striped mt-2">
+	<table class=" mt-5 table table-striped">
 	<thead>
             <tr class="text-center table-primary">
 			<th>Return Record ID</th>
@@ -100,6 +100,7 @@
 				<td>@record.ReturnRecordId</td>
 				<td>@record.RentalTransactionId</td>
 				<td>@record.ActualReturnDate.ToString("yyyy-MM-dd")</td>
+
 				<td>@record.AdditionalCharge</td>
 				<td>@record.LateReturnFee</td>
 				<td>@record.DocumentId</td>
