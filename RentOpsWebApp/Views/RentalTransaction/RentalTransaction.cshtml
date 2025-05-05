@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="mt-2">RentalTransaction</h1>
+
 
 @{
 	//will be used to display success message for editting 
@@ -19,11 +19,12 @@
 
 
 <div class="container px-0">
+	<h1 class="m-2">Rental Transactions</h1>
 	<div class="row pt-2">
 		<div class="p-3">
 
 			<div class="card border-primary mx-3">
-				<div class="card-header p-3"><h4>Search & Filter Transaction</h4></div>
+				<div class="card-header p-3"><h4>Search & Filter Rental Transactions</h4></div>
 				<div class="card-body p-4">
 					<form asp-controller="RentalTransaction" asp-action="RentalTransaction" method="get">
 						<div class="input-group">
@@ -74,7 +75,7 @@
 			</div>
 
 		</div>
-
+		</div>
 
 <h2>Website Rental Requests</h2>
 
@@ -176,3 +177,4 @@
 				}		}
 		</tbody>
 </table>
+</div>

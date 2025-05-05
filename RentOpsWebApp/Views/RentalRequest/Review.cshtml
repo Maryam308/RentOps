@@ -6,7 +6,6 @@
 }
 
 @{
-
     //check tempdata for success message
     if (TempData["Error"] != null)
     {
@@ -62,10 +61,9 @@
             <h4>Fill in the details and request the equipment for rental.</h4>
         </div>
         <div class="card-body">
-            <form asp-action="Review" method="post">
+            <form asp-action="Review" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <!--Add the rental request id in a hidden field-->
-				@* <input type="hidden" asp-for="RentalRequest.RentalRequestId" /> *@
                 <input type="hidden" name="RentalRequest.RentalRequestId" value="@Model.RentalRequest.RentalRequestId" />
                 <!--display the equipment name in readonly input field-->
                 <div class="form-group" >
@@ -107,6 +105,13 @@
                         <option value="">-- Select Status --</option>
                     </select>
                     <span asp-validation-for="RentalRequest.RentalRequestStatusId" class="text-danger"></span>
+                </div>
+
+                <!--An optional file upload for required rental agreements-->
+                <div>
+                    <label asp-for="UploadedAgreement" class="form-label mt-4">Attach a Rental Agreement (optional)</label>
+                    <input asp-for="UploadedAgreement" class="form-control" type="file" accept=".pdf">
+                    <span asp-validation-for="UploadedAgreement" class="text-danger"></span>
                 </div>
 
                 <button type="submit" class="btn btn-info">Save Changes</button>

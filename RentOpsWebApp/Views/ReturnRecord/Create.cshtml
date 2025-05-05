@@ -12,7 +12,7 @@
             <h3 class="mb-0">Add New Return Record</h3>
         </div>
         <div class="card-body">
-            <form asp-action="Create" method="post">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
                 <!-- Rental Transaction -->
                 <div class="form-group mb-3">                    
                     <label asp-for="theReturnRecord.RentalTransactionId" class="form-label">Associated Rental Transaction ID</label>
@@ -59,8 +59,9 @@
 
                 <!-- Additional Documents - Damage Report -- should be uploaded to the documents -->
                 <div>
-                    <label asp-for="theReturnRecord.DocumentId" class="form-label mt-4">Default file input example</label>
-                    <input asp-for="theReturnRecord.DocumentId" class="form-control" type="file" id="formFile">
+                    <label asp-for="@Model.UploadedFile" class="form-label mt-4">Attach PDF (optional)</label>
+                    <input asp-for="@Model.UploadedFile" class="form-control" type="file" accept=".pdf">
+                    <span asp-validation-for="@Model.UploadedFile" class="text-danger"></span>
                 </div>
 
                 <button type="submit" class="btn btn-primary">Add Return Record</button>

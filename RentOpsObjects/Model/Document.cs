@@ -43,4 +43,8 @@ public partial class Document
     [ForeignKey("UserId")]
     [InverseProperty("Documents")]
     public virtual User User { get; set; } = null!;
+
+    [ForeignKey("DocumentId")]
+    [InverseProperty("Documents")]
+    public virtual ICollection<RentalTransaction> RentalTransactions { get; set; } = new List<RentalTransaction>();
 }
