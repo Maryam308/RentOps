@@ -18,7 +18,7 @@
 }
 
 
-<div class="container px-0">
+<div class="container p-3 px-0">
 	<h1 class="m-2">Rental Transactions</h1>
 	<div class="row pt-2">
 		<div class="p-3">
@@ -94,6 +94,7 @@
 			<th>Return Date</th>
 			<th>Equipment Name</th>
 			<th>Payment Status</th>
+			<th>Document ID</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -118,6 +119,8 @@
 				<td>
 					@(record.PaymentId == null ? "Not Paid" : "Paid")
 				</td>
+				<td>Documents</td>
+				<!--print the ids of the docuemnts-->
 				<td>
 					<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
 					
