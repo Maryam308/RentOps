@@ -194,6 +194,11 @@ namespace RentOpsWebApp.Controllers
 
             };
 
+            //test the current user id fetching 
+            var userId = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
+
+            //send to the view using viewbag
+            ViewBag.UserId = userId;
 
             return View(viewmodel);
         }
