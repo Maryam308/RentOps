@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -20,7 +21,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using RentOpsWebApp.Areas.Identity.Data;
+using RentOpsObjects.Model;
 
 namespace RentOpsWebApp.Areas.Identity.Pages.Account
 {
@@ -32,9 +33,8 @@ namespace RentOpsWebApp.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-
-        //add role manager
         private readonly RoleManager<IdentityRole> _roleManager;
+        private  RentOpsDBContext _context;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -42,15 +42,17 @@ namespace RentOpsWebApp.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            RentOpsDBContext context)
         {
-            _roleManager = roleManager;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
+            _context = context;
         }
 
         /// <summary>
@@ -106,40 +108,113 @@ namespace RentOpsWebApp.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
-            //add the name property
+            //public string Role { get; set; }
+
             [Required]
-            public string Name { get; set; }
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
 
+            [Required]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
 
-            //add the role property
-            public string Role { get; set; }
+            [Phone]
+            [Display(Name = "Phone Number")]
+            public string? PhoneNumber { get; set; } // optional
 
             [ValidateNever]
-            public IEnumerable<SelectListItem> RoleList { get; set; }
-
-
+            public IEnumerable<SelectListItem> RoleList { get; set; }   
         }
 
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-
-            if (!_roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
+            if(!_roleManager.RoleExistsAsync("Administrator").GetAwaiter().GetResult())
             {
-                _roleManager.CreateAsync(new IdentityRole("Admin")).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole("Manager")).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole("Rental User")).GetAwaiter().GetResult();
+                //seed roles if they do not exist
+                _roleManager.CreateAsync(new IdentityRole("Administrator")).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole("Rental Manager")).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole("Customer")).GetAwaiter().GetResult();
             }
 
+            //seed admin user if it does not exist
+            if (_userManager.FindByEmailAsync("admin@test.com").GetAwaiter().GetResult() == null)
+            {
+                var admin = new IdentityUser
+                {
+                    UserName = "admin@test.com",
+                    Email = "admin@test.com",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true
+                };
+                await _userManager.CreateAsync(admin, "Test@123");
+                await _userManager.AddToRoleAsync(admin, "Administrator");
+            
+           
+
+                //var manager = new IdentityUser
+                //{
+                //    UserName = "manager@test.com",
+                //    Email = "manager@test.com",
+                //    EmailConfirmed = true,
+                //    PhoneNumberConfirmed = true
+                //};
+                //await _userManager.CreateAsync(manager, "Test@123");
+                //await _userManager.AddToRoleAsync(manager, "Rental Manager");
+
+            
+                //var tech1 = new IdentityUser
+                //{
+                //    UserName = "tech1@test.com",
+                //    Email = "tech1@test.com",
+                //    EmailConfirmed = true,
+                //    PhoneNumberConfirmed = true
+                //};
+                //await _userManager.CreateAsync(tech1, "Test@123");
+                //await _userManager.AddToRoleAsync(tech1, "Rental Manager");
+            
+                //var tech2 = new IdentityUser
+                //{
+                //    UserName = "tech2@test.com",
+                //    Email = "tech2@test.com",
+                //    EmailConfirmed = true,
+                //    PhoneNumberConfirmed = true
+                //};
+                //await _userManager.CreateAsync(tech2, "Test@123");
+                //await _userManager.AddToRoleAsync(tech2, "Rental Manager");
+            
+                //var user1 = new IdentityUser
+                //{
+                //    UserName = "user1@test.com",
+                //    Email = "user1@test.com",
+                //    EmailConfirmed = true,
+                //    PhoneNumberConfirmed = true
+                //};
+                //await _userManager.CreateAsync(user1, "Test@123");
+                //await _userManager.AddToRoleAsync(user1, "Customer");
+
+            
+                //var user2 = new IdentityUser
+                //{
+                //    UserName = "user2@test.com",
+                //    Email = "user2@test.com",
+                //    EmailConfirmed = true,
+                //    PhoneNumberConfirmed = true
+                //};
+                //await _userManager.CreateAsync(user2, "Test@123");
+                //await _userManager.AddToRoleAsync(user2, "Customer");
+
+            }
+
+
             ReturnUrl = returnUrl;
+
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            Input = new InputModel()
-            {
-                RoleList = _roleManager.Roles.Select(x => x.Name)
-               .Select(i => new SelectListItem { Text = i, Value = i })
-            };
-
+            //Input = new InputModel()
+            //{
+            //    RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem { Text = i, Value = i })
+            //};
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -157,13 +232,38 @@ namespace RentOpsWebApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-                    if (Input.Role == null || Input.Role == "0")
+
+
+                    //if(Input.Role == null || Input.Role == "0") {
+                    //    await _userManager.AddToRoleAsync(user, "Customer"); //if no role selected, add him as user
+                    //}
+                    //else
+                    //{
+                    //    await _userManager.AddToRoleAsync(user, Input.Role); //if role was selected, add him to that role
+                    //}
+
+                    //user role is always customer
+                    await _userManager.AddToRoleAsync(user, "Customer");
+
+                    //add to the database context of RentOpsDBContext
+                    if (!_context.Users.Any(c => c.Email == user.Email))
                     {
-                        await _userManager.AddToRoleAsync(user, "Viewer"); // If no role was selected, assign the user as a Viewer
-                    }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user, Input.Role); // If a role was selected, assign it to the user
+                        var customer = new User
+                        {
+                            FirstName = Input.FirstName,
+                            LastName = Input.LastName,
+                            Email = user.Email,
+                            PhoneNumber = Input.PhoneNumber,
+                            RoleId = _context.Roles.FirstOrDefault(r => r.RoleTitle == "Customer").RoleId,
+
+                        };
+                        _context.Users.Add(customer);
+                        await _context.SaveChangesAsync();
+
+                        //test by printing user id in message box
+                        Console.WriteLine(customer.UserId);
+
+
                     }
 
 
@@ -192,6 +292,12 @@ namespace RentOpsWebApp.Areas.Identity.Pages.Account
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
+
+                    //var Input = new InputModel()
+                    //{
+                    //    RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem { Text = i, Value = i })
+                    //};
+
                 }
             }
 
@@ -199,11 +305,11 @@ namespace RentOpsWebApp.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private ApplicationUser CreateUser()
+        private IdentityUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<ApplicationUser>();
+                return Activator.CreateInstance<IdentityUser>();
             }
             catch
             {

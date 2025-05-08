@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RentOpsWebApp.Areas.Identity.Data;
 
 namespace RentOpsWebApp.Data;
 
@@ -20,6 +19,5 @@ public class RentOpsWebAppContext : IdentityDbContext<IdentityUser>
         // Add your customizations after calling base.OnModelCreating(builder);
     }
 
-    DbSet<ApplicationUser> ApplicationUsers { get; set; } = null!;
 
 }

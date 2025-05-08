@@ -1,8 +1,8 @@
 ﻿@using RentOpsWebApp.ViewModels;
 @model EquipmentViewModel;
 @{
-    ViewData["Title"] = "Equipment";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "Equipment";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
@@ -16,6 +16,16 @@
 			@TempData["CreateSuccess"].ToString()
 		</div>
 	}
+	
+	//check the viewbag for the success message
+	if (ViewBag.UserId != null)
+	{
+		<div class="alert alert-danger" role="alert">
+			@ViewBag.UserId.ToString()
+		</div>
+	}
+
+
 }
 
 
