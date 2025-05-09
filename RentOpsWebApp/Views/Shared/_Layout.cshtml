@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 <body>
-    <header> 
+    <header>
         <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
@@ -34,11 +34,11 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Equipment" asp-action="Equipment">Equipment</a>
-                        </li>                        
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Dashboard" asp-action="Dashboard">Dashboard</a>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="AuditLog" asp-action="AuditLog">Audit Logs</a>
                         </li>
@@ -53,32 +53,32 @@
 
                             </div>
                         </li>
-                        
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Rentals</a>
                             <div class="dropdown-menu">
-                                
+
                                 <a class="dropdown-item" asp-area="" asp-controller="MyRentalRequest" asp-action="MyRentalRequest">My Rental Request</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction">My Rental Transactions</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="MyReturnRecord" asp-action="MyReturnRecord">My Return Records</a>
-                               
+
                             </div>
                         </li>
                     </ul>
                     <div class="d-flex">
                         <!--drop down with two options logout and profile-->
-						<div class="dropdown">
-							<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-								User
-							</button>
-							<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
-								<li><a class="dropdown-item" asp-area="" asp-controller="Profile" asp-action="Profile">Profile</a></li>
-							</ul>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                User
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Profile" asp-action="Profile">Profile</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <partial name="_LoginPartial"/>
+                <partial name="_LoginPartial" />
         </nav>
     </header>
     <div class="container">
@@ -102,3 +102,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

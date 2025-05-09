@@ -3,6 +3,8 @@ using RentOpsObjects.Model;
 using Microsoft.AspNetCore.Identity;
 using RentOpsWebApp.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using RentOpsWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<RentOpsWebAppContext>();
 
+builder.Services.AddScoped<NotificationLogic>();
+builder.Services.AddHostedService<NotificationService>();
 
 var app = builder.Build();
 
@@ -38,6 +42,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
 app.UseAuthentication(); ;
 
 app.UseAuthorization();

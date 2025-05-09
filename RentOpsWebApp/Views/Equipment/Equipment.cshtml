@@ -5,7 +5,11 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+@{
+	// var userRoleTitle = ViewBag.UserRoleTitle.ToString();
+	// var isAdminOrManager = userRoleTitle == "Administrator" || userRoleTitle == "Rental Manager"; Check roles
+	// var isAdmin = userRoleTitle == "Administrator";
+}
 
 <!--Check if there is a success message to display-->
 
@@ -18,12 +22,12 @@
 	}
 	
 	//check the viewbag for the success message
-	if (ViewBag.UserId != null)
-	{
-		<div class="alert alert-danger" role="alert">
-			@ViewBag.UserId.ToString()
-		</div>
-	}
+	// if (ViewBag.UserId != null)
+	// {
+	// 	<div class="alert alert-danger" role="alert">
+	// 		@ViewBag.UserId.ToString()
+	// 	</div>
+	// }
 
 
 }
@@ -83,14 +87,21 @@
 			</div>
 		</div>
 
+		
 		<div class="col-4 text-center mt-5 pt-4 ">
-			<a asp-controller="Equipment" asp-action="AddEquipment"  class="btn btn-primary my-2 px-5 py-3" >
+			@* @if (isAdminOrManager) *@
+			@* 		{ *@
+<a asp-controller="Equipment" asp-action="AddEquipment"  class="btn btn-primary my-2 px-5 py-3" >
 				<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
 			</a>
+					@* } *@
 			<br/>
+			@* @if (isAdmin) *@
+			@* 		{ *@
 			<a asp-controller="Equipment" asp-action="ManageCategories" class="btn btn-primary my-2 px-4 py-3">
 				Manage Equipment Categories
 			</a>
+					@* } *@
         </div>
 
 		
@@ -138,11 +149,14 @@
 					<a asp-action="Request" asp-route-id="@record.EquipmentId" class="btn btn-primary">Request for Rental</a>
 				</td>
 
-				<!--if role is admin or manager-->
-				<td> 
-						<a asp-action="Edit" asp-route-id="@record.EquipmentId" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
-						<a asp-action="Delete" asp-route-id="@record.EquipmentId" class="btn btn-danger"><i class="bi bi-trash-fill"></i>Delete</a>
-				</td> 
+					<!-- Conditional rendering based on role title -->
+					@* @if (isAdminOrManager) *@
+					@* { *@
+						<td>
+							<a asp-action="Edit" asp-route-id="@record.EquipmentId" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
+							<a asp-action="Delete" asp-route-id="@record.EquipmentId" class="btn btn-danger"><i class="bi bi-trash-fill"></i>Delete</a>
+						</td>
+					@* } *@
 
 
 

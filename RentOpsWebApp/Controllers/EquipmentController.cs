@@ -194,13 +194,14 @@ namespace RentOpsWebApp.Controllers
 
             };
 
-            //test the current user id fetching 
-            var userId = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
-
-            //send to the view using viewbag
-            ViewBag.UserId = userId;
+            //var user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
+            //var userId = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
+            //var userRoleTitle = _context.Roles.FirstOrDefault(r => r.RoleId == user.RoleId)?.RoleTitle; // Assuming RoleId is foreign key in Users table
+            //ViewBag.UserId = userId;
+            //ViewBag.UserRoleTitle = userRoleTitle; // Store role title in ViewBag
 
             return View(viewmodel);
+
         }
 
         //GET to navigate to the delete page
@@ -375,7 +376,8 @@ namespace RentOpsWebApp.Controllers
                 
             } 
             
-            model.RentalRequest.UserId = 1; // Set the UserId to 1 for now, as we don't have user authentication yet.
+            model.RentalRequest.UserId = _context.Users
+        .FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
             model.RentalRequest.EquipmentId = model.NewEquipment.EquipmentId; // Set the EquipmentId to the selected equipment
             model.RentalRequest.RentalRequestTimestamp = DateTime.Now; // Set the RentalRequestTimestamp to the current date and time
             model.RentalRequest.RentalRequestStatusId = 1; // Set the RentalRequestStatusId to 1 
@@ -400,6 +402,55 @@ namespace RentOpsWebApp.Controllers
                 // Save to database
                 _context.RentalRequests.Add(model.RentalRequest);
                 _context.SaveChanges();
+
+                // Retrieve the message content for Pending Approval status from the database
+                var pendingMessageContent = _context.MessageContents
+                    .FirstOrDefault(m => m.MessageContentText == "Rental Request Pending Approval: Thank you for choosing RentOps! Your rental request has been sent successfully and is pending approval.");
+
+                if (pendingMessageContent != null && model.RentalRequest.UserId.HasValue)
+                {
+                    // Create a notification for the user
+                    var notification = new Notification
+                    {
+                        UserId = model.RentalRequest.UserId.Value,
+                        MessageContentId = pendingMessageContent.MessageContentId,
+                        NotificationStatusId = 1, // 1 means "unread"
+                        NotificationTimestamp = DateTime.Now
+                    };
+
+                    // Add the notification to the database
+                    _context.Notifications.Add(notification);
+                    _context.SaveChanges();
+
+                    // Retrieve the message content for admin and manager notification
+                    var adminMessageContent = _context.MessageContents
+                        .FirstOrDefault(m => m.MessageContentText == "New Rental Request! Please approve or reject the request.");
+
+                    // Notify all admins and managers about the new rental request
+                    var adminAndManagers = _context.Users
+                        .Where(u => u.RoleId == 1 || u.RoleId == 2) // RoleId 1 for Admin, 2 for Manager
+                        .ToList();
+
+                    foreach (var user in adminAndManagers)
+                    {
+                        if (adminMessageContent != null)
+                        {
+                            var adminNotification = new Notification
+                            {
+                                UserId = user.UserId,
+                                MessageContentId = adminMessageContent.MessageContentId,
+                                NotificationStatusId = 1, // 1 means "unread"
+                                NotificationTimestamp = DateTime.Now
+                            };
+
+                            _context.Notifications.Add(adminNotification);
+                        }
+                    }
+
+                    _context.SaveChanges(); // Save the notifications for admins and managers
+                }
+
+
                 TempData["CreateSuccess"] = "Rental Request Created Successfully.";
 
                 return RedirectToAction("Equipment");

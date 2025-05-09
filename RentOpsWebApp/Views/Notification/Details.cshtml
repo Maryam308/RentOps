@@ -1,0 +1,57 @@
+﻿@model RentOpsWebApp.ViewModels.NotificationDetailsViewModel
+
+@{
+    ViewData["Title"] = "Notification Details";
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".card").hide().fadeIn(500);
+        });
+    </script>
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <!-- Back to Notifications at top-left -->
+            <div class="mb-3">
+                <a class="btn btn-link text-decoration-none" href="@Url.Action("Notification", "Notification")">
+                    ← Back to Notifications
+                </a>
+            </div>
+
+            <h1 class="mb-4 text-center">@ViewData["Title"]</h1>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    Message Details
+                </div>
+                <div class="card-body">
+                    <p><strong>Message:</strong> @Model.MessageContentText</p>
+                    <p><strong>Timestamp:</strong> @Model.NotificationTimestamp.ToString("f")</p>
+                </div>
+            </div>
+
+            @if (Model.RentalRequestId != null)
+            {
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        Related Rental Request
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Status:</strong> @Model.RentalRequestStatusTitle</p>
+                        <p><strong>Equipment:</strong> @Model.EquipmentTitle</p>
+                        <p><strong>Start Date:</strong> @Model.RentalStartDate?.ToString("d")</p>
+                        <p><strong>Return Date:</strong> @Model.RentalReturnDate?.ToString("d")</p>
+                    </div>
+                </div>
+            }
+
+          
+        </div>
+    </div>
+</div>

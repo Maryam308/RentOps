@@ -3,13 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace RentOpsWebApp.Controllers
 {
     public class RentalRequestController : Controller
     {
-
-        private  RentOpsDBContext _context;
+        private RentOpsDBContext _context;
 
         public RentalRequestController(RentOpsDBContext context)
         {
@@ -20,6 +23,7 @@ namespace RentOpsWebApp.Controllers
         {
             return View();
         }
+
         public IActionResult RentalRequest(string SearchRentalRequestId, string SearchRentalRequestStatusId, string searchequipmentId)
         {
             IEnumerable<RentalRequest> rentalRequestsList = _context.RentalRequests
@@ -29,9 +33,7 @@ namespace RentOpsWebApp.Controllers
                 .OrderByDescending(r => r.RentalStartDate)
                 .ToList();
 
-            //filtering system
-
-            //If id is used, we filter the list retrieved above
+            // Filtering system
             if (!String.IsNullOrEmpty(SearchRentalRequestId))
             {
                 rentalRequestsList = rentalRequestsList.Where(p =>
@@ -63,8 +65,6 @@ namespace RentOpsWebApp.Controllers
             return View(rentalRequestViewModel);
         }
 
-
-        //get to navigate to the review page
         public IActionResult Review(int id)
         {
             var rentalRequest = _context.RentalRequests
@@ -77,11 +77,13 @@ namespace RentOpsWebApp.Controllers
             {
                 return NotFound();
             }
+
             var rentalRequestViewModel = new RentalRequestViewModel
             {
                 RentalRequest = rentalRequest,
-                rentalRequestStatuses = _context.RentalRequestStatuses.ToList(), 
+                rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
             };
+
             return View(rentalRequestViewModel);
         }
 
@@ -89,10 +91,9 @@ namespace RentOpsWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Review(RentalRequestViewModel model)
         {
-            
             try
             {
-                if (model.RentalRequest.RentalRequestId == 0) // Check if ID was passed
+                if (model.RentalRequest.RentalRequestId == 0)
                 {
                     TempData["Error"] = "Invalid Rental Request ID.";
                     return RedirectToAction("RentalRequest");
@@ -106,52 +107,114 @@ namespace RentOpsWebApp.Controllers
                     return RedirectToAction("Review", new { id = model.RentalRequest.RentalRequestId });
                 }
 
-
                 if (rentalRequest == null)
                 {
                     TempData["Error"] = "Rental request not found.";
                     return RedirectToAction("Review", new { id = model.RentalRequest.EquipmentId });
                 }
 
-                //  Handle Pending Requests
-                if (model.RentalRequest.RentalRequestStatusId == 1)
+                // Use system local time
+                DateTime currentTime = DateTime.Now;
+
+                // If the status hasn't changed, skip notification
+                if (model.RentalRequest.RentalRequestStatusId == rentalRequest.RentalRequestStatusId)
                 {
-                    return RedirectToAction("RentalRequest"); // Go to Rental Requests view  
+                    TempData["NoChange"] = "No changes were made to the rental request status.";
+                    return RedirectToAction("RentalRequest");
                 }
 
-                //  Handle Rejected Requests
-                if (model.RentalRequest.RentalRequestStatusId == 3)
+                // Handle Pending Requests
+                if (model.RentalRequest.RentalRequestStatusId == 1)
                 {
-                    rentalRequest.RentalRequestStatusId = 3; // Update status to Rejected
+                    rentalRequest.RentalRequestStatusId = 1;
                     _context.Entry(rentalRequest).Property(r => r.RentalRequestStatusId).IsModified = true;
                     _context.SaveChanges();
 
+                    var pendingMessageContent = _context.MessageContents
+                        .FirstOrDefault(m => m.MessageContentText == "Rental Request Pending Approval: Your rental request is pending approval. We will notify you once it is reviewed.");
+
+                    if (pendingMessageContent != null && rentalRequest.UserId.HasValue)
+                    {
+                        var notification = new Notification
+                        {
+                            UserId = rentalRequest.UserId.Value,
+                            MessageContentId = pendingMessageContent.MessageContentId,
+                            NotificationStatusId = 1,
+                            NotificationTimestamp = currentTime
+                        };
+
+                        _context.Notifications.Add(notification);
+                        _context.SaveChanges();
+                    }
+
+                    TempData["Pending"] = "Rental request is pending approval.";
+                    return RedirectToAction("RentalRequest");
+                }
+
+                // Handle Rejected Requests
+                if (model.RentalRequest.RentalRequestStatusId == 3)
+                {
+                    rentalRequest.RentalRequestStatusId = 3;
+                    _context.Entry(rentalRequest).Property(r => r.RentalRequestStatusId).IsModified = true;
+                    _context.SaveChanges();
+
+                    var rejectedMessageContent = _context.MessageContents
+                        .FirstOrDefault(m => m.MessageContentText == "Your rental request has been rejected. You can contact our department for further carifications: +973 67893143.");
+
+                    if (rejectedMessageContent != null && rentalRequest.UserId.HasValue)
+                    {
+                        var notification = new Notification
+                        {
+                            UserId = rentalRequest.UserId.Value,
+                            MessageContentId = rejectedMessageContent.MessageContentId,
+                            NotificationStatusId = 1,
+                            NotificationTimestamp = currentTime
+                        };
+
+                        _context.Notifications.Add(notification);
+                        _context.SaveChanges();
+                    }
+
                     TempData["Rejected"] = "Rental request has been rejected.";
-                    return RedirectToAction("RentalRequest"); // Go to Rental Requests view  
+                    return RedirectToAction("RentalRequest");
                 }
 
                 // Handle Approved Requests
                 if (model.RentalRequest.RentalRequestStatusId == 2)
                 {
-                    rentalRequest.RentalRequestStatusId = 2; // Update status to Approved
+                    rentalRequest.RentalRequestStatusId = 2;
                     _context.Entry(rentalRequest).Property(r => r.RentalRequestStatusId).IsModified = true;
                     _context.SaveChanges();
-                    
-                    
-                    // Create a transaction
+
+                    var approvedMessageContent = _context.MessageContents
+                        .FirstOrDefault(m => m.MessageContentText == "Your rental request has been approved. Please proceed to payment.");
+
+                    if (approvedMessageContent != null && rentalRequest.UserId.HasValue)
+                    {
+                        var notification = new Notification
+                        {
+                            UserId = rentalRequest.UserId.Value,
+                            MessageContentId = approvedMessageContent.MessageContentId,
+                            NotificationStatusId = 1,
+                            NotificationTimestamp = currentTime
+                        };
+
+                        _context.Notifications.Add(notification);
+                        _context.SaveChanges();
+                    }
+
                     var transaction = new RentalTransaction
                     {
-                        RentalTransactionTimestamp = DateTime.Now,
+                        RentalTransactionTimestamp = currentTime,
                         RentalRequestId = rentalRequest.RentalRequestId,
                         EquipmentId = rentalRequest.EquipmentId,
                         PickupDate = rentalRequest.RentalStartDate,
-                        ReturnDate = rentalRequest.RentalReturnDate ,
+                        ReturnDate = rentalRequest.RentalReturnDate,
                         RentalFee = model.RentalRequest.RentalTotalCost,
-                        EmployeeId = 1, // You might want to fetch this dynamically
+                        EmployeeId = 1,
                         PaymentId = null
                     };
 
-                    //check if in the model there is an agreement uploaded
                     if (model.UploadedAgreement != null && model.UploadedAgreement.Length > 0)
                     {
                         if (Path.GetExtension(model.UploadedAgreement.FileName).ToLower() != ".pdf")
@@ -165,9 +228,9 @@ namespace RentOpsWebApp.Controllers
 
                         var document = new Document
                         {
-                            UserId = 1, // Replace with actual user context
+                            UserId = 1,
                             FileName = model.UploadedAgreement.FileName,
-                            UploadDate = DateTime.UtcNow,
+                            UploadDate = currentTime,
                             FileTypeId = 4,
                             StoragePath = "",
                             FileData = memoryStream.ToArray()
@@ -176,13 +239,7 @@ namespace RentOpsWebApp.Controllers
                         _context.Documents.Add(document);
                         await _context.SaveChangesAsync();
 
-
-                        //add the rental transaction id and the document id to the rentaldocument table
-                        transaction.Documents = new List<Document>
-                        {
-                            document
-                        };
-
+                        transaction.Documents = new List<Document> { document };
                     }
 
                     _context.RentalTransactions.Add(transaction);
@@ -191,7 +248,7 @@ namespace RentOpsWebApp.Controllers
                     TempData["CreateSuccess"] = "Rental Request Approved! A transaction has been created.";
                 }
 
-                return RedirectToAction("RentalRequest"); // Go to Rental Requests view
+                return RedirectToAction("RentalRequest");
             }
             catch (Exception ex)
             {
@@ -200,8 +257,5 @@ namespace RentOpsWebApp.Controllers
                 return RedirectToAction("Review", new { id = model.RentalRequest.EquipmentId });
             }
         }
-
-
-
     }
 }
