@@ -27,7 +27,7 @@ namespace RentOpsWebApp.Services
                     notificationLogic.SendReturnReminderNotifications();
                 }
 
-                // Wait for 1 hour before the next update (adjust as needed)
+                // Wait for 1 hour before the next update 
                 await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
             }
         }
