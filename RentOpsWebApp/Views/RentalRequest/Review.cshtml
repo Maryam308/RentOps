@@ -90,31 +90,74 @@
                     <input disabled asp-for="RentalRequest.RentalTotalCost" type="text" class="form-control" id="TotalCost" name="TotalCost" />
                 </div>
 
+
+                <!--if the rental request status is not pending-->
+                @{
+                    bool isPending = Model.RentalRequest.RentalRequestStatus.RentalRequestStatusTitle == "Pending";
+                }
+
                 <!-- Requested Deposit -->
                 <div class="form-group mb-3">
                     <label asp-for="NewRentalTransaction.Deposit" class="form-label">Deposit</label>
-                    <input asp-for="NewRentalTransaction.Deposit" type="text" class="form-control" />
+                    @if (!isPending)
+                    {
+                        <input asp-for="NewRentalTransaction.Deposit" type="text" class="form-control" disabled />
+                    }
+                    else
+                    {
+                        <input asp-for="NewRentalTransaction.Deposit" type="text" class="form-control" />
+                    }
+
                 </div>
 
 				<!-- Rental Request Status -->
                 <div class="form-group mb-4">
                     <label asp-for="RentalRequest.RentalRequestStatusId" class="form-label">Availability Status</label>
-                    <select asp-for="RentalRequest.RentalRequestStatusId"
-                            asp-items="@Model.rentalRequestStatuses.Select(i => new SelectListItem { Text = i.RentalRequestStatusTitle, Value = i.RentalRequestStatusId.ToString() })"
-                            class="form-select">
-                        <option value="">-- Select Status --</option>
-                    </select>
+                    
+                    @if (!isPending)
+                    {
+                        <select disabled asp-for="RentalRequest.RentalRequestStatusId"
+                                asp-items="@Model.rentalRequestStatuses.Select(i => new SelectListItem { Text = i.RentalRequestStatusTitle, Value = i.RentalRequestStatusId.ToString() })"
+                                class="form-select">
+                            <option value="" disabled>-- Select Status --</option>
+                        </select>
+                    }
+                    else
+                    {
+                        <select asp-for="RentalRequest.RentalRequestStatusId"
+                                asp-items="@Model.rentalRequestStatuses.Select(i => new SelectListItem { Text = i.RentalRequestStatusTitle, Value = i.RentalRequestStatusId.ToString() })"
+                                class="form-select">
+                            <option value="">-- Select Status --</option>
+                        </select>
+                    }
+                    
                     <span asp-validation-for="RentalRequest.RentalRequestStatusId" class="text-danger"></span>
                 </div>
 
                 <!--An optional file upload for required rental agreements-->
                 <div>
                     <label asp-for="UploadedAgreement" class="form-label mt-4">Attach a Rental Agreement (optional)</label>
-                    <input asp-for="UploadedAgreement" class="form-control" type="file" accept=".pdf">
+                    @if (!isPending)
+                    {
+                        <input asp-for="UploadedAgreement" class="form-control" type="file" accept=".pdf" disabled>
+                    }
+                    else
+                    {
+                        <input asp-for="NewRentalTransaction.Deposit" type="text" class="form-control" />
+                    }
                     <span asp-validation-for="UploadedAgreement" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-info">Save Changes</button>
+                @if (!isPending)
+                {
+                    <button type="#" class="btn btn-info">Save Changes</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-info">Save Changes</button>
+                }
+
+                
 
                 <!--Add a Link to go back to the list without deleting-->
                 <a asp-controller="RentalRequest" asp-action="RentalRequest" class="btn btn-secondary" style="width:180px">Back to List</a>

@@ -1,7 +1,7 @@
 ﻿@using RentOpsWebApp.ViewModels;
 @model RentalRequestViewModel;
 @{
-		ViewData["Title"] = "RentalRequest";
+	ViewData["Title"] = "RentalRequest";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -20,7 +20,7 @@
 		<div class="alert alert-danger" role="alert">
 			@TempData["Rejected"]
 		</div>
-	
+
 	}
 
 }
@@ -42,18 +42,18 @@
 
 						<div class="input-group">
 							<select asp-for="SearchRentalRequestStatusId"
-									asp-items="@Model.rentalRequestStatuses
+							asp-items="@Model.rentalRequestStatuses
                                .Select(i => new SelectListItem { Text = i.RentalRequestStatusTitle, Value = i.RentalRequestStatusId.ToString() })"
-									class="form-select  mb-3 mx-4">
+							class="form-select  mb-3 mx-4">
 								<option value="" disabled selected>Select a Rental Request Status</option>
 							</select>
 						</div>
 
 						<div class="input-group">
 							<select asp-for="SearchEquipmentId"
-									asp-items="@Model.equipmentTitle
+							asp-items="@Model.equipmentTitle
                                .Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
-									class="form-select  mb-3 mx-4">
+							class="form-select  mb-3 mx-4">
 								<option value="" disabled selected>Select an Equipment</option>
 							</select>
 						</div>
@@ -70,47 +70,55 @@
 
 				</div>
 			</div>
-			
+
 
 		</div>
 
+	</div>
+
+
+	@if (Model.rentalRequests == null || !Model.rentalRequests.Any())
+	{
+		<div class="alert alert-light text-center" role="alert">
+			There are no rental requests to display.
 		</div>
-
-
-
-<table class="table table-striped mt-2">
-	<thead>
-		<tr class="text-center table-primary">
-			<th>Rental Request ID</th>
-			<th>Timestamp</th>
-			<th>Customer ID</th>
-			<th>Customer Name</th>
-			<th>Start Date</th>
-			<th>End Date</th>
-			<th>Total Cost</th>
-			<th>Equipment Name</th>
-			<th>Request Status</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var record in Model.rentalRequests)
-		{
-			<tr class="text-center">
-				<td>@record.RentalRequestId</td>
-				<td>@record.RentalRequestTimestamp</td>
-				<td>@record.User.UserId</td>
-				<td>@record.User.FirstName @record.User.LastName</td>
-				<td>@record.RentalStartDate</td>
-				<td>@record.RentalReturnDate</td>
-				<td>@record.RentalTotalCost</td>
-				<td>@record.Equipment.EquipmentName</td>
-				<td>@record.RentalRequestStatus.RentalRequestStatusTitle</td>
-				<td>
-					<a asp-action="Review" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Review Request</a>
-				</td>
-			</tr>
-		}
-	</tbody>
-	</table>
+	}
+	else
+	{
+		<table class="table table-striped mt-2">
+			<thead>
+				<tr class="text-center table-primary">
+					<th>Rental Request ID</th>
+					<th>Timestamp</th>
+					<th>Customer ID</th>
+					<th>Customer Name</th>
+					<th>Start Date</th>
+					<th>End Date</th>
+					<th>Total Cost</th>
+					<th>Equipment Name</th>
+					<th>Request Status</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var record in Model.rentalRequests)
+				{
+					<tr class="text-center">
+						<td>@record.RentalRequestId</td>
+						<td>@record.RentalRequestTimestamp</td>
+						<td>@record.User.UserId</td>
+						<td>@record.User.FirstName @record.User.LastName</td>
+						<td>@record.RentalStartDate</td>
+						<td>@record.RentalReturnDate</td>
+						<td>@record.RentalTotalCost</td>
+						<td>@record.Equipment.EquipmentName</td>
+						<td>@record.RentalRequestStatus.RentalRequestStatusTitle</td>
+						<td>
+								<a asp-action="Review" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Review Request</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+		</table>
+	}
 	</div>

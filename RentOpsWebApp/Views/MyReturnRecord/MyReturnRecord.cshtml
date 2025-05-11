@@ -1,14 +1,12 @@
 ﻿@using RentOpsWebApp.ViewModels;
 @model ReturnRecordViewModel;
 @{
-    ViewData["Title"] = "MyReturnRecord";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "MyReturnRecord";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>MyReturnRecord</h1>
 
 
-<!------------------------------------------------------------------------------>
 @{
 	if (TempData["CreateSuccess"] != null)
 	{
@@ -18,91 +16,104 @@
 	}
 }
 
-<!-- a container with padding of 3.. This div is closed at the end of the page-->
 <div class="container p-3">
-	<!-- a row with padding-top of 4-->
-	<div class="row pt-4">
-		<!-- divide up the row into 2 blocks of 8 & 2 columns = total 12 as per bootstrap standard-->
-		<div class="col-8">
 
-			<form asp-controller="MyReturnRecord" asp-action="MyReturnRecord" method="get">
-				<div class="input-group">
-					return record ID:
+	<h1 class="m-2">My Return Records</h1>
 
-					<input type="text" name="SearchReturnRecordId" value="@Context.Request.Query["SearchReturnRecordId"].ToString()" style="width: 60px;" />
-
-					Rental Transaction Id:
-
-					<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" />
-
-					Actual Return Date:
-					<input type="date" name="searchActualReturnDate" value="@Context.Request.Query["searchActualReturnDate"].ToString()">
+	<div class="row py-3 px-5">
+		
 
 
-				</div>
+			<div class="card border-primary mx-4 mb-2">
+				<div class="card-header p-3"><h4>Search & Filter Return Records</h4></div>
+				<div class="card-body p-4">
 
-				Return Condition:
-				<div class="input-group">
-					<select asp-for="SearchConditionStatus"
-							asp-items="@Model.conditionStatuses
+					<form asp-controller="MyReturnRecord" asp-action="MyReturnRecord" method="get">
+						<div class="input-group">
+
+							<input type="text" name="SearchReturnRecordId" value="@Context.Request.Query["SearchReturnRecordId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Return Record ID" />
+
+							<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Rental Transaction ID" />
+
+						</div>
+
+						<div class="input-group pt-2">
+
+							Actual Return Date:
+
+							<input type="date" class="form-control mb-3 mx-4" name="searchActualReturnDate" value="@Context.Request.Query["searchActualReturnDate"].ToString()">
+
+						</div>
+
+						<div class="input-group">
+							<select asp-for="SearchConditionStatus"
+									asp-items="@Model.conditionStatuses
                                .Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
-							class="form-select">
-						<option value="" disabled selected>Select a Condition</option>
-					</select>
-				</div>
+									class="form-select  mb-3 mx-4">
+								<option value="" disabled selected>Select a Return Condition</option>
+							</select>
+						</div>
 
 
-				<input type="submit" value="Search" class="btn btn-secondary" />
-				<a asp-controller="MyReturnRecord" asp-action="MyReturnRecord" class="btn btn-outline-danger">Clear</a>
-			</form>
+						<div class="align-items-end text-end pe-2">
+							<input type="submit" value="Search" class="px-4 btn btn-secondary" />
+							<a asp-controller="MyReturnRecord" asp-action="MyReturnRecord" class="px-4 btn btn-danger m-2">Clear</a>
+						</div>
 
-		</div>
+					</form>
 
-		<!--create button-->
-		<div class="col-4 text-end">
-			<!--text end aligns the button to the right side-->
-			<a asp-controller="Equipment" asp-action="AddEquipment" class="btn btn-primary">
-				<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
-			</a>
+			</div>
+			
 
 		</div>
 
 	</div>
 
 
-	<!------------------------------------------------------------------------------>
-
-
-	<table class="table table-striped">
-		<thead>
-			<tr class="text-center">
-				<th>Return Record ID</th>
-				<th>Rental Transaction ID</th>
-				<th>Actual Return Date</th>
-				<th>Additional Charge</th>
-				<th>Late Return Fee</th>
-				<th>Document ID</th>
-				<th>Return Condition</th>
-				<th></th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var record in Model.returnRecords)
-			{
+	@if (Model.returnRecords == null || !Model.returnRecords.Any())
+	{
+		<div class="alert alert-light text-center" role="alert">
+			There are no return records to display.
+		</div>
+	}
+	else
+	{
+		<table class="table table-striped">
+			<thead>
 				<tr class="text-center">
-					<td>@record.ReturnRecordId</td>
-					<td>@record.RentalTransactionId</td>
-					<td>@record.ActualReturnDate.ToString("yyyy-MM-dd")</td>
-					<td>@record.AdditionalCharge</td>
-					<td>@record.LateReturnFee</td>
-					<td>@record.DocumentId</td>
-					<td>@record.ReturnCondition.ConditionStatusTitle</td>
-					<td>
-						<a asp-action="Edit" asp-route-id="@record.ReturnRecordId" class="btn btn-primary">Edit</a>
-						<a asp-action="Delete" asp-route-id="@record.ReturnRecordId" class="btn btn-danger">Delete</a>
-					</td>
+					<th>Return Record ID</th>
+					<th>Rental Transaction ID</th>
+					<th>Actual Return Date</th>
+					<th>Additional Charge</th>
+					<th>Late Return Fee</th>
+					<th>Document ID</th>
+					<th>Return Condition</th>
+					<th></th>
+					<th></th>
 				</tr>
-			}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				@foreach (var record in Model.returnRecords)
+				{
+					<tr class="text-center">
+						<td>@record.ReturnRecordId</td>
+						<td>@record.RentalTransactionId</td>
+						<td>@record.ActualReturnDate.ToString("yyyy-MM-dd")</td>
+						<td>@record.AdditionalCharge</td>
+						<td>@record.LateReturnFee</td>
+						<td>@record.DocumentId</td>
+						<td>@record.ReturnCondition.ConditionStatusTitle</td>
+						<td>
+							<a asp-action="Edit" asp-route-id="@record.ReturnRecordId" class="btn btn-primary">Edit</a>
+							<a asp-action="Delete" asp-route-id="@record.ReturnRecordId" class="btn btn-danger">Delete</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+		
+	
+	}
+
+	
+</div>

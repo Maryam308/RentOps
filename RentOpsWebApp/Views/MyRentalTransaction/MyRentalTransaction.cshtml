@@ -1,73 +1,92 @@
 ﻿@using RentOpsWebApp.ViewModels;
 @model RentalTransactionViewModel;
 @{
-    ViewData["Title"] = "MyRentalTransaction";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "MyRentalTransaction";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>MyRentalTransaction</h1>
-<br />
 
-<!-- a container with padding of 3.. This div is closed at the end of the page-->
 <div class="container p-3">
-	<!-- a row with padding-top of 4-->
-	<div class="row pt-4">
-		<!-- divide up the row into 2 blocks of 8 & 2 columns = total 12 as per bootstrap standard-->
-		<div class="col-8">
+	<h1 class="m-2">My Rental Transactions</h1>
+	<div class="row py-3 px-5">
 
-			<form asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction" method="get">
-				<div class="input-group">
-					Rental Transaction Id:
+		<div class="card border-primary me-5 ms-2 my-2">
+			<div class="card-header p-3"><h4>Search & Filter Rental Transactions</h4></div>
+			<div class="card-body p-4">
+				<form asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction" method="get">
 
-					<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" style="width: 60px;" />
+					<div class="input-group">
 
-					Rental Request Id:
+						<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Rental Transaction Id" />
 
-					<input type="text" name="SearchRentalRequestId" value="@Context.Request.Query["SearchRentalRequestId"].ToString()" />
+						<input type="text" name="SearchRentalRequestId" value="@Context.Request.Query["SearchRentalRequestId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Rental Request Id" />
 
+						<input type="text" name="SearchEmployeeId" value="@Context.Request.Query["SearchEmployeeId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Employee Id" />
 
-					Employee Id:
-
-					<input type="text" name="SearchEmployeeId" value="@Context.Request.Query["SearchEmployeeId"].ToString()" />
-
-					Transaction Date:
-					<input type="date" name="SearchTransactionDate" value="@Context.Request.Query["SearchTransactionDate"].ToString()">
+					</div>
 
 
+					<div class="input-group pt-2">
+						Transaction Date:
 
+						<input type="date" class="form-control mb-3 mx-4" name="SearchTransactionDate" value="@Context.Request.Query["SearchTransactionDate"].ToString()">
+					</div>
 
-				</div>
-
-				Equipment Name:
-				<div class="input-group">
-					<select asp-for="SearchEquipment"
-							asp-items="@Model.equipmentTitle
+					Equipment Name: <br />
+					<div class="input-group">
+						<select asp-for="SearchEquipment"
+						asp-items="@Model.equipmentTitle
                                .Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
-							class="form-select">
-						<option value="" disabled selected>Select an Equipment</option>
-					</select>
-				</div>
+						class="form-select mb-3 mx-4">
+							<option value="" disabled selected>Select an Equipment</option>
+						</select>
+					</div>
 
-				Payment Status:
-				<div class="input-group">
-					<select asp-for="SearchPayment" class="form-select">
-						<option value="" disabled selected>Select a Payment Status</option>
-						<option value="Paid">Paid</option>
-						<option value="Not Paid">Not Paid</option>
-					</select>
-				</div>
+					Payment Status:<br />
+					<div class="input-group">
+						<select asp-for="SearchPayment" class="form-select mb-3 mx-4">
+							<option value="" disabled selected>Select a Payment Status</option>
+							<option value="Paid">Paid</option>
+							<option value="Not Paid">Not Paid</option>
+						</select>
+					</div>
 
-				<input type="submit" value="Search" class="btn btn-secondary" />
-				<a asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction" class="btn btn-outline-danger">Clear</a>
-			</form>
+					<div class="align-items-end text-end pe-2">
+
+						<input type="submit" value="Search" class="px-4 btn btn-secondary" />
+						<a asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction" class="px-4 btn btn-danger m-2">Clear</a>
+
+					</div>
+
+				</form>
+
+
+			</div>
+
 
 		</div>
 
+	</div>
 
-		<h2>Website Rental Requests</h2>
+	<h2>Website Rental Requests</h2>
+	<br/>
+
+	@{
+		var websiteRentalTransactions = Model.rentalTransactions?.Where(record => record.UserId == null && record.RentalRequest != null).ToList();
+	}
+
+
+	@if (websiteRentalTransactions == null || !websiteRentalTransactions.Any())
+	{
+		<div class="alert alert-light text-center" role="alert">
+			There are no rental transactions to display.
+		</div>
+	}
+	else
+	{
 
 		<table class="table table-striped">
-			<thead>
+			<thead class="table-primary">
 				<tr class="text-center">
 					<th>Rental Transaction ID</th>
 					<th>Rental Transaction TimeStamp</th>
@@ -107,22 +126,38 @@
 							</td>
 							<td>
 								<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
-								@* <a asp-action="Delete" asp-route-id="@record.RentalRequestId" class="btn btn-danger">Delete</a> *@
+
 							</td>
 						</tr>
-					}}
+					}			}
 			</tbody>
 
 		</table>
+	
+	}
+	
 
 
-		<br />
-		<br />
-		<h3>External Rental Requests</h3>
-		<br />
+	<br />
+	<br />
+	<h3>External Rental Requests</h3>
+	<br />
 
+	@{
+		var externalRentalTransactions = Model.rentalTransactions?.Where(record => record.UserId != null && record.RentalRequest == null).ToList();
+	}
+
+
+	@if (externalRentalTransactions == null || !externalRentalTransactions.Any() )
+	{
+		<div class="alert alert-light text-center" role="alert">
+			There are no rental transactions to display.
+		</div>
+	}
+	else
+	{
 		<table class="table table-striped">
-			<thead>
+			<thead class="table-primary">
 				<tr class="text-center">
 					<th>Rental Transaction ID</th>
 					<th>Rental Transaction TimeStamp</th>
@@ -160,12 +195,14 @@
 							</td>
 							<td>
 								<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
-								@* <a asp-action="Delete" asp-route-id="@record.RentalRequestId" class="btn btn-danger">Delete</a> *@
 							</td>
 						</tr>
-					}		}
+					}			}
 			</tbody>
 		</table>
+	
+	
+	}
 
-
-
+		
+</div>
