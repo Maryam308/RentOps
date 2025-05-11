@@ -2,18 +2,18 @@
 @model ReturnRecordViewModel;
 
 @{
-    ViewData["Title"] = "ReturnRecord";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "ReturnRecord";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
 @{
-    if (TempData["CreateSuccess"] != null)
-    {
-        <div class="alert alert-success" role="alert">
-            @TempData["CreateSuccess"].ToString()
-        </div>
-    }
+	if (TempData["CreateSuccess"] != null)
+	{
+		<div class="alert alert-success" role="alert">
+			@TempData["CreateSuccess"].ToString()
+		</div>
+	}
 }
 
 <div class="container p-3">
@@ -36,7 +36,7 @@
 						</div>
 
 						<div class="input-group pt-2">
-							
+
 							Actual Return Date:
 
 							<input type="date" class="form-control mb-3 mx-4" name="searchActualReturnDate" value="@Context.Request.Query["searchActualReturnDate"].ToString()">
@@ -45,9 +45,9 @@
 
 						<div class="input-group">
 							<select asp-for="SearchConditionStatus"
-									asp-items="@Model.conditionStatuses
+							asp-items="@Model.conditionStatuses
                                .Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
-									class="form-select  mb-3 mx-4">
+							class="form-select  mb-3 mx-4">
 								<option value="" disabled selected>Select a Return Condition</option>
 							</select>
 						</div>
@@ -55,7 +55,7 @@
 
 						<div class="align-items-end text-end pe-2">
 							<input type="submit" value="Search" class="px-4 btn btn-secondary" />
-							<a asp-controller="Equipment" asp-action="Equipment" class="px-4 btn btn-danger m-2">Clear</a>
+							<a asp-controller="ReturnRecord" asp-action="ReturnRecord" class="px-4 btn btn-danger m-2">Clear</a>
 						</div>
 
 					</form>
@@ -67,51 +67,62 @@
 
 		<!--create button-->
 		<div class="col-4 text-center mt-3">
-			<!--text end aligns the button to the right side-->
 			<a asp-controller="ReturnRecord" asp-action="Create" class="p-3 mt-5 px-5 btn btn-primary">
 				<i class="bi bi-plus-square-fill"></i>&nbsp; Add Return Record
 			</a>
-			
+
 		</div>
 
 	</div>
 
 
 
+	@if (Model.returnRecords == null || !Model.returnRecords.Any())
+	{
+		<div class="alert alert-light text-center" role="alert">
+			There are no return records to display.
+		</div>
+	}
+	else
+	{
 
-	<table class=" mt-5 table table-striped">
-	<thead>
-            <tr class="text-center table-primary">
-			<th>Return Record ID</th>
-			<th>Rental Transaction ID</th>
-			<th>Actual Return Date</th>
-			<th>Additional Charge</th>
-			<th>Late Return Fee</th>
-			<th>Document ID</th>
-			<th>Return Condition</th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var record in Model.returnRecords)
-		{
-             <tr class="text-center">
-				<td>@record.ReturnRecordId</td>
-				<td>@record.RentalTransactionId</td>
-				<td>@record.ActualReturnDate.ToString("yyyy-MM-dd")</td>
+		<table class=" mt-5 table table-striped">
+			<thead>
+				<tr class="text-center table-primary">
+					<th>Return Record ID</th>
+					<th>Rental Transaction ID</th>
+					<th>Actual Return Date</th>
+					<th>Additional Charge</th>
+					<th>Late Return Fee</th>
+					<th>Document ID</th>
+					<th>Return Condition</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var record in Model.returnRecords)
+				{
+					<tr class="text-center">
+						<td>@record.ReturnRecordId</td>
+						<td>@record.RentalTransactionId</td>
+						<td>@record.ActualReturnDate.ToString("yyyy-MM-dd")</td>
 
-				<td>@record.AdditionalCharge</td>
-				<td>@record.LateReturnFee</td>
-				<td>@record.DocumentId</td>
-				<td>@record.ReturnCondition.ConditionStatusTitle </td>
-				<td>
-						<a asp-action="Edit" asp-route-id="@record.ReturnRecordId" class="btn btn-primary"><i class="bi bi-pencil-square"></i>Edit</a>
+						<td>@record.AdditionalCharge</td>
+						<td>@record.LateReturnFee</td>
+						<td>@record.DocumentId</td>
+						<td>@record.ReturnCondition.ConditionStatusTitle </td>
+						<td>
+							<a asp-action="Edit" asp-route-id="@record.ReturnRecordId" class="btn btn-primary"><i class="bi bi-pencil-square"></i>Edit</a>
 
-						<a asp-action="Delete" asp-route-id="@record.ReturnRecordId" class="btn btn-danger"><i class="bi bi-trash-fill"></i>Delete</a>
-				</td>
-			</tr>
-		}
-	</tbody>
-	</table>
+							<a asp-action="Delete" asp-route-id="@record.ReturnRecordId" class="btn btn-danger"><i class="bi bi-trash-fill"></i>Delete</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+
+
+	}
+	
 	</div>

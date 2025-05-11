@@ -77,63 +77,95 @@
 		</div>
 		</div>
 
-<h2>Website Rental Requests</h2>
+	<h2>Website Rental Requests</h2>
+	<br />
 
-<table class="table table-striped">
-	<thead>
-		<tr class="text-center table-primary">
-			<th>Rental Transaction ID</th>
-			<th>Rental Transaction TimeStamp</th>
-			<th>Rental Request ID</th>
-			<th>Employee ID</th>
-			<th>Employee Name</th>
-			<th>Customer ID</th>
-			<th>Customer Name</th>
-			<th>Rental Fee</th>
-			<th>Pickup Date</th>
-			<th>Return Date</th>
-			<th>Equipment Name</th>
-			<th>Payment Status</th>
-			<th>Document ID</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var record in Model.rentalTransactions)
-		{
-			@if (record.UserId == null && record.RentalRequest != null)
-			{
+	@{
+		var websiteRentalTransactions = Model.rentalTransactions?.Where(record => record.UserId == null && record.RentalRequest != null).ToList();
+	}
 
-			<tr class="text-center">
-				<td>@record.RentalTransactionId</td>
-				<td>@record.RentalTransactionTimestamp</td>
-				<td>@record.RentalRequestId</td>
-				<td>@record.EmployeeId</td>
-				<td>@record.Employee.FirstName @record.Employee.LastName</td>
-				<td>@record.RentalRequest.UserId </td>
-				<td>@record.RentalRequest.User.FirstName @record.RentalRequest.User.LastName </td>	
-				<td>@record.RentalFee</td>
-				<td>@record.PickupDate</td>
-				<td>@record.ReturnDate</td>
-				<td>@record.Equipment.EquipmentName</td>
-				<td>
-					@(record.PaymentId == null ? "Not Paid" : "Paid")
-				</td>
-				<td>Documents</td>
-				<!--print the ids of the docuemnts-->
-				<td>
-					<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
+
+	@if (websiteRentalTransactions == null || !websiteRentalTransactions.Any())
+	{
+		<div class="alert alert-light text-center" role="alert">
+			There are no rental transactions to display.
+		</div>
+	}
+	else
+	{
+
+		<table class="table table-striped">
+			<thead>
+				<tr class="text-center table-primary">
+					<th>Rental Transaction ID</th>
+					<th>Rental Transaction TimeStamp</th>
+					<th>Rental Request ID</th>
+					<th>Employee ID</th>
+					<th>Employee Name</th>
+					<th>Customer ID</th>
+					<th>Customer Name</th>
+					<th>Rental Fee</th>
+					<th>Pickup Date</th>
+					<th>Return Date</th>
+					<th>Equipment Name</th>
+					<th>Payment Status</th>
+					<th>Document ID</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var record in Model.rentalTransactions)
+				{
+					@if (record.UserId == null && record.RentalRequest != null)
+					{
+
+					<tr class="text-center">
+						<td>@record.RentalTransactionId</td>
+						<td>@record.RentalTransactionTimestamp</td>
+						<td>@record.RentalRequestId</td>
+						<td>@record.EmployeeId</td>
+						<td>@record.Employee.FirstName @record.Employee.LastName</td>
+						<td>@record.RentalRequest.UserId </td>
+						<td>@record.RentalRequest.User.FirstName @record.RentalRequest.User.LastName </td>	
+						<td>@record.RentalFee</td>
+						<td>@record.PickupDate</td>
+						<td>@record.ReturnDate</td>
+						<td>@record.Equipment.EquipmentName</td>
+						<td>
+							@(record.PaymentId == null ? "Not Paid" : "Paid")
+						</td>
+						<td>Documents</td>
+						<!--print the ids of the docuemnts-->
+						<td>
+							<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
 					
-				</td>
-			</tr>
-			}}
-	</tbody>
+						</td>
+					</tr>
+					}}
+			</tbody>
 
-	</table>
+			</table> 
+	
+	}
+
+	<br />
+	<br />
+	<h3 class="my-3">External Rental Requests</h3>
+	<br />
+
+	@{
+		var externalRentalTransactions = Model.rentalTransactions?.Where(record => record.UserId != null && record.RentalRequest == null).ToList();
+	}
 
 
-<h3 class="my-3">External Rental Requests</h3>
-
+	@if (externalRentalTransactions == null || !externalRentalTransactions.Any() )
+	{
+		<div class="alert alert-light text-center" role="alert">
+			There are no rental transactions to display.
+		</div>
+	}
+	else
+	{
 	
 	<table class="table table-striped">
 		<thead>
@@ -180,4 +212,5 @@
 				}		}
 		</tbody>
 </table>
+}
 </div>
