@@ -4,6 +4,7 @@ using RentOpsWebApp.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Abstractions;
+using RentOpsObjects.Services;
 
 namespace RentOpsWebApp.Controllers
 {
@@ -53,7 +54,17 @@ namespace RentOpsWebApp.Controllers
 
             if (ModelState.IsValid)
             {
+
+                //print to console for debugging
+                Console.WriteLine("ModelState is valid will call logger");
+
                 _context.Equipment.Add(model.NewEquipment);
+
+                // Track changes before the new entity is saved
+                var logger = new AuditLogger(_context);
+                logger.TrackChanges(model.NewEquipment.UserId, 1);
+
+
                 _context.SaveChanges();
 
                 TempData["CreateSuccess"] = "Equipment added successfully.";
@@ -236,6 +247,10 @@ namespace RentOpsWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? id)
         {
+            //print to console for debugging
+            Console.WriteLine("DeletePost method called");
+
+
             //find the equipment object in the database
             var equipmentObject = _context.Equipment.Find(id);
 
@@ -243,8 +258,18 @@ namespace RentOpsWebApp.Controllers
             if (equipmentObject == null)
                 return NotFound();
 
+            
+
+
             //remove the equipment object from the database and save changes
             _context.Equipment.Remove(equipmentObject);
+
+
+            //call the logger to track changes
+            var logger = new AuditLogger(_context);
+            logger.TrackChanges(equipmentObject.UserId, 1);
+
+
             _context.SaveChanges();
 
             //add success message to tempdata
