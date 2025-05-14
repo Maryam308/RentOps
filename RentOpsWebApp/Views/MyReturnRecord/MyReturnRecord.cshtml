@@ -89,7 +89,6 @@
 					<th>Document ID</th>
 					<th>Return Condition</th>
 					<th></th>
-					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -104,8 +103,8 @@
 						<td>@record.DocumentId</td>
 						<td>@record.ReturnCondition.ConditionStatusTitle</td>
 						<td>
-							<a asp-action="Edit" asp-route-id="@record.ReturnRecordId" class="btn btn-primary">Edit</a>
-							<a asp-action="Delete" asp-route-id="@record.ReturnRecordId" class="btn btn-danger">Delete</a>
+							<a asp-action="ReturnRecordDetails" asp-route-id="@record.ReturnRecordId" class="btn btn-primary">View Details</a>
+							
 						</td>
 					</tr>
 				}

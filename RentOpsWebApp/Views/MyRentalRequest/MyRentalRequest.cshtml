@@ -94,7 +94,7 @@
 						<td>@record.Equipment.EquipmentName</td>
 						<td>@record.RentalRequestStatus.RentalRequestStatusTitle</td>
 						<td>
-							<a asp-action="Review" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit Request</a>
+							<a asp-action="ViewDetails" asp-route-id="@record.RentalRequestId" class="btn btn-primary">View Details</a>
 							@* <a asp-action="Delete" asp-route-id="@record.RentalRequestId" class="btn btn-danger">Delete</a> *@
 						</td>
 					</tr>

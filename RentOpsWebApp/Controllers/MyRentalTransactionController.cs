@@ -18,6 +18,32 @@ namespace RentOpsWebApp.Controllers
             return View();
         }
 
+        public IActionResult RentalTransactionDetails(int id)
+        {
+            var transaction = _context.RentalTransactions
+                .Include(rt => rt.Equipment)
+                .ThenInclude(e => e.EquipmentCategory)
+                .Include(rt => rt.Employee)
+                .Include(rt => rt.User)
+                .Include(rt => rt.RentalRequest)
+                    .ThenInclude(rr => rr.User)
+                .Include(rt => rt.Payment)
+                .FirstOrDefault(rt => rt.RentalTransactionId == id);
+
+            if (transaction == null)
+                return NotFound();
+
+
+            var viewModel = new RentalTransactionViewModel
+            {
+                rentalTransaction = transaction
+            };
+
+            return View("RentalTransctionDetails", viewModel);
+            // Expects Views/MyRentalTransaction/RentalTransactionDetails.cshtml
+        }
+
+
         public IActionResult MyRentalTransaction(string searchRentalTransactionId, string SearchRentalRequestId, string searchEmployeeId, string SearchEquipment, string SearchTransactionDate, string SearchPayment)
         {
             int currentUserId = 30;

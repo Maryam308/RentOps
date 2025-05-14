@@ -1,0 +1,55 @@
+﻿@model RentOpsWebApp.ViewModels.RentalRequestViewModel
+
+@{
+    ViewData["Title"] = "RentalRequestDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var request = Model.RentalRequest;
+}
+
+@if (request != null)
+{
+    <div class="container mt-4">
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3>Rental Request Details</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Request Timestamp:</strong> @request.RentalRequestTimestamp</p>
+                <p><strong>Start Date:</strong> @request.RentalStartDate.ToShortDateString()</p>
+                <p><strong>End Date:</strong> @request.RentalReturnDate.ToShortDateString()</p>
+                <p><strong>Total Cost:</strong> BHD @request.RentalTotalCost</p>
+                <p><strong>Status:</strong> @request.RentalRequestStatus.RentalRequestStatusTitle</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3>Equipment Details</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> @request.Equipment.EquipmentName</p>
+                <p><strong>Category:</strong> @request.Equipment.EquipmentCategory.EquipmentCategoryTitle</p>
+                <p><strong>Description:</strong> @request.Equipment.EquipmentDescription</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3>Customer Details</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> @request.User.FirstName @request.User.LastName</p>
+                <p><strong>Email:</strong> @request.User.Email</p>
+                <p><strong>Email:</strong> @request.User.PhoneNumber</p>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger text-center">Request not found.</div>
+}

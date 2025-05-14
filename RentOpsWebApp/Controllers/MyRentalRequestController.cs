@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
@@ -18,10 +19,11 @@ namespace RentOpsWebApp.Controllers
         {
             return View();
         }
+
         public IActionResult MyRentalRequest(string SearchRentalRequestId, string SearchRentalRequestStatusId, string searchequipmentId)
         {
             int currentUserId = 30;
-            
+
             IEnumerable<RentalRequest> rentalRequestsList = _context.RentalRequests
                 .Include(r => r.RentalRequestStatus)
                 .Include(r => r.Equipment)
@@ -63,6 +65,28 @@ namespace RentOpsWebApp.Controllers
 
             return View(rentalRequestViewModel);
         }
+
+        //[Authorize(Roles = "Customer")]
+        public IActionResult ViewDetails(int id)
+        {
+            var request = _context.RentalRequests
+                .Include(r => r.User)
+                .Include(r => r.Equipment)
+                .ThenInclude(e => e.EquipmentCategory)
+                .Include(r => r.RentalRequestStatus)
+                .FirstOrDefault(r => r.RentalRequestId == id);
+
+            if (request == null)
+                return NotFound();
+
+            var model = new RentalRequestViewModel
+            {
+                RentalRequest = request
+            };
+
+            return View("RentalRequestDetails", model);
+        }
+
 
 
     }

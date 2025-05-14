@@ -1,0 +1,71 @@
+﻿@model RentOpsWebApp.ViewModels.ReturnRecordViewModel
+@{
+    ViewData["Title"] = "Return Record Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Return Record Details</h2>
+
+    <!-- Card 1: Return Record Details -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Return Record Details</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Return Record ID:</strong> @Model.theReturnRecord.ReturnRecordId</p>
+            <p><strong>Actual Return Date:</strong> @Model.theReturnRecord.ActualReturnDate.ToString("yyyy-MM-dd")</p>
+            <p><strong>Additional Charge:</strong> BHD @Model.theReturnRecord.AdditionalCharge</p>
+            <p><strong>Late Return Fee:</strong> BHD @Model.theReturnRecord.LateReturnFee</p>
+            <p><strong>Return Condition:</strong> @Model.theReturnRecord.ReturnCondition?.ConditionStatusTitle</p>
+        </div>
+    </div>
+
+    <!-- Card 2: Transaction Details -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Transaction Details</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Rental Transaction ID:</strong> @Model.theReturnRecord.RentalTransactionId</p>
+            <p><strong>Transaction Timestamp:</strong> @Model.theReturnRecord.RentalTransaction?.RentalTransactionTimestamp.ToString("g")</p>
+            <p><strong>Rental Fee:</strong> BHD @Model.theReturnRecord.RentalTransaction?.RentalFee</p>
+            <p><strong>Pickup Date:</strong> @Model.theReturnRecord.RentalTransaction?.PickupDate.ToShortDateString()</p>
+            <p><strong>Return Date:</strong> @Model.theReturnRecord.RentalTransaction?.ReturnDate.ToShortDateString()</p>
+        </div>
+    </div>
+
+    <!-- Card 3: Employee Details -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Processed By</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>Employee Name:</strong> @Model.theReturnRecord.RentalTransaction?.Employee?.FirstName @Model.theReturnRecord.RentalTransaction?.Employee?.LastName</p>
+            <p><strong>Email:</strong> @Model.theReturnRecord.RentalTransaction?.Employee?.Email</p>
+            <p><strong>Phone Number:</strong> @Model.theReturnRecord.RentalTransaction?.Employee?.PhoneNumber</p>
+        </div>
+    </div>
+
+    <!-- Card 4: Return Document -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-info  text-white">
+            <h3>Attachment</h3>
+        </div>
+        <div class="card-body">
+            @if (Model.theReturnRecord.Document != null)
+            {
+                <p><strong>File:</strong> @Model.theReturnRecord.Document.FileName</p>
+                <a asp-controller="ReturnRecord" asp-action="Download" asp-route-id="@Model.theReturnRecord.DocumentId" class="btn btn-outline-light">
+                    Download PDF
+                </a>
+            }
+            else
+            {
+                <p>No Document Attached.</p>
+            }
+        </div>
+    </div>
+
+    <a asp-action="MyReturnRecord" class="btn btn-secondary mt-3">Back to List</a>
+</div>
