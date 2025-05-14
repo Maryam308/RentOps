@@ -34,6 +34,16 @@ public partial class Log
     [StringLength(200)]
     public string? AffectedData { get; set; }
 
+    [Required]
+    [MaxLength(255)]
+    [Column("currentValue")]
+    public string CurrentValue { get; set; } = string.Empty;
+
+    [Required]
+    [MaxLength(255)]
+    [Column("previousValue")]
+    public string PreviousValue { get; set; } = string.Empty;
+
     [Column("sourceID")]
     public int SourceId { get; set; }
 
