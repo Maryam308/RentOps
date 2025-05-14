@@ -6,6 +6,8 @@ namespace RentOpsWebApp.ViewModels
     {
         public IEnumerable<RentalRequest>? rentalRequests { get; set; }
 
+        public RentalRequest rentalRequest { get; set; }
+
         public IEnumerable<RentalRequestStatus>? rentalRequestStatuses { get; set; }
 
         public IEnumerable<Equipment>? equipmentTitle { get; set; }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
-using RentOpsWebApp.ViewModels; 
+using RentOpsWebApp.ViewModels;
 
 namespace RentOpsWebApp.Controllers
 {
@@ -21,17 +21,38 @@ namespace RentOpsWebApp.Controllers
 
             return View();
         }
+
+        public IActionResult ReturnRecordDetails(int id)
+        {
+            var record = _context.ReturnRecords
+                .Include(r => r.RentalTransaction)
+                .ThenInclude(rt => rt.Employee)
+                .Include(r => r.ReturnCondition)
+                .Include(r => r.Document)
+                .FirstOrDefault(r => r.ReturnRecordId == id);
+
+            if (record == null)
+                return NotFound();
+
+            var viewModel = new ReturnRecordViewModel
+            {
+                theReturnRecord = record
+            };
+
+            return View("ReturnRecordDetails", viewModel);
+        }
+
         public IActionResult MyReturnRecord(string searchReturnRecordId, string searchRentalTransactionId, string searchActualReturnDate, string searchConditionStatus)
         {
 
             //for now the user id is hardcoded to 1
-            int userId = 1; 
+            int userId = 16;
 
             IEnumerable<ReturnRecord> returnRecords = _context.ReturnRecords
                 .Include(e => e.ReturnCondition)
                 .Include(e => e.RentalTransaction)
                 .Include(e => e.Document)
-                .Where(e => e.RentalTransaction.UserId == userId  || e.RentalTransaction.RentalRequest.UserId == userId)
+                .Where(e => e.RentalTransaction.UserId == userId || e.RentalTransaction.RentalRequest.UserId == userId)
                 .OrderByDescending(d => d.ActualReturnDate)
                 .ToList();
 

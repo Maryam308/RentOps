@@ -1,0 +1,89 @@
+﻿@using RentOpsWebApp.ViewModels
+@model RentalTransactionViewModel
+
+@{
+
+    ViewData["Title"] = "RentalTransctionDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@{
+
+    var transaction = Model.rentalTransaction;
+}
+
+@if (transaction != null)
+{
+    <div class="container mt-4">
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3>Transaction Details</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Transaction Timestamp:</strong> @transaction.RentalTransactionTimestamp</p>
+                <p><strong>Rental Fee:</strong> BHD @transaction.RentalFee</p>
+                <p><strong>Pickup Date:</strong> @transaction.PickupDate.ToShortDateString()</p>
+                <p><strong>Return Date:</strong> @transaction.ReturnDate.ToShortDateString()</p>
+                <p><strong>Payment Status:</strong> @(transaction.PaymentId == null ? "Not Paid" : "Paid")</p>
+            </div>
+        </div>
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3>Equipment Details</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> @transaction.Equipment.EquipmentName</p>
+                <p><strong>Category:</strong> @transaction.Equipment.EquipmentCategory.EquipmentCategoryTitle</p>
+                <p><strong>Description:</strong> @transaction.Equipment.EquipmentDescription</p>
+            </div>
+        </div>
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3>Processed By</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Employee Name:</strong> @transaction.Employee.FirstName @transaction.Employee.LastName</p>
+                <p><strong>Email Adrress:</strong> @transaction.Employee.Email</p>
+                <p><strong>Contact Number:</strong> @transaction.Employee.PhoneNumber</p>
+            </div>
+        </div>
+
+        @if (transaction.User != null || transaction.RentalRequest?.User != null)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3>Customer Details</h3>
+                </div>
+                <div class="card-body">
+                    <p>
+                        <strong>Customer Name:</strong>
+                        @(transaction.User != null
+                            ? $"{transaction.User.FirstName} {transaction.User.LastName}"
+                            : $"{transaction.RentalRequest.User.FirstName} {transaction.RentalRequest.User.LastName}")
+                    </p>
+                    <p>
+                        <strong>Email Addreess:</strong>
+                        @(transaction.User != null
+                            ? $"{transaction.User.Email} "
+                            : $"{transaction.RentalRequest.User.Email}")
+                    </p>
+                    <p>
+                        <strong>Contact Number:</strong>
+                        @(transaction.User != null
+                            ? $"{transaction.User.PhoneNumber} "
+                            : $"{transaction.RentalRequest.User.PhoneNumber}")
+                    </p>
+                </div>
+            </div>
+        }
+
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">Transaction not found.</div>
+}
