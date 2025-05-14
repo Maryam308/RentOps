@@ -1,0 +1,70 @@
+﻿@using RentOpsWebApp.ViewModels
+@model AuditLogViewModel
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.LogObject == null)
+{
+	<div class="alert alert-light text-center" role="alert">
+		Audit Log not found.
+	</div>
+}
+else
+{
+
+    <div class="container mt-4">
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3>Log Details</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Log ID:</strong> @Model.LogObject.LogId</p>
+                <p><strong>Log Timestamp:</strong> @Model.LogObject.LogTimestamp</p>
+                <p><strong>Log Type:</strong> @Model.LogObject.LogType.LogTypeTitle</p>
+                <p><strong>Source:</strong> @Model.LogObject.Source.SourceTitle</p>
+            </div>
+        </div>
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3>User Details</h3>
+            </div>
+            <div class="card-body">
+				<p><strong>User ID:</strong> @Model.LogObject.User.UserId</p>
+				<p><strong>User Name:</strong> @Model.LogObject.User.FirstName @Model.LogObject.User.LastName</p>
+            </div>
+        </div>
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3>Action & Affected Data</h3>
+            </div>
+            <div class="card-body">
+				<p><strong>Original Value:</strong> @Model.LogObject.PreviousValue</p>
+				<p><strong>Current Value:</strong> @Model.LogObject.CurrentValue</p>
+				<p><strong>User Action:</strong> @Model.LogObject.UserAction</p>
+				<p><strong>Affected Data:</strong> @Model.LogObject.AffectedData</p>
+            </div>
+        </div>
+
+        
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

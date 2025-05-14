@@ -1,8 +1,110 @@
-﻿
+﻿@using RentOpsWebApp.ViewModels
+@model AuditLogViewModel
+
 @{
     ViewData["Title"] = "AuditLog";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>AuditLog</h1>
+
+<div class="container p-3">
+	<h1 class="m-2">System Audit Log</h1>
+	<div class="row py-3 px-5">
+
+		<div class="card border-primary me-5 ms-2 my-2">
+			<div class="card-header p-3"><h4>Search & Filter Audit Logs</h4></div>
+			<div class="card-body p-4">
+				<form asp-controller="AuditLog" asp-action="AuditLog" method="get">
+
+					<div class="input-group pt-2">
+						Log Date:
+
+						<input type="date" class="form-control mb-3 mx-4" name="SearchTimestamp" value="@Context.Request.Query["SearchTimestamp"].ToString()">
+					</div>
+
+					 <div class="input-group"> 
+					 	<select asp-for="SearchLogType" 
+								asp-items="@Model.LogTypes
+								.Select(i => new SelectListItem { Text = i.LogTypeTitle, Value = i.LogTypeId.ToString() })"
+					 			class="form-select  mb-3 mx-4"> 
+							<option value="" disabled selected>Select a Log Type</option> 
+					 	</select> 
+					 </div> 
+
+					 <div class="input-group"> 
+					 	<select asp-for="SearchSource" 
+					 			asp-items="@Model.Sources
+								.Select(i => new SelectListItem { Text = i.SourceTitle, Value = i.SourceId.ToString() })"
+								class="form-select  mb-3 mx-4"> 
+					 		<option value="" disabled selected>Select a Source</option> 
+					</select> 
+					 </div>
+
+
+					<div class="align-items-end text-end pe-2">
+
+						<input type="submit" value="Search" class="px-4 btn btn-secondary" />
+						<a asp-controller="AuditLog" asp-action="AuditLog" class="px-4 btn btn-danger m-2">Clear</a>
+
+					</div>
+
+				</form>
+
+			</div>
+
+		</div>
+	</div>
+
+
+	@if (Model.Logs == null || !Model.Logs.Any())
+	{
+		<div class="alert alert-light text-center" role="alert">
+			There are no audit logs to display.
+		</div>
+	}
+	else
+	{
+		<table class="table table-striped">
+			<thead class="table-primary">
+				<tr class="text-center">
+					<td>Log ID</td>
+					<td>Log Timestamp</td>
+					<td>Log Type</td>
+					<td>Source</td>
+					<td>User ID</td>
+					<td>User Name</td>
+					<td>Exception</td>
+					<td>UserAction</td>
+					<td>Affected Data</td>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var record in Model.Logs)
+				{
+					<tr class="text-center">
+						<td>@record.LogId</td>
+						<td>@record.LogTimestamp</td>
+						<td>@record.LogType.LogTypeTitle</td>
+						<td>@record.Source.SourceTitle</td>
+						<td>@record.User.UserId</td>
+						<td>@record.User.FirstName @record.User.LastName</td>
+
+						<td>@record.Exception</td>
+						<td>@record.UserAction</td>
+						<td>@record.AffectedData</td>
+						<td>
+							<a asp-action="Details" asp-route-id="@record.LogId" class="btn btn-primary">View Details</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+
+		</table>
+
+	}
+
+
+
+</div>
 
