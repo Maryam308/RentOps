@@ -17,6 +17,9 @@ namespace RentOpsDesktop
         RentOpsDBContext dbContext;
         internal RentalTransaction rentalTransactionToEdit;
 
+        Document agreement;
+        Document idVerification;
+
         bool validDeposit = false;
         bool validRentalFee = false;
         bool validPickupDate = false;
@@ -38,6 +41,7 @@ namespace RentOpsDesktop
                 var rentalTransaction = dbContext.RentalTransactions
                 .Include(rt => rt.Equipment)
                 .Include(rt => rt.Employee)
+                .Include(rt => rt.Documents)
                 .Include(rt => rt.RentalRequest)
                 .ThenInclude(rr => rr.User)
                 .Where(rt => rt.RentalTransactionId == rentalTransactionToEdit.RentalTransactionId)
@@ -52,10 +56,13 @@ namespace RentOpsDesktop
                     rt.PaymentId,
                     rt.RentalRequestId,
                     rt.EmployeeId,
+                    agreement = rt.Documents.Where(rt => rt.FileTypeId == 4),
+                    idVerification = rt.Documents.Where(rt => rt.FileTypeId == 5),
                     requesterName = rt.RentalRequest != null ? rt.RentalRequest.User.FirstName + " " + rt.RentalRequest.User.LastName : "N/A",
                     rt.EquipmentId,
                     EquipmentName = rt.Equipment != null ? rt.Equipment.EquipmentName : "N/A",
                     EmployeeName = rt.Employee != null ? rt.Employee.FirstName + " " + rt.Employee.LastName : "N/A"
+
                 })
                 .FirstOrDefault();
 
@@ -92,6 +99,8 @@ namespace RentOpsDesktop
                     }
 
 
+                    
+                    
 
 
                 }
@@ -206,6 +215,111 @@ namespace RentOpsDesktop
             TimeSpan rentalPeriod = returnDate - pickupDate;
             //display the rental period
             lblRentalPeriod.Text = rentalPeriod.Days.ToString() + " days";
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            // Fetch the rental transactions including their documents
+            var rentalTransactions = dbContext.RentalTransactions
+                .Include(rt => rt.Documents)
+                .Where(rt => rt.RentalTransactionId == rentalTransactionToEdit.RentalTransactionId)
+                .ToList();  // Convert IQueryable to a list
+
+            // Loop through the rental transactions
+            foreach (var transaction in rentalTransactions)
+            {
+                foreach (var document in transaction.Documents)
+                {
+                    if (document != null)
+                    {
+                        if (document.FileTypeId == 5)
+                        {
+                            idVerification = document;
+                        }
+                        if (document.FileTypeId == 4)
+                        {
+                            agreement = document;
+                        }
+                    }
+                }
+            }
+
+
+            // Show the UploadTransactionDocuments form as a dialog
+            UploadTransactionDocuments uploadForm = new UploadTransactionDocuments(agreement, idVerification);
+            DialogResult result = uploadForm.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+
+                if (uploadForm.isAgreementModified == true) {
+
+                    if (agreement != null)
+                    {
+
+                        //remove the old agreement 
+                        rentalTransactionToEdit.Documents.Remove(agreement);
+
+                        agreement = uploadForm.agreement;
+
+                        if (agreement != null)
+                        {
+                            rentalTransactionToEdit.Documents.Add(agreement);
+                        }
+
+                    }
+                    else { 
+                    
+                        agreement = uploadForm.agreement;
+
+                            if (agreement != null)
+                            {
+                                rentalTransactionToEdit.Documents.Add(agreement);
+                            }
+
+                    
+                    }
+                    if (idVerification != null)
+                    {
+
+                        //remove the old agreement 
+                        rentalTransactionToEdit.Documents.Remove(idVerification);
+
+                        idVerification = uploadForm.idVerification;
+
+                        if (idVerification != null)
+                        {
+                            rentalTransactionToEdit.Documents.Add(idVerification);
+                        }
+
+                    }
+                    else
+                    {
+
+                        agreement = uploadForm.agreement;
+
+                        if (idVerification != null)
+                        {
+                            rentalTransactionToEdit.Documents.Add(idVerification);
+                        }
+
+
+                    }
+
+
+                }
+
+                    if (uploadForm.isIDModified == true) { 
+                        idVerification = uploadForm.idVerification;
+
+
+
+                    }
+
+                
+                
+            }
         }
     }
 }

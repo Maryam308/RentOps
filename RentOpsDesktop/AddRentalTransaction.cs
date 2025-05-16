@@ -672,21 +672,23 @@ namespace RentOpsDesktop
 
         private void btnUploadDocuments_Click(object sender, EventArgs e)
         {
-            //show dialog the upload form 
+            // Show the UploadTransactionDocuments form as a dialog
             UploadTransactionDocuments uploadForm = new UploadTransactionDocuments();
-
             DialogResult result = uploadForm.ShowDialog();
 
             if (result == DialogResult.OK)
             {
-                 agreement = uploadForm.agreement;
-                 idVerification = uploadForm.idVerfication;
+                // Get the documents from the upload form
+                agreement = uploadForm.agreement;
+                idVerification = uploadForm.idVerification;
 
-                if (agreement != null || idVerification != null) { 
-                
+                // Check if both documents were uploaded successfully
+                if (agreement != null && idVerification != null)
+                {
                     hasDocument = true;
-                
+                    MessageBox.Show("Documents uploaded successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                
 
             }
 
