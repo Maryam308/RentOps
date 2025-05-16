@@ -96,6 +96,7 @@
             Margin = new Padding(3, 2, 3, 2);
             Name = "Landing";
             Text = "Landing";
+            Load += Landing_Load;
             ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             ResumeLayout(false);
             PerformLayout();

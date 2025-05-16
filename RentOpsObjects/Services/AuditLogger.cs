@@ -20,7 +20,7 @@ namespace RentOpsObjects.Services
         }
 
         //The TrackChanges method will be called before the SaveChanges method of the DbContext
-        public void TrackChanges(int userId, int sourceId)
+        public void TrackChanges(int? userId, int sourceId)
         {
             //print an indication that the track changes method was called
             Console.WriteLine("TrackChanges method called");
@@ -102,13 +102,13 @@ namespace RentOpsObjects.Services
         }
 
         // This method will be called to log exceptions
-        public void LogException(int userId, string errorMessage, string stackTrace)
+        public void LogException(int? userId, string errorMessage, string stackTrace, int sourceId)
         {
             // Create a new log entry for the exception
             var log = new Log
             {
                 UserId = userId,
-                SourceId = -1, // Indicate it's a system-level error
+                SourceId = sourceId,
                 LogTypeId = 2, // Special log type for exceptions
                 LogTimestamp = DateTime.UtcNow,
                 AffectedData = "System Error",

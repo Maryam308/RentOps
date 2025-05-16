@@ -143,17 +143,7 @@ namespace RentOpsDesktop
 
         private void txtQuantity_TextChanged(object sender, EventArgs e)
         {
-            //if (!int.TryParse(txtQuantity.Text, out int quantity) || quantity <= 0)
-            //{
-            //    lblQuantityErr.Text = "Quantity must be a positive integer";
-            //    validQuantity = false;
-            //}
-            //else
-            //{
-            //    lblQuantityErr.Text = string.Empty;
-            //    validQuantity = true;
-            //}
-            //ValidateForm();
+            
 
         }
 
