@@ -9,16 +9,24 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
+using RentOpsObjects.Services;
 
 namespace RentOpsDesktop
 {
     public partial class EquipmentInformation : Form
     {
         RentOpsDBContext context;
+        AuditLogger logger;
+        int currentUserId;
         public EquipmentInformation()
         {
             InitializeComponent();
             context = new RentOpsDBContext();
+
+            logger = new AuditLogger(context); //create a logger object
+
+            currentUserId = Global.user.UserId;
+
         }
 
         private void lblRentalDashboard_Click(object sender, EventArgs e)
@@ -188,20 +196,34 @@ namespace RentOpsDesktop
             AddEquipment addEquipment = new AddEquipment();
             addEquipment.StartPosition = FormStartPosition.CenterScreen; // Center the form
             addEquipment.ShowDialog(); // Show the add equipment form
-
-            if (addEquipment.DialogResult == DialogResult.OK)
-            {
-                // Detach any existing entity with the same key value
-                var existingEntity = context.Equipment.Local.FirstOrDefault(e => e.EquipmentId == addEquipment.equipment.EquipmentId);
-                if (existingEntity != null)
+            
+            try { 
+            
+                if (addEquipment.DialogResult == DialogResult.OK)
                 {
-                    context.Entry(existingEntity).State = EntityState.Detached;
-                }
+                    // Detach any existing entity with the same key value
+                    var existingEntity = context.Equipment.Local.FirstOrDefault(e => e.EquipmentId == addEquipment.equipment.EquipmentId);
+                    if (existingEntity != null)
+                    {
+                        context.Entry(existingEntity).State = EntityState.Detached;
+                    }
 
-                context.Equipment.Add(addEquipment.equipment);
-                context.SaveChanges(); // Save changes to the database
-                RefreshEquipmentGridview(); // Refresh the DataGridView
-            }
+                    context.Equipment.Add(addEquipment.equipment);
+
+                    // Track changes 
+                    logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                
+
+                    context.SaveChanges(); // Save changes to the database
+                    RefreshEquipmentGridview(); // Refresh the DataGridView
+                }
+            
+            
+            }catch(Exception ex) {
+
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+            }   
 
         }
 
