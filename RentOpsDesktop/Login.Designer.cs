@@ -33,7 +33,6 @@
             txtEmail = new TextBox();
             txtPassword = new TextBox();
             btnLogin = new Button();
-            lblForgotPassword = new Label();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
             // 
@@ -88,7 +87,7 @@
             btnLogin.FlatStyle = FlatStyle.Flat;
             btnLogin.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnLogin.ForeColor = Color.White;
-            btnLogin.Location = new Point(417, 309);
+            btnLogin.Location = new Point(497, 299);
             btnLogin.Margin = new Padding(3, 2, 3, 2);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(202, 44);
@@ -97,24 +96,11 @@
             btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
             // 
-            // lblForgotPassword
-            // 
-            lblForgotPassword.AutoSize = true;
-            lblForgotPassword.Font = new Font("Segoe UI", 12F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0);
-            lblForgotPassword.ForeColor = Color.FromArgb(139, 128, 116);
-            lblForgotPassword.Location = new Point(667, 268);
-            lblForgotPassword.Name = "lblForgotPassword";
-            lblForgotPassword.Size = new Size(138, 21);
-            lblForgotPassword.TabIndex = 7;
-            lblForgotPassword.Text = "Forgot Password?";
-            lblForgotPassword.Click += lblForgotPassword_Click;
-            // 
             // Login
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
-            Controls.Add(lblForgotPassword);
             Controls.Add(btnLogin);
             Controls.Add(txtPassword);
             Controls.Add(txtEmail);
@@ -135,6 +121,5 @@
         private TextBox txtEmail;
         private TextBox txtPassword;
         private Button btnLogin;
-        private Label lblForgotPassword;
     }
 }

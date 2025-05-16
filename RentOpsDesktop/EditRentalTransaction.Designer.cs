@@ -53,6 +53,7 @@
             lblPickupDateError = new Label();
             lblDepositError = new Label();
             lblRentalFeeError = new Label();
+            button1 = new Button();
             SuspendLayout();
             // 
             // lblRentalPeriod
@@ -70,14 +71,14 @@
             // 
             btnUpdateRentalTransaction.BackColor = Color.FromArgb(121, 86, 76);
             btnUpdateRentalTransaction.FlatStyle = FlatStyle.Flat;
-            btnUpdateRentalTransaction.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnUpdateRentalTransaction.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnUpdateRentalTransaction.ForeColor = Color.White;
-            btnUpdateRentalTransaction.Location = new Point(639, 381);
+            btnUpdateRentalTransaction.Location = new Point(741, 381);
             btnUpdateRentalTransaction.Margin = new Padding(3, 2, 3, 2);
             btnUpdateRentalTransaction.Name = "btnUpdateRentalTransaction";
-            btnUpdateRentalTransaction.Size = new Size(279, 44);
+            btnUpdateRentalTransaction.Size = new Size(177, 44);
             btnUpdateRentalTransaction.TabIndex = 81;
-            btnUpdateRentalTransaction.Text = "Update Rental Transaction";
+            btnUpdateRentalTransaction.Text = "Save Changes";
             btnUpdateRentalTransaction.UseVisualStyleBackColor = false;
             btnUpdateRentalTransaction.Click += btnUpdateRentalTransaction_Click;
             // 
@@ -343,11 +344,27 @@
             lblRentalFeeError.TabIndex = 96;
             lblRentalFeeError.Text = " ";
             // 
+            // button1
+            // 
+            button1.BackColor = Color.FromArgb(121, 86, 76);
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.ForeColor = Color.White;
+            button1.Location = new Point(540, 381);
+            button1.Margin = new Padding(3, 2, 3, 2);
+            button1.Name = "button1";
+            button1.Size = new Size(177, 44);
+            button1.TabIndex = 97;
+            button1.Text = "View Documents";
+            button1.UseVisualStyleBackColor = false;
+            button1.Click += button1_Click;
+            // 
             // EditRentalTransaction
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(957, 458);
+            Controls.Add(button1);
             Controls.Add(lblRentalFeeError);
             Controls.Add(lblDepositError);
             Controls.Add(lblPickupDateError);
@@ -408,5 +425,6 @@
         private Label lblPickupDateError;
         private Label lblDepositError;
         private Label lblRentalFeeError;
+        private Button button1;
     }
 }
