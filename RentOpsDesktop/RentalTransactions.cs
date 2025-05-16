@@ -371,7 +371,7 @@ namespace RentOpsDesktop
                 // find the object 
                 RentalTransaction rentalTransaction = dbContext.RentalTransactions.Find(rentalTransactionId);
 
-                try 
+                try
                 {
                     dbContext.RentalTransactions.Remove(rentalTransaction);
                     dbContext.SaveChanges(); // Save changes to the database
@@ -379,10 +379,21 @@ namespace RentOpsDesktop
                     MessageBox.Show("Rental Transaction deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information); // Show sucess message
 
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     MessageBox.Show("An error occurred while deleting the Rental Transaction: " + ex.Message);
                 }
             }
+        }
+
+        private void btnAddnewRentalTransaction_Click(object sender, EventArgs e)
+        {
+            //show choose equipment form
+            this.Hide();
+            ChooseEquipment chooseEquipment = new ChooseEquipment();
+            chooseEquipment.StartPosition = FormStartPosition.CenterScreen; // Center the form
+            chooseEquipment.Show();
+
         }
     }
 
