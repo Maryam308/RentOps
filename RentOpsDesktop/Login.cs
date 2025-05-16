@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RentOpsWebApp.Data;
+using RentOpsObjects.Services;
 
 namespace RentOpsDesktop
 {
@@ -25,11 +26,15 @@ namespace RentOpsDesktop
         private IServiceProvider serviceProvider;
         private RentOpsWebApp.Data.RentOpsWebAppContext identityDbContext;
 
+        AuditLogger logger;
+
+
         public Login()
         {
             InitializeComponent();
             //Initializing database context object
             dbContext = new RentOpsDBContext();
+            logger = new AuditLogger(dbContext);
         }
 
         private void picLogo_Click(object sender, EventArgs e)
@@ -48,6 +53,8 @@ namespace RentOpsDesktop
             var signInResults = await VerifyUserNamePassword(txtEmail.Text, txtPassword.Text);
             if (signInResults == true) //if user is verified
             {
+                logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2);
+
                 //do something.. i.e. navigate to next forms
                 UserEquipmentDashboard home = new UserEquipmentDashboard();
                 this.Hide();
@@ -55,6 +62,7 @@ namespace RentOpsDesktop
             }
             else
             {
+                logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2);
                 MessageBox.Show("Error. The username or password are not correct");
             }
 
@@ -90,6 +98,7 @@ namespace RentOpsDesktop
 
                         Global.RoleName = roles.FirstOrDefault();
 
+
                     }
                     return passCheck;
                 }
@@ -97,6 +106,7 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                logger.LogException(null,ex.Message,ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 MessageBox.Show("Error from verifying " + ex);
                 return false;
             }
@@ -121,6 +131,7 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                logger.LogException(null, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 MessageBox.Show("Error from configuring services");
             }
         }

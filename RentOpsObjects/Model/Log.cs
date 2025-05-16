@@ -20,27 +20,27 @@ public partial class Log
     public int LogTypeId { get; set; }
 
     [Column("exception")]
-    [StringLength(500)]
+    [StringLength(1000)]
     public string? Exception { get; set; }
 
     [Column("userAction")]
-    [StringLength(200)]
+    [StringLength(500)]
     public string? UserAction { get; set; }
 
     [Column("logTimestamp")]
     public DateTime LogTimestamp { get; set; }
 
     [Column("affectedData")]
-    [StringLength(200)]
+    [StringLength(500)]
     public string? AffectedData { get; set; }
 
     [Required]
-    [MaxLength(255)]
+    [MaxLength(2000)]
     [Column("currentValue")]
     public string CurrentValue { get; set; } = string.Empty;
 
     [Required]
-    [MaxLength(255)]
+    [MaxLength(1000)]
     [Column("previousValue")]
     public string PreviousValue { get; set; } = string.Empty;
 

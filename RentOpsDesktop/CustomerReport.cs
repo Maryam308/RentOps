@@ -15,19 +15,23 @@ using PdfSharp.Drawing;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using System.Diagnostics;
 using PdfSharp.Drawing.Layout;
-
+using RentOpsObjects.Services;
+using RentOpsObjects.Services;
 
 namespace RentOpsDesktop
 {
     public partial class CustomerReport : Form
     {
         RentOpsDBContext dbContext;
+        int currentUserId;
+        AuditLogger logger;
         bool isLoaded;
         public CustomerReport()
         {
             InitializeComponent();
             dbContext = new RentOpsDBContext();
-
+            logger = new AuditLogger(dbContext); //create a logger object
+            currentUserId = Global.EmployeeID;
         }
 
         private void btnGenerateCustomerReport_Click(object sender, EventArgs e)
@@ -240,7 +244,7 @@ Number of Lost Returns: {numberOfLostReturns}
                 dbContext.Documents.Add(newDocument);
                 dbContext.SaveChanges();
 
-                // Show custom dialog with Open option
+                // Show the dialog with Open option
                 DialogResult result = MessageBox.Show("Customer report has been generated successfully!\n\nDo you want to open the file now?", "Report Created", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
@@ -254,13 +258,18 @@ Number of Lost Returns: {numberOfLostReturns}
                 }
                 else
                 {
-                    // Optionally, you can show a message or perform another action if "No" is clicked
+                    // Show message with file location if user clicks "No"
                     MessageBox.Show("You can find the report in the Reports/CustomerReports folder.", "Report Location", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Log the error
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace, 1); // Log the error
+
+                // Show error message to the user
+                MessageBox.Show("An error occurred while generating the report. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             }
 
 

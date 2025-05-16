@@ -10,12 +10,15 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RentOpsObjects.Model;
+using RentOpsObjects.Services;
 
 namespace RentOpsDesktop
 {
     public partial class AddRentalTransaction : Form
     {
         RentOpsDBContext context;
+        AuditLogger logger;
+        int currentUserId;
         int equipmentId;
         double rentalPrice;
         double totalPrice;
@@ -41,7 +44,11 @@ namespace RentOpsDesktop
 
             context = new RentOpsDBContext();
 
+            logger = new AuditLogger(context); //create a logger object
+            
             this.equipmentId = equipmentId;
+            
+            currentUserId = Global.user.UserId;
 
         }
 
@@ -76,106 +83,139 @@ namespace RentOpsDesktop
                     return;
                 }
 
-                //add the rental transaction
-                RentalTransaction rentalTransaction = new RentalTransaction
+                try
                 {
-                    EquipmentId = equipmentId,
-                    EmployeeId = Global.EmployeeID,
-                    UserId = Convert.ToInt32(txtUserId.Text),
-                    PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value.Date),
-                    ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value.Date),
-                    RentalFee = totalPrice,
-                    Deposit = (double)Convert.ToDecimal(txtDeposit.Text),
-                    RentalTransactionTimestamp = DateTime.Now,
-                };
-
-                //add the rental transaction to the database
-                context.RentalTransactions.Add(rentalTransaction);
-
-                if (isPaid)
-                {
-                    //creat a payment object
-                    Payment payment = new Payment();
-                    payment.PaymentMethodId = (int)cmbPaymentMethod.SelectedValue;
-                    payment.PaymentStatusId = (int)cmbPaymentStatus.SelectedValue;
-
-                    //add the payment to the database
-                    context.Payments.Add(payment);
-
-                    //check if the transaction has document then add them to the database
-                    if (hasDocument) {
-                        if (agreement != null) {
-                            context.Documents.Add(agreement);
-                        }
-                        if(idVerification != null) {  context.Documents.Add(idVerification); }
-                        
-                    }
-
-                    //save changes in the db and then link the objects to the transaction
-                    context.SaveChanges();
-
-                    if (hasDocument)
+                    //add the rental transaction
+                    RentalTransaction rentalTransaction = new RentalTransaction
                     {
+                        EquipmentId = equipmentId,
+                        EmployeeId = Global.EmployeeID,
+                        UserId = Convert.ToInt32(txtUserId.Text),
+                        PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value.Date),
+                        ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value.Date),
+                        RentalFee = totalPrice,
+                        Deposit = (double)Convert.ToDecimal(txtDeposit.Text),
+                        RentalTransactionTimestamp = DateTime.Now,
+                    };
 
-                        rentalTransaction.Documents = new List<RentOpsObjects.Model.Document>();
+                    //add the rental transaction to the database
+                    context.RentalTransactions.Add(rentalTransaction);
 
-                        if (agreement != null)
-                        {
-                            //add the agreement to the list
-                            rentalTransaction.Documents.Add(agreement);
-                        }
-                        if (idVerification != null)
-                        {
-                            //add the idVerification to the list
-                            rentalTransaction.Documents.Add(idVerification);
-                        }
-
-                    }
-
-                    //attach the payment to the transaction
-                    rentalTransaction.PaymentId = payment.PaymentId;
-                    rentalTransaction.Payment = payment;
-
-                    //save changes again
-                    context.SaveChanges();
-
-                }
-                else
-                {
-                    if (hasDocument)
+                    if (isPaid)
                     {
-                        if (agreement != null)
-                        {
-                            context.Documents.Add(agreement);
-                        }
-                        if (idVerification != null) { context.Documents.Add(idVerification); }
+                        //creat a payment object
+                        Payment payment = new Payment();
+                        payment.PaymentMethodId = (int)cmbPaymentMethod.SelectedValue;
+                        payment.PaymentStatusId = (int)cmbPaymentStatus.SelectedValue;
 
-                    }
-                    //save changes in the db and then link the objects to the transaction
-                    context.SaveChanges();
-                    
-                    if (hasDocument)
-                    {
+                        //add the payment to the database
+                        context.Payments.Add(payment);
 
-                        rentalTransaction.Documents = new List<RentOpsObjects.Model.Document>();
+                        //check if the transaction has document then add them to the database
+                        if (hasDocument)
+                        {
+                            if (agreement != null)
+                            {
+                                context.Documents.Add(agreement);
+                            }
+                            if (idVerification != null) { context.Documents.Add(idVerification); }
 
-                        if (agreement != null)
-                        {
-                            //add the agreement to the list
-                            rentalTransaction.Documents.Add(agreement);
-                        }
-                        if (idVerification != null)
-                        {
-                            //add the idVerification to the list
-                            rentalTransaction.Documents.Add(idVerification);
                         }
 
+                        // Track changes 
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+
+                        //save changes in the db and then link the objects to the transaction
+                        context.SaveChanges();
+
+                        if (hasDocument)
+                        {
+
+                            rentalTransaction.Documents = new List<RentOpsObjects.Model.Document>();
+
+                            if (agreement != null)
+                            {
+                                //add the agreement to the list
+                                rentalTransaction.Documents.Add(agreement);
+                            }
+                            if (idVerification != null)
+                            {
+                                //add the idVerification to the list
+                                rentalTransaction.Documents.Add(idVerification);
+                            }
+
+                        }
+
+                        //attach the payment to the transaction
+                        rentalTransaction.PaymentId = payment.PaymentId;
+                        rentalTransaction.Payment = payment;
+
+                        // Track changes 
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+
+                        //save changes again
                         context.SaveChanges();
 
                     }
+                    else
+                    {
+                        // add the transaction documents if uploaded
+                        if (hasDocument)
+                        {
+                            if (agreement != null)
+                            {
+                                context.Documents.Add(agreement);
+                            }
+                            if (idVerification != null) 
+                            { 
+                                context.Documents.Add(idVerification); 
+                            }
+
+                        }
+
+                        // Track changes 
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+
+                        //save changes in the db and then link the objects to the transaction
+                        context.SaveChanges();
+
+
+                        // attach the uploaded documents to the rental transaction
+                        if (hasDocument)
+                        {
+
+                            rentalTransaction.Documents = new List<RentOpsObjects.Model.Document>();
+
+                            if (agreement != null)
+                            {
+                                //add the agreement to the list
+                                rentalTransaction.Documents.Add(agreement);
+                            }
+                            if (idVerification != null)
+                            {
+                                //add the idVerification to the list
+                                rentalTransaction.Documents.Add(idVerification);
+                            }
+
+                            // Track changes 
+                            logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+
+                            context.SaveChanges();
+
+                        }
+                    }
+                    //save the rental transaction id
+                    rentalTransactionID = rentalTransaction.RentalTransactionId;
                 }
-                //save the rental transaction id
-                rentalTransactionID = rentalTransaction.RentalTransactionId;
+                catch (Exception ex)
+                {
+                    // log the error
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                    // show the error message
+                    MessageBox.Show("An error occurred while saving the customer's rental transaction:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
             }
             else
@@ -203,112 +243,138 @@ namespace RentOpsDesktop
                     return;
                 }
 
-
-                //create an external customer object
-                ExternalCustomer externalCustomer = new ExternalCustomer
+                try
                 {
-                    FirstName = txtFirstName.Text,
-                    LastName = txtLastName.Text,
-                    PhoneNumber = txtPhoneNumber.Text,
-                    Email = txtEmail.Text,
-
-                };
-                //add the external customer to the database
-                context.ExternalCustomers.Add(externalCustomer);
-
-                //add the rental transaction
-                RentalTransaction rentalTransaction = new RentalTransaction
-                {
-                    EquipmentId = equipmentId,
-                    EmployeeId = Global.EmployeeID,
-                    PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value.Date),
-                    ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value.Date),
-                    RentalFee = totalPrice,
-                    Deposit = (double)Convert.ToDecimal(txtDeposit.Text),
-                    RentalTransactionTimestamp = DateTime.Now,
-                };
-
-                //add the rental transaction to the database
-                context.RentalTransactions.Add(rentalTransaction);
-
-                if (isPaid)
-                {
-                    //creat a payment object
-                    Payment payment = new Payment();
-                    payment.PaymentMethodId = (int)cmbPaymentMethod.SelectedValue;
-                    payment.PaymentStatusId = (int)cmbPaymentStatus.SelectedValue;
-
-                    //add the payment to the database
-                    context.Payments.Add(payment);
-
-                    if (hasDocument)
+                    //create an external customer object
+                    ExternalCustomer externalCustomer = new ExternalCustomer
                     {
-                        if (agreement != null)
-                        {
-                            context.Documents.Add(agreement);
-                        }
-                        if (idVerification != null) { context.Documents.Add(idVerification); }
+                        FirstName = txtFirstName.Text,
+                        LastName = txtLastName.Text,
+                        PhoneNumber = txtPhoneNumber.Text,
+                        Email = txtEmail.Text,
 
-                    }
+                    };
+                    //add the external customer to the database
+                    context.ExternalCustomers.Add(externalCustomer);
 
-                    //save changes in the db and then link the objects to the transaction
-                    context.SaveChanges();
-
-                    //attach the payment to the transaction
-                    rentalTransaction.PaymentId = payment.PaymentId;
-                    rentalTransaction.Payment = payment;
-
-                    //attach the customer
-                    rentalTransaction.CustomerId = externalCustomer.CustomerId;
-
-                    //save changes again
-                    context.SaveChanges();
-
-                }
-                else
-                {
-
-                    //add a not paid transaction
-                    //check if there is documents to add
-                    if (hasDocument)
+                    //add the rental transaction
+                    RentalTransaction rentalTransaction = new RentalTransaction
                     {
-                        if (agreement != null)
+                        EquipmentId = equipmentId,
+                        EmployeeId = Global.EmployeeID,
+                        PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value.Date),
+                        ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value.Date),
+                        RentalFee = totalPrice,
+                        Deposit = (double)Convert.ToDecimal(txtDeposit.Text),
+                        RentalTransactionTimestamp = DateTime.Now,
+                    };
+
+                    //add the rental transaction to the database
+                    context.RentalTransactions.Add(rentalTransaction);
+
+                    if (isPaid)
+                    {
+                        //creat a payment object
+                        Payment payment = new Payment();
+                        payment.PaymentMethodId = (int)cmbPaymentMethod.SelectedValue;
+                        payment.PaymentStatusId = (int)cmbPaymentStatus.SelectedValue;
+
+                        //add the payment to the database
+                        context.Payments.Add(payment);
+
+                        if (hasDocument)
                         {
-                            context.Documents.Add(agreement);
+                            if (agreement != null)
+                            {
+                                context.Documents.Add(agreement);
+                            }
+                            if (idVerification != null) { context.Documents.Add(idVerification); }
+
                         }
-                        if (idVerification != null) { context.Documents.Add(idVerification); }
+
+                        // Track changes 
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+
+                        //save changes in the db and then link the objects to the transaction
+                        context.SaveChanges();
+
+                        //attach the payment to the transaction
+                        rentalTransaction.PaymentId = payment.PaymentId;
+                        rentalTransaction.Payment = payment;
+
+                        //attach the customer
+                        rentalTransaction.CustomerId = externalCustomer.CustomerId;
+
+                        // Track changes 
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+
+                        //save changes again
+                        context.SaveChanges();
 
                     }
-                    //save changes in the db and then link the objects to the transaction
-                    context.SaveChanges();
+                    else
+                    {
 
-                    //attach the customer and the doucuments
-                    rentalTransaction.CustomerId = externalCustomer.CustomerId;
+                        //add a not paid transaction
+                        //check if there is documents to add
+                        if (hasDocument)
+                        {
+                            if (agreement != null)
+                            {
+                                context.Documents.Add(agreement);
+                            }
+                            if (idVerification != null) { context.Documents.Add(idVerification); }
 
-                    if (hasDocument) {
-
-                        rentalTransaction.Documents = new List<RentOpsObjects.Model.Document>();
-
-                        if (agreement != null) {
-                            //add the agreement to the list
-                            rentalTransaction.Documents.Add(agreement);
                         }
-                        if (idVerification != null) { 
-                            //add the idVerification to the list
-                            rentalTransaction.Documents.Add(idVerification);
+
+                        // Track changes 
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+
+                        //save changes in the db and then link the objects to the transaction
+                        context.SaveChanges();
+
+                        //attach the customer and the doucuments
+                        rentalTransaction.CustomerId = externalCustomer.CustomerId;
+
+                        if (hasDocument)
+                        {
+
+                            rentalTransaction.Documents = new List<RentOpsObjects.Model.Document>();
+
+                            if (agreement != null)
+                            {
+                                //add the agreement to the list
+                                rentalTransaction.Documents.Add(agreement);
+                            }
+                            if (idVerification != null)
+                            {
+                                //add the idVerification to the list
+                                rentalTransaction.Documents.Add(idVerification);
+                            }
+
                         }
-                    
+
+                        // Track changes 
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+
+                        //save changes again
+                        context.SaveChanges();
+
+
                     }
 
-                    //save changes again
-                    context.SaveChanges();
-
-
+                    //save the rental transaction id
+                    rentalTransactionID = rentalTransaction.RentalTransactionId;
                 }
+                catch (Exception ex)
+                {
+                    // log the error
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
 
-                //save the rental transaction id
-                rentalTransactionID = rentalTransaction.RentalTransactionId;
-
+                    // show the error message
+                    MessageBox.Show("An error occurred while saving the external customer's rental transaction:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
             }
 
@@ -330,41 +396,50 @@ namespace RentOpsDesktop
 
         private void AddRentalTransaction_Load(object sender, EventArgs e)
         {
-            //load the equipment name
-            var equipment = context.Equipment.FirstOrDefault(e => e.EquipmentId == equipmentId);
+            try
+            {
+                //load the equipment name
+                var equipment = context.Equipment.FirstOrDefault(e => e.EquipmentId == equipmentId);
 
-            txtEquipment.Text = equipment.EquipmentName;
+                txtEquipment.Text = equipment.EquipmentName;
 
-            //save the equipment price 
-            rentalPrice = equipment.RentalPrice;
-
-
-            //assume that the customer is an external customer and the manager will be adding the customer details
-            txtUserId.Enabled = false;
-            txtFirstName.Enabled = true;
-            txtLastName.Enabled = true;
-            txtPhoneNumber.Enabled = true;
-            txtEmail.Enabled = true;
-
-            //load the payment status and payment method
-            var paymentStatus = context.PaymentStatuses.ToList();
-            var paymentMethod = context.PaymentMethods.ToList();
-            cmbPaymentStatus.DataSource = paymentStatus;
-            cmbPaymentMethod.DataSource = paymentMethod;
-            cmbPaymentStatus.DisplayMember = "PaymentStatusTitle";
-            cmbPaymentMethod.DisplayMember = "PaymentMethodTitle";
-            cmbPaymentStatus.ValueMember = "PaymentStatusId";
-            cmbPaymentMethod.ValueMember = "PaymentMethodId";
-            cmbPaymentStatus.SelectedIndex = -1;
-            cmbPaymentMethod.SelectedIndex = -1;
+                //save the equipment price 
+                rentalPrice = equipment.RentalPrice;
 
 
-            //consider the transaction not paid and disable the comboboxes
-            cmbPaymentMethod.Enabled = false;
-            cmbPaymentStatus.Enabled = false;
+                //assume that the customer is an external customer and the manager will be adding the customer details
+                txtUserId.Enabled = false;
+                txtFirstName.Enabled = true;
+                txtLastName.Enabled = true;
+                txtPhoneNumber.Enabled = true;
+                txtEmail.Enabled = true;
+
+                //load the payment status and payment method
+                var paymentStatus = context.PaymentStatuses.ToList();
+                var paymentMethod = context.PaymentMethods.ToList();
+                cmbPaymentStatus.DataSource = paymentStatus;
+                cmbPaymentMethod.DataSource = paymentMethod;
+                cmbPaymentStatus.DisplayMember = "PaymentStatusTitle";
+                cmbPaymentMethod.DisplayMember = "PaymentMethodTitle";
+                cmbPaymentStatus.ValueMember = "PaymentStatusId";
+                cmbPaymentMethod.ValueMember = "PaymentMethodId";
+                cmbPaymentStatus.SelectedIndex = -1;
+                cmbPaymentMethod.SelectedIndex = -1;
 
 
+                //consider the transaction not paid and disable the comboboxes
+                cmbPaymentMethod.Enabled = false;
+                cmbPaymentStatus.Enabled = false;
 
+            }
+            catch (Exception ex)
+            {
+                // log the error
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                // show the error message
+                MessageBox.Show("An error occurred while loading the form:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }  
 
         }
 
@@ -582,7 +657,11 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message);
+                // log the error
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                // show the error message
+                MessageBox.Show("An error occurred while switching between user modes:\n" + ex.Message, "Checkbox Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
@@ -672,25 +751,35 @@ namespace RentOpsDesktop
 
         private void btnUploadDocuments_Click(object sender, EventArgs e)
         {
-            // Show the UploadTransactionDocuments form as a dialog
-            UploadTransactionDocuments uploadForm = new UploadTransactionDocuments();
-            DialogResult result = uploadForm.ShowDialog();
-
-            if (result == DialogResult.OK)
+            try
             {
-                // Get the documents from the upload form
-                agreement = uploadForm.agreement;
-                idVerification = uploadForm.idVerification;
+                // Show the UploadTransactionDocuments form as a dialog
+                UploadTransactionDocuments uploadForm = new UploadTransactionDocuments();
+                DialogResult result = uploadForm.ShowDialog();
 
-                // Check if both documents were uploaded successfully
-                if (agreement != null && idVerification != null)
+                if (result == DialogResult.OK)
                 {
-                    hasDocument = true;
-                    MessageBox.Show("Documents uploaded successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                
+                    // Get the documents from the upload form
+                    agreement = uploadForm.agreement;
+                    idVerification = uploadForm.idVerification;
 
+                    // Check if both documents were uploaded successfully
+                    if (agreement != null && idVerification != null)
+                    {
+                        hasDocument = true;
+                        MessageBox.Show("Documents uploaded successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                // Log the error
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                // Show the error message
+                MessageBox.Show($"An error occurred while uploading documents: {ex.Message}", "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
 
         }
     }
