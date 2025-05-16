@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            txtRentalPeriod = new Label();
+            txtEquipment = new Label();
             btnAddRentalTransaction = new Button();
             txtRentalFee = new TextBox();
             txtDeposit = new TextBox();
@@ -59,16 +59,16 @@
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
-            // txtRentalPeriod
+            // txtEquipment
             // 
-            txtRentalPeriod.AutoSize = true;
-            txtRentalPeriod.Font = new Font("Segoe UI", 14F);
-            txtRentalPeriod.Location = new Point(285, 227);
-            txtRentalPeriod.Margin = new Padding(2, 0, 2, 0);
-            txtRentalPeriod.Name = "txtRentalPeriod";
-            txtRentalPeriod.Size = new Size(187, 25);
-            txtRentalPeriod.TabIndex = 95;
-            txtRentalPeriod.Text = "fetch the equipment ";
+            txtEquipment.AutoSize = true;
+            txtEquipment.Font = new Font("Segoe UI", 14F);
+            txtEquipment.Location = new Point(280, 227);
+            txtEquipment.Margin = new Padding(2, 0, 2, 0);
+            txtEquipment.Name = "txtEquipment";
+            txtEquipment.Size = new Size(187, 25);
+            txtEquipment.TabIndex = 95;
+            txtEquipment.Text = "fetch the equipment ";
             // 
             // btnAddRentalTransaction
             // 
@@ -185,7 +185,7 @@
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 28.125F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblTitle.ForeColor = Color.FromArgb(135, 66, 62);
-            lblTitle.Location = new Point(325, 21);
+            lblTitle.Location = new Point(292, 11);
             lblTitle.Name = "lblTitle";
             lblTitle.Size = new Size(443, 51);
             lblTitle.TabIndex = 84;
@@ -387,7 +387,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(957, 458);
             Controls.Add(groupBox1);
-            Controls.Add(txtRentalPeriod);
+            Controls.Add(txtEquipment);
             Controls.Add(btnAddRentalTransaction);
             Controls.Add(txtRentalFee);
             Controls.Add(txtDeposit);
@@ -403,6 +403,7 @@
             Margin = new Padding(2);
             Name = "AddRentalTransaction";
             Text = "AddRentalTransaction";
+            Load += AddRentalTransaction_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ResumeLayout(false);
@@ -411,7 +412,7 @@
 
         #endregion
 
-        private Label txtRentalPeriod;
+        private Label txtEquipment;
         private Button btnAddRentalTransaction;
         private TextBox txtRentalFee;
         private TextBox txtDeposit;
