@@ -24,7 +24,8 @@ namespace RentOpsDesktop
         //a function to refresh the data grid view 
         private void RefreshDataGridView()
         {
-            try {
+            try
+            {
 
                 var returnRecords = dbContext.ReturnRecords.AsQueryable();
 
@@ -45,7 +46,7 @@ namespace RentOpsDesktop
                     returnRecords = returnRecords.Where(r => r.ActualReturnDate == selectedDate);
                 }
 
-                
+
                 //select the full recordds
 
                 var returnRecordslist = returnRecords.Join(dbContext.ConditionStatuses,
@@ -65,21 +66,22 @@ namespace RentOpsDesktop
 
 
                 dgvReturnRecords.DataSource = returnRecordslist;
-            
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
 
-            
+
 
 
         }
 
         private void ReturnRecords_Load(object sender, EventArgs e)
         {
-            try { 
+            try
+            {
                 //laod conditions into the combo box
                 var conditions = dbContext.ConditionStatuses.ToList();
                 cmbConditionStatus.DataSource = conditions;
@@ -90,14 +92,14 @@ namespace RentOpsDesktop
 
                 //load into the data grid view
                 RefreshDataGridView();
-            
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
 
-            
+
         }
 
         private void lblReturnID_Click(object sender, EventArgs e)
@@ -127,7 +129,7 @@ namespace RentOpsDesktop
             {
                 var returnRecords = dbContext.ReturnRecords.AsQueryable();
 
-                
+
 
 
                 //if the return ID is filled
@@ -198,7 +200,7 @@ namespace RentOpsDesktop
                 dtpActualReturnDate.Value = DateTime.Now;
                 dtpActualReturnDate.Checked = false;
             }
-            
+
 
             //reset the dgv
             RefreshDataGridView();
@@ -230,7 +232,7 @@ namespace RentOpsDesktop
 
             if (addReturnRecord.DialogResult == DialogResult.OK)
             {
-                
+
                 RefreshDataGridView(); // Refresh the DataGridView
             }
 
@@ -353,9 +355,9 @@ namespace RentOpsDesktop
 
                 try
                 {
-                        dbContext.ReturnRecords.Remove(returnRecordToRemove);
-                        dbContext.SaveChanges(); // Save changes to the database
-                        RefreshDataGridView(); // Refresh the DataGridVi  
+                    dbContext.ReturnRecords.Remove(returnRecordToRemove);
+                    dbContext.SaveChanges(); // Save changes to the database
+                    RefreshDataGridView(); // Refresh the DataGridVi  
                 }
                 catch (Exception ex)
                 {
@@ -364,6 +366,14 @@ namespace RentOpsDesktop
 
 
             }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            //go bock to the dashboard
+            this.Hide();
+            UserEquipmentDashboard userEquipmentDashboard = new UserEquipmentDashboard();
+            userEquipmentDashboard.Show();
         }
     }
 }

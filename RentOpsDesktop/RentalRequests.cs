@@ -79,9 +79,10 @@ namespace RentOpsDesktop
 
         private void btnBack_Click(object sender, EventArgs e)
         {
-            RentalDashboard rentalDashboard = new RentalDashboard();
-            this.Hide(); //hide the current form
-            rentalDashboard.Show(); //show rental dashboard
+            //go bock to the dashboard
+            this.Hide();
+            UserEquipmentDashboard userEquipmentDashboard = new UserEquipmentDashboard();
+            userEquipmentDashboard.Show();
         }
 
         private void btnUpdateRentalRequest_Click(object sender, EventArgs e)

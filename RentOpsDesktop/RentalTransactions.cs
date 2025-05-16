@@ -395,6 +395,14 @@ namespace RentOpsDesktop
             chooseEquipment.Show();
 
         }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            //go bock to the dashboard
+            this.Hide();
+            UserEquipmentDashboard userEquipmentDashboard = new UserEquipmentDashboard();
+            userEquipmentDashboard.Show();
+        }
     }
 
 }

@@ -48,10 +48,10 @@ namespace RentOpsDesktop
 
             //average rental period (rental period is checked by the differance between the start and end) count the days then devide by the number of rentals
             var averageRentalPeriod = dbContext.RentalTransactions
-                .Include(i => i.Equipment)
-                .ThenInclude(t => t.RentalRequests)
-                .Where(r => r.Equipment.UserId == currentUserId || r.RentalRequest.Equipment.UserId == currentUserId)
-                .Select(r => (r.ReturnDate.ToDateTime(TimeOnly.MinValue) - r.PickupDate.ToDateTime(TimeOnly.MinValue)).TotalDays)
+                .Include(r => r.Equipment)
+                .Include(r => r.RentalRequest)
+                .Where(r => r.RentalRequest.Equipment.UserId == currentUserId)
+                .Select(r => EF.Functions.DateDiffDay(r.PickupDate, r.ReturnDate))
                 .Average();
 
             //available equipments will check the availability status of the equipment that has the user id of the current user
