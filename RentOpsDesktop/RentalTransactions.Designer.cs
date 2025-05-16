@@ -170,6 +170,7 @@
             btnBack.TabIndex = 9;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
+            btnBack.Click += btnBack_Click;
             // 
             // btnReset
             // 
@@ -334,7 +335,7 @@
             Controls.Add(dgvRentalTransactions);
             Controls.Add(lblReturnRecords);
             Controls.Add(pnlNavigationSideBar);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "RentalTransactions";
             Text = "RentalTransactions";
             Load += RentalTransactions_Load;

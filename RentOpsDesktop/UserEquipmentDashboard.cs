@@ -195,5 +195,15 @@ namespace RentOpsDesktop
         {
 
         }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnUpdateEquipment_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

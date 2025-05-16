@@ -185,7 +185,7 @@ namespace RentOpsDesktop
             DialogResult result = MessageBox.Show($"Are you sure you want to view the Log with ID {selectedLogID}?", "Confirm Edit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                
+
                 try
                 {
                     // Pass the object to the edit screen constructor and show the form
@@ -204,6 +204,13 @@ namespace RentOpsDesktop
 
 
             }
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            this.Hide(); //hide the current form
+            Profile screen = new Profile();
+            screen.Show();
         }
     }
 }

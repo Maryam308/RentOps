@@ -172,7 +172,7 @@ namespace RentOpsDesktop
 
         private void btnBack1_Click(object sender, EventArgs e)
         {
-            EquipmentInformation equipmentDashboard = new EquipmentInformation();
+            UserEquipmentDashboard equipmentDashboard = new UserEquipmentDashboard();
             this.Hide();
             equipmentDashboard.Show();
         }

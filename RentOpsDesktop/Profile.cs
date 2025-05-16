@@ -128,5 +128,13 @@ namespace RentOpsDesktop
             ReturnRecords screen = new ReturnRecords();
             screen.Show();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Hide(); //hide the current form
+            AuditLog screen = new AuditLog();
+            screen.Show();
+        
+        }
     }
 }

@@ -19,5 +19,12 @@ public class RentOpsWebAppContext : IdentityDbContext<IdentityUser>
         // Add your customizations after calling base.OnModelCreating(builder);
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=RentOpsWebApp;Trusted_Connection=True;MultipleActiveResultSets=true");
+        }
+    }
 
 }

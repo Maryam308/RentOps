@@ -96,8 +96,8 @@ namespace RentOpsDesktop
                 {
                     //creat a payment object
                     Payment payment = new Payment();
-                    payment.PaymentMethodId = cmbPaymentMethod.SelectedIndex;
-                    payment.PaymentStatusId = cmbPaymentStatus.SelectedIndex;
+                    payment.PaymentMethodId = (int)cmbPaymentMethod.SelectedValue;
+                    payment.PaymentStatusId = (int)cmbPaymentStatus.SelectedValue;
 
                     //add the payment to the database
                     context.Payments.Add(payment);
@@ -235,8 +235,8 @@ namespace RentOpsDesktop
                 {
                     //creat a payment object
                     Payment payment = new Payment();
-                    payment.PaymentMethodId = cmbPaymentMethod.SelectedIndex;
-                    payment.PaymentStatusId = cmbPaymentStatus.SelectedIndex;
+                    payment.PaymentMethodId = (int)cmbPaymentMethod.SelectedValue;
+                    payment.PaymentStatusId = (int)cmbPaymentStatus.SelectedValue;
 
                     //add the payment to the database
                     context.Payments.Add(payment);
@@ -357,6 +357,11 @@ namespace RentOpsDesktop
             cmbPaymentMethod.ValueMember = "PaymentMethodId";
             cmbPaymentStatus.SelectedIndex = -1;
             cmbPaymentMethod.SelectedIndex = -1;
+
+
+            //consider the transaction not paid and disable the comboboxes
+            cmbPaymentMethod.Enabled = false;
+            cmbPaymentStatus.Enabled = false;
 
 
 

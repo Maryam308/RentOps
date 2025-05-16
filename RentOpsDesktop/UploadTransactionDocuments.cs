@@ -19,7 +19,12 @@ namespace RentOpsDesktop
         public UploadTransactionDocuments()
         {
             InitializeComponent();
-            
+
+        }
+
+        private void UploadTransactionDocuments_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
