@@ -8,6 +8,6 @@ namespace RentOpsDesktop
 {
     internal class Global
     {
-        internal static int EmployeeID;
+        internal static int EmployeeID = 1;
     }
 }
