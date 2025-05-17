@@ -85,10 +85,10 @@
             // 
             txtEquipment.AutoSize = true;
             txtEquipment.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point, 0);
-            txtEquipment.Location = new Point(197, 30);
-            txtEquipment.Margin = new Padding(2, 0, 2, 0);
+            txtEquipment.Location = new Point(366, 64);
+            txtEquipment.Margin = new Padding(4, 0, 4, 0);
             txtEquipment.Name = "txtEquipment";
-            txtEquipment.Size = new Size(164, 21);
+            txtEquipment.Size = new Size(327, 45);
             txtEquipment.TabIndex = 95;
             txtEquipment.Text = "fetch the equipment ";
             // 
@@ -98,10 +98,10 @@
             btnAddRentalTransaction.FlatStyle = FlatStyle.Flat;
             btnAddRentalTransaction.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAddRentalTransaction.ForeColor = Color.White;
-            btnAddRentalTransaction.Location = new Point(685, 394);
-            btnAddRentalTransaction.Margin = new Padding(3, 2, 3, 2);
+            btnAddRentalTransaction.Location = new Point(1272, 841);
+            btnAddRentalTransaction.Margin = new Padding(6, 4, 6, 4);
             btnAddRentalTransaction.Name = "btnAddRentalTransaction";
-            btnAddRentalTransaction.Size = new Size(223, 44);
+            btnAddRentalTransaction.Size = new Size(414, 94);
             btnAddRentalTransaction.TabIndex = 94;
             btnAddRentalTransaction.Text = "Add Rental Transaction";
             btnAddRentalTransaction.UseVisualStyleBackColor = false;
@@ -111,21 +111,21 @@
             // 
             txtRentalFee.BorderStyle = BorderStyle.FixedSingle;
             txtRentalFee.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtRentalFee.Location = new Point(139, 164);
-            txtRentalFee.Margin = new Padding(2);
+            txtRentalFee.Location = new Point(258, 350);
+            txtRentalFee.Margin = new Padding(4, 4, 4, 4);
             txtRentalFee.Name = "txtRentalFee";
             txtRentalFee.ReadOnly = true;
-            txtRentalFee.Size = new Size(220, 29);
+            txtRentalFee.Size = new Size(407, 50);
             txtRentalFee.TabIndex = 93;
             // 
             // txtDeposit
             // 
             txtDeposit.BorderStyle = BorderStyle.FixedSingle;
             txtDeposit.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtDeposit.Location = new Point(139, 210);
-            txtDeposit.Margin = new Padding(2);
+            txtDeposit.Location = new Point(258, 448);
+            txtDeposit.Margin = new Padding(4, 4, 4, 4);
             txtDeposit.Name = "txtDeposit";
-            txtDeposit.Size = new Size(220, 29);
+            txtDeposit.Size = new Size(407, 50);
             txtDeposit.TabIndex = 92;
             txtDeposit.TextChanged += txtDeposit_TextChanged;
             // 
@@ -133,10 +133,10 @@
             // 
             lblRentalPrice.AutoSize = true;
             lblRentalPrice.Font = new Font("Segoe UI", 12F);
-            lblRentalPrice.Location = new Point(19, 166);
-            lblRentalPrice.Margin = new Padding(2, 0, 2, 0);
+            lblRentalPrice.Location = new Point(35, 354);
+            lblRentalPrice.Margin = new Padding(4, 0, 4, 0);
             lblRentalPrice.Name = "lblRentalPrice";
-            lblRentalPrice.Size = new Size(85, 21);
+            lblRentalPrice.Size = new Size(174, 45);
             lblRentalPrice.TabIndex = 89;
             lblRentalPrice.Text = "Rental Fee:";
             // 
@@ -144,10 +144,10 @@
             // 
             lblQuantity.AutoSize = true;
             lblQuantity.Font = new Font("Segoe UI", 12F);
-            lblQuantity.Location = new Point(19, 212);
-            lblQuantity.Margin = new Padding(2, 0, 2, 0);
+            lblQuantity.Location = new Point(35, 452);
+            lblQuantity.Margin = new Padding(4, 0, 4, 0);
             lblQuantity.Name = "lblQuantity";
-            lblQuantity.Size = new Size(66, 21);
+            lblQuantity.Size = new Size(137, 45);
             lblQuantity.TabIndex = 88;
             lblQuantity.Text = "Deposit:";
             // 
@@ -155,10 +155,10 @@
             // 
             lblEquipmentCategory.AutoSize = true;
             lblEquipmentCategory.Font = new Font("Segoe UI", 12F);
-            lblEquipmentCategory.Location = new Point(18, 30);
-            lblEquipmentCategory.Margin = new Padding(2, 0, 2, 0);
+            lblEquipmentCategory.Location = new Point(33, 64);
+            lblEquipmentCategory.Margin = new Padding(4, 0, 4, 0);
             lblEquipmentCategory.Name = "lblEquipmentCategory";
-            lblEquipmentCategory.Size = new Size(150, 21);
+            lblEquipmentCategory.Size = new Size(311, 45);
             lblEquipmentCategory.TabIndex = 87;
             lblEquipmentCategory.Text = "Equipment Selected:";
             // 
@@ -166,10 +166,10 @@
             // 
             lblEquipmentDescription.AutoSize = true;
             lblEquipmentDescription.Font = new Font("Segoe UI", 12F);
-            lblEquipmentDescription.Location = new Point(19, 116);
-            lblEquipmentDescription.Margin = new Padding(2, 0, 2, 0);
+            lblEquipmentDescription.Location = new Point(35, 247);
+            lblEquipmentDescription.Margin = new Padding(4, 0, 4, 0);
             lblEquipmentDescription.Name = "lblEquipmentDescription";
-            lblEquipmentDescription.Size = new Size(96, 21);
+            lblEquipmentDescription.Size = new Size(195, 45);
             lblEquipmentDescription.TabIndex = 86;
             lblEquipmentDescription.Text = "Return Date:";
             // 
@@ -177,10 +177,10 @@
             // 
             lblEquipmentName.AutoSize = true;
             lblEquipmentName.Font = new Font("Segoe UI", 12F);
-            lblEquipmentName.Location = new Point(19, 75);
-            lblEquipmentName.Margin = new Padding(2, 0, 2, 0);
+            lblEquipmentName.Location = new Point(35, 160);
+            lblEquipmentName.Margin = new Padding(4, 0, 4, 0);
             lblEquipmentName.Name = "lblEquipmentName";
-            lblEquipmentName.Size = new Size(95, 21);
+            lblEquipmentName.Size = new Size(196, 45);
             lblEquipmentName.TabIndex = 85;
             lblEquipmentName.Text = "Pickup Date:";
             // 
@@ -189,9 +189,10 @@
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 28.125F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblTitle.ForeColor = Color.FromArgb(135, 66, 62);
-            lblTitle.Location = new Point(292, 11);
+            lblTitle.Location = new Point(542, 23);
+            lblTitle.Margin = new Padding(6, 0, 6, 0);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(443, 51);
+            lblTitle.Size = new Size(868, 100);
             lblTitle.TabIndex = 84;
             lblTitle.Text = "Add Rental Transaction";
             // 
@@ -201,10 +202,10 @@
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(12, 11);
-            btnBack.Margin = new Padding(3, 2, 3, 2);
+            btnBack.Location = new Point(22, 23);
+            btnBack.Margin = new Padding(6, 4, 6, 4);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(155, 44);
+            btnBack.Size = new Size(288, 94);
             btnBack.TabIndex = 83;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
@@ -232,11 +233,11 @@
             gbCustomer.Controls.Add(label2);
             gbCustomer.Controls.Add(label1);
             gbCustomer.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            gbCustomer.Location = new Point(511, 64);
-            gbCustomer.Margin = new Padding(3, 2, 3, 2);
+            gbCustomer.Location = new Point(949, 137);
+            gbCustomer.Margin = new Padding(6, 4, 6, 4);
             gbCustomer.Name = "gbCustomer";
-            gbCustomer.Padding = new Padding(3, 2, 3, 2);
-            gbCustomer.Size = new Size(411, 270);
+            gbCustomer.Padding = new Padding(6, 4, 6, 4);
+            gbCustomer.Size = new Size(763, 576);
             gbCustomer.TabIndex = 96;
             gbCustomer.TabStop = false;
             gbCustomer.Text = "Customer Details";
@@ -247,9 +248,10 @@
             lblUserIdErr.AutoSize = true;
             lblUserIdErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
             lblUserIdErr.ForeColor = Color.Red;
-            lblUserIdErr.Location = new Point(217, 64);
+            lblUserIdErr.Location = new Point(403, 137);
+            lblUserIdErr.Margin = new Padding(6, 0, 6, 0);
             lblUserIdErr.Name = "lblUserIdErr";
-            lblUserIdErr.Size = new Size(0, 15);
+            lblUserIdErr.Size = new Size(0, 32);
             lblUserIdErr.TabIndex = 113;
             // 
             // lblPhoneNumberErr
@@ -257,9 +259,10 @@
             lblPhoneNumberErr.AutoSize = true;
             lblPhoneNumberErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
             lblPhoneNumberErr.ForeColor = Color.Red;
-            lblPhoneNumberErr.Location = new Point(174, 243);
+            lblPhoneNumberErr.Location = new Point(323, 518);
+            lblPhoneNumberErr.Margin = new Padding(6, 0, 6, 0);
             lblPhoneNumberErr.Name = "lblPhoneNumberErr";
-            lblPhoneNumberErr.Size = new Size(0, 15);
+            lblPhoneNumberErr.Size = new Size(0, 32);
             lblPhoneNumberErr.TabIndex = 112;
             // 
             // lblEmailErr
@@ -267,9 +270,10 @@
             lblEmailErr.AutoSize = true;
             lblEmailErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
             lblEmailErr.ForeColor = Color.Red;
-            lblEmailErr.Location = new Point(174, 191);
+            lblEmailErr.Location = new Point(323, 407);
+            lblEmailErr.Margin = new Padding(6, 0, 6, 0);
             lblEmailErr.Name = "lblEmailErr";
-            lblEmailErr.Size = new Size(0, 15);
+            lblEmailErr.Size = new Size(0, 32);
             lblEmailErr.TabIndex = 111;
             // 
             // lblLastNameErr
@@ -277,9 +281,10 @@
             lblLastNameErr.AutoSize = true;
             lblLastNameErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
             lblLastNameErr.ForeColor = Color.Red;
-            lblLastNameErr.Location = new Point(242, 139);
+            lblLastNameErr.Location = new Point(449, 297);
+            lblLastNameErr.Margin = new Padding(6, 0, 6, 0);
             lblLastNameErr.Name = "lblLastNameErr";
-            lblLastNameErr.Size = new Size(0, 15);
+            lblLastNameErr.Size = new Size(0, 32);
             lblLastNameErr.TabIndex = 110;
             // 
             // lblFirstNameErr
@@ -287,19 +292,20 @@
             lblFirstNameErr.AutoSize = true;
             lblFirstNameErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
             lblFirstNameErr.ForeColor = Color.Red;
-            lblFirstNameErr.Location = new Point(66, 137);
+            lblFirstNameErr.Location = new Point(123, 292);
+            lblFirstNameErr.Margin = new Padding(6, 0, 6, 0);
             lblFirstNameErr.Name = "lblFirstNameErr";
-            lblFirstNameErr.Size = new Size(0, 15);
+            lblFirstNameErr.Size = new Size(0, 32);
             lblFirstNameErr.TabIndex = 109;
             // 
             // checkBox1
             // 
             checkBox1.AutoSize = true;
             checkBox1.Font = new Font("Segoe UI", 15F);
-            checkBox1.Location = new Point(169, 44);
-            checkBox1.Margin = new Padding(3, 2, 3, 2);
+            checkBox1.Location = new Point(314, 94);
+            checkBox1.Margin = new Padding(6, 4, 6, 4);
             checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(15, 14);
+            checkBox1.Size = new Size(28, 27);
             checkBox1.TabIndex = 108;
             checkBox1.UseVisualStyleBackColor = true;
             checkBox1.CheckedChanged += checkBox1_CheckedChanged;
@@ -308,10 +314,10 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 12F);
-            label8.Location = new Point(27, 37);
-            label8.Margin = new Padding(2, 0, 2, 0);
+            label8.Location = new Point(50, 79);
+            label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
-            label8.Size = new Size(117, 21);
+            label8.Size = new Size(241, 45);
             label8.TabIndex = 107;
             label8.Text = "Is website User:";
             // 
@@ -319,10 +325,10 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 12F);
-            label7.Location = new Point(210, 37);
-            label7.Margin = new Padding(2, 0, 2, 0);
+            label7.Location = new Point(390, 79);
+            label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(64, 21);
+            label7.Size = new Size(131, 45);
             label7.TabIndex = 105;
             label7.Text = "User ID:";
             // 
@@ -330,10 +336,10 @@
             // 
             txtUserId.BorderStyle = BorderStyle.FixedSingle;
             txtUserId.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtUserId.Location = new Point(278, 35);
-            txtUserId.Margin = new Padding(2);
+            txtUserId.Location = new Point(516, 75);
+            txtUserId.Margin = new Padding(4, 4, 4, 4);
             txtUserId.Name = "txtUserId";
-            txtUserId.Size = new Size(105, 29);
+            txtUserId.Size = new Size(193, 50);
             txtUserId.TabIndex = 106;
             txtUserId.TextChanged += txtUserId_TextChanged;
             // 
@@ -341,10 +347,10 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 12F);
-            label5.Location = new Point(19, 210);
-            label5.Margin = new Padding(2, 0, 2, 0);
+            label5.Location = new Point(35, 448);
+            label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(119, 21);
+            label5.Size = new Size(243, 45);
             label5.TabIndex = 102;
             label5.Text = "Phone Number:";
             // 
@@ -352,10 +358,10 @@
             // 
             txtPhoneNumber.BorderStyle = BorderStyle.FixedSingle;
             txtPhoneNumber.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtPhoneNumber.Location = new Point(160, 210);
-            txtPhoneNumber.Margin = new Padding(2);
+            txtPhoneNumber.Location = new Point(297, 448);
+            txtPhoneNumber.Margin = new Padding(4, 4, 4, 4);
             txtPhoneNumber.Name = "txtPhoneNumber";
-            txtPhoneNumber.Size = new Size(223, 29);
+            txtPhoneNumber.Size = new Size(412, 50);
             txtPhoneNumber.TabIndex = 104;
             txtPhoneNumber.TextChanged += txtPhoneNumber_TextChanged;
             // 
@@ -363,10 +369,10 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 12F);
-            label6.Location = new Point(19, 159);
-            label6.Margin = new Padding(2, 0, 2, 0);
+            label6.Location = new Point(35, 339);
+            label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(51, 21);
+            label6.Size = new Size(103, 45);
             label6.TabIndex = 101;
             label6.Text = "Email:";
             // 
@@ -374,10 +380,10 @@
             // 
             txtEmail.BorderStyle = BorderStyle.FixedSingle;
             txtEmail.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtEmail.Location = new Point(160, 158);
-            txtEmail.Margin = new Padding(2);
+            txtEmail.Location = new Point(297, 337);
+            txtEmail.Margin = new Padding(4, 4, 4, 4);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(223, 29);
+            txtEmail.Size = new Size(412, 50);
             txtEmail.TabIndex = 103;
             txtEmail.TextChanged += txtEmail_TextChanged;
             // 
@@ -385,10 +391,10 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 12F);
-            label3.Location = new Point(210, 84);
-            label3.Margin = new Padding(2, 0, 2, 0);
+            label3.Location = new Point(390, 179);
+            label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(87, 21);
+            label3.Size = new Size(177, 45);
             label3.TabIndex = 98;
             label3.Text = "Last Name:";
             // 
@@ -396,10 +402,10 @@
             // 
             txtLastName.BorderStyle = BorderStyle.FixedSingle;
             txtLastName.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtLastName.Location = new Point(233, 108);
-            txtLastName.Margin = new Padding(2);
+            txtLastName.Location = new Point(433, 230);
+            txtLastName.Margin = new Padding(4, 4, 4, 4);
             txtLastName.Name = "txtLastName";
-            txtLastName.Size = new Size(150, 29);
+            txtLastName.Size = new Size(277, 50);
             txtLastName.TabIndex = 100;
             txtLastName.TextChanged += txtLastName_TextChanged;
             // 
@@ -407,10 +413,10 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 12F);
-            label4.Location = new Point(27, 84);
-            label4.Margin = new Padding(2, 0, 2, 0);
+            label4.Location = new Point(50, 179);
+            label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(89, 21);
+            label4.Size = new Size(181, 45);
             label4.TabIndex = 97;
             label4.Text = "First Name:";
             // 
@@ -418,10 +424,10 @@
             // 
             txtFirstName.BorderStyle = BorderStyle.FixedSingle;
             txtFirstName.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            txtFirstName.Location = new Point(43, 108);
-            txtFirstName.Margin = new Padding(2);
+            txtFirstName.Location = new Point(80, 230);
+            txtFirstName.Margin = new Padding(4, 4, 4, 4);
             txtFirstName.Name = "txtFirstName";
-            txtFirstName.Size = new Size(150, 29);
+            txtFirstName.Size = new Size(277, 50);
             txtFirstName.TabIndex = 99;
             txtFirstName.TextChanged += txtFirstName_TextChanged;
             // 
@@ -429,10 +435,10 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(-147, 46);
-            label2.Margin = new Padding(2, 0, 2, 0);
+            label2.Location = new Point(-273, 98);
+            label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(124, 25);
+            label2.Size = new Size(241, 50);
             label2.TabIndex = 97;
             label2.Text = "Pickup Date:";
             // 
@@ -440,10 +446,10 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(-147, 94);
-            label1.Margin = new Padding(2, 0, 2, 0);
+            label1.Location = new Point(-273, 201);
+            label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(124, 25);
+            label1.Size = new Size(239, 50);
             label1.TabIndex = 98;
             label1.Text = "Return Date:";
             // 
@@ -451,20 +457,22 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 12F);
-            label9.Location = new Point(364, 28);
-            label9.Margin = new Padding(2, 0, 2, 0);
+            label9.Location = new Point(676, 60);
+            label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new Size(119, 21);
+            label9.Size = new Size(244, 45);
             label9.TabIndex = 97;
             label9.Text = "Payment Status:";
             // 
             // cmbPaymentStatus
             // 
+            cmbPaymentStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbPaymentStatus.Font = new Font("Segoe UI", 12F);
             cmbPaymentStatus.FormattingEnabled = true;
-            cmbPaymentStatus.Location = new Point(365, 52);
+            cmbPaymentStatus.Location = new Point(678, 111);
+            cmbPaymentStatus.Margin = new Padding(6, 6, 6, 6);
             cmbPaymentStatus.Name = "cmbPaymentStatus";
-            cmbPaymentStatus.Size = new Size(185, 29);
+            cmbPaymentStatus.Size = new Size(340, 53);
             cmbPaymentStatus.TabIndex = 98;
             // 
             // lblReturnDateErr
@@ -472,9 +480,10 @@
             lblReturnDateErr.AutoSize = true;
             lblReturnDateErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
             lblReturnDateErr.ForeColor = Color.Red;
-            lblReturnDateErr.Location = new Point(154, 147);
+            lblReturnDateErr.Location = new Point(286, 314);
+            lblReturnDateErr.Margin = new Padding(6, 0, 6, 0);
             lblReturnDateErr.Name = "lblReturnDateErr";
-            lblReturnDateErr.Size = new Size(0, 15);
+            lblReturnDateErr.Size = new Size(0, 32);
             lblReturnDateErr.TabIndex = 99;
             // 
             // lblDepositeErr
@@ -482,18 +491,20 @@
             lblDepositeErr.AutoSize = true;
             lblDepositeErr.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
             lblDepositeErr.ForeColor = Color.Red;
-            lblDepositeErr.Location = new Point(154, 245);
+            lblDepositeErr.Location = new Point(286, 523);
+            lblDepositeErr.Margin = new Padding(6, 0, 6, 0);
             lblDepositeErr.Name = "lblDepositeErr";
-            lblDepositeErr.Size = new Size(0, 15);
+            lblDepositeErr.Size = new Size(0, 32);
             lblDepositeErr.TabIndex = 100;
             // 
             // dtpReturnDate
             // 
             dtpReturnDate.CalendarFont = new Font("Segoe UI", 12F);
             dtpReturnDate.Font = new Font("Segoe UI", 12F);
-            dtpReturnDate.Location = new Point(139, 111);
+            dtpReturnDate.Location = new Point(258, 237);
+            dtpReturnDate.Margin = new Padding(6, 6, 6, 6);
             dtpReturnDate.Name = "dtpReturnDate";
-            dtpReturnDate.Size = new Size(220, 29);
+            dtpReturnDate.Size = new Size(405, 50);
             dtpReturnDate.TabIndex = 102;
             dtpReturnDate.ValueChanged += dtpReturnDate_ValueChanged;
             // 
@@ -501,9 +512,10 @@
             // 
             dtpPickupDate.CalendarFont = new Font("Segoe UI", 12F);
             dtpPickupDate.Font = new Font("Segoe UI", 12F);
-            dtpPickupDate.Location = new Point(139, 69);
+            dtpPickupDate.Location = new Point(258, 147);
+            dtpPickupDate.Margin = new Padding(6, 6, 6, 6);
             dtpPickupDate.Name = "dtpPickupDate";
-            dtpPickupDate.Size = new Size(220, 29);
+            dtpPickupDate.Size = new Size(405, 50);
             dtpPickupDate.TabIndex = 103;
             dtpPickupDate.ValueChanged += dtpPickupDate_ValueChanged;
             // 
@@ -518,32 +530,34 @@
             gbPayment.Controls.Add(cmbPaymentStatus);
             gbPayment.Controls.Add(label9);
             gbPayment.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic);
-            gbPayment.Location = new Point(54, 342);
-            gbPayment.Margin = new Padding(3, 2, 3, 2);
+            gbPayment.Location = new Point(100, 730);
+            gbPayment.Margin = new Padding(6, 4, 6, 4);
             gbPayment.Name = "gbPayment";
-            gbPayment.Padding = new Padding(3, 2, 3, 2);
-            gbPayment.Size = new Size(601, 98);
+            gbPayment.Padding = new Padding(6, 4, 6, 4);
+            gbPayment.Size = new Size(1116, 209);
             gbPayment.TabIndex = 104;
             gbPayment.TabStop = false;
             gbPayment.Text = "Total Payment Details";
             // 
             // cmbPaymentMethod
             // 
+            cmbPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbPaymentMethod.Font = new Font("Segoe UI", 12F);
             cmbPaymentMethod.FormattingEnabled = true;
-            cmbPaymentMethod.Location = new Point(159, 52);
+            cmbPaymentMethod.Location = new Point(295, 111);
+            cmbPaymentMethod.Margin = new Padding(6, 6, 6, 6);
             cmbPaymentMethod.Name = "cmbPaymentMethod";
-            cmbPaymentMethod.Size = new Size(185, 29);
+            cmbPaymentMethod.Size = new Size(340, 53);
             cmbPaymentMethod.TabIndex = 110;
             // 
             // label11
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Segoe UI", 12F);
-            label11.Location = new Point(159, 28);
-            label11.Margin = new Padding(2, 0, 2, 0);
+            label11.Location = new Point(295, 60);
+            label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
-            label11.Size = new Size(131, 21);
+            label11.Size = new Size(271, 45);
             label11.TabIndex = 109;
             label11.Text = "Payment Method:";
             // 
@@ -551,10 +565,10 @@
             // 
             checkBox2.AutoSize = true;
             checkBox2.Font = new Font("Segoe UI", 15F);
-            checkBox2.Location = new Point(96, 41);
-            checkBox2.Margin = new Padding(3, 2, 3, 2);
+            checkBox2.Location = new Point(178, 87);
+            checkBox2.Margin = new Padding(6, 4, 6, 4);
             checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(15, 14);
+            checkBox2.Size = new Size(28, 27);
             checkBox2.TabIndex = 108;
             checkBox2.UseVisualStyleBackColor = true;
             checkBox2.CheckedChanged += checkBox2_CheckedChanged;
@@ -563,10 +577,10 @@
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Segoe UI", 12F);
-            label10.Location = new Point(34, 34);
-            label10.Margin = new Padding(2, 0, 2, 0);
+            label10.Location = new Point(63, 73);
+            label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
-            label10.Size = new Size(57, 21);
+            label10.Size = new Size(119, 45);
             label10.TabIndex = 107;
             label10.Text = "Is Paid:";
             // 
@@ -574,10 +588,10 @@
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label16.Location = new Point(-147, 45);
-            label16.Margin = new Padding(2, 0, 2, 0);
+            label16.Location = new Point(-273, 96);
+            label16.Margin = new Padding(4, 0, 4, 0);
             label16.Name = "label16";
-            label16.Size = new Size(124, 25);
+            label16.Size = new Size(241, 50);
             label16.TabIndex = 97;
             label16.Text = "Pickup Date:";
             // 
@@ -585,10 +599,10 @@
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label17.Location = new Point(-147, 93);
-            label17.Margin = new Padding(2, 0, 2, 0);
+            label17.Location = new Point(-273, 198);
+            label17.Margin = new Padding(4, 0, 4, 0);
             label17.Name = "label17";
-            label17.Size = new Size(124, 25);
+            label17.Size = new Size(239, 50);
             label17.TabIndex = 98;
             label17.Text = "Return Date:";
             // 
@@ -609,11 +623,11 @@
             gbRental.Controls.Add(txtRentalFee);
             gbRental.Controls.Add(lblQuantity);
             gbRental.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic);
-            gbRental.Location = new Point(54, 64);
-            gbRental.Margin = new Padding(3, 2, 3, 2);
+            gbRental.Location = new Point(100, 137);
+            gbRental.Margin = new Padding(6, 4, 6, 4);
             gbRental.Name = "gbRental";
-            gbRental.Padding = new Padding(3, 2, 3, 2);
-            gbRental.Size = new Size(411, 270);
+            gbRental.Padding = new Padding(6, 4, 6, 4);
+            gbRental.Size = new Size(763, 576);
             gbRental.TabIndex = 109;
             gbRental.TabStop = false;
             gbRental.Text = "Rental Details";
@@ -622,10 +636,10 @@
             // 
             label20.AutoSize = true;
             label20.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label20.Location = new Point(-147, 45);
-            label20.Margin = new Padding(2, 0, 2, 0);
+            label20.Location = new Point(-273, 96);
+            label20.Margin = new Padding(4, 0, 4, 0);
             label20.Name = "label20";
-            label20.Size = new Size(124, 25);
+            label20.Size = new Size(241, 50);
             label20.TabIndex = 97;
             label20.Text = "Pickup Date:";
             // 
@@ -633,10 +647,10 @@
             // 
             label21.AutoSize = true;
             label21.Font = new Font("Segoe UI", 13.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label21.Location = new Point(-147, 93);
-            label21.Margin = new Padding(2, 0, 2, 0);
+            label21.Location = new Point(-273, 198);
+            label21.Margin = new Padding(4, 0, 4, 0);
             label21.Name = "label21";
-            label21.Size = new Size(124, 25);
+            label21.Size = new Size(239, 50);
             label21.TabIndex = 98;
             label21.Text = "Return Date:";
             // 
@@ -646,10 +660,10 @@
             btnUploadDocuments.FlatStyle = FlatStyle.Flat;
             btnUploadDocuments.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnUploadDocuments.ForeColor = Color.White;
-            btnUploadDocuments.Location = new Point(685, 346);
-            btnUploadDocuments.Margin = new Padding(3, 2, 3, 2);
+            btnUploadDocuments.Location = new Point(1272, 738);
+            btnUploadDocuments.Margin = new Padding(6, 4, 6, 4);
             btnUploadDocuments.Name = "btnUploadDocuments";
-            btnUploadDocuments.Size = new Size(223, 44);
+            btnUploadDocuments.Size = new Size(414, 94);
             btnUploadDocuments.TabIndex = 110;
             btnUploadDocuments.Text = "Upload Documents";
             btnUploadDocuments.UseVisualStyleBackColor = false;
@@ -657,9 +671,9 @@
             // 
             // AddRentalTransaction
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(957, 458);
+            ClientSize = new Size(1777, 977);
             Controls.Add(btnUploadDocuments);
             Controls.Add(gbRental);
             Controls.Add(gbPayment);
@@ -667,7 +681,7 @@
             Controls.Add(btnAddRentalTransaction);
             Controls.Add(lblTitle);
             Controls.Add(btnBack);
-            Margin = new Padding(2);
+            Margin = new Padding(4, 4, 4, 4);
             Name = "AddRentalTransaction";
             Text = "AddRentalTransaction";
             Load += AddRentalTransaction_Load;

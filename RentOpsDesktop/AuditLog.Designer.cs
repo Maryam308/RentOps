@@ -47,11 +47,11 @@
             // 
             dgvAuditLog.BackgroundColor = Color.WhiteSmoke;
             dgvAuditLog.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvAuditLog.Location = new Point(67, 153);
-            dgvAuditLog.Margin = new Padding(3, 2, 3, 2);
+            dgvAuditLog.Location = new Point(124, 326);
+            dgvAuditLog.Margin = new Padding(6, 4, 6, 4);
             dgvAuditLog.Name = "dgvAuditLog";
             dgvAuditLog.RowHeadersWidth = 51;
-            dgvAuditLog.Size = new Size(813, 232);
+            dgvAuditLog.Size = new Size(1510, 495);
             dgvAuditLog.TabIndex = 12;
             // 
             // lblAuditLog
@@ -59,9 +59,10 @@
             lblAuditLog.AutoSize = true;
             lblAuditLog.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0, true);
             lblAuditLog.ForeColor = Color.FromArgb(135, 66, 62);
-            lblAuditLog.Location = new Point(412, 23);
+            lblAuditLog.Location = new Point(765, 49);
+            lblAuditLog.Margin = new Padding(6, 0, 6, 0);
             lblAuditLog.Name = "lblAuditLog";
-            lblAuditLog.Size = new Size(160, 42);
+            lblAuditLog.Size = new Size(311, 82);
             lblAuditLog.TabIndex = 11;
             lblAuditLog.Text = "Audit Log";
             // 
@@ -73,10 +74,10 @@
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(12, 11);
-            btnBack.Margin = new Padding(3, 2, 3, 2);
+            btnBack.Location = new Point(22, 23);
+            btnBack.Margin = new Padding(6, 4, 6, 4);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(155, 44);
+            btnBack.Size = new Size(288, 94);
             btnBack.TabIndex = 13;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
@@ -85,53 +86,61 @@
             // dtpTimestamp
             // 
             dtpTimestamp.Checked = false;
-            dtpTimestamp.Location = new Point(120, 110);
+            dtpTimestamp.Location = new Point(223, 235);
+            dtpTimestamp.Margin = new Padding(6, 6, 6, 6);
             dtpTimestamp.Name = "dtpTimestamp";
             dtpTimestamp.ShowCheckBox = true;
-            dtpTimestamp.Size = new Size(190, 23);
+            dtpTimestamp.Size = new Size(349, 39);
             dtpTimestamp.TabIndex = 14;
             // 
             // cmbSource
             // 
+            cmbSource.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbSource.FormattingEnabled = true;
-            cmbSource.Location = new Point(351, 110);
+            cmbSource.Location = new Point(652, 235);
+            cmbSource.Margin = new Padding(6, 6, 6, 6);
             cmbSource.Name = "cmbSource";
-            cmbSource.Size = new Size(190, 23);
+            cmbSource.Size = new Size(349, 40);
             cmbSource.TabIndex = 15;
             // 
             // lblRentalTransaction
             // 
             lblRentalTransaction.AutoSize = true;
-            lblRentalTransaction.Location = new Point(578, 89);
+            lblRentalTransaction.Location = new Point(1073, 190);
+            lblRentalTransaction.Margin = new Padding(6, 0, 6, 0);
             lblRentalTransaction.Name = "lblRentalTransaction";
-            lblRentalTransaction.Size = new Size(100, 15);
+            lblRentalTransaction.Size = new Size(204, 32);
             lblRentalTransaction.TabIndex = 38;
             lblRentalTransaction.Text = "Filter by Log Type";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(351, 89);
+            label2.Location = new Point(652, 190);
+            label2.Margin = new Padding(6, 0, 6, 0);
             label2.Name = "label2";
-            label2.Size = new Size(88, 15);
+            label2.Size = new Size(180, 32);
             label2.TabIndex = 37;
             label2.Text = "Filter by Source";
             // 
             // lblReturnDateFilter
             // 
             lblReturnDateFilter.AutoSize = true;
-            lblReturnDateFilter.Location = new Point(122, 89);
+            lblReturnDateFilter.Location = new Point(227, 190);
+            lblReturnDateFilter.Margin = new Padding(6, 0, 6, 0);
             lblReturnDateFilter.Name = "lblReturnDateFilter";
-            lblReturnDateFilter.Size = new Size(99, 15);
+            lblReturnDateFilter.Size = new Size(203, 32);
             lblReturnDateFilter.TabIndex = 36;
             lblReturnDateFilter.Text = "Filter by Log Date";
             // 
             // cmbLogType
             // 
+            cmbLogType.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbLogType.FormattingEnabled = true;
-            cmbLogType.Location = new Point(575, 110);
+            cmbLogType.Location = new Point(1068, 235);
+            cmbLogType.Margin = new Padding(6, 6, 6, 6);
             cmbLogType.Name = "cmbLogType";
-            cmbLogType.Size = new Size(190, 23);
+            cmbLogType.Size = new Size(349, 40);
             cmbLogType.TabIndex = 39;
             // 
             // btnReset
@@ -142,10 +151,10 @@
             btnReset.FlatStyle = FlatStyle.Flat;
             btnReset.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnReset.ForeColor = Color.FromArgb(241, 240, 234);
-            btnReset.Location = new Point(810, 23);
+            btnReset.Location = new Point(1504, 49);
             btnReset.Margin = new Padding(0);
             btnReset.Name = "btnReset";
-            btnReset.Size = new Size(108, 39);
+            btnReset.Size = new Size(201, 83);
             btnReset.TabIndex = 41;
             btnReset.Text = "Reset";
             btnReset.UseVisualStyleBackColor = false;
@@ -159,10 +168,10 @@
             btnFilter.FlatStyle = FlatStyle.Flat;
             btnFilter.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnFilter.ForeColor = Color.FromArgb(241, 240, 234);
-            btnFilter.Location = new Point(810, 69);
+            btnFilter.Location = new Point(1504, 147);
             btnFilter.Margin = new Padding(0);
             btnFilter.Name = "btnFilter";
-            btnFilter.Size = new Size(108, 39);
+            btnFilter.Size = new Size(201, 83);
             btnFilter.TabIndex = 40;
             btnFilter.Text = "Filter";
             btnFilter.UseVisualStyleBackColor = false;
@@ -176,10 +185,10 @@
             btnViewDetails.FlatStyle = FlatStyle.Flat;
             btnViewDetails.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnViewDetails.ForeColor = Color.White;
-            btnViewDetails.Location = new Point(785, 403);
-            btnViewDetails.Margin = new Padding(3, 2, 3, 2);
+            btnViewDetails.Location = new Point(1458, 860);
+            btnViewDetails.Margin = new Padding(6, 4, 6, 4);
             btnViewDetails.Name = "btnViewDetails";
-            btnViewDetails.Size = new Size(155, 44);
+            btnViewDetails.Size = new Size(288, 94);
             btnViewDetails.TabIndex = 42;
             btnViewDetails.Text = "View Details";
             btnViewDetails.UseVisualStyleBackColor = false;
@@ -187,9 +196,9 @@
             // 
             // AuditLog
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(952, 458);
+            ClientSize = new Size(1768, 977);
             Controls.Add(btnViewDetails);
             Controls.Add(btnReset);
             Controls.Add(btnFilter);
@@ -202,6 +211,7 @@
             Controls.Add(btnBack);
             Controls.Add(dgvAuditLog);
             Controls.Add(lblAuditLog);
+            Margin = new Padding(6, 6, 6, 6);
             Name = "AuditLog";
             Text = "AuditLog";
             Load += AuditLog_Load;

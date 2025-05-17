@@ -36,32 +36,44 @@ namespace RentOpsDesktop
 
         private void EquipmentDashboard_Load(object sender, EventArgs e)
         {
-            //load data to the equipment cateogry combobox
-            cmbEquipmentCategory.DataSource = context.EquipmentCategories.ToList();
-            cmbEquipmentCategory.DisplayMember = "EquipmentCategoryTitle";
-            cmbEquipmentCategory.ValueMember = "EquipmentCategoryId";
-            cmbEquipmentCategory.SelectedItem = null;
+            try 
+            {
+                //load data to the equipment cateogry combobox
+                cmbEquipmentCategory.DataSource = context.EquipmentCategories.ToList();
+                cmbEquipmentCategory.DisplayMember = "EquipmentCategoryTitle";
+                cmbEquipmentCategory.ValueMember = "EquipmentCategoryId";
+                cmbEquipmentCategory.SelectedItem = null;
 
-            //load data to the condition status combobox
-            cmbConditionStatus.DataSource = context.ConditionStatuses.ToList();
-            cmbConditionStatus.DisplayMember = "ConditionStatusTitle";
-            cmbConditionStatus.ValueMember = "ConditionStatusId";
-            cmbConditionStatus.SelectedItem = null;
+                //load data to the condition status combobox
+                cmbConditionStatus.DataSource = context.ConditionStatuses.ToList();
+                cmbConditionStatus.DisplayMember = "ConditionStatusTitle";
+                cmbConditionStatus.ValueMember = "ConditionStatusId";
+                cmbConditionStatus.SelectedItem = null;
 
 
-            //load data to the availability status combobox
-            cmbAvailabilityStatus.DataSource = context.AvailabilityStatuses.ToList();
-            cmbAvailabilityStatus.DisplayMember = "AvailabilityStatusTitle";
-            cmbAvailabilityStatus.ValueMember = "AvailabilityStatusId";
-            cmbAvailabilityStatus.SelectedItem = null;
+                //load data to the availability status combobox
+                cmbAvailabilityStatus.DataSource = context.AvailabilityStatuses.ToList();
+                cmbAvailabilityStatus.DisplayMember = "AvailabilityStatusTitle";
+                cmbAvailabilityStatus.ValueMember = "AvailabilityStatusId";
+                cmbAvailabilityStatus.SelectedItem = null;
 
-            // Load data to the user combobox
-            cmbUser.DataSource = context.Users.ToList();
-            cmbUser.DisplayMember = "FullName"; // Displaying full name
-            cmbUser.ValueMember = "UserId";
-            cmbUser.SelectedItem = null;
+                // Load data to the user combobox
+                cmbUser.DataSource = context.Users.ToList();
+                cmbUser.DisplayMember = "FullName"; // Displaying full name
+                cmbUser.ValueMember = "UserId";
+                cmbUser.SelectedItem = null;
 
-            RefreshEquipmentGridview();
+                RefreshEquipmentGridview();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                //show error message
+                MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
         }
         private void RefreshEquipmentGridview()
         {
@@ -124,8 +136,11 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
-                // Show error message if an exception occurs
-                MessageBox.Show("Error: " + ex.Message);
+                // Log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                //show error message
+                MessageBox.Show(" An error occurred while loading the equipment list: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -136,31 +151,12 @@ namespace RentOpsDesktop
             login.Show(); //show the main menu
         }
 
-        private void btnUpdateEquipment_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnDeleteEquipment_Click(object sender, EventArgs e)
-        {
-
-
-        }
-
-        private void btnAddEquipment_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void EquipmentDashboard_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit(); //exit the application
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void btnFilter_Click(object sender, EventArgs e)
         {
@@ -221,7 +217,13 @@ namespace RentOpsDesktop
             
             }catch(Exception ex) {
 
+
+                // log the exception
                 logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                //show the error message
+                MessageBox.Show("An error occurred while adding the equipment: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
 
             }   
 
@@ -229,64 +231,80 @@ namespace RentOpsDesktop
 
         private void btnEditEquipmentInformation_Click(object sender, EventArgs e)
         {
-            // Check if the DataGridView is empty
-            if (dgvEquipment.Rows.Count == 0)
+            try 
             {
-                MessageBox.Show("No equipment available to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // Ensure a row is selected
-            if (dgvEquipment.SelectedRows.Count == 0 && dgvEquipment.SelectedCells.Count == 0)
-            {
-                MessageBox.Show("Please select a row to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // Get the selected row
-            DataGridViewRow selectedRow;
-            if (dgvEquipment.SelectedRows.Count > 0)
-            {
-                selectedRow = dgvEquipment.SelectedRows[0];
-            }
-            else
-            {
-                int rowIndex = dgvEquipment.SelectedCells[0].RowIndex;
-                selectedRow = dgvEquipment.Rows[rowIndex];
-            }
-
-            // Check if the selected row is the empty default row
-            if (selectedRow.IsNewRow || selectedRow.Cells["EquipmentID"].Value == null)
-            {
-                MessageBox.Show("This row is empty. Please select a valid equipment to edit.", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Get the ID of the selected equipment
-            int selectedEquipmentID = Convert.ToInt32(selectedRow.Cells["EquipmentID"].Value);
-
-            // Confirm the edit action
-            DialogResult result = MessageBox.Show($"Are you sure you want to edit the equipment with ID {selectedEquipmentID}?", "Confirm Edit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (result == DialogResult.Yes)
-            {
-                // Pass the ID to the EditEquipmentInformation constructor and show the form
-                EditEquipmentInformation editEquipmentInformation = new EditEquipmentInformation(selectedEquipmentID);
-                editEquipmentInformation.StartPosition = FormStartPosition.CenterScreen; // Center the form
-                editEquipmentInformation.ShowDialog();
-
-                if (editEquipmentInformation.DialogResult == DialogResult.OK)
+                // Check if the DataGridView is empty
+                if (dgvEquipment.Rows.Count == 0)
                 {
-                    // Detach any existing entity with the same key value
-                    var existingEntity = context.Equipment.Local.FirstOrDefault(e => e.EquipmentId == editEquipmentInformation.equipmentToEdit.EquipmentId);
-                    if (existingEntity != null)
-                    {
-                        context.Entry(existingEntity).State = EntityState.Detached;
-                    }
-
-                    context.Equipment.Update(editEquipmentInformation.equipmentToEdit);
-                    context.SaveChanges(); // Save changes to the database
-                    RefreshEquipmentGridview(); // Refresh the DataGridView
+                    MessageBox.Show("No equipment available to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
+
+                // Ensure a row is selected
+                if (dgvEquipment.SelectedRows.Count == 0 && dgvEquipment.SelectedCells.Count == 0)
+                {
+                    MessageBox.Show("Please select a row to edit.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                // Get the selected row
+                DataGridViewRow selectedRow;
+                if (dgvEquipment.SelectedRows.Count > 0)
+                {
+                    selectedRow = dgvEquipment.SelectedRows[0];
+                }
+                else
+                {
+                    int rowIndex = dgvEquipment.SelectedCells[0].RowIndex;
+                    selectedRow = dgvEquipment.Rows[rowIndex];
+                }
+
+                // Check if the selected row is the empty default row
+                if (selectedRow.IsNewRow || selectedRow.Cells["EquipmentID"].Value == null)
+                {
+                    MessageBox.Show("This row is empty. Please select a valid equipment to edit.", "Selection Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Get the ID of the selected equipment
+                int selectedEquipmentID = Convert.ToInt32(selectedRow.Cells["EquipmentID"].Value);
+
+                // Confirm the edit action
+                DialogResult result = MessageBox.Show($"Are you sure you want to edit the equipment with ID {selectedEquipmentID}?", "Confirm Edit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    // Pass the ID to the EditEquipmentInformation constructor and show the form
+                    EditEquipmentInformation editEquipmentInformation = new EditEquipmentInformation(selectedEquipmentID);
+                    editEquipmentInformation.StartPosition = FormStartPosition.CenterScreen; // Center the form
+                    editEquipmentInformation.ShowDialog();
+
+                    if (editEquipmentInformation.DialogResult == DialogResult.OK)
+                    {
+                        // Detach any existing entity with the same key value
+                        var existingEntity = context.Equipment.Local.FirstOrDefault(e => e.EquipmentId == editEquipmentInformation.equipmentToEdit.EquipmentId);
+                        if (existingEntity != null)
+                        {
+                            context.Entry(existingEntity).State = EntityState.Detached;
+                        }
+
+                        context.Equipment.Update(editEquipmentInformation.equipmentToEdit);
+
+                        // Track changes
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+
+                        // Save changes to the database
+                        context.SaveChanges(); // Save changes to the database
+                        RefreshEquipmentGridview(); // Refresh the DataGridView
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                // Log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                
+                //show error message
+                MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -338,8 +356,16 @@ namespace RentOpsDesktop
                     var equipment = context.Equipment.Find(selectedEquipmentID);
                     if (equipment != null)
                     {
+                        // remove the equipment
                         context.Equipment.Remove(equipment);
+                        
+                        // Track changes
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                        // Save changes to the database
+                        
                         context.SaveChanges();
+
+                        // Show success message
                         MessageBox.Show("The equipment has been deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         // Reload the equipment list to reflect the changes
@@ -352,8 +378,11 @@ namespace RentOpsDesktop
                 }
                 catch (Exception ex)
                 {
+                    // Log the exception
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
                     // Handle exceptions by showing a message box
-                    MessageBox.Show($"Error: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("An error occurred while attempting to delete the selected equipment. Please try again or contact support if the issue persists.", "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -430,6 +459,10 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                // Log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+
                 // Show error message if an exception occurs
                 MessageBox.Show("Error: " + ex.Message);
             }

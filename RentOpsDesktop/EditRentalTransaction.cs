@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
+using RentOpsObjects.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,16 +10,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RentOpsObjects.Services;
+
 
 namespace RentOpsDesktop
 {
     public partial class EditRentalTransaction : Form
     {
         RentOpsDBContext dbContext;
+        int currentUserId;
+        AuditLogger logger;
         internal RentalTransaction rentalTransactionToEdit;
 
         Document agreement;
         Document idVerification;
+        
 
         bool validDeposit = false;
         bool validRentalFee = false;
@@ -28,6 +34,8 @@ namespace RentOpsDesktop
             InitializeComponent();
             dbContext = new RentOpsDBContext();
             this.rentalTransactionToEdit = rentalTransactionToEdit;
+            logger = new AuditLogger(dbContext);
+            currentUserId = Global.EmployeeID;
 
         }
 
@@ -37,7 +45,7 @@ namespace RentOpsDesktop
 
             try
             {
-
+                // fetch the selected rental transction
                 var rentalTransaction = dbContext.RentalTransactions
                 .Include(rt => rt.Equipment)
                 .Include(rt => rt.Employee)
@@ -75,7 +83,7 @@ namespace RentOpsDesktop
                     dtpPickupDate.Value = rentalTransaction.PickupDate.ToDateTime(new TimeOnly(0, 0));
                     dtpReturnDate.Value = rentalTransaction.ReturnDate.ToDateTime(new TimeOnly(0, 0));
 
-
+                    //set the text boxes to the rental transaction values
                     txtDeposit.Text = rentalTransaction.Deposit.ToString();
                     txtRentalFee.Text = rentalTransaction.RentalFee.ToString();
                     lblTimestamp.Text = rentalTransaction.RentalTransactionTimestamp.ToString("yyyy-MM-dd HH:mm:ss");
@@ -97,24 +105,21 @@ namespace RentOpsDesktop
                         lblPayment.Text = "Not Paid";
                         lblPayment.ForeColor = Color.Red;
                     }
-
-
-                    
-                    
-
-
                 }
                 else
                 {
-                    MessageBox.Show("Rental transaction not found.");
+                    //show an error message if the rental transaction is not found
+                    MessageBox.Show("Rental transaction not found.","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error loading data: " + ex.Message);
+                //log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                //show the error message
+                MessageBox.Show("An error occurred while loading the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
@@ -123,6 +128,7 @@ namespace RentOpsDesktop
 
         private void txtDeposit_TextChanged(object sender, EventArgs e)
         {
+            //check if the deposit in a non negative number
             if (!decimal.TryParse(txtDeposit.Text, out decimal price) || price <= 0)
             {
                 lblDepositError.Text = "Late Return Penalty must be a positive number";
@@ -137,6 +143,7 @@ namespace RentOpsDesktop
 
         private void txtRentalFee_TextChanged(object sender, EventArgs e)
         {
+            //check if the rental fee is a non negative number
             if (!decimal.TryParse(txtRentalFee.Text, out decimal price) || price <= 0)
             {
                 lblRentalFeeError.Text = "Late Return Penalty must be a positive number";
@@ -158,27 +165,36 @@ namespace RentOpsDesktop
 
         private void btnUpdateRentalTransaction_Click(object sender, EventArgs e)
         {
-            //check if all the fields are valid
-            if (validDeposit && validRentalFee)
+            // Check if all the fields are valid
+            if (validDeposit && validRentalFee && validPickupDate)
             {
-                //update the record
-                rentalTransactionToEdit.RentalFee = Convert.ToDouble(txtRentalFee.Text);
-                rentalTransactionToEdit.Deposit = Convert.ToDouble(txtDeposit.Text);
+                try
+                {
+                    // Update the record
+                    rentalTransactionToEdit.RentalFee = Convert.ToDouble(txtRentalFee.Text);
+                    rentalTransactionToEdit.Deposit = Convert.ToDouble(txtDeposit.Text);
 
-                //add the date after converting it to date only
+                    rentalTransactionToEdit.ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value);
+                    rentalTransactionToEdit.PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value);
 
-                rentalTransactionToEdit.ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value);
-                rentalTransactionToEdit.PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value);
+                    MessageBox.Show("The rental transaction has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    // log the exception
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
 
-                MessageBox.Show("The rental transaction has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                this.DialogResult = DialogResult.OK;
-                this.Close();
+                    // show a the error message
+                    MessageBox.Show("An error occurred while updating the transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
-                MessageBox.Show("Please fill all the fields correctly");
+                // show a message box indicating that the fields are not valid
+                MessageBox.Show("Please fill all the fields correctly.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -202,9 +218,6 @@ namespace RentOpsDesktop
             TimeSpan rentalPeriod = returnDate - pickupDate;
             //display the rental period
             lblRentalPeriod.Text = rentalPeriod.Days.ToString() + " days";
-
-
-
         }
 
         private void dtpPickupDate_ValueChanged(object sender, EventArgs e)
@@ -219,106 +232,117 @@ namespace RentOpsDesktop
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-            // Fetch the rental transactions including their documents
-            var rentalTransactions = dbContext.RentalTransactions
-                .Include(rt => rt.Documents)
-                .Where(rt => rt.RentalTransactionId == rentalTransactionToEdit.RentalTransactionId)
-                .ToList();  // Convert IQueryable to a list
-
-            // Loop through the rental transactions
-            foreach (var transaction in rentalTransactions)
+            try
             {
-                foreach (var document in transaction.Documents)
+
+                // Fetch the rental transactions including their documents
+                var rentalTransactions = dbContext.RentalTransactions
+                    .Include(rt => rt.Documents)
+                    .Where(rt => rt.RentalTransactionId == rentalTransactionToEdit.RentalTransactionId)
+                    .ToList();  // Convert IQueryable to a list
+
+                // Loop through the rental transactions
+                foreach (var transaction in rentalTransactions)
                 {
-                    if (document != null)
+                    foreach (var document in transaction.Documents)
                     {
-                        if (document.FileTypeId == 5)
+                        if (document != null)
                         {
-                            idVerification = document;
-                        }
-                        if (document.FileTypeId == 4)
-                        {
-                            agreement = document;
+                            if (document.FileTypeId == 5)
+                            {
+                                idVerification = document;
+                            }
+                            if (document.FileTypeId == 4)
+                            {
+                                agreement = document;
+                            }
                         }
                     }
                 }
-            }
 
 
-            // Show the UploadTransactionDocuments form as a dialog
-            UploadTransactionDocuments uploadForm = new UploadTransactionDocuments(agreement, idVerification);
-            DialogResult result = uploadForm.ShowDialog();
+                // Show the UploadTransactionDocuments form as a dialog
+                UploadTransactionDocuments uploadForm = new UploadTransactionDocuments(agreement, idVerification);
+                DialogResult result = uploadForm.ShowDialog();
 
-            if (result == DialogResult.OK)
-            {
+                if (result == DialogResult.OK)
+                {
 
-                if (uploadForm.isAgreementModified == true) {
-
-                    if (agreement != null)
+                    if (uploadForm.isAgreementModified == true)
                     {
-
-                        //remove the old agreement 
-                        rentalTransactionToEdit.Documents.Remove(agreement);
-
-                        agreement = uploadForm.agreement;
 
                         if (agreement != null)
                         {
-                            rentalTransactionToEdit.Documents.Add(agreement);
-                        }
 
-                    }
-                    else { 
-                    
-                        agreement = uploadForm.agreement;
+                            //remove the old agreement 
+                            rentalTransactionToEdit.Documents.Remove(agreement);
+
+                            agreement = uploadForm.agreement;
 
                             if (agreement != null)
                             {
                                 rentalTransactionToEdit.Documents.Add(agreement);
                             }
 
-                    
+                        }
+                        else
+                        {
+
+                            agreement = uploadForm.agreement;
+
+                            if (agreement != null)
+                            {
+                                rentalTransactionToEdit.Documents.Add(agreement);
+                            }
+
+
+                        }
+                        if (idVerification != null)
+                        {
+
+                            //remove the old agreement 
+                            rentalTransactionToEdit.Documents.Remove(idVerification);
+
+                            idVerification = uploadForm.idVerification;
+
+                            if (idVerification != null)
+                            {
+                                rentalTransactionToEdit.Documents.Add(idVerification);
+                            }
+
+                        }
+                        else
+                        {
+
+                            agreement = uploadForm.agreement;
+
+                            if (idVerification != null)
+                            {
+                                rentalTransactionToEdit.Documents.Add(idVerification);
+                            }
+
+
+                        }
+
+
                     }
-                    if (idVerification != null)
+
+                    if (uploadForm.isIDModified == true)
                     {
-
-                        //remove the old agreement 
-                        rentalTransactionToEdit.Documents.Remove(idVerification);
-
                         idVerification = uploadForm.idVerification;
 
-                        if (idVerification != null)
-                        {
-                            rentalTransactionToEdit.Documents.Add(idVerification);
-                        }
-
-                    }
-                    else
-                    {
-
-                        agreement = uploadForm.agreement;
-
-                        if (idVerification != null)
-                        {
-                            rentalTransactionToEdit.Documents.Add(idVerification);
-                        }
 
 
                     }
-
-
                 }
-
-                    if (uploadForm.isIDModified == true) { 
-                        idVerification = uploadForm.idVerification;
-
-
-
-                    }
-
-                
-                
+            }
+            catch (Exception ex)
+            {
+                // log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
+              
+                // show a the error message
+                MessageBox.Show("An error occurred while updating the transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

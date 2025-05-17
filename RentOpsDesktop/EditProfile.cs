@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
+using RentOpsObjects.Services;
+
 
 namespace RentOpsDesktop
 {
@@ -20,13 +22,16 @@ namespace RentOpsDesktop
         bool isEmailValid;
         bool isPhoneNumberValid;
 
-        //Declaring database context object
-        private RentOpsDBContext dbContext;
+        int currentUserId;
+        RentOpsDBContext dbContext;
+        AuditLogger logger;
+
         public EditProfile()
         {
             InitializeComponent();
-            //Initializing database context object
             dbContext = new RentOpsDBContext();
+            logger = new AuditLogger(dbContext); //create a logger object
+            currentUserId = Global.EmployeeID;
         }
 
         private void btnSaveProfile_Click(object sender, EventArgs e)
@@ -64,7 +69,11 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while loading employee data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                //show the error message
+                MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
@@ -116,12 +125,21 @@ namespace RentOpsDesktop
                 employee.PhoneNumber = txtPhone.Text.Trim();
 
                 dbContext.Users.Update(employee);
+                
+                // Track changes 
+                logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+
+                //save the changes
                 dbContext.SaveChanges();
 
                 MessageBox.Show("Profile updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
+                //log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                //show the error message
                 MessageBox.Show("An error occurred while saving changes: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
