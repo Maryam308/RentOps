@@ -464,7 +464,8 @@ namespace RentOpsDesktop
 
 
                 // Show error message if an exception occurs
-                MessageBox.Show("Error: " + ex.Message);
+                MessageBox.Show("An unexpected error occurred while searching for equipment. Please try again or contact support if the problem persists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
             }
         }
         }
