@@ -94,6 +94,7 @@ namespace RentOpsDesktop
             //go bock to the dashboard
             this.Hide();
             UserEquipmentDashboard userEquipmentDashboard = new UserEquipmentDashboard();
+            userEquipmentDashboard.StartPosition = FormStartPosition.CenterScreen; // Center the form
             userEquipmentDashboard.Show();
         }
 
