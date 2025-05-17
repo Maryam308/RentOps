@@ -197,6 +197,7 @@ namespace RentOpsDesktop
         {
             //navigate to overdue returns form
             OverdueReturns overdueReturns = new OverdueReturns();
+            overdueReturns.StartPosition = FormStartPosition.CenterScreen; // Center the form
             overdueReturns.Show();
             this.Hide();
         }
@@ -206,6 +207,7 @@ namespace RentOpsDesktop
             //Hide the current form and navigate to the EquipmentDashboard form
             this.Hide(); //hide the current form
             UserEquipmentDashboard equipmentDashboardForm = new UserEquipmentDashboard();
+            equipmentDashboardForm.StartPosition = FormStartPosition.CenterScreen; // Center the form
             equipmentDashboardForm.Show(); //show EquipmentDashboard form
         }
 
@@ -214,6 +216,7 @@ namespace RentOpsDesktop
             //Hide the current form and navigate to the rentaldashboard form
             this.Hide(); //hide the current form
             RentalDashboard screen = new RentalDashboard();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             screen.Show();
         }
 
@@ -221,6 +224,7 @@ namespace RentOpsDesktop
         {
             this.Hide(); //hide the current form
             RentalRequests screen = new RentalRequests();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             screen.Show();
         }
 
@@ -228,6 +232,7 @@ namespace RentOpsDesktop
         {
             this.Hide(); //hide the current form
             RentalTransactions screen = new RentalTransactions();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             screen.Show();
         }
 
@@ -235,6 +240,7 @@ namespace RentOpsDesktop
         {
             this.Hide(); //hide the current form
             ReturnRecords screen = new ReturnRecords();
+            screen.StartPosition = FormStartPosition.CenterScreen;
             screen.Show();
         }
 
@@ -242,12 +248,14 @@ namespace RentOpsDesktop
         {
             this.Hide(); //hide the current form
             EquipmentInformation screen = new EquipmentInformation();
+            screen.StartPosition = FormStartPosition.CenterScreen;
             screen.Show();
         }
 
         private void btnReports_Click(object sender, EventArgs e)
         {
             Reports reports = new Reports();
+            reports.StartPosition = FormStartPosition.CenterScreen;
             reports.Show();
             this.Hide();
         }

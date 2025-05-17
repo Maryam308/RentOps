@@ -69,6 +69,7 @@ namespace RentOpsDesktop
         {
             EditProfile editProfile = new EditProfile();
             this.Hide(); //hide the curent form 
+            editProfile.StartPosition = FormStartPosition.CenterScreen; // Center the form
             editProfile.Show(); //show edit profile form
 
         }
@@ -77,6 +78,7 @@ namespace RentOpsDesktop
         {
             EditProfile editProfileForm = new EditProfile();
             this.Hide(); //hide the current form
+            editProfileForm.StartPosition = FormStartPosition.CenterScreen; // Center the form
             editProfileForm.Show(); //show edit profile form
         }
 
@@ -86,6 +88,7 @@ namespace RentOpsDesktop
             {
                 Login loginForm = new Login();
                 this.Hide(); //hide the current form
+                loginForm.StartPosition = FormStartPosition.CenterScreen; // Center the form
                 loginForm.Show(); //show login form
 
                 // Clear the global user and roleName objects
@@ -109,6 +112,7 @@ namespace RentOpsDesktop
         {
             this.Hide(); //hide the current form
             EquipmentInformation screen = new EquipmentInformation();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             screen.Show();
         }
 
@@ -117,6 +121,7 @@ namespace RentOpsDesktop
             //Hide the current form and navigate to the EquipmentDashboard form
             this.Hide(); //hide the current form
             UserEquipmentDashboard equipmentDashboardForm = new UserEquipmentDashboard();
+            equipmentDashboardForm.StartPosition = FormStartPosition.CenterScreen; // Center the form
             equipmentDashboardForm.Show(); //show EquipmentDashboard form
         }
 
@@ -125,6 +130,7 @@ namespace RentOpsDesktop
             //Hide the current form and navigate to the rentaldashboard form
             this.Hide(); //hide the current form
             RentalDashboard screen = new RentalDashboard();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             screen.Show();
         }
 
@@ -132,6 +138,7 @@ namespace RentOpsDesktop
         {
             this.Hide(); //hide the current form
             RentalRequests screen = new RentalRequests();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             screen.Show();
         }
 
@@ -139,6 +146,7 @@ namespace RentOpsDesktop
         {
             this.Hide(); //hide the current form
             RentalTransactions screen = new RentalTransactions();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             screen.Show();
         }
 
@@ -146,6 +154,7 @@ namespace RentOpsDesktop
         {
             this.Hide(); //hide the current form
             ReturnRecords screen = new ReturnRecords();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             screen.Show();
         }
 
@@ -153,6 +162,7 @@ namespace RentOpsDesktop
         {
             this.Hide(); //hide the current form
             AuditLog screen = new AuditLog();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             screen.Show();
         
         }
