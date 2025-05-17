@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic.Logging;
 using RentOpsObjects.Model;
+using RentOpsObjects.Services;
+
 
 namespace RentOpsDesktop
 {
@@ -16,14 +18,19 @@ namespace RentOpsDesktop
     {
         RentOpsDBContext dbContext;
         int logId;
+        AuditLogger logger;
+        int currentUserId;
 
         public LogDetails(int logId)
         {
             InitializeComponent();
 
             dbContext = new RentOpsDBContext();
+            logger = new AuditLogger(dbContext); //create a logger object
+            currentUserId = Global.EmployeeID; //get the current user id
             this.logId = logId;
             LoadData();
+
 
         }
 
@@ -31,44 +38,55 @@ namespace RentOpsDesktop
         //function to load data 
         private void LoadData()
         {
-            //select the data to be displayed in the gridview
-            var log = dbContext.Logs.Select(l => new
+            try 
             {
-                l.LogId,
-                l.User.FirstName,
-                l.User.LastName,
-                l.LogType.LogTypeTitle,
-                l.Source.SourceTitle,
-                l.LogTimestamp,
-                l.Exception,
-                l.UserAction,
-                l.AffectedData,
-                l.CurrentValue,
-                l.PreviousValue
+                //select the data to be displayed in the gridview
+                var log = dbContext.Logs.Select(l => new
+                {
+                    l.LogId,
+                    l.User.FirstName,
+                    l.User.LastName,
+                    l.LogType.LogTypeTitle,
+                    l.Source.SourceTitle,
+                    l.LogTimestamp,
+                    l.Exception,
+                    l.UserAction,
+                    l.AffectedData,
+                    l.CurrentValue,
+                    l.PreviousValue
 
-            }).Where(l => l.LogId == logId).FirstOrDefault();
+                }).Where(l => l.LogId == logId).FirstOrDefault();
 
-            //set labels values
-            lblLogID.Text = log.LogId.ToString();
-            lblLogType.Text = log.LogTypeTitle;
-            lblSource.Text = log.SourceTitle;
-            lblLogTimestamp.Text = log.LogTimestamp.ToString();
-            lblUserAction.Text = log.UserAction;
-            lblUserName.Text = log.FirstName + " " + log.LastName;
-            lblUserID.Text = log.LogId.ToString();
-            lblOriginalValue.Text = log.PreviousValue;
-            lblCurrentValue.Text = log.CurrentValue;
+                //set labels values
+                lblLogID.Text = log.LogId.ToString();
+                lblLogType.Text = log.LogTypeTitle;
+                lblSource.Text = log.SourceTitle;
+                lblLogTimestamp.Text = log.LogTimestamp.ToString();
+                lblUserAction.Text = log.UserAction;
+                lblUserName.Text = log.FirstName + " " + log.LastName;
+                lblUserID.Text = log.LogId.ToString();
+                lblOriginalValue.Text = log.PreviousValue;
+                lblCurrentValue.Text = log.CurrentValue;
 
-            if (log.Exception == null)
-            {
-                lblException.Text = "No Exception";
+                if (log.Exception == null)
+                {
+                    lblException.Text = "No Exception";
+                }
+                else
+                {
+                    lblException.Text = log.Exception;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                lblException.Text = log.Exception;
+                //log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                //show the error message
+                MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            
+
 
 
         }
@@ -79,6 +97,11 @@ namespace RentOpsDesktop
             this.Close();
             AuditLog logDetails = new AuditLog();
             logDetails.Show();
+        }
+
+        private void LogDetails_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

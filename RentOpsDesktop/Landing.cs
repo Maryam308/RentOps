@@ -30,15 +30,24 @@ namespace RentOpsDesktop
 
         private void Landing_Load(object sender, EventArgs e)
         {
-            //when loadding the application fetch the source id 
-            // Fetch the sourceId for "Form Application"
-            var sourceId = context.Sources
-                .Where(s => s.SourceTitle == "Form Application")
-                .Select(s => s.SourceId)
-                .FirstOrDefault(); // Retrieves the first matching sourceId or default (0 if not found)
+            try 
+            {
+                //when loadding the application fetch the source id 
+                // Fetch the sourceId for "Form Application"
+                var sourceId = context.Sources
+                    .Where(s => s.SourceTitle == "Form Application")
+                    .Select(s => s.SourceId)
+                    .FirstOrDefault(); // Retrieves the first matching sourceId or default (0 if not found)
 
-            //assign the source to the global
-            Global.sourceId = sourceId;
+                //assign the source to the global
+                Global.sourceId = sourceId;
+            }
+            catch (Exception ex)
+            {
+                //show the error message
+                MessageBox.Show("An error occurred while loading the application: " + ex.Message);
+            }
+
 
         }
     }
