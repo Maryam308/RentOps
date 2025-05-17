@@ -41,19 +41,20 @@
             lblLogin.AutoSize = true;
             lblLogin.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0, true);
             lblLogin.ForeColor = Color.FromArgb(135, 66, 62);
-            lblLogin.Location = new Point(538, 64);
+            lblLogin.Location = new Point(999, 137);
+            lblLogin.Margin = new Padding(6, 0, 6, 0);
             lblLogin.Name = "lblLogin";
-            lblLogin.Size = new Size(99, 42);
+            lblLogin.Size = new Size(192, 82);
             lblLogin.TabIndex = 1;
             lblLogin.Text = "Login";
             // 
             // picLogo
             // 
             picLogo.Image = Properties.Resources.rentOpsLogo;
-            picLogo.Location = new Point(55, 85);
-            picLogo.Margin = new Padding(3, 2, 3, 2);
+            picLogo.Location = new Point(102, 181);
+            picLogo.Margin = new Padding(6, 4, 6, 4);
             picLogo.Name = "picLogo";
-            picLogo.Size = new Size(305, 268);
+            picLogo.Size = new Size(566, 572);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picLogo.TabIndex = 3;
             picLogo.TabStop = false;
@@ -63,21 +64,21 @@
             // 
             txtEmail.BorderStyle = BorderStyle.FixedSingle;
             txtEmail.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtEmail.Location = new Point(417, 147);
-            txtEmail.Margin = new Padding(3, 2, 3, 2);
+            txtEmail.Location = new Point(774, 314);
+            txtEmail.Margin = new Padding(6, 4, 6, 4);
             txtEmail.Name = "txtEmail";
-            txtEmail.Size = new Size(378, 39);
+            txtEmail.Size = new Size(700, 71);
             txtEmail.TabIndex = 4;
             // 
             // txtPassword
             // 
             txtPassword.BorderStyle = BorderStyle.FixedSingle;
             txtPassword.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            txtPassword.Location = new Point(417, 218);
-            txtPassword.Margin = new Padding(3, 2, 3, 2);
+            txtPassword.Location = new Point(774, 465);
+            txtPassword.Margin = new Padding(6, 4, 6, 4);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(378, 39);
+            txtPassword.Size = new Size(700, 71);
             txtPassword.TabIndex = 5;
             // 
             // btnLogin
@@ -87,10 +88,10 @@
             btnLogin.FlatStyle = FlatStyle.Flat;
             btnLogin.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnLogin.ForeColor = Color.White;
-            btnLogin.Location = new Point(497, 299);
-            btnLogin.Margin = new Padding(3, 2, 3, 2);
+            btnLogin.Location = new Point(923, 638);
+            btnLogin.Margin = new Padding(6, 4, 6, 4);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(202, 44);
+            btnLogin.Size = new Size(375, 94);
             btnLogin.TabIndex = 6;
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = false;
@@ -98,17 +99,18 @@
             // 
             // Login
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(952, 458);
+            ClientSize = new Size(1768, 977);
             Controls.Add(btnLogin);
             Controls.Add(txtPassword);
             Controls.Add(txtEmail);
             Controls.Add(picLogo);
             Controls.Add(lblLogin);
-            Margin = new Padding(3, 2, 3, 2);
+            Margin = new Padding(6, 4, 6, 4);
             Name = "Login";
             Text = "Login";
+            Load += Login_Load;
             ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             ResumeLayout(false);
             PerformLayout();

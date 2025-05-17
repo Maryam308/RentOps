@@ -20,13 +20,15 @@ namespace RentOpsDesktop
 {
     public partial class Login : Form
     {
-        //Declaring database context object
-        RentOpsDBContext dbContext;
 
+        RentOpsDBContext dbContext;
         private IServiceProvider serviceProvider;
         private RentOpsWebApp.Data.RentOpsWebAppContext identityDbContext;
-
         AuditLogger logger;
+
+        //used to track the previous login attempts
+        private string? previousEmail = null;
+        private string? previousPassword = null;
 
 
         public Login()
@@ -50,20 +52,53 @@ namespace RentOpsDesktop
         private async void btnLogin_Click(object sender, EventArgs e)
         {
 
-            var signInResults = await VerifyUserNamePassword(txtEmail.Text, txtPassword.Text);
-            if (signInResults == true) //if user is verified
+            try
             {
-                logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2);
+                //verify if the user exists and if the username and password are correct
+                var signInResults = await VerifyUserNamePassword(txtEmail.Text, txtPassword.Text);
 
-                //do something.. i.e. navigate to next forms
-                UserEquipmentDashboard home = new UserEquipmentDashboard();
-                this.Hide();
-                home.Show();
+                //capture current email and password from the input fields
+                string currentEmail = txtEmail.Text.Trim();
+                string currentPassword = txtPassword.Text.Trim();
+
+                if (signInResults == true) //if user is verified
+                {
+                    //change the password if it is correct
+                    previousPassword = "[REDACTED]";
+
+                    //log the login activity
+                    logger.LogLoginActivity(Global.user.UserId, 2, "User logged in", previousEmail, previousPassword, currentEmail, currentPassword);
+
+                    // reset previous attempt trackers
+                    previousEmail = null;
+                    previousPassword = null;
+
+                    //do something.. i.e. navigate to next forms
+                    UserEquipmentDashboard home = new UserEquipmentDashboard();
+                    this.Hide();
+                    home.Show();
+                }
+                else //if user is not verified
+                {
+                    //log failed login attempt
+                    logger.LogLoginActivity(null, 2, "Login failed", previousEmail, previousPassword, currentEmail, currentPassword);
+
+                    //save current attempt as previous for next login
+                    previousEmail = currentEmail;
+                    previousPassword = currentPassword;
+
+                    //show error message
+                    MessageBox.Show("Error: The username or password are not correct", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2);
-                MessageBox.Show("Error. The username or password are not correct");
+                //log unexpected error during login process
+                logger.LogException(null, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
+                //show error message
+                MessageBox.Show("Unexpected error occurred during login: " + ex.Message, "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
@@ -106,7 +141,7 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
-                logger.LogException(null,ex.Message,ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(null, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 MessageBox.Show("Error from verifying " + ex);
                 return false;
             }
@@ -136,7 +171,9 @@ namespace RentOpsDesktop
             }
         }
 
+        private void Login_Load(object sender, EventArgs e)
+        {
 
-
+        }
     }
 }
