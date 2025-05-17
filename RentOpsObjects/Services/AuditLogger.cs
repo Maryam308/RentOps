@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using RentOpsObjects.Model;
 
@@ -122,6 +123,61 @@ namespace RentOpsObjects.Services
             _context.Logs.Add(log);
             _context.SaveChanges(); // Save the error log immediately because we want to ensure we capture the error and save changes wont be called where the logexception is called
         }
+
+        // This method will be called to log login activity
+        public void LogLoginActivity(int? userId, int sourceId, string userAction, string? previousEmail = null, string? previousPassword = null, string? currentEmail = null, string? currentPassword = null)
+        {
+
+            //the affected data will be the user id if it is not null
+            string affectedData = userId.HasValue
+        ? $"AspNetUsers: ID = {userId.Value}"
+        : "AspNetUsers: Unknown or Failed Login Attempt";
+
+            // declare previous and current JSON value holders
+            string previousValue = "";
+            string currentValue = "";
+
+            // log previous input (if available) - this is used in case of multiple failed login attempts
+            if (!string.IsNullOrEmpty(previousEmail) || !string.IsNullOrEmpty(previousPassword))
+            {
+                var previousValues = new Dictionary<string, object?>
+        {
+            { "Email", previousEmail },
+            { "Password", previousPassword }
+        };
+
+                previousValue = JsonConvert.SerializeObject(previousValues, Formatting.Indented);
+            }
+
+            // log current input (if available)
+            if (!string.IsNullOrEmpty(currentEmail) || !string.IsNullOrEmpty(currentPassword))
+            {
+                var currentValues = new Dictionary<string, object?>
+        {
+            { "Email", currentEmail },
+            { "Password", currentPassword }
+        };
+
+                currentValue = JsonConvert.SerializeObject(currentValues, Formatting.Indented);
+            }
+
+            var log = new Log
+            {
+                UserId = userId,
+                SourceId = sourceId, // web app or desktop app
+                LogTypeId = 1, // Action Log 
+                LogTimestamp = DateTime.UtcNow,
+                AffectedData = affectedData,
+                PreviousValue = previousValue,
+                CurrentValue = currentValue,
+                UserAction = userAction,
+                Exception = null
+            };
+
+            _context.Logs.Add(log);
+            _context.SaveChanges();
+        }
+
 
 
 

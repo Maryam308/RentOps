@@ -18,6 +18,7 @@ namespace RentOpsDesktop
         public Landing()
         {
             InitializeComponent();
+            context = new RentOpsDBContext();
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
