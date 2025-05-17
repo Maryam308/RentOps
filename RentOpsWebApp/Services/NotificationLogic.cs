@@ -34,11 +34,11 @@ namespace RentOpsWebApp.Services
 
             foreach (var rental in dueRentalsTomorrow)
             {
-                if (reminderMessageTomorrow != null && rental.UserId.HasValue)
+                if (reminderMessageTomorrow != null )
                 {
                     var notification = new Notification
                     {
-                        UserId = rental.UserId.Value,
+                        UserId = rental.UserId,
                         MessageContentId = reminderMessageTomorrow.MessageContentId,
                         NotificationStatusId = 1,
                         NotificationTimestamp = DateTime.Now
@@ -50,11 +50,11 @@ namespace RentOpsWebApp.Services
 
             foreach (var rental in dueRentalsThreeDays)
             {
-                if (reminderMessageThreeDays != null && rental.UserId.HasValue)
+                if (reminderMessageThreeDays != null )
                 {
                     var notification = new Notification
                     {
-                        UserId = rental.UserId.Value,
+                        UserId = rental.UserId,
                         MessageContentId = reminderMessageThreeDays.MessageContentId,
                         NotificationStatusId = 1,
                         NotificationTimestamp = DateTime.Now

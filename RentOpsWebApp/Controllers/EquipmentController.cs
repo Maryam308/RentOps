@@ -402,7 +402,7 @@ namespace RentOpsWebApp.Controllers
             } 
             
             model.RentalRequest.UserId = _context.Users
-        .FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
+        .FirstOrDefault(u => u.Email == User.Identity.Name).UserId;
             model.RentalRequest.EquipmentId = model.NewEquipment.EquipmentId; // Set the EquipmentId to the selected equipment
             model.RentalRequest.RentalRequestTimestamp = DateTime.Now; // Set the RentalRequestTimestamp to the current date and time
             model.RentalRequest.RentalRequestStatusId = 1; // Set the RentalRequestStatusId to 1 
@@ -432,12 +432,12 @@ namespace RentOpsWebApp.Controllers
                 var pendingMessageContent = _context.MessageContents
                     .FirstOrDefault(m => m.MessageContentText == "Rental Request Pending Approval: Thank you for choosing RentOps! Your rental request has been sent successfully and is pending approval.");
 
-                if (pendingMessageContent != null && model.RentalRequest.UserId.HasValue)
+                if (pendingMessageContent != null )
                 {
                     // Create a notification for the user
                     var notification = new Notification
                     {
-                        UserId = model.RentalRequest.UserId.Value,
+                        UserId = model.RentalRequest.UserId,
                         MessageContentId = pendingMessageContent.MessageContentId,
                         NotificationStatusId = 1, // 1 means "unread"
                         NotificationTimestamp = DateTime.Now

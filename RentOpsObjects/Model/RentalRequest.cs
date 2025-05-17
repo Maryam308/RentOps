@@ -23,13 +23,13 @@ public partial class RentalRequest
     public double RentalTotalCost { get; set; }
 
     [Column("rentalRequestStatusID")]
-    public int? RentalRequestStatusId { get; set; }
+    public int RentalRequestStatusId { get; set; }
 
     [Column("equipmentID")]
-    public int? EquipmentId { get; set; }
+    public int EquipmentId { get; set; }
 
     [Column("userID")]
-    public int? UserId { get; set; }
+    public int UserId { get; set; }
 
     [Column("rentalRequestTimestamp")]
     public DateTime RentalRequestTimestamp { get; set; }

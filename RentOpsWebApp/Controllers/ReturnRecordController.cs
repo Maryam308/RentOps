@@ -221,7 +221,7 @@ namespace RentOpsWebApp.Controllers
                 return NotFound();
 
             //find the return record object in the database
-            var returnRecordObj = _context.ReturnRecords.Find(id);
+            var returnRecordObj = _context.ReturnRecords.Include(rr => rr.Document).FirstOrDefault(rr => rr.ReturnRecordId == id);
 
             //check if the return record object is null
             if (returnRecordObj == null)

@@ -133,11 +133,11 @@ namespace RentOpsWebApp.Controllers
                     var pendingMessageContent = _context.MessageContents
                         .FirstOrDefault(m => m.MessageContentText == "Rental Request Pending Approval: Your rental request is pending approval. We will notify you once it is reviewed.");
 
-                    if (pendingMessageContent != null && rentalRequest.UserId.HasValue)
+                    if (pendingMessageContent != null)
                     {
                         var notification = new Notification
                         {
-                            UserId = rentalRequest.UserId.Value,
+                            UserId = rentalRequest.UserId,
                             MessageContentId = pendingMessageContent.MessageContentId,
                             NotificationStatusId = 1,
                             NotificationTimestamp = currentTime
@@ -161,11 +161,11 @@ namespace RentOpsWebApp.Controllers
                     var rejectedMessageContent = _context.MessageContents
                         .FirstOrDefault(m => m.MessageContentText == "Your rental request has been rejected. You can contact our department for further carifications: +973 67893143.");
 
-                    if (rejectedMessageContent != null && rentalRequest.UserId.HasValue)
+                    if (rejectedMessageContent != null)
                     {
                         var notification = new Notification
                         {
-                            UserId = rentalRequest.UserId.Value,
+                            UserId = rentalRequest.UserId,
                             MessageContentId = rejectedMessageContent.MessageContentId,
                             NotificationStatusId = 1,
                             NotificationTimestamp = currentTime
@@ -189,11 +189,11 @@ namespace RentOpsWebApp.Controllers
                     var approvedMessageContent = _context.MessageContents
                         .FirstOrDefault(m => m.MessageContentText == "Your rental request has been approved. Please proceed to payment.");
 
-                    if (approvedMessageContent != null && rentalRequest.UserId.HasValue)
+                    if (approvedMessageContent != null)
                     {
                         var notification = new Notification
                         {
-                            UserId = rentalRequest.UserId.Value,
+                            UserId = rentalRequest.UserId,
                             MessageContentId = approvedMessageContent.MessageContentId,
                             NotificationStatusId = 1,
                             NotificationTimestamp = currentTime
@@ -211,7 +211,8 @@ namespace RentOpsWebApp.Controllers
                         PickupDate = rentalRequest.RentalStartDate,
                         ReturnDate = rentalRequest.RentalReturnDate,
                         RentalFee = model.RentalRequest.RentalTotalCost,
-                        EmployeeId = 1,
+                        EmployeeId = _context.Users
+                                    .FirstOrDefault(u => u.Email == User.Identity.Name).UserId,
                         PaymentId = null
                     };
 

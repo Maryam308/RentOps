@@ -87,9 +87,8 @@
 						<td>@record.LogTimestamp</td>
 						<td>@record.LogType.LogTypeTitle</td>
 						<td>@record.Source.SourceTitle</td>
-						<td>@record.User.UserId</td>
-						<td>@record.User.FirstName @record.User.LastName</td>
-
+						<td>@record.User?.UserId</td>
+						<td>@record.User?.FirstName @record.User?.LastName</td>
 						<td>@record.Exception</td>
 						<td>@record.UserAction</td>
 						<td>@record.AffectedData</td>
