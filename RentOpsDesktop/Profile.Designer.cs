@@ -204,7 +204,7 @@
             lblProfile.AutoSize = true;
             lblProfile.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0, true);
             lblProfile.ForeColor = Color.FromArgb(135, 66, 62);
-            lblProfile.Location = new Point(321, 41);
+            lblProfile.Location = new Point(292, 26);
             lblProfile.Name = "lblProfile";
             lblProfile.Size = new Size(169, 42);
             lblProfile.TabIndex = 2;
@@ -215,7 +215,7 @@
             lblFirstName.AutoSize = true;
             lblFirstName.Font = new Font("Segoe UI", 17.8000011F);
             lblFirstName.ForeColor = Color.Black;
-            lblFirstName.Location = new Point(313, 120);
+            lblFirstName.Location = new Point(321, 120);
             lblFirstName.Name = "lblFirstName";
             lblFirstName.Size = new Size(129, 32);
             lblFirstName.TabIndex = 8;
@@ -226,7 +226,7 @@
             lblPhone.AutoSize = true;
             lblPhone.Font = new Font("Segoe UI", 17.8000011F);
             lblPhone.ForeColor = Color.Black;
-            lblPhone.Location = new Point(321, 273);
+            lblPhone.Location = new Point(321, 248);
             lblPhone.Name = "lblPhone";
             lblPhone.Size = new Size(177, 32);
             lblPhone.TabIndex = 9;
@@ -237,7 +237,7 @@
             lblEmail.AutoSize = true;
             lblEmail.Font = new Font("Segoe UI", 17.8000011F);
             lblEmail.ForeColor = Color.Black;
-            lblEmail.Location = new Point(321, 350);
+            lblEmail.Location = new Point(321, 312);
             lblEmail.Name = "lblEmail";
             lblEmail.Size = new Size(71, 32);
             lblEmail.TabIndex = 10;
@@ -247,7 +247,7 @@
             // 
             btnEditProfile.BackColor = Color.FromArgb(139, 128, 116);
             btnEditProfile.FlatStyle = FlatStyle.Flat;
-            btnEditProfile.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            btnEditProfile.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnEditProfile.ForeColor = Color.White;
             btnEditProfile.Location = new Point(769, 24);
             btnEditProfile.Margin = new Padding(3, 2, 3, 2);
@@ -262,7 +262,7 @@
             // 
             txtEmail.BorderStyle = BorderStyle.FixedSingle;
             txtEmail.Font = new Font("Segoe UI", 14F);
-            txtEmail.Location = new Point(551, 353);
+            txtEmail.Location = new Point(551, 316);
             txtEmail.Margin = new Padding(3, 2, 3, 2);
             txtEmail.Name = "txtEmail";
             txtEmail.ReadOnly = true;
@@ -273,7 +273,7 @@
             // 
             txtPhone.BorderStyle = BorderStyle.FixedSingle;
             txtPhone.Font = new Font("Segoe UI", 14F);
-            txtPhone.Location = new Point(551, 276);
+            txtPhone.Location = new Point(551, 252);
             txtPhone.Margin = new Padding(3, 2, 3, 2);
             txtPhone.Name = "txtPhone";
             txtPhone.ReadOnly = true;
@@ -284,7 +284,7 @@
             // 
             txtFirstName.BorderStyle = BorderStyle.FixedSingle;
             txtFirstName.Font = new Font("Segoe UI", 14F);
-            txtFirstName.Location = new Point(551, 122);
+            txtFirstName.Location = new Point(551, 124);
             txtFirstName.Margin = new Padding(3, 2, 3, 2);
             txtFirstName.Name = "txtFirstName";
             txtFirstName.ReadOnly = true;
@@ -295,7 +295,7 @@
             // 
             txtLastName.BorderStyle = BorderStyle.FixedSingle;
             txtLastName.Font = new Font("Segoe UI", 14F);
-            txtLastName.Location = new Point(551, 199);
+            txtLastName.Location = new Point(551, 188);
             txtLastName.Margin = new Padding(3, 2, 3, 2);
             txtLastName.Name = "txtLastName";
             txtLastName.ReadOnly = true;
@@ -307,7 +307,7 @@
             lblLastName.AutoSize = true;
             lblLastName.Font = new Font("Segoe UI", 17.8000011F);
             lblLastName.ForeColor = Color.Black;
-            lblLastName.Location = new Point(321, 196);
+            lblLastName.Location = new Point(321, 184);
             lblLastName.Name = "lblLastName";
             lblLastName.Size = new Size(121, 32);
             lblLastName.TabIndex = 30;
@@ -315,16 +315,16 @@
             // 
             // btnViewAuditLog
             // 
-            btnViewAuditLog.BackColor = Color.FromArgb(139, 128, 116);
+            btnViewAuditLog.BackColor = Color.FromArgb(121, 86, 76);
             btnViewAuditLog.BackgroundImageLayout = ImageLayout.None;
             btnViewAuditLog.FlatAppearance.BorderSize = 0;
             btnViewAuditLog.FlatStyle = FlatStyle.Flat;
-            btnViewAuditLog.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            btnViewAuditLog.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnViewAuditLog.ForeColor = Color.White;
-            btnViewAuditLog.Location = new Point(743, 406);
+            btnViewAuditLog.Location = new Point(728, 383);
             btnViewAuditLog.Margin = new Padding(3, 2, 3, 2);
             btnViewAuditLog.Name = "btnViewAuditLog";
-            btnViewAuditLog.Size = new Size(181, 40);
+            btnViewAuditLog.Size = new Size(196, 50);
             btnViewAuditLog.TabIndex = 29;
             btnViewAuditLog.Text = "View Audit Log";
             btnViewAuditLog.UseVisualStyleBackColor = false;

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RentOpsObjects.Model;
+using RentOpsObjects.Services;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RentOpsDesktop
@@ -21,12 +23,19 @@ namespace RentOpsDesktop
         public bool isIDModified = false;
         public bool isAgreementModified = false;
 
+        AuditLogger auditLogger;
+        RentOpsDBContext dbContext;
+        int currentUserId = Global.user.UserId;
 
 
-        int currentUserId = Global.EmployeeID;
         public UploadTransactionDocuments()
         {
             InitializeComponent();
+
+            dbContext = new RentOpsDBContext();
+
+            //initialize the logger
+            auditLogger = new AuditLogger(dbContext);
 
         }
 
@@ -34,7 +43,16 @@ namespace RentOpsDesktop
         public UploadTransactionDocuments(Document rentalAgreement, Document IDVerification)
         {
             InitializeComponent();
+
+            dbContext = new RentOpsDBContext();
+
+            //initialize the logger
+            auditLogger = new AuditLogger(dbContext);
+
+            //flag the form for edit mode
             isEditMode = true;
+
+            //get the passed documents variable from the rentaltransaction being editted and save them to class level
             agreement = rentalAgreement;
             idVerification = IDVerification;
 
@@ -45,12 +63,18 @@ namespace RentOpsDesktop
             if (agreement != null)
                 lblAgreementFilename.Text = agreement.FileName + "\n(Already Uploaded)";
 
-            // Enable download/remove if documents exist
+            // Show download/remove if documents exist
             btnDownloadIDDocument.Visible = idVerification != null;
             btnRemoveIDDecument.Visible = idVerification != null;
+            btnDownloadIDDocument.Enabled = idVerification != null;
+            btnRemoveIDDecument.Enabled = idVerification != null;
 
             btnDownloadAgreementDocument.Visible = agreement != null;
             btnRemoveAgreementDocument.Visible = agreement != null;
+            btnDownloadAgreementDocument.Enabled = agreement != null;
+            btnRemoveAgreementDocument.Enabled = agreement != null;
+
+
         }
 
 
@@ -82,13 +106,13 @@ namespace RentOpsDesktop
                         return;
                     }
 
-                    // Example: You will set actual values for UserId and FileTypeId later
-                    int userId = 1; // Replace with actual logged-in user ID or context
-                    int fileTypeId = 5; //the id of the ID verification files 
+                    //fetch the file type id for the idverification
+                    FileType? fileTypeIdVerification = (FileType)dbContext.FileTypes.Where(ft => ft.FileTypeTitle == "ID Verification");        
+                    int fileTypeId = fileTypeIdVerification.FileTypeId ; 
 
                     idVerification = new Document
                     {
-                        UserId = userId,
+                        UserId = currentUserId,
                         FileName = fileName,
                         UploadDate = DateTime.Now,
                         FileTypeId = fileTypeId,
@@ -112,17 +136,17 @@ Uploaded Successfully";
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //print the exception message 
                 MessageBox.Show("An error occurred while uploading the file:\n" + ex.Message, "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            
-           
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void btnUploadREntalAgreement_Click(object sender, EventArgs e)
@@ -146,13 +170,14 @@ Uploaded Successfully";
                         return;
                     }
 
-                    // Example: You will set actual values for UserId and FileTypeId later
-                    int userId = 1; // Replace with actual logged-in user ID or context
-                    int fileTypeId = 4; //the id of the Rental Agreement files 
+                    //fetch the file type id for the idverification
+                    FileType? fileTypeIdVerification = (FileType)dbContext.FileTypes.Where(ft => ft.FileTypeTitle == "Rental Agreement");
+                    int fileTypeId = fileTypeIdVerification.FileTypeId;
 
+                    //create a new document for the agreement
                     agreement = new Document
                     {
-                        UserId = userId,
+                        UserId = currentUserId,
                         FileName = fileName,
                         UploadDate = DateTime.Now,
                         FileTypeId = fileTypeId,
@@ -176,6 +201,9 @@ Uploaded Successfully";
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //print the exception message 
                 MessageBox.Show("An error occurred while uploading the file:\n" + ex.Message, "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
@@ -202,6 +230,9 @@ Uploaded Successfully";
             }
             catch(Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //print the exception message 
                 MessageBox.Show("An error occurred while downloading the file:\n" + ex.Message, "Download Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -245,6 +276,9 @@ Uploaded Successfully";
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //print the exception message 
                 MessageBox.Show("An error occurred while downloading the file:\n" + ex.Message, "Download Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

@@ -217,11 +217,13 @@ namespace RentOpsDesktop
             
             }catch(Exception ex) {
 
+
                 // log the exception
                 logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
 
                 //show the error message
                 MessageBox.Show("An error occurred while adding the equipment: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
 
             }   
 
