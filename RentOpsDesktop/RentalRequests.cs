@@ -8,16 +8,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RentOpsObjects.Model;
+using RentOpsObjects.Services;
 
 namespace RentOpsDesktop
 {
     public partial class RentalRequests : Form
     {
         RentOpsDBContext context;
+        AuditLogger auditLogger;
+        int currentUserId;
         public RentalRequests()
         {
             InitializeComponent();
+
+            //initialize the context and the logger object
             context = new RentOpsDBContext();
+            auditLogger = new AuditLogger(context);
+
+            //fetch the current user id 
+            currentUserId = Global.user.UserId;
+
         }
 
         private void RefreshRentalRequestsGridview()
@@ -66,6 +76,8 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 // Show error message if an exception occurs
                 MessageBox.Show("Error: " + ex.Message);
             }
@@ -166,6 +178,8 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 // Show error message if an exception occurs
                 MessageBox.Show("Error: " + ex.Message);
             }
@@ -224,6 +238,8 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 // Show error message if an exception occurs
                 MessageBox.Show("Error: " + ex.Message);
             }
@@ -237,9 +253,12 @@ namespace RentOpsDesktop
 
         private void btnReset_Click(object sender, EventArgs e)
         {
+            //reset the inputs 
             cmbEquipmentName.SelectedItem = null;
             cmbRequestStatus.SelectedItem = null;
             txtRequestID.Text = "";
+
+            //refresh the data grid view 
             RefreshRentalRequestsGridview();
         }
     }

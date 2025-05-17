@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
+using RentOpsObjects.Services;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
 
 namespace RentOpsDesktop
@@ -17,12 +18,16 @@ namespace RentOpsDesktop
     public partial class RentalTransactions : Form
     {
         RentOpsDBContext dbContext;
+        AuditLogger auditLogger;
+        int currentUserId;
 
 
         public RentalTransactions()
         {
             InitializeComponent();
             dbContext = new RentOpsDBContext();
+            auditLogger= new AuditLogger(dbContext);
+            currentUserId = Global.user.UserId;
         }
 
         //a function to refresh the data grid view 
@@ -100,6 +105,8 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 MessageBox.Show("Error: " + ex.Message);
             }
 
@@ -131,6 +138,8 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
@@ -236,6 +245,8 @@ namespace RentOpsDesktop
 
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 MessageBox.Show("An error occurred while searching: " + ex.Message);
             }
         }
@@ -311,6 +322,10 @@ namespace RentOpsDesktop
                     if (editRentalTransaction.DialogResult == DialogResult.OK)
                     {
                         dbContext.RentalTransactions.Update(editRentalTransaction.rentalTransactionToEdit);
+
+                        //track changes 
+                        auditLogger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+
                         dbContext.SaveChanges(); // Save changes to the database
                         RefreshDataGridView(); // Refresh the DataGridVi
                     }
@@ -318,6 +333,8 @@ namespace RentOpsDesktop
                 }
                 catch (Exception ex)
                 {
+                    //log the exception using the auditlogger
+                    auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                     MessageBox.Show("Error: " + ex.Message);
                 }
 
@@ -374,6 +391,10 @@ namespace RentOpsDesktop
                 try
                 {
                     dbContext.RentalTransactions.Remove(rentalTransaction);
+
+                    //track changes using the logger
+                    auditLogger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+
                     dbContext.SaveChanges(); // Save changes to the database
                     RefreshDataGridView(); // Refresh the DataGridView
                     MessageBox.Show("Rental Transaction deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information); // Show sucess message
@@ -381,6 +402,8 @@ namespace RentOpsDesktop
                 }
                 catch (Exception ex)
                 {
+                    //log the exception using the auditlogger
+                    auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                     MessageBox.Show("An error occurred while deleting the Rental Transaction: " + ex.Message);
                 }
             }

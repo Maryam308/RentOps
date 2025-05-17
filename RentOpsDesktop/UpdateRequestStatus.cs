@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
+using RentOpsObjects.Services;
 
 namespace RentOpsDesktop
 {
@@ -16,48 +17,67 @@ namespace RentOpsDesktop
     {
         internal RentalRequest requestToUpdate;
         int rentalRequestId;
+        
         RentOpsDBContext context;
+        AuditLogger auditLogger;
+        int currentUserId;
+
         public UpdateRequestStatus(int rentalRequestId)
         {
             InitializeComponent();
             this.rentalRequestId = rentalRequestId;
             context = new RentOpsDBContext();
+
+            auditLogger = new AuditLogger(context);
+
         }
 
         private void LoadRequestData()
         {
-            if (requestToUpdate != null)
-            {
-                // Find the enriched item
-                var enrichedRequest = context.RentalRequests
-                .Include(r => r.RentalRequestStatus)
-                .Include(r => r.Equipment)
-                .Include(r => r.User) 
-                .FirstOrDefault(r => r.RentalRequestId == rentalRequestId);
+            try {
 
-
-                if (enrichedRequest != null)
+                if (requestToUpdate != null)
                 {
-                    StringBuilder details = new StringBuilder();
-                    details.AppendLine($"Request ID: {enrichedRequest.RentalRequestId}");
-                    details.AppendLine($"Start Date: {enrichedRequest.RentalStartDate:yyyy-MM-dd}");
-                    details.AppendLine($"Return Date: {enrichedRequest.RentalReturnDate:yyyy-MM-dd}");
-                    details.AppendLine($"Total Cost: {enrichedRequest.RentalTotalCost:C}");
-                    details.AppendLine($"Request Status: {enrichedRequest.RentalRequestStatus.RentalRequestStatusTitle}");
-                    details.AppendLine($"Equipment Name: {enrichedRequest.Equipment.EquipmentName}");
-                    details.AppendLine($"Customer Name: {enrichedRequest.User.FirstName} {enrichedRequest.User.LastName}");
+                    // Find the enriched item
+                    var enrichedRequest = context.RentalRequests
+                    .Include(r => r.RentalRequestStatus)
+                    .Include(r => r.Equipment)
+                    .Include(r => r.User)
+                    .FirstOrDefault(r => r.RentalRequestId == rentalRequestId);
 
-                    lblRequestDetails.Text = details.ToString();
+
+                    if (enrichedRequest != null)
+                    {
+                        StringBuilder details = new StringBuilder();
+                        details.AppendLine($"Request ID: {enrichedRequest.RentalRequestId}");
+                        details.AppendLine($"Start Date: {enrichedRequest.RentalStartDate:yyyy-MM-dd}");
+                        details.AppendLine($"Return Date: {enrichedRequest.RentalReturnDate:yyyy-MM-dd}");
+                        details.AppendLine($"Total Cost: {enrichedRequest.RentalTotalCost:C}");
+                        details.AppendLine($"Request Status: {enrichedRequest.RentalRequestStatus.RentalRequestStatusTitle}");
+                        details.AppendLine($"Equipment Name: {enrichedRequest.Equipment.EquipmentName}");
+                        details.AppendLine($"Customer Name: {enrichedRequest.User.FirstName} {enrichedRequest.User.LastName}");
+
+                        lblRequestDetails.Text = details.ToString();
+                    }
+                    else
+                    {
+                        lblRequestDetails.Text = "Request details not found.";
+                    }
                 }
                 else
                 {
-                    lblRequestDetails.Text = "Request details not found.";
+                    lblRequestDetails.Text = "No request selected.";
                 }
+
+            } catch(Exception ex) {
+
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //show message indicating the error
+                MessageBox.Show("An Error has occured: " + ex.Message);
+
             }
-            else
-            {
-                lblRequestDetails.Text = "No request selected.";
-            }
+
         }
 
 
@@ -91,6 +111,9 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+
                 MessageBox.Show("Error: " + ex.Message);
             }
 
@@ -104,6 +127,9 @@ namespace RentOpsDesktop
                 // Update the rental request status
                 requestToUpdate.RentalRequestStatusId = Convert.ToInt32(lstStatus.SelectedValue);
 
+                //log the changes using the audit logger
+                auditLogger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+
                 // Save changes to the database
                 context.SaveChanges(); // Ensure you save changes to persist the update
 
@@ -114,6 +140,8 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 MessageBox.Show("Error updating rental request status: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
