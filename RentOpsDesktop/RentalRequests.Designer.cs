@@ -54,10 +54,10 @@
             btnSearch.FlatStyle = FlatStyle.Flat;
             btnSearch.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
             btnSearch.ForeColor = Color.FromArgb(241, 240, 234);
-            btnSearch.Location = new Point(808, 84);
+            btnSearch.Location = new Point(808, 116);
             btnSearch.Margin = new Padding(0);
             btnSearch.Name = "btnSearch";
-            btnSearch.Size = new Size(101, 28);
+            btnSearch.Size = new Size(108, 39);
             btnSearch.TabIndex = 18;
             btnSearch.Text = "Search";
             btnSearch.UseVisualStyleBackColor = false;
@@ -67,10 +67,10 @@
             // 
             dgvRentalRequests.BackgroundColor = Color.WhiteSmoke;
             dgvRentalRequests.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvRentalRequests.Location = new Point(265, 126);
+            dgvRentalRequests.Location = new Point(265, 170);
             dgvRentalRequests.Name = "dgvRentalRequests";
             dgvRentalRequests.RowHeadersWidth = 62;
-            dgvRentalRequests.Size = new Size(652, 312);
+            dgvRentalRequests.Size = new Size(652, 268);
             dgvRentalRequests.TabIndex = 20;
             // 
             // pnlNavigationSideBar
@@ -139,10 +139,10 @@
             btnFilter.FlatStyle = FlatStyle.Flat;
             btnFilter.Font = new Font("Segoe UI Semibold", 12.25F, FontStyle.Bold);
             btnFilter.ForeColor = Color.FromArgb(241, 240, 234);
-            btnFilter.Location = new Point(553, 84);
+            btnFilter.Location = new Point(808, 68);
             btnFilter.Margin = new Padding(0);
             btnFilter.Name = "btnFilter";
-            btnFilter.Size = new Size(101, 27);
+            btnFilter.Size = new Size(108, 39);
             btnFilter.TabIndex = 21;
             btnFilter.Text = "Filter";
             btnFilter.UseVisualStyleBackColor = false;
@@ -159,7 +159,7 @@
             btnReset.Location = new Point(808, 21);
             btnReset.Margin = new Padding(0);
             btnReset.Name = "btnReset";
-            btnReset.Size = new Size(101, 27);
+            btnReset.Size = new Size(108, 39);
             btnReset.TabIndex = 22;
             btnReset.Text = "Reset";
             btnReset.UseVisualStyleBackColor = false;
@@ -168,17 +168,18 @@
             // cmbEquipmentName
             // 
             cmbEquipmentName.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbEquipmentName.Font = new Font("Segoe UI", 12F);
             cmbEquipmentName.FormattingEnabled = true;
-            cmbEquipmentName.Location = new Point(265, 90);
+            cmbEquipmentName.Location = new Point(374, 127);
             cmbEquipmentName.Margin = new Padding(3, 2, 3, 2);
             cmbEquipmentName.Name = "cmbEquipmentName";
-            cmbEquipmentName.Size = new Size(142, 23);
+            cmbEquipmentName.Size = new Size(142, 29);
             cmbEquipmentName.TabIndex = 26;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(265, 74);
+            label1.Location = new Point(268, 130);
             label1.Name = "label1";
             label1.Size = new Size(100, 15);
             label1.TabIndex = 28;
@@ -187,7 +188,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(419, 73);
+            label2.Location = new Point(542, 130);
             label2.Name = "label2";
             label2.Size = new Size(84, 15);
             label2.TabIndex = 29;
@@ -197,17 +198,18 @@
             // cmbRequestStatus
             // 
             cmbRequestStatus.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbRequestStatus.Font = new Font("Segoe UI", 12F);
             cmbRequestStatus.FormattingEnabled = true;
-            cmbRequestStatus.Location = new Point(419, 90);
+            cmbRequestStatus.Location = new Point(632, 127);
             cmbRequestStatus.Margin = new Padding(3, 2, 3, 2);
             cmbRequestStatus.Name = "cmbRequestStatus";
-            cmbRequestStatus.Size = new Size(110, 23);
+            cmbRequestStatus.Size = new Size(142, 29);
             cmbRequestStatus.TabIndex = 30;
             // 
             // lblRequestId
             // 
             lblRequestId.AutoSize = true;
-            lblRequestId.Location = new Point(690, 75);
+            lblRequestId.Location = new Point(283, 80);
             lblRequestId.Name = "lblRequestId";
             lblRequestId.Size = new Size(63, 15);
             lblRequestId.TabIndex = 31;
@@ -215,10 +217,11 @@
             // 
             // txtRequestID
             // 
-            txtRequestID.Location = new Point(690, 91);
+            txtRequestID.BorderStyle = BorderStyle.FixedSingle;
+            txtRequestID.Location = new Point(374, 78);
             txtRequestID.Margin = new Padding(3, 2, 3, 2);
             txtRequestID.Name = "txtRequestID";
-            txtRequestID.Size = new Size(95, 23);
+            txtRequestID.Size = new Size(142, 23);
             txtRequestID.TabIndex = 32;
             // 
             // RentalRequests

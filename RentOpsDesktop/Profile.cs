@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RentOpsObjects.Model;
+using RentOpsObjects.Services;
 
 namespace RentOpsDesktop
 {
@@ -16,34 +17,50 @@ namespace RentOpsDesktop
 
         //Declaring database context object
         private RentOpsDBContext dBContext;
+        AuditLogger auditLogger;
+        User currentUser;
 
-        User employee;
+
         public Profile()
         {
             InitializeComponent();
+            
             //Initializing database context object
             dBContext = new RentOpsDBContext();
+
+            //initialze a logger object for change tracking
+            auditLogger = new AuditLogger(dBContext);
+
+            //fetch the current user object 
+            currentUser = Global.user;
+
         }
 
         private void Profile_Load(object sender, EventArgs e)
         {
             try
             {
-                var userId = Global.EmployeeID; // Get the global employee ID
-
-                //Fetch the employee object from the database
-                var employee = dBContext.Users
-                    .Where(e => e.UserId == userId)
-                    .FirstOrDefault();
-
                 //Display the employee details in the text boxes
-                txtFirstName.Text = employee.FirstName;
-                txtLastName.Text = employee.LastName;
-                txtEmail.Text = employee.Email;
-                txtPhone.Text = employee.PhoneNumber.ToString();
+                txtFirstName.Text = currentUser.FirstName;
+                txtLastName.Text = currentUser.LastName;
+                txtEmail.Text = currentUser.Email;
+                txtPhone.Text = currentUser.PhoneNumber.ToString() ?? "";
+
+                //if the role is not admin hide and disable the auditlog button  
+                if (Global.RoleName != "Administrator")
+                {
+                    
+                    btnViewAuditLog.Enabled = false;
+                    btnViewAuditLog.Visible = false;
+
+                }               
+
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUser.UserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //print the exception message 
                 MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -71,14 +88,17 @@ namespace RentOpsDesktop
                 this.Hide(); //hide the current form
                 loginForm.Show(); //show login form
 
-                // Clear the global employee ID 
-                Global.EmployeeID = 0; // Reset the global employee ID
+                // Clear the global user and roleName objects
+                Global.user = new User();
 
                 //Display a message box to confirm logout
                 MessageBox.Show("You have been logged out successfully.", "Logout", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUser.UserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //print the exception message 
                 MessageBox.Show("Error logging out: " + ex.Message);
             }
 

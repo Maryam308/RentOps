@@ -9,18 +9,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RentOpsObjects.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RentOpsDesktop
 {
     public partial class OverdueReturns : Form
     {
         RentOpsDBContext dbContext;
-        int currentEmployeeId;
+        int currentUserId;
+        AuditLogger auditLogger;
+
         public OverdueReturns()
         {
             InitializeComponent();
             dbContext = new RentOpsDBContext();
-            currentEmployeeId = Global.EmployeeID; // Get the global employee ID
+            currentUserId = Global.user.UserId; // Get the global employee ID
         }
 
 
@@ -29,30 +33,31 @@ namespace RentOpsDesktop
         {
 
             try {
-
-
                 //select the overdue transactions that do not have a return record and its retuned date is less than the current date
 
                 //select as queryable
                 IEnumerable<RentalTransaction> rentalTransactions = dbContext.RentalTransactions
-                    .Where(x => x.ReturnDate < DateOnly.FromDateTime(DateTime.Now) && x.EmployeeId == currentEmployeeId)
+                    .Where(x => x.ReturnDate < DateOnly.FromDateTime(DateTime.Now) && x.EmployeeId == currentUserId)
                     .OrderByDescending(d => d.ReturnDate)
                     .AsQueryable();
 
                 //check if filters apply
 
-                //check the return date
+                //Filter according to a selected date 
                 if (dtpTransctionDate.Checked)
                 {
+                    //get the date seleceted from the filter dtp
                     DateTime selectedDate = dtpTransctionDate.Value;
+                    //filter the transactions to include only the transactions of the selected date
                     rentalTransactions = rentalTransactions.Where(r => r.RentalTransactionTimestamp.Date == selectedDate.Date);
                 }
 
-                //check if equipment is selected to filter
+                //Filter according to a selected equipment 
                 if (cmbEquipment.SelectedIndex != -1) {
 
-                    //filter the rental transactions by equipment id
+                    //get the selected equipment id
                     int equipmentId = (int)cmbEquipment.SelectedValue;
+                    //get the transactions with the specified equipment
                     rentalTransactions = rentalTransactions.Where(r => r.EquipmentId == equipmentId);
 
                 }
@@ -60,19 +65,21 @@ namespace RentOpsDesktop
                 //check if payment status is selected to filter
                 if (cmbPaymentStatus.SelectedIndex != -1)
                 {
-                    //filter the rental transactions by payment status
+                    //fetch the selected payment status
                     string paymentStatus = cmbPaymentStatus.SelectedItem.ToString();
                     if (paymentStatus == "Paid")
                     {
+                        //the paid transactions are the one with a payment id 
                         rentalTransactions = rentalTransactions.Where(r => r.PaymentId != null);
                     }
                     else if (paymentStatus == "Not Paid")
                     {
+                        //The transactions without a payment id connected are not paid
                         rentalTransactions = rentalTransactions.Where(r => r.PaymentId == null);
                     }
                 }
 
-                //check if the equipment is selected to filter
+                //fetch the filtered overdue trnsactions  and include extra data for clarity
                 var overdueTransactions = rentalTransactions.Select(rt => new
                 {
                     RentalTransactionId = rt.RentalTransactionId,
@@ -95,11 +102,15 @@ namespace RentOpsDesktop
                         .FirstOrDefault() // Fetch Employee Full Name
                                 }).ToList(); // Convert the result to a list
 
+                //set the data source of the datagridview to the list
                 dgvReturnRecords.DataSource = overdueTransactions;
 
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //print the exception message in a message box
                 MessageBox.Show("Error: " + ex.Message);
             }
 
@@ -108,13 +119,13 @@ namespace RentOpsDesktop
         private void OverdueReturns_Load(object sender, EventArgs e)
         {
             try {
-                //laod conditions into the combo box
+                //laod filter conditions into the combo boxes
 
                 //load the equipment names 
                 cmbEquipment.DataSource = dbContext.Equipment.ToList();
-                cmbEquipment.DisplayMember = "EquipmentName";
-                cmbEquipment.ValueMember = "EquipmentId";
-                cmbEquipment.SelectedIndex = -1;
+                cmbEquipment.DisplayMember = "EquipmentName"; //display the equipment name
+                cmbEquipment.ValueMember = "EquipmentId"; //set the values to hold the equipment ids
+                cmbEquipment.SelectedIndex = -1; // set the selected value to display an empty selection
 
                 //load into the payment cmbo box a paid and not paid options
                 cmbPaymentStatus.Items.Add("Paid");
@@ -129,6 +140,9 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //print the exception message 
                 MessageBox.Show("Error: " + ex.Message);
             }
             
@@ -139,19 +153,21 @@ namespace RentOpsDesktop
             //validate that not both text fields are filled
             if (txtRequestID.Text != "" && txtTransactionID.Text != "")
             {
+                //instruct the user
                 MessageBox.Show("Please fill only one field");
-                //reset the text fields
+                //reset the text fields to empty 
                 txtRequestID.Text = "";
                 txtTransactionID.Text = "";
-                return;
+                return; //stop the excution
             }
 
             try
             {
+                //select the rental transactions only for the current logged in employee 
                 var rentalTransactions = dbContext.RentalTransactions
                 .Include(rt => rt.Equipment)
                 .Include(rt => rt.Employee)
-                .Where(rt => rt.EmployeeId == currentEmployeeId)
+                .Where(rt => rt.EmployeeId == currentUserId)
                 .OrderByDescending(rt => rt.RentalTransactionTimestamp)
                 .Select(rt => new
                 {
@@ -167,15 +183,23 @@ namespace RentOpsDesktop
                     rt.EquipmentId,
                     EquipmentName = rt.Equipment != null ? rt.Equipment.EquipmentName : "N/A",
                     EmployeeName = rt.Employee != null ? rt.Employee.FirstName + " " + rt.Employee.LastName : "N/A"
-                })
-                .ToList();
+                });
 
-                //if the request ID is filled
+
+                //the admin should be able to find all the overdue returns 
+                if (Global.RoleName != "Administrator") 
+                {
+                    //if the role is not administrator filter the transactions to show only the overdue transactions that the currnet employee is responsible of 
+                    rentalTransactions = rentalTransactions.Where(rt => rt.EmployeeId == currentUserId);
+                }
+
+
+                //if the request ID is filled (search by the request id)
                 if (txtRequestID.Text != "")
                 {
-                    //get the return record id from the text field
+                    //get the rental request id from the text field
                     int requestRecordID = Convert.ToInt32(txtRequestID.Text);
-
+                    //fetch the record with the request id
                     var record = rentalTransactions.Where(rt => rt.RentalRequestId == requestRecordID)
                        .ToList();
 
@@ -186,6 +210,7 @@ namespace RentOpsDesktop
                 {
                     //get the transaction id from the text field
                     int transactionID = Convert.ToInt32(txtTransactionID.Text);
+                    //fetch the record with the transaction id
                     var record = rentalTransactions.Where(rt => rt.RentalTransactionId == transactionID)
                        .ToList();
                     //refresh the data grid view
@@ -193,6 +218,7 @@ namespace RentOpsDesktop
                 }
                 else
                 {
+                    //if the user is trying to search without adding any values to any of the text fields return from the function and instruct the user to fill at leas one  
                     MessageBox.Show("Please fill one of the fields");
                     return;
                 }
@@ -200,9 +226,13 @@ namespace RentOpsDesktop
 
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //print the exception message 
                 MessageBox.Show("An error occurred while searching: " + ex.Message);
             }
         }
+
 
         private void btnReset_Click(object sender, EventArgs e)
         {
@@ -212,7 +242,7 @@ namespace RentOpsDesktop
             //reset the combo boxes
             cmbEquipment.SelectedIndex = -1;
             cmbPaymentStatus.SelectedIndex = -1;
-            cmbPaymentStatus.Text = "Select Payment Status";
+            cmbPaymentStatus.Text = "Select Payment Status"; // add the placeholder
             dtpTransctionDate.Value = DateTime.Now; // Reset to current date
             dtpTransctionDate.Checked = false; // Uncheck the date picker
 
@@ -225,6 +255,7 @@ namespace RentOpsDesktop
             //if no filters are selected, show message 
             if (cmbEquipment.SelectedIndex == -1 && cmbPaymentStatus.SelectedIndex == -1 && dtpTransctionDate.Checked == false)
             {
+                //instruct the user to select a criteria to filter if non is chosen
                 MessageBox.Show("Please select at least one filter.");
                 return;
             }
@@ -238,17 +269,33 @@ namespace RentOpsDesktop
 
         private void btnAddRecord_Click(object sender, EventArgs e)
         {
-            //show the add record form 
+            //show the add record form as a dialog
             AddReturnRecord addReturnRecord = new AddReturnRecord();
             addReturnRecord.StartPosition = FormStartPosition.CenterScreen; // Center the form
             addReturnRecord.ShowDialog();
 
-            if (addReturnRecord.DialogResult == DialogResult.OK)
-            {
-                dbContext.ReturnRecords.Add(addReturnRecord.newReturnRecord);
-                dbContext.SaveChanges(); // Save changes to the database
-                RefreshDataGridView(); // Refresh the DataGridView
+            try { 
+                
+                //get the dialogresult and add the retutn record to the database if its set to ok
+                if (addReturnRecord.DialogResult == DialogResult.OK)
+                {
+                    dbContext.ReturnRecords.Add(addReturnRecord.newReturnRecord);
+                    dbContext.SaveChanges(); // Save changes to the database
+                    RefreshDataGridView(); // Refresh the DataGridView
+                }
+            
+            
+            } catch (Exception ex) {
+
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //print the exception message 
+                MessageBox.Show("An error has occured: " + ex.Message) ; return;
+
+
             }
+
+
 
         }
 

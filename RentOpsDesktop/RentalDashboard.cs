@@ -9,16 +9,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using RentOpsObjects.Services;
 
 namespace RentOpsDesktop
 {
     public partial class RentalDashboard : Form
     {
         RentOpsDBContext dbContext;
+        AuditLogger logger;
         public RentalDashboard()
         {
             InitializeComponent();
+
+            //initialize the dbcontext
             dbContext = new RentOpsDBContext();
+
+            //initialize the audit logger object to track changes
+            logger = new AuditLogger(dbContext);
+
         }
 
         private void RentalDashboard_Load(object sender, EventArgs e)
@@ -30,91 +38,154 @@ namespace RentOpsDesktop
         //feth statistics from the database 
         private void fetchStatistics()
         {
+            //fetch the current user 
+            int currentUserId = Global.user.UserId;
 
-            //fetch the current user from the database
-            int currentUserId = Global.EmployeeID;
-
-            //all the statics will depend on the current user
-
-
-            //total income from the user equipments
-            //sum total cost from rental transaction where the equipment has userid of the current user
-            var totalIncome = dbContext.RentalTransactions
-                .Include(i => i.Equipment)
-                .ThenInclude(t => t.RentalRequests)
-                .Where(r => r.Equipment.UserId == currentUserId || r.RentalRequest.Equipment.UserId == currentUserId).Sum(k => k.RentalFee);
-
-
-
-            //average rental period (rental period is checked by the differance between the start and end) count the days then devide by the number of rentals
-            var averageRentalPeriod = dbContext.RentalTransactions
-                .Include(r => r.Equipment)
-                .Include(r => r.RentalRequest)
-                .Where(r => r.RentalRequest.Equipment.UserId == currentUserId)
-                .Select(r => EF.Functions.DateDiffDay(r.PickupDate, r.ReturnDate))
-                .Average();
-
-            //available equipments will check the availability status of the equipment that has the user id of the current user
-            var availableEquipments = dbContext.Equipment
-                .Include(i => i.AvailabilityStatus)
-                .Where(r => r.UserId == currentUserId && r.AvailabilityStatus.AvailabilityStatusTitle == "Available")
-                .Count();
-
-
-            //total rental request of the day
-            var totalRentalRequest = dbContext.RentalRequests
-                .Include(i => i.Equipment)
-                .ThenInclude(t => t.RentalRequests)
-                .Where(r => r.Equipment.UserId == currentUserId && r.RentalRequestTimestamp == DateTime.Now.Date)
-                .Count();
-
-            //total rentals of the month
-            var totalRentalsOfTheMonth = dbContext.RentalTransactions
-                .Include(i => i.Equipment)
-                .ThenInclude(t => t.RentalRequests)
-                .Where(r => r.Equipment.UserId == currentUserId && r.RentalTransactionTimestamp.Month == DateTime.Now.Month)
-                .Count();
-
-            //currently rented equipments 
-
-            //fetch the active rentals to a variable
-            var activeRentals = dbContext.RentalTransactions
-                .Include(i => i.Equipment)
-                .ThenInclude(t => t.RentalRequests)
-                .Where(r => r.Equipment.UserId == currentUserId && r.PickupDate <= DateOnly.FromDateTime(DateTime.Today.Date) && r.ReturnDate >= DateOnly.FromDateTime(DateTime.Today.Date))
-                .ToList();
-
-            //loop through the active rentals and get the equipment id and mark it as rented
-            foreach (var rental in activeRentals)
+            //check if the current user is an admin (if so display the statistics for all the system)
+            bool isAdmin ;
+            if (Global.RoleName == "Administrator")
             {
-                //get the equipment id
-                var equipmentId = rental.EquipmentId;
-                //mark the equipment as rented
-                var equipment = dbContext.Equipment.Find(equipmentId);
-                if (equipment != null)
-                {
-                    equipment.AvailabilityStatusId = 2; // 2 is the id for rented
-                    dbContext.SaveChanges();
-                }
+                isAdmin = true;
+            }
+            else { 
+            
+                isAdmin = false;
+
             }
 
-            //count the rented equipments from the database
-            var rentedEquipments = dbContext.Equipment
-                .Include(i => i.AvailabilityStatus)
-                .Where(r => r.UserId == currentUserId && r.AvailabilityStatus.AvailabilityStatusTitle == "Rented")
-                .Count();
 
 
-            //set all the labels to the values fetched from the database
-            lblTotalIncome.Text = totalIncome.ToString();
-            lblAverageRentalPeriod.Text = averageRentalPeriod.ToString();
-            lblAvailableEquipments.Text = availableEquipments.ToString();
-            lblTodayRentalRequest.Text = totalRentalRequest.ToString();
-            lblLastMonthRentals.Text = totalRentalsOfTheMonth.ToString();
-            lblCurrentlyRented.Text = rentedEquipments.ToString();
+            try
+            {
+                var today = DateOnly.FromDateTime(DateTime.Today);
+                var now = DateTime.Now;
+
+                // all the statics will depend on the current user if the user is not the admin
+
+                // total income from the user equipments
+                // sum total cost from rental transaction where the equipment has userid of the current user
+                var totalIncome = dbContext.RentalTransactions
+                    .Include(i => i.Equipment)
+                    .ThenInclude(t => t.RentalRequests)
+                    .Include(r => r.RentalRequest)
+                    .Where(r => isAdmin || r.Equipment.UserId == currentUserId || r.RentalRequest.Equipment.UserId == currentUserId)
+                    .Sum(k => k.RentalFee);
+
+
+                // average rental period (rental period is checked by the differance between the start and end) 
+                // count the days then devide by the number of rentals
+
+                //seperate the fetch from the average to avoid getting an exception
+                var rentalPeriodQuery = dbContext.RentalTransactions
+                    .Include(r => r.Equipment)
+                    .Include(r => r.RentalRequest)
+                    .Where(r => isAdmin || (r.RentalRequest != null && r.RentalRequest.Equipment.UserId == currentUserId))
+                    .Select(r => EF.Functions.DateDiffDay(r.PickupDate, r.ReturnDate));
+
+                double averageRentalPeriod = 0;
+
+                if (rentalPeriodQuery.Any())
+                {
+                    averageRentalPeriod = rentalPeriodQuery.Average();
+                }
+
+
+
+
+                // fetch the availability id for the available status
+                var availableStatus = dbContext.AvailabilityStatuses
+                    .FirstOrDefault(s => s.AvailabilityStatusTitle == "Available");
+
+                // available equipments will check the availability status of the equipment that has the user id of the current user
+                var availableEquipments = dbContext.Equipment
+                    .Include(i => i.AvailabilityStatus)
+                    .Where(r => (isAdmin || r.UserId == currentUserId) &&
+                                r.AvailabilityStatusId == availableStatus.AvailabilityStatusId)
+                    .Count();
+
+                // total rental request of the day
+                var totalRentalRequest = dbContext.RentalRequests
+                    .Include(i => i.Equipment)
+                    .ThenInclude(t => t.RentalRequests)
+                    .Where(r => r.RentalRequestTimestamp.Date == now.Date &&
+                                (isAdmin || r.Equipment.UserId == currentUserId))
+                    .Count();
+
+                // total rentals of the month
+                var totalRentalsOfTheMonth = dbContext.RentalTransactions
+                    .Include(i => i.Equipment)
+                    .ThenInclude(t => t.RentalRequests)
+                    .Where(r => r.RentalTransactionTimestamp.Month == now.Month &&
+                                r.RentalTransactionTimestamp.Year == now.Year &&
+                                (isAdmin || r.Equipment.UserId == currentUserId))
+                    .Count();
+
+                // currently rented equipments 
+
+                // fetch the active rentals to a variable
+                var activeRentals = dbContext.RentalTransactions
+                    .Include(i => i.Equipment)
+                    .ThenInclude(t => t.RentalRequests)
+                    .Where(r => r.PickupDate <= today &&
+                                r.ReturnDate >= today &&
+                                (isAdmin || r.Equipment.UserId == currentUserId))
+                    .ToList();
+
+                // Fetch the ID of the rented status from the database
+                var rentedStatus = dbContext.AvailabilityStatuses
+                    .FirstOrDefault(s => s.AvailabilityStatusTitle == "Out for Rent");
+
+                if (rentedStatus != null)
+                {
+                    // loop through the active rentals and get the equipment id and mark it as rented
+                    foreach (var rental in activeRentals)
+                    {
+                        var equipmentId = rental.EquipmentId;
+                        var equipment = dbContext.Equipment.Find(equipmentId);
+                        if (equipment != null)
+                        {
+                            equipment.AvailabilityStatusId = rentedStatus.AvailabilityStatusId; // assign the fetched id as the status of the equipment
+                        }
+                    }
+
+                    // track changes before saving them to the database
+                    logger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+
+                    // save changes outside the loop and for once to avoid multiple writes to the database
+                    dbContext.SaveChanges();
+                }
+
+                // count the rented equipments from the database
+                var rentedEquipments = dbContext.Equipment
+                    .Include(i => i.AvailabilityStatus)
+                    .Where(r => (isAdmin || r.UserId == currentUserId) &&
+                                r.AvailabilityStatus.AvailabilityStatusId == rentedStatus.AvailabilityStatusId)
+                    .Count();
+
+                // set all the labels to the values fetched from the database
+                lblTotalIncome.Text = totalIncome.ToString();
+                lblAverageRentalPeriod.Text = averageRentalPeriod.ToString();
+                lblAvailableEquipments.Text = availableEquipments.ToString();
+                lblTodayRentalRequest.Text = totalRentalRequest.ToString();
+                lblLastMonthRentals.Text = totalRentalsOfTheMonth.ToString();
+                lblCurrentlyRented.Text = rentedEquipments.ToString();
+            }
+
+            catch (Exception ex)
+             {
+
+                    //log the exception using the auditlogger
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                    //print the exception message 
+                    MessageBox.Show("An Error has occured: " + ex.Message);
+
+             }
 
 
         }
+
+
+        //Navigation bar code 
 
         private void btnRefreshStatistics_Click(object sender, EventArgs e)
         {

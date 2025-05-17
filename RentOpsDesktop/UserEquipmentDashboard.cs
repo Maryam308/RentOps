@@ -1,4 +1,5 @@
 ﻿using RentOpsObjects.Model;
+using RentOpsObjects.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,15 +15,17 @@ namespace RentOpsDesktop
     public partial class UserEquipmentDashboard : Form
     {
         RentOpsDBContext dbContext;
-        int userId;
+        AuditLogger auditLogger;
+        int currentUserId;
 
         public UserEquipmentDashboard()
         {
             InitializeComponent();
             dbContext = new RentOpsDBContext();
+            auditLogger = new AuditLogger(dbContext);
 
             //fetch the user id from global
-            int userId = Global.EmployeeID;
+            currentUserId = Global.EmployeeID;
 
         }
 
@@ -55,7 +58,7 @@ namespace RentOpsDesktop
             {
 
                 // Fetch the filtered equipment list and select relevant fields
-                var equipmentList = dbContext.Equipment.Where(e => e.UserId == userId).Select(e => new
+                var equipmentList = dbContext.Equipment.Where(e => e.UserId == currentUserId).Select(e => new
                 {
                     EquipmentID = e.EquipmentId, // Select the equipment ID
                     EquipmentName = e.EquipmentName, // Select the equipment name
@@ -83,6 +86,8 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 MessageBox.Show("Error: " + ex.Message);
             }
 
@@ -99,12 +104,12 @@ namespace RentOpsDesktop
             {
 
                 // Fetch the total number of current user equipment 
-                var totalEquipment = dbContext.Equipment.Where(e => e.UserId == userId).Count();
+                var totalEquipment = dbContext.Equipment.Where(e => e.UserId == currentUserId).Count();
 
 
                 //fetch frequently rented equipment object
                 var frequentlyRentedEquipment = dbContext.RentalTransactions
-                    .Where(rt => rt.EmployeeId == userId)
+                    .Where(rt => rt.EmployeeId == currentUserId)
                     .GroupBy(rt => rt.EquipmentId)
                     .Select(g => new
                     {
@@ -121,14 +126,21 @@ namespace RentOpsDesktop
                 //fetch the frequently rented equipment name
                 var frequentlyRentedEquipmentName = frequentlyRentedEquipment != null ? frequentlyRentedEquipment.EquipmentName : "";
 
-                //fech the number of the damaged equipment
-                var damagedEquipment = dbContext.Equipment.Where(e => e.UserId == userId)
-                    .Count(e => e.ConditionStatusId == 2); // Assuming 2 is the ID for damaged status
+                //fetch the condition status 
+                ConditionStatus damaged = dbContext.ConditionStatuses.Where(cs => cs.ConditionStatusTitle == "Requires Maintenance").FirstOrDefault();
 
+
+                //fech the number of the damaged equipment
+                var damagedEquipment = dbContext.Equipment.Where(e => e.UserId == currentUserId)
+                    .Count(e => e.ConditionStatusId == damaged.ConditionStatusId); // Assuming 2 is the ID for damaged status
+
+
+                //fetch the condition status id
+                AvailabilityStatus availableStatusId = dbContext.AvailabilityStatuses.Where(a => a.AvailabilityStatusTitle == "Available").FirstOrDefault();
 
                 // Fetch the total number of available equipment
-                var availableEquipment = dbContext.Equipment.Where(e => e.UserId == userId)
-                    .Count(e => e.AvailabilityStatusId == 1); // Assuming 1 is the ID for available status
+                var availableEquipment = dbContext.Equipment.Where(e => e.UserId == currentUserId)
+                    .Count(e => e.AvailabilityStatusId == availableStatusId.AvailabilityStatusId); 
 
 
                 //display the statistics in the labels
@@ -141,6 +153,8 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
                 MessageBox.Show("Error: " + ex.Message);
             }
 
