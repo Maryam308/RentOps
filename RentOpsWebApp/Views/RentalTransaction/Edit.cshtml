@@ -1,8 +1,417 @@
-﻿
+﻿@using RentOpsWebApp.ViewModels
+@using RentOpsObjects.Model
+@model RentalTransactionViewModel
+
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!--in this view the transaction details are going -->
+<!--in this view the managers and the admin are going to be able to (what i need fetched is the transaction its requerst / external customer / user and its payment) -->
 
+
+
+<div class="container p-3 px-0">
+    <div class="card border-light mt-5 mb-3 w-100">
+        <div class="card-header">
+            <h3>Requester Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <!-- Requester Details --> <!--this could be either the request-userid or the user id or the customer id inside this section also mention the rented equipment (either by transaction-equipment or by transaction-request-equipment)-->
+                @{
+                    //check if the rental request is from an external customer or a user
+                    bool isExternalCustomer =  Model.rentalTransaction?.CustomerId != null;
+                    bool isUser = Model.rentalTransaction?.UserId != null;
+                    bool isRentalRequest = Model.rentalTransaction?.RentalRequest != null && Model.rentalTransaction?.User == null;
+
+                    //fetdch the equipment name
+                    string equipmentName = string.Empty;
+
+                    //check if the rental request is from an external customer or a user
+                    if (isRentalRequest)
+                    {
+                        //if the rental request is from the website then display the request id and requester id and name
+                        equipmentName = Model.rentalTransaction?.RentalRequest?.Equipment?.EquipmentName;
+
+                        //if it is a rental request then display its id and requester id and name
+                        <div class="form-group col-md-6 mb-3">
+                            this is a request
+                            <label disabled asp-for="rentalTransaction.RentalRequestId" class="form-label">Rental Request ID</label>
+                            <input disabled asp-for="rentalTransaction.RentalRequestId" class="form-control" readonly="readonly" />
+                        </div>
+
+                        <div class="form-group col-md-6 mb-3">
+                            <label disabled asp-for="rentalTransaction.RentalRequestId" class="form-label">Rental Request ID</label>
+                            <input disabled asp-for="rentalTransaction.RentalRequestId" class="form-control" readonly="readonly" />
+                        </div>
+
+                        <div class="form-group col-md-6 mb-3">
+                            <label disabled asp-for="rentalTransaction.RentalRequest.User.FirstName" class="form-label">First Name</label>
+                            <input disabled asp-for="rentalTransaction.RentalRequest.User.FirstName" class="form-control" readonly="readonly" />
+                        </div>
+
+                        <div class="form-group col-md-6 mb-3">
+                            <label disabled asp-for="rentalTransaction.RentalRequest.User.LastName" class="form-label">Last Name</label>
+                            <input disabled asp-for="rentalTransaction.RentalRequest.User.LastName" class="form-control" readonly="readonly" />
+                        </div>
+
+                        //add the request data including the dates and the total cost
+                        <div class="form-group col-md-6 mb-3">
+                            <label disabled asp-for="rentalTransaction.RentalRequest.RentalRequestTimestamp" class="form-label">Requested at: </label>
+                            <input disabled asp-for="rentalTransaction.RentalRequest.RentalRequestTimestamp" class="form-control" readonly="readonly" />
+                        </div>
+
+                        <!-- Rental Request Start Date -->
+                        <div class="form-group mb-3">
+                            <label disabled asp-for="rentalTransaction.RentalRequest.RentalStartDate" class="form-label">Pickup Date</label>
+                            <input disabled asp-for="rentalTransaction.RentalRequest.RentalStartDate" class="form-control" type="date" id="PickupDate" />
+
+                        </div>
+
+                        <!-- Rental Request End Date -->
+                        <div class="form-group mb-3">
+                            <label disabled asp-for="rentalTransaction.RentalRequest.RentalReturnDate" class="form-label">Return Date</label>
+                            <input disabled asp-for="rentalTransaction.RentalRequest.RentalReturnDate" class="form-control" type="date" id="ReturnDate" />
+                        </div>
+
+                        <!-- Total Cost -->
+                        <div class="form-group mb-3">
+                            <label disabled asp-for="rentalTransaction.RentalRequest.RentalTotalCost" class="form-label">Total Cost</label>
+                            <input disabled asp-for="rentalTransaction.RentalRequest.RentalTotalCost" type="text" class="form-control"  name="TotalCost" />
+                            
+                        </div>
+
+
+
+
+                    }
+                    else
+                    {
+                        equipmentName = Model.rentalTransaction.Equipment?.EquipmentName;
+
+                        //if the request is not from the website then display the customer id and name
+
+                        if (isExternalCustomer)
+                        {
+
+                            <div class="form-group col-md-6 mb-3">
+                                <h6>This transaction is processed from the desktop app for an External Customer</h6>
+                            </div>
+
+                            <div class="form-group col-md-6 mb-3">
+                                <label disabled asp-for="rentalTransaction.CustomerId" class="form-label">Customer ID</label>
+                                <input disabled asp-for="rentalTransaction.CustomerId" class="form-control" readonly="readonly" />
+                            </div>
+
+                            <div class="form-group col-md-6 mb-3">
+                                <label disabled asp-for="rentalTransaction.Customer.FirstName" class="form-label">First Name</label>
+                                <input disabled asp-for="rentalTransaction.Customer.FirstName" class="form-control" readonly="readonly" />
+                            </div>
+
+                            <div class="form-group col-md-6 mb-3">
+                                <label disabled asp-for="rentalTransaction.Customer.LastName" class="form-label">Last Name</label>
+                                <input disabled asp-for="rentalTransaction.Customer.LastName" class="form-control" readonly="readonly" />
+                            </div>
+
+
+                        }
+
+                        if (isUser)
+                        {
+
+                            <div class="form-group col-md-6 mb-3">                        
+                                <h6>This transaction is processed from the desktop app for a website user.</h6>
+                            </div>
+
+                            <div class="form-group col-md-6 mb-3">
+                                <label disabled asp-for="rentalTransaction.UserId" class="form-label">User ID</label>
+                                <input disabled asp-for="rentalTransaction.UserId" class="form-control" readonly="readonly" />
+                            </div>
+
+                            <div class="form-group col-md-6 mb-3">
+                                <label disabled asp-for="rentalTransaction.User.FirstName" class="form-label">First Name</label>
+                                <input disabled asp-for="rentalTransaction.User.FirstName" class="form-control" readonly="readonly" />
+                            </div>
+
+                            <div class="form-group col-md-6 mb-3">
+                                <label disabled asp-for="rentalTransaction.User.LastName" class="form-label">Last Name</label>
+                                <input disabled asp-for="rentalTransaction.User.LastName" class="form-control" readonly="readonly" />
+                            </div>
+
+                        }
+                    }
+
+                    //the payment and deposite and dates are common in the rental transaction in the three casses
+
+
+                }
+
+
+            </div>
+        </div>
+
+    </div>
+
+    <!--Transaction Details including dates and payment details
+    -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Rental Transaction Details</h3>
+            <h4>Meke sure to save your changes.</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Update" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <!--Add the rental transaction id in a hidden field-->
+                <input type="hidden" name="RentalTransaction.RentalTransactionId" value="@Model.rentalTransaction.RentalTransactionId" />
+
+                <!-- deposite -->
+                <div class="form-group mb-3">
+                    <label  asp-for="rentalTransaction.Deposit" class="form-label">Deposit</label>
+                    <input  asp-for="rentalTransaction.Deposit" class="form-control" id="Deposit" />
+
+                </div>
+
+                <!-- Pickup Date -->
+                <div class="form-group mb-3">
+                    <label  asp-for="rentalTransaction.PickupDate"  class="form-label">Pickup Date</label>
+					<input asp-for="rentalTransaction.PickupDate"  class="form-control" type="date" id="PickupDate" />
+
+                </div>
+
+                <!-- Rental Request End Date -->
+                <div class="form-group mb-3">
+                    <label  asp-for="rentalTransaction.ReturnDate" class="form-label">Return Date</label>
+                    <input  asp-for="rentalTransaction.ReturnDate"  class="form-control" type="date" id="ReturnDate" />
+                </div>
+
+                <!-- .RentalFee" -->
+                <div class="form-group mb-3">
+                    <label asp-for="rentalTransaction.RentalFee" class="form-label">Total Cost</label>
+                    <input asp-for="rentalTransaction.RentalFee" type="text" class="form-control" id="TotalCost" name="TotalCost" />
+                    <input type="hidden" asp-for="rentalTransaction.RentalFee" id="HiddenTotalCost" />
+
+                </div>
+
+
+                <!--if the rental request status is not pending-->
+                @{
+                    bool isPaid = Model.rentalTransaction.PaymentId != null;
+                }
+
+                <!-- payment method and payment status -->
+                <div class="form-group mb-3">
+
+
+                    <h4>Payment Details</h4>
+
+                    @if (!isPaid)
+                    {
+                        //if the payment is not paid then add two select fields for the payment method and payment status
+                        <label asp-for="rentalTransaction.Payment.PaymentMethodId" class="form-label">Payment Method</label>
+                        <select asp-for="rentalTransaction.Payment.PaymentMethodId"
+                        asp-items="@Model.PaymentMethod.Select(i => new SelectListItem { Text = i.PaymentMethodTitle, Value = i.PaymentMethodId.ToString() })"
+                        class="form-select">
+                            <option value="" disabled>-- Select Payment Method --</option>
+                        </select>
+                        <label asp-for="rentalTransaction.Payment.PaymentStatusId" class="form-label">Payment Method</label>
+                        <select asp-for="rentalTransaction.Payment.PaymentStatusId"
+                        asp-items="@Model.PaymentStatus.Select(i => new SelectListItem { Text = i.PaymentStatusTitle, Value = i.PaymentStatusId.ToString() })"
+                        class="form-select">
+                            <option value="" disabled>-- Select Payment Status --</option>
+                        </select>
+
+                    }
+                    else
+                    {
+                        //if the payment is paid then add two select fields for the payment method and payment status and disabled
+                        <label asp-for="rentalTransaction.Payment.PaymentMethodId" class="form-label">Payment Method</label>
+                        <select disabled asp-for="rentalTransaction.Payment.PaymentMethodId"
+                        asp-items="@Model.PaymentMethod.Select(i => new SelectListItem { Text = i.PaymentMethodTitle, Value = i.PaymentMethodId.ToString() })"
+                        class="form-select">
+                            <option value="" disabled>-- Select Payment Method --</option>
+                        </select>
+                        <label asp-for="rentalTransaction.Payment.PaymentStatusId" class="form-label">Payment Method</label>
+                        <select disabled asp-for="rentalTransaction.Payment.PaymentStatusId"
+                        asp-items="@Model.PaymentStatus.Select(i => new SelectListItem { Text = i.PaymentStatusTitle, Value = i.PaymentStatusId.ToString() })"
+                        class="form-select">
+                            <option value="" disabled>-- Select Payment Status --</option>
+                        </select>
+                    }
+
+                </div>
+
+
+
+                <!--An optional file upload for required rental agreements-->
+                @{
+                    // Variables to hold document IDs, names, and file paths
+                    int? rentalAgreementId = null;
+                    string rentalAgreementName = null;
+                    int? idVerificationId = null;
+                    string idVerificationName = null;
+
+                    // Find the rental agreement and ID verification documents
+                    foreach (Document document in Model.rentalTransaction.Documents)
+                    {
+                        if (document.FileTypeId == 4)
+                        {
+                            rentalAgreementId = document.DocumentId;
+                            rentalAgreementName = document.FileName;
+                        }
+                        if (document.FileTypeId == 5)
+                        {
+                            idVerificationId = document.DocumentId;
+                            idVerificationName = document.FileName;
+                        }
+                    }
+                }
+
+                <!-- Rental Agreement -->
+                <div class="mb-3">
+                    <label class="form-label">Rental Agreement (PDF)</label>
+                    <input asp-for="UploadedAgreement" class="form-control" type="file" accept=".pdf"
+                           onchange="updateFileName(this, 'rentalAgreementName', 'agreementIsModified')" />
+
+                    <span asp-validation-for="UploadedAgreement" class="text-danger"></span>
+					<strong id="rentalAgreementName" class="mt-3">
+						@(rentalAgreementName ?? "No file selected")
+					</strong>
+                    <!-- Show existing file info -->
+                    <div id="rentalAgreementSection">
+                        
+                        @if (rentalAgreementId != null)
+                        {
+                            <div class="mt-2">
+                                <a asp-controller="RentalTransaction" asp-action="Download" asp-route-id="@rentalAgreementId"
+                                   class="btn btn-outline-primary btn-sm" target="_blank">
+                                    Download
+                                </a>
+                                <button type="button" class="btn btn-outline-danger btn-sm ms-3"
+                                        onclick="removeFile('rentalAgreementSection', 'rentalAgreementName', 'agreementIsModified')">
+                                    Remove
+                                </button>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Hidden field to track removal -->
+                    <input type="hidden" asp-for="agreementIsModified" id="agreementIsModified" />
+                </div>
+
+                <!-- ID Verification -->
+                <div class="mb-3">
+                    <label class="form-label">ID Verification (PDF)</label>
+                    <input asp-for="UploadedIdVerification" class="form-control" type="file" accept=".pdf"
+                           onchange="updateFileName(this, 'idVerificationName', 'idVerificationIsModified')" />
+
+                    <span asp-validation-for="UploadedIdVerification" class="text-danger"></span>
+					
+                    <strong id="idVerificationName" class="mt-3">
+						@(idVerificationName ?? "No file selected")
+					</strong>
+
+                    <!-- Show existing file info -->
+                    <div id="idVerificationSection">
+                        
+                        @if (idVerificationId != null)
+                        {
+                            <div class="mt-2">
+                                <a asp-controller="RentalTransaction" asp-action="Download" asp-route-id="@idVerificationId"
+                                   class="btn btn-outline-primary btn-sm" target="_blank">
+                                    Download
+                                </a>
+                                <button type="button" class="btn btn-outline-danger btn-sm ms-3"
+                                        onclick="removeFile('idVerificationSection', 'idVerificationName', 'idVerificationIsModified')">
+                                    Remove
+                                </button>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Hidden field to track removal -->
+                    <input type="hidden" asp-for="idVerificationIsModified" id="idVerificationIsModified" />
+                </div>
+
+
+                <!--Add a Link to go back to the list without saving-->
+				<button type="submit" class="btn btn-primary" style="width:180px">Save Changes</button>
+
+                <!--Add a Link to go back to the list without saving-->
+                <a asp-controller="RentalTransaction" asp-action="RentalTransaction" class="btn btn-secondary" style="width:180px">Back to List</a>
+
+            </form>
+        </div>
+    </div>
+
+    @{
+        var price = Model.rentalTransaction.Equipment?.RentalPrice
+        ?? Model.rentalTransaction.RentalRequest?.Equipment?.RentalPrice
+        ?? 0;
+    }
+
+    <script>
+
+			// Function to calculate rental cost based on dates
+
+                document.addEventListener("DOMContentLoaded", function () {
+            const startDate = document.getElementById("PickupDate");
+            const endDate = document.getElementById("ReturnDate");
+            const totalCost = document.getElementById("TotalCost");
+            const hiddenTotalCost = document.getElementById("HiddenTotalCost");
+            const rentalPrice = parseFloat('@price');
+
+            function calculateCost() {
+                if (startDate.value && endDate.value) {
+                    const start = new Date(startDate.value);
+                    const end = new Date(endDate.value);
+                    const days = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+
+                    if (days > 0) {
+                        let cost = (days * rentalPrice).toFixed(2);
+                        totalCost.value = cost;
+                        hiddenTotalCost.value = cost;
+                    } else {
+                        totalCost.value = "Invalid dates";
+                        hiddenTotalCost.value = "";
+                    }
+                }
+            }
+
+            startDate.addEventListener("change", calculateCost);
+            endDate.addEventListener("change", calculateCost);
+        });
+
+
+        function updateFileName(inputElement, labelId, flagId) {
+            if (inputElement.files.length > 0) {
+                const fileName = inputElement.files[0].name;
+
+                // Update displayed file name
+                document.getElementById(labelId).innerText = fileName;
+
+                // Set modification flag
+                document.getElementById(flagId).value = "true";
+
+                // Show the section again (if previously hidden)
+                const sectionId = labelId.includes("rentalAgreement") ? "rentalAgreementSection" : "idVerificationSection";
+                document.getElementById(sectionId).style.display = "block";
+            }
+
+        }
+
+    function removeFile(sectionId, labelId, flagId) {
+        document.getElementById(sectionId).style.display = "none"; // Hide section visually
+        document.getElementById(labelId).innerText = "No file selected";
+        document.getElementById(flagId).value = "true"; // Mark as removed
+    }
+    </script>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
