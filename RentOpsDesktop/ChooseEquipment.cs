@@ -24,7 +24,7 @@ namespace RentOpsDesktop
             InitializeComponent();
             context = new RentOpsDBContext();
             logger = new AuditLogger(context); //create a logger object
-            currentUserId = Global.EmployeeID;
+            currentUserId = Global.user.UserId;
             RefreshEquipmentGridview();
 
         }
@@ -67,7 +67,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 // Show an error message
                 MessageBox.Show("An error occurred while loading the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -142,7 +142,7 @@ namespace RentOpsDesktop
                     catch (Exception ex)
                     {
                         // log the error
-                        logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                        logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                         
                         // Show an error message
                         MessageBox.Show("Error: " + ex.Message);
@@ -153,7 +153,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 
                 // Show an error message
                 MessageBox.Show("An error occurred while loading the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

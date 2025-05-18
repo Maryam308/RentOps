@@ -226,7 +226,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 // show the error message box to the user
                 MessageBox.Show($"An error occurred while saving the return record: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -283,7 +283,7 @@ Uploaded Successfully";
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 // show the error message box to the user
                 MessageBox.Show($"An error occurred while uploading the document: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

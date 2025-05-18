@@ -77,7 +77,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 // Show error message if an exception occurs
                 MessageBox.Show("Error: " + ex.Message);
             }
@@ -180,7 +180,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 // Show error message if an exception occurs
                 MessageBox.Show("Error: " + ex.Message);
             }
@@ -240,7 +240,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 // Show error message if an exception occurs
                 MessageBox.Show("Error: " + ex.Message);
             }

@@ -72,7 +72,7 @@ namespace RentOpsDesktop
             } catch(Exception ex) {
 
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //show message indicating the error
                 MessageBox.Show("An Error has occured: " + ex.Message);
 
@@ -112,7 +112,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 MessageBox.Show("Error: " + ex.Message);
             }
@@ -128,7 +128,7 @@ namespace RentOpsDesktop
                 requestToUpdate.RentalRequestStatusId = Convert.ToInt32(lstStatus.SelectedValue);
 
                 //log the changes using the audit logger
-                auditLogger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+                auditLogger.TrackChanges(currentUserId, Global.sourceId);
 
                 // Save changes to the database
                 context.SaveChanges(); // Ensure you save changes to persist the update
@@ -141,7 +141,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 MessageBox.Show("Error updating rental request status: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

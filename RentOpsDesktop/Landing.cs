@@ -40,8 +40,13 @@ namespace RentOpsDesktop
                     .Select(s => s.SourceId)
                     .FirstOrDefault(); // Retrieves the first matching sourceId or default (0 if not found)
 
-                //assign the source to the global
-                Global.sourceId = sourceId;
+                //assign the source to the global if not zero
+                if(sourceId != 0)
+                {
+                    // override the sourceId
+                        Global.sourceId = sourceId;
+                }
+                
             }
             catch (Exception ex)
             {

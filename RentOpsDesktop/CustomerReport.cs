@@ -31,7 +31,7 @@ namespace RentOpsDesktop
             InitializeComponent();
             dbContext = new RentOpsDBContext();
             logger = new AuditLogger(dbContext); //create a logger object
-            currentUserId = Global.EmployeeID;
+            currentUserId = Global.user.UserId;
         }
 
         private void btnGenerateCustomerReport_Click(object sender, EventArgs e)
@@ -42,11 +42,9 @@ namespace RentOpsDesktop
                 //will generate pdf report about customers
 
                 //fetch current employee name 
-                //int employeeID = Global.EmployeeID;
-                //var employee = dbContext.Users.Find(employeeID);
-                //string employeeName = employee.FirstName + " " + employee.LastName;
+                
 
-                int employeeID = 2;
+                int employeeID = currentUserId;
                 string employeeName = "mohammed";
 
                 //create a string for the report header
@@ -265,7 +263,7 @@ Number of Lost Returns: {numberOfLostReturns}
             catch (Exception ex)
             {
                 // Log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace, 1); // Log the error
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId); // Log the error
 
                 // Show error message to the user
                 MessageBox.Show("An error occurred while generating the report. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

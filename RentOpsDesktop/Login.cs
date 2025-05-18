@@ -95,7 +95,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log unexpected error during login process
-                logger.LogException(null, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(null, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 //show error message
                 MessageBox.Show("Unexpected error occurred during login: " + ex.Message, "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -141,7 +141,7 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
-                logger.LogException(null, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(null, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 MessageBox.Show("Error from verifying " + ex);
                 return false;
             }
@@ -166,7 +166,7 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
-                logger.LogException(null, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(null, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 MessageBox.Show("Error from configuring services");
             }
         }

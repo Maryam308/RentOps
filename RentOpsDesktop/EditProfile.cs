@@ -31,7 +31,7 @@ namespace RentOpsDesktop
             InitializeComponent();
             dbContext = new RentOpsDBContext();
             logger = new AuditLogger(dbContext); //create a logger object
-            currentUserId = Global.EmployeeID;
+            currentUserId = Global.user.UserId;
         }
 
         private void btnSaveProfile_Click(object sender, EventArgs e)
@@ -52,7 +52,7 @@ namespace RentOpsDesktop
 
             try
             {
-                var userId = Global.EmployeeID; // Get the global employee ID
+                var userId = Global.user.UserId; // Get the global employee ID
                 var employee = dbContext.Users.FirstOrDefault(e => e.UserId == userId);
 
                 if (employee == null)
@@ -70,7 +70,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 //show the error message
                 MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -96,7 +96,7 @@ namespace RentOpsDesktop
                 }
 
                 // Fetch the employee object from the database
-                User employee = dbContext.Users.Find(Global.EmployeeID);
+                User employee = dbContext.Users.Find(Global.user.UserId);
 
                 // Check if the data has changed
                 bool isFirstNameChanged = employee.FirstName != txtFirstName.Text.Trim();
@@ -127,7 +127,7 @@ namespace RentOpsDesktop
                 dbContext.Users.Update(employee);
                 
                 // Track changes 
-                logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                 //save the changes
                 dbContext.SaveChanges();
@@ -137,7 +137,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 //show the error message
                 MessageBox.Show("An error occurred while saving changes: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

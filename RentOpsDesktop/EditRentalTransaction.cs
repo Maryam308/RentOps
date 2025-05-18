@@ -36,7 +36,7 @@ namespace RentOpsDesktop
             dbContext = new RentOpsDBContext();
             this.rentalTransactionToEdit = rentalTransactionToEdit;
             logger = new AuditLogger(dbContext);
-            currentUserId = Global.EmployeeID;
+            currentUserId = Global.user.UserId;
 
         }
 
@@ -168,7 +168,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 //show the error message
                 MessageBox.Show("An error occurred while loading the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -239,8 +239,8 @@ namespace RentOpsDesktop
                     return; // Prevent save
                 }
 
-                //try
-                //{
+                try
+                {
                     // Update the record
                     rentalTransactionToEdit.RentalFee = Convert.ToDouble(txtRentalFee.Text);
                     rentalTransactionToEdit.Deposit = Convert.ToDouble(txtDeposit.Text);
@@ -268,14 +268,48 @@ namespace RentOpsDesktop
                     }
 
 
-                //checkif the uploaded files is modified then if so add the new files to the rental transaction
-                if(theUploadForm.isAgreementModified == true)
+
+
+
+                // Handle Agreement Document
+                var trackedTransaction = dbContext.RentalTransactions
+    .Include(rt => rt.Documents)
+    .FirstOrDefault(rt => rt.RentalTransactionId == rentalTransactionToEdit.RentalTransactionId);
+
+                if (theUploadForm != null && theUploadForm.isAgreementModified)
                 {
-                    rentalTransactionToEdit.Documents.Add(theUploadForm.agreement);
-                }if (theUploadForm.isIDModified == true)
-                {
-                    rentalTransactionToEdit.Documents.Add(theUploadForm.idVerification);
+                    if (agreement == null)
+                    {
+                        var oldAgreement = trackedTransaction.Documents.FirstOrDefault(d => d.FileTypeId == 4);
+                        if (oldAgreement != null)
+                            trackedTransaction.Documents.Remove(oldAgreement);
+                    }
+                    else if (!trackedTransaction.Documents.Contains(agreement))
+                    {
+                        dbContext.Documents.Add(agreement);
+                        dbContext.SaveChanges();
+                        trackedTransaction.Documents.Add(agreement);
+                    }
                 }
+
+                if (theUploadForm != null && theUploadForm.isIDModified)
+                {
+                    if (idVerification == null)
+                    {
+                        var oldID = trackedTransaction.Documents.FirstOrDefault(d => d.FileTypeId == 5);
+                        if (oldID != null)
+                            trackedTransaction.Documents.Remove(oldID);
+                    }
+                    else if (!trackedTransaction.Documents.Contains(idVerification))
+                    {
+                        dbContext.Documents.Add(idVerification);
+                        dbContext.SaveChanges();
+                        trackedTransaction.Documents.Add(idVerification);
+                    }
+                }
+
+                dbContext.SaveChanges();
+
 
 
                 //update the rental transaction in the dbcontext
@@ -287,7 +321,7 @@ namespace RentOpsDesktop
 
 
                 //log the changes
-                logger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+                logger.TrackChanges(currentUserId, Global.sourceId);
 
                     // Save the final updates (transaction and optionally the link to payment)
                     dbContext.SaveChanges();
@@ -295,16 +329,16 @@ namespace RentOpsDesktop
                     MessageBox.Show("The rental transaction has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     this.DialogResult = DialogResult.OK;
-                    this.Close();
-            //}
-            //    catch (Exception ex)
-            //    {
-            //    // log the exception
-            //    logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
+                this.Close();
+            }
+                    catch (Exception ex)
+                    {
+                // log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId);
 
-            //    // show the error message
-            //    MessageBox.Show("An error occurred while updating the transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
+                // show the error message
+                MessageBox.Show("An error occurred while updating the transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
             else
             {
@@ -378,84 +412,27 @@ namespace RentOpsDesktop
 
                 // Show the UploadTransactionDocuments form as a dialog
                 UploadTransactionDocuments uploadForm = new UploadTransactionDocuments(agreement, idVerification); 
-                theUploadForm = uploadForm;
+                
                 DialogResult result = uploadForm.ShowDialog();
 
                 if (result == DialogResult.OK)
                 {
 
-                    if (uploadForm.isAgreementModified == true)
-                    {
+                    // Only update local variables, do not touch dbContext or rentalTransactionToEdit.Documents here
+                    if (uploadForm.isAgreementModified)
+                        agreement = uploadForm.agreement;
 
-                        if (agreement != null)
-                        {
-
-                            //remove the old agreement 
-                            rentalTransactionToEdit.Documents.Remove(agreement);
-
-                            agreement = uploadForm.agreement;
-
-                            if (agreement != null)
-                            {
-                                rentalTransactionToEdit.Documents.Add(agreement);
-                            }
-
-                        }
-                        else
-                        {
-
-                            agreement = uploadForm.agreement;
-
-                            if (agreement != null)
-                            {
-                                rentalTransactionToEdit.Documents.Add(agreement);
-                            }
-
-
-                        }
-                        if (idVerification != null)
-                        {
-
-                            //remove the old agreement 
-                            rentalTransactionToEdit.Documents.Remove(idVerification);
-
-                            idVerification = uploadForm.idVerification;
-
-                            if (idVerification != null)
-                            {
-                                rentalTransactionToEdit.Documents.Add(idVerification);
-                            }
-
-                        }
-                        else
-                        {
-
-                            agreement = uploadForm.agreement;
-
-                            if (idVerification != null)
-                            {
-                                rentalTransactionToEdit.Documents.Add(idVerification);
-                            }
-
-
-                        }
-
-
-                    }
-
-                    if (uploadForm.isIDModified == true)
-                    {
+                    if (uploadForm.isIDModified)
                         idVerification = uploadForm.idVerification;
+                    
+                    theUploadForm = uploadForm;
 
-
-
-                    }
                 }
             }
             catch (Exception ex)
             {
                 // log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId);
               
                 // show a the error message
                 MessageBox.Show("An error occurred while updating the transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

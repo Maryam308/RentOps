@@ -9,13 +9,11 @@ namespace RentOpsDesktop
 {
     internal class Global
     {
-        internal static int EmployeeID = 1;
-
         internal static User user;
 
         internal static string RoleName;
 
-        internal static int? sourceId = 2;
+        internal static int sourceId = 2;
 
     }
 }

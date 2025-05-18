@@ -70,7 +70,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 //show the error message
                 MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -158,7 +158,7 @@ namespace RentOpsDesktop
                     dbContext.Entry(returnRecordToEdit).State = EntityState.Modified;
 
                     //log the changes
-                    logger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+                    logger.TrackChanges(currentUserId, Global.sourceId);
 
                     // Save all changes to the database
                     dbContext.SaveChanges();
@@ -178,7 +178,7 @@ namespace RentOpsDesktop
             }
             catch (Exception ex)
             {
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId);
                 MessageBox.Show("An error occurred while updating the return record. Please try again.\n\nDetails: " + ex.Message, "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 }
@@ -216,7 +216,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // Log the error 
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId);
 
                 // show the error message
                 MessageBox.Show("An error occurred while loading the damage report.\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -277,7 +277,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId);
 
                 // show the error message
                 MessageBox.Show("An error occurred while uploading the document:\n" + ex.Message, "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -307,7 +307,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId );
                 // show the error message
                 MessageBox.Show("An error occurred while downloading the document:\n" + ex.Message, "Download Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -326,7 +326,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId );
 
                 // show the error message
                 MessageBox.Show("An error occurred while removing the document:\n" + ex.Message, "Remove Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

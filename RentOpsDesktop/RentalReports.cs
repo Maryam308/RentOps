@@ -293,7 +293,7 @@ Payment method: {(r.PaymentId != null ? r.Payment.PaymentMethod.PaymentMethodTit
                 dbContext.Documents.Add(newDocument);
 
                 //track the changes and add a log
-                auditLogger.TrackChanges(employeeID, Global.sourceId ?? 2);
+                auditLogger.TrackChanges(employeeID, Global.sourceId);
 
                 dbContext.SaveChanges();
 
@@ -312,7 +312,7 @@ Payment method: {(r.PaymentId != null ? r.Payment.PaymentMethod.PaymentMethodTit
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //print the exception message 
                 MessageBox.Show($"An error occurred: {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -372,7 +372,7 @@ Payment method: {(r.PaymentId != null ? r.Payment.PaymentMethod.PaymentMethodTit
                     catch (Exception ex)
                     {
                         //log the exception using the auditlogger
-                        auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                        auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                         //print the exception message 
                         MessageBox.Show($"Error opening file: {ex.Message}");
                     }
