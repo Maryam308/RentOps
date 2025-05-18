@@ -8,6 +8,8 @@ namespace RentOpsWebApp.ViewModels
 
         public RentalTransaction? rentalTransaction { get; set; }
 
+        public Payment? RentalTransctionPayment { get; set; }
+
         public IEnumerable<Equipment>? equipmentTitle { get; set; }
 
         public IEnumerable<PaymentMethod>? PaymentMethod { get; set; }
