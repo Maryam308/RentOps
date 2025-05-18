@@ -57,6 +57,10 @@ namespace RentOpsWebApp.Controllers
                 .ToList();
 
 
+            var transactionIdsWithFeedback = _context.Feedbacks
+            .Select(f => f.RentalTransactionId)
+            .Distinct()
+            .ToList();
 
 
 
@@ -100,10 +104,73 @@ namespace RentOpsWebApp.Controllers
             {
                 returnRecords = returnRecords,
                 conditionStatuses = _context.ConditionStatuses.ToList(),
+                RentalTransactionIdsWithFeedback = transactionIdsWithFeedback,
             };
 
             return View(returnRecordViewModel);
         }
+
+        [HttpGet]
+        public IActionResult AddFeedback(int rentalTransactionId)
+        {
+            var transaction = _context.RentalTransactions
+                .Include(t => t.Equipment)
+                .ThenInclude(e => e.EquipmentCategory)
+                .FirstOrDefault(t => t.RentalTransactionId == rentalTransactionId);
+
+            if (transaction == null)
+                return NotFound();
+
+            var viewModel = new ReturnRecordViewModel
+            {
+                NewFeedback = new Feedback
+                {
+                    RentalTransactionId = rentalTransactionId // link to correct transaction
+                },
+                Equipment = transaction.Equipment // for display only
+            };
+
+            return View("AddFeedback", viewModel);
+        }
+
+
+        [HttpPost]
+        public IActionResult AddFeedback(ReturnRecordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.NewFeedback.FeedbackTimestamp = DateTime.Now;
+                model.NewFeedback.IsHidden = false;
+
+                _context.Feedbacks.Add(model.NewFeedback);
+                _context.SaveChanges();
+
+                //Find the return record for this transaction to redirect to details view
+                var returnRecord = _context.ReturnRecords
+                    .FirstOrDefault(r => r.RentalTransactionId == model.NewFeedback.RentalTransactionId);
+
+                if (returnRecord != null)
+                {
+                    TempData["CreateSuccess"] = "Feedback added successfully!";
+                    return RedirectToAction("MyReturnRecord", new { id = returnRecord.ReturnRecordId });
+                }
+
+                return RedirectToAction("MyReturnRecord");
+            }
+
+            // If validation fails, re-fetch equipment to redisplay
+            model.Equipment = _context.RentalTransactions
+                .Include(rt => rt.Equipment)
+                .ThenInclude(e => e.EquipmentCategory)
+                .Where(rt => rt.RentalTransactionId == model.NewFeedback.RentalTransactionId)
+                .Select(rt => rt.Equipment)
+                .FirstOrDefault();
+
+            return View(model);
+        }
+
+
+
 
     }
 }
