@@ -16,12 +16,14 @@ public partial class Feedback
     [Column("feedbackTimestamp", TypeName = "datetime")]
     public DateTime FeedbackTimestamp { get; set; }
 
+    [Required(ErrorMessage = "Please enter a comment.")]
     [Column("commentText")]
     [StringLength(300)]
     public string? CommentText { get; set; }
 
+    [Required(ErrorMessage = "Please select a rating.")]
     [Column("rating")]
-    public int Rating { get; set; }
+    public int? Rating { get; set; }
 
     [Column("rentalTransactionID")]
     public int RentalTransactionId { get; set; }
@@ -32,4 +34,6 @@ public partial class Feedback
     [ForeignKey("RentalTransactionId")]
     [InverseProperty("Feedbacks")]
     public virtual RentalTransaction? RentalTransaction { get; set; } //= null!;
+
+
 }

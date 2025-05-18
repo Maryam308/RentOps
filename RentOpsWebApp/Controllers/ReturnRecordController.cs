@@ -343,22 +343,7 @@ namespace RentOpsWebApp.Controllers
 
         }
 
-        [HttpPost]
-        public IActionResult AddFeedback(Feedback feedback)
-        {
-            if (ModelState.IsValid)
-            {
-                feedback.FeedbackTimestamp = DateTime.Now; // Set timestamp
-                feedback.IsHidden = false; // Not hidden by default
 
-                _context.Feedbacks.Add(feedback);
-                _context.SaveChanges();
-
-                return RedirectToAction("ReturnRecord"); // Redirect to appropriate page
-            }
-
-            return View(feedback); // Return to form if validation fails
-        }
 
 
 

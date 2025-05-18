@@ -80,7 +80,7 @@
 	{
 		<table class="table table-striped">
 			<thead>
-				<tr class="text-center">
+				<tr class="text-center table-primary" >
 					<th>Return Record ID</th>
 					<th>Rental Transaction ID</th>
 					<th>Actual Return Date</th>
@@ -104,7 +104,13 @@
 						<td>@record.ReturnCondition.ConditionStatusTitle</td>
 						<td>
 							<a asp-action="ReturnRecordDetails" asp-route-id="@record.ReturnRecordId" class="btn btn-primary">View Details</a>
-							
+							<a asp-action="AddFeedback"
+							   asp-controller="MyReturnRecord"
+							   asp-route-rentalTransactionId="@record.RentalTransactionId"
+							   class="btn @(Model.RentalTransactionIdsWithFeedback.Contains(record.RentalTransactionId) ? "btn-secondary disabled" : "btn-primary")">
+								Add Feedback
+							</a>
+
 						</td>
 					</tr>
 				}
