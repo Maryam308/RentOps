@@ -80,10 +80,28 @@ namespace RentOpsWebApp.Controllers
         //navigating to the create page
         public IActionResult Create()
         {
+
+            //fetch only the rental transactions without return records
+            //save the ids of the rental transactions that has a return record in a list
+            List<int> rentalTransactionIds = new List<int>();
+
+            //loop through the return records and add the ids of the transactions to the list
+            var returnRecords = _context.ReturnRecords.ToList();
+            foreach (var returnRecord in returnRecords)
+            {
+                rentalTransactionIds.Add(returnRecord.RentalTransactionId);
+            }
+
+            // Get all rental transactions that are not in the list
+            List<RentalTransaction> notReturnedRentalTransactions = _context.RentalTransactions
+                .Where(x => !rentalTransactionIds.Contains(x.RentalTransactionId))
+                .ToList();
+
+
             var returnRecordViewModel = new ReturnRecordViewModel
             {
                 conditionStatuses = _context.ConditionStatuses.ToList(),
-                rentalTransactions = _context.RentalTransactions.ToList(),
+                rentalTransactions = notReturnedRentalTransactions,
             };
             return View(returnRecordViewModel);
         }
@@ -91,7 +109,7 @@ namespace RentOpsWebApp.Controllers
 
 
 
-        // Fix for CS1983 and CS0161: Update the method signature to return Task<IActionResult> and ensure all code paths return a value.
+        
         [HttpPost]
         public async Task<IActionResult> Create(ReturnRecordViewModel model)
         {
