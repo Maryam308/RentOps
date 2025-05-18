@@ -25,7 +25,7 @@ namespace RentOpsDesktop
 
         AuditLogger auditLogger;
         RentOpsDBContext dbContext;
-        int currentUserId = Global.user.UserId;
+        int currentUserId = 1; //Global.user.UserId;
 
 
         public UploadTransactionDocuments()
@@ -87,8 +87,8 @@ namespace RentOpsDesktop
 
         private void btnUploadIDVerificationDocuments_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
                 openFileDialog.Title = "Select a PDF Document";
@@ -106,16 +106,14 @@ namespace RentOpsDesktop
                         return;
                     }
 
-                    //fetch the file type id for the idverification
-                    FileType? fileTypeIdVerification = (FileType)dbContext.FileTypes.Where(ft => ft.FileTypeTitle == "ID Verification");        
-                    int fileTypeId = fileTypeIdVerification.FileTypeId ; 
+
 
                     idVerification = new Document
                     {
                         UserId = currentUserId,
                         FileName = fileName,
                         UploadDate = DateTime.Now,
-                        FileTypeId = fileTypeId,
+                        FileTypeId = 5,
                         StoragePath = filePath, // Optional
                         FileData = fileData
                     };
@@ -133,14 +131,14 @@ Uploaded Successfully";
 
 
                 }
-            }
-            catch (Exception ex)
-            {
-                //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
-                //print the exception message 
-                MessageBox.Show("An error occurred while uploading the file:\n" + ex.Message, "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //log the exception using the auditlogger
+            //    auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+            //    //print the exception message 
+            //    MessageBox.Show("An error occurred while uploading the file:\n" + ex.Message, "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -170,9 +168,7 @@ Uploaded Successfully";
                         return;
                     }
 
-                    //fetch the file type id for the idverification
-                    FileType? fileTypeIdVerification = (FileType)dbContext.FileTypes.Where(ft => ft.FileTypeTitle == "Rental Agreement");
-                    int fileTypeId = fileTypeIdVerification.FileTypeId;
+
 
                     //create a new document for the agreement
                     agreement = new Document
@@ -180,7 +176,7 @@ Uploaded Successfully";
                         UserId = currentUserId,
                         FileName = fileName,
                         UploadDate = DateTime.Now,
-                        FileTypeId = fileTypeId,
+                        FileTypeId = 4,
                         StoragePath = filePath, // Optional
                         FileData = fileData
                     };

@@ -352,8 +352,8 @@ namespace RentOpsDesktop
                 //find the object 
                 RentalTransaction returnTransactionToEdit = dbContext.RentalTransactions.Find(selectedTransactionID);
 
-                try
-                {
+                //try
+                //{
                     // Pass the object to the edit screen constructor and show the form
                     EditRentalTransaction editRentalTransaction = new EditRentalTransaction(returnTransactionToEdit);
                     editRentalTransaction.StartPosition = FormStartPosition.CenterScreen; // Center the form
@@ -361,22 +361,22 @@ namespace RentOpsDesktop
 
                     if (editRentalTransaction.DialogResult == DialogResult.OK)
                     {
-                        dbContext.RentalTransactions.Update(editRentalTransaction.rentalTransactionToEdit);
+                        //dbContext.RentalTransactions.Update(editRentalTransaction.rentalTransactionToEdit);
 
                         //track changes 
-                        auditLogger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+                        //auditLogger.TrackChanges(currentUserId, Global.sourceId ?? 2);
 
-                        dbContext.SaveChanges(); // Save changes to the database
+                        //dbContext.SaveChanges(); // Save changes to the database
                         RefreshDataGridView(); // Refresh the DataGridVi
                     }
 
-                }
-                catch (Exception ex)
-                {
-                    //log the exception using the auditlogger
-                    auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
-                    MessageBox.Show("Error: " + ex.Message);
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    //log the exception using the auditlogger
+                //    auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                //    MessageBox.Show("Error: " + ex.Message);
+                //}
 
 
             }

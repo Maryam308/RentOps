@@ -21,6 +21,7 @@ namespace RentOpsDesktop
         int currentUserId;
         AuditLogger logger;
         internal RentalTransaction rentalTransactionToEdit;
+        UploadTransactionDocuments theUploadForm;
 
         Document agreement;
         Document idVerification;
@@ -52,6 +53,10 @@ namespace RentOpsDesktop
                 .Include(rt => rt.Documents)
                 .Include(rt => rt.RentalRequest)
                 .ThenInclude(rr => rr.User)
+                .Include(rt => rt.Payment)
+                .ThenInclude(p => p.PaymentStatus)
+                .Include(rt => rt.Payment)
+                .ThenInclude(p => p.PaymentMethod)
                 .Where(rt => rt.RentalTransactionId == rentalTransactionToEdit.RentalTransactionId)
                 .Select(rt => new
                 {
@@ -69,7 +74,9 @@ namespace RentOpsDesktop
                     requesterName = rt.RentalRequest != null ? rt.RentalRequest.User.FirstName + " " + rt.RentalRequest.User.LastName : "N/A",
                     rt.EquipmentId,
                     EquipmentName = rt.Equipment != null ? rt.Equipment.EquipmentName : "N/A",
-                    EmployeeName = rt.Employee != null ? rt.Employee.FirstName + " " + rt.Employee.LastName : "N/A"
+                    EmployeeName = rt.Employee != null ? rt.Employee.FirstName + " " + rt.Employee.LastName : "N/A",
+                    paymentStatusId = rt.Payment != null ? rt.Payment.PaymentStatusId : (int?)null,
+                    paymentMethodId = rt.Payment != null ? rt.Payment.PaymentMethodId : (int?)null
 
                 })
                 .FirstOrDefault();
@@ -77,8 +84,6 @@ namespace RentOpsDesktop
                 //fill in the data in the form
                 if (rentalTransaction != null)
                 {
-
-
                     //set the date time picker values to the rental transaction values
                     dtpPickupDate.Value = rentalTransaction.PickupDate.ToDateTime(new TimeOnly(0, 0));
                     dtpReturnDate.Value = rentalTransaction.ReturnDate.ToDateTime(new TimeOnly(0, 0));
@@ -91,13 +96,11 @@ namespace RentOpsDesktop
                     txtRentedEquipment.Text = rentalTransaction.EquipmentName;
                     txtManagedBy.Text = rentalTransaction.EmployeeName;
 
-
                     //display rental period 
                     DateTime pickupDate = rentalTransaction.PickupDate.ToDateTime(new TimeOnly(0, 0));
                     DateTime returnDate = rentalTransaction.ReturnDate.ToDateTime(new TimeOnly(0, 0));
                     TimeSpan rentalPeriod = returnDate - pickupDate;
                     lblRentalPeriod.Text = rentalPeriod.Days.ToString() + " days";
-
 
                     // Fetch payment statuses and methods (like AddRentalTransaction form)
                     var paymentStatus = dbContext.PaymentStatuses.ToList();
@@ -131,6 +134,28 @@ namespace RentOpsDesktop
 
                         cmbPaymentStatus.SelectedIndexChanged += CmbPayment_SelectedIndexChanged;
                         cmbPaymentMethod.SelectedIndexChanged += CmbPayment_SelectedIndexChanged;
+                    }
+                    else
+                    {
+                        // Set payment label to Paid in green
+                        lblPayment.Text = "Paid";
+                        lblPayment.ForeColor = Color.Green;
+
+                        // Pre-select the existing payment method and status from the projection result
+                        cmbPaymentStatus.SelectedValue = rentalTransaction.paymentStatusId ?? -1;
+                        cmbPaymentMethod.SelectedValue = rentalTransaction.paymentMethodId ?? -1;
+
+                        // Disable changing them
+                        cmbPaymentStatus.Enabled = false;
+                        cmbPaymentMethod.Enabled = false;
+
+                        // Enable editing fields
+                        txtDeposit.Enabled = true;
+                        txtRentalFee.Enabled = true;
+                        dtpPickupDate.Enabled = true;
+                        dtpReturnDate.Enabled = true;
+                        btnUpdateRentalTransaction.Enabled = true;
+
                     }
                 }
                 else
@@ -205,29 +230,82 @@ namespace RentOpsDesktop
             // Check if all the fields are valid
             if (validDeposit && validRentalFee && validPickupDate)
             {
-                try
+                // If there's no payment and the combo boxes are enabled, validate that both selections are made
+                if (rentalTransactionToEdit.PaymentId == null &&
+                    cmbPaymentStatus.Enabled && cmbPaymentMethod.Enabled &&
+                    (cmbPaymentStatus.SelectedIndex == -1 || cmbPaymentMethod.SelectedIndex == -1))
                 {
+                    MessageBox.Show("Please select both Payment Status and Payment Method before saving.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return; // Prevent save
+                }
+
+                //try
+                //{
                     // Update the record
                     rentalTransactionToEdit.RentalFee = Convert.ToDouble(txtRentalFee.Text);
                     rentalTransactionToEdit.Deposit = Convert.ToDouble(txtDeposit.Text);
-
                     rentalTransactionToEdit.ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value);
                     rentalTransactionToEdit.PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value);
+
+                    // If the payment was not initially set, and the comboboxes are enabled
+                    if (rentalTransactionToEdit.PaymentId == null &&
+                        cmbPaymentStatus.Enabled && cmbPaymentMethod.Enabled)
+                    {
+                        // Create a new Payment record
+                        var newPayment = new Payment
+                        {
+                            PaymentMethodId = (int)cmbPaymentMethod.SelectedValue,
+                            PaymentStatusId = (int)cmbPaymentStatus.SelectedValue
+                        };
+
+                        // Add the payment to the database
+                        dbContext.Payments.Add(newPayment);
+                        dbContext.SaveChanges(); // Save to generate PaymentId
+
+                        // Link the new payment to the transaction
+                        rentalTransactionToEdit.PaymentId = newPayment.PaymentId;
+                        rentalTransactionToEdit.Payment = newPayment;
+                    }
+
+
+                //checkif the uploaded files is modified then if so add the new files to the rental transaction
+                if(theUploadForm.isAgreementModified == true)
+                {
+                    rentalTransactionToEdit.Documents.Add(theUploadForm.agreement);
+                }if (theUploadForm.isIDModified == true)
+                {
+                    rentalTransactionToEdit.Documents.Add(theUploadForm.idVerification);
+                }
+
+
+                //update the rental transaction in the dbcontext
+
+                if (!dbContext.Entry(rentalTransactionToEdit).IsKeySet)
+                    {
+                        dbContext.RentalTransactions.Update(rentalTransactionToEdit);
+                    }
+
+
+                //log the changes
+                logger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+
+                    // Save the final updates (transaction and optionally the link to payment)
+                    dbContext.SaveChanges();
 
                     MessageBox.Show("The rental transaction has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
-                }
-                catch (Exception ex)
-                {
-                    // log the exception
-                    logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
+            //}
+            //    catch (Exception ex)
+            //    {
+            //    // log the exception
+            //    logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId ?? 2);
 
-                    // show a the error message
-                    MessageBox.Show("An error occurred while updating the transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
+            //    // show the error message
+            //    MessageBox.Show("An error occurred while updating the transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+        }
             else
             {
                 // show a message box indicating that the fields are not valid
@@ -299,7 +377,8 @@ namespace RentOpsDesktop
 
 
                 // Show the UploadTransactionDocuments form as a dialog
-                UploadTransactionDocuments uploadForm = new UploadTransactionDocuments(agreement, idVerification);
+                UploadTransactionDocuments uploadForm = new UploadTransactionDocuments(agreement, idVerification); 
+                theUploadForm = uploadForm;
                 DialogResult result = uploadForm.ShowDialog();
 
                 if (result == DialogResult.OK)
