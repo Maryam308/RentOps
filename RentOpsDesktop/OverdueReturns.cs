@@ -19,12 +19,27 @@ namespace RentOpsDesktop
         RentOpsDBContext dbContext;
         int currentUserId;
         AuditLogger auditLogger;
+        bool isAdmin = false; //to check if the current user is an admin or not
 
         public OverdueReturns()
         {
             InitializeComponent();
             dbContext = new RentOpsDBContext();
-            currentUserId = Global.user.UserId; // Get the global employee ID
+            currentUserId = Global.user.UserId;
+
+            //check if the current user is an admin (if so display the statistics for all the system)
+
+            if (Global.RoleName == "Administrator")
+            {
+                isAdmin = true;
+            }
+            else
+            {
+
+                isAdmin = false;
+
+            }
+
         }
 
 
@@ -37,7 +52,7 @@ namespace RentOpsDesktop
 
                 //select as queryable
                 IEnumerable<RentalTransaction> rentalTransactions = dbContext.RentalTransactions
-                    .Where(x => x.ReturnDate < DateOnly.FromDateTime(DateTime.Now) && x.EmployeeId == currentUserId)
+                    .Where(x => x.ReturnDate < DateOnly.FromDateTime(DateTime.Now) && (isAdmin ? true : x.EmployeeId == currentUserId))
                     .OrderByDescending(d => d.ReturnDate)
                     .AsQueryable();
 
@@ -167,7 +182,7 @@ namespace RentOpsDesktop
                 var rentalTransactions = dbContext.RentalTransactions
                 .Include(rt => rt.Equipment)
                 .Include(rt => rt.Employee)
-                .Where(rt => rt.EmployeeId == currentUserId)
+                .Where(rt => isAdmin ? true : rt.EmployeeId == currentUserId)
                 .OrderByDescending(rt => rt.RentalTransactionTimestamp)
                 .Select(rt => new
                 {
@@ -280,6 +295,10 @@ namespace RentOpsDesktop
                 if (addReturnRecord.DialogResult == DialogResult.OK)
                 {
                     dbContext.ReturnRecords.Add(addReturnRecord.newReturnRecord);
+
+                    //track the changes using the audit logger
+                    auditLogger.TrackChanges(currentUserId, Global.sourceId);
+
                     dbContext.SaveChanges(); // Save changes to the database
                     RefreshDataGridView(); // Refresh the DataGridView
                 }

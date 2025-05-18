@@ -430,6 +430,16 @@ namespace RentOpsDesktop
 
                 try
                 {
+                    // Check and delete associated payment if it exists
+                    if (rentalTransaction.PaymentId != null)
+                    {
+                        var payment = dbContext.Payments.Find(rentalTransaction.PaymentId);
+                        if (payment != null)
+                        {
+                            dbContext.Payments.Remove(payment);
+                        }
+                    }
+
                     dbContext.RentalTransactions.Remove(rentalTransaction);
 
                     //track changes using the logger
@@ -437,7 +447,8 @@ namespace RentOpsDesktop
 
                     dbContext.SaveChanges(); // Save changes to the database
                     RefreshDataGridView(); // Refresh the DataGridView
-                    MessageBox.Show("Rental Transaction deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information); // Show sucess message
+                    MessageBox.Show("Rental Transaction deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information); // Show success message
+
 
                 }
                 catch (Exception ex)

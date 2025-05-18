@@ -32,5 +32,14 @@ namespace RentOpsDesktop
             this.Hide();
             screen.Show();
         }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            //navigate to the rental dasboard
+            RentalDashboard screen = new RentalDashboard();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
+            this.Hide();
+            screen.Show();
+        }
     }
 }

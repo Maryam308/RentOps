@@ -17,6 +17,9 @@ namespace RentOpsDesktop
     {
         RentOpsDBContext dbContext;
         AuditLogger logger;
+        bool isAdmin = false;
+        int currentUserId;
+
         public RentalDashboard()
         {
             InitializeComponent();
@@ -26,6 +29,22 @@ namespace RentOpsDesktop
 
             //initialize the audit logger object to track changes
             logger = new AuditLogger(dbContext);
+
+            //fetch the current user 
+            currentUserId = Global.user.UserId;
+
+            //check if the current user is an admin (if so display the statistics for all the system)
+
+            if (Global.RoleName == "Administrator")
+            {
+                isAdmin = true;
+            }
+            else
+            {
+
+                isAdmin = false;
+
+            }
 
         }
 
@@ -38,21 +57,7 @@ namespace RentOpsDesktop
         //feth statistics from the database 
         private void fetchStatistics()
         {
-            //fetch the current user 
-            int currentUserId = Global.user.UserId;
 
-            //check if the current user is an admin (if so display the statistics for all the system)
-            bool isAdmin;
-            if (Global.RoleName == "Administrator")
-            {
-                isAdmin = true;
-            }
-            else
-            {
-
-                isAdmin = false;
-
-            }
 
 
 
@@ -69,7 +74,7 @@ namespace RentOpsDesktop
                     .Include(i => i.Equipment)
                     .ThenInclude(t => t.RentalRequests)
                     .Include(r => r.RentalRequest)
-                    .Where(r => isAdmin || r.Equipment.UserId == currentUserId || r.RentalRequest.Equipment.UserId == currentUserId)
+                    .Where(r => isAdmin ? true : r.Equipment.UserId == currentUserId || r.RentalRequest.Equipment.UserId == currentUserId)
                     .Sum(k => k.RentalFee);
 
 
@@ -80,7 +85,7 @@ namespace RentOpsDesktop
                 var rentalPeriodQuery = dbContext.RentalTransactions
                     .Include(r => r.Equipment)
                     .Include(r => r.RentalRequest)
-                    .Where(r => isAdmin || (r.RentalRequest != null && r.RentalRequest.Equipment.UserId == currentUserId))
+                    .Where(r => isAdmin ? true : (r.RentalRequest != null && r.RentalRequest.Equipment.UserId == currentUserId))
                     .Select(r => EF.Functions.DateDiffDay(r.PickupDate, r.ReturnDate));
 
                 double averageRentalPeriod = 0;
@@ -100,7 +105,7 @@ namespace RentOpsDesktop
                 // available equipments will check the availability status of the equipment that has the user id of the current user
                 var availableEquipments = dbContext.Equipment
                     .Include(i => i.AvailabilityStatus)
-                    .Where(r => (isAdmin || r.UserId == currentUserId) &&
+                    .Where(r => (isAdmin ? true : r.UserId == currentUserId) &&
                                 r.AvailabilityStatusId == availableStatus.AvailabilityStatusId)
                     .Count();
 
@@ -109,7 +114,7 @@ namespace RentOpsDesktop
                     .Include(i => i.Equipment)
                     .ThenInclude(t => t.RentalRequests)
                     .Where(r => r.RentalRequestTimestamp.Date == now.Date &&
-                                (isAdmin || r.Equipment.UserId == currentUserId))
+                                (isAdmin ? true : r.Equipment.UserId == currentUserId))
                     .Count();
 
                 // total rentals of the month
@@ -118,7 +123,7 @@ namespace RentOpsDesktop
                     .ThenInclude(t => t.RentalRequests)
                     .Where(r => r.RentalTransactionTimestamp.Month == now.Month &&
                                 r.RentalTransactionTimestamp.Year == now.Year &&
-                                (isAdmin || r.Equipment.UserId == currentUserId))
+                                (isAdmin ? true : r.Equipment.UserId == currentUserId))
                     .Count();
 
                 // currently rented equipments 
@@ -129,7 +134,7 @@ namespace RentOpsDesktop
                     .ThenInclude(t => t.RentalRequests)
                     .Where(r => r.PickupDate <= today &&
                                 r.ReturnDate >= today &&
-                                (isAdmin || r.Equipment.UserId == currentUserId))
+                                (isAdmin ? true : r.Equipment.UserId == currentUserId))
                     .ToList();
 
                 // Fetch the ID of the rented status from the database
@@ -159,13 +164,13 @@ namespace RentOpsDesktop
                 // count the rented equipments from the database
                 var rentedEquipments = dbContext.Equipment
                     .Include(i => i.AvailabilityStatus)
-                    .Where(r => (isAdmin || r.UserId == currentUserId) &&
+                    .Where(r => (isAdmin ? true : r.UserId == currentUserId) &&
                                 r.AvailabilityStatus.AvailabilityStatusId == rentedStatus.AvailabilityStatusId)
                     .Count();
 
                 // set all the labels to the values fetched from the database
-                lblTotalIncome.Text = totalIncome.ToString();
-                lblAverageRentalPeriod.Text = averageRentalPeriod.ToString();
+                lblTotalIncome.Text = totalIncome.ToString("F2"); // double
+                lblAverageRentalPeriod.Text = ((int)Math.Round(averageRentalPeriod)).ToString();
                 lblAvailableEquipments.Text = availableEquipments.ToString();
                 lblTodayRentalRequest.Text = totalRentalRequest.ToString();
                 lblLastMonthRentals.Text = totalRentalsOfTheMonth.ToString();
@@ -269,6 +274,18 @@ namespace RentOpsDesktop
             Profile profile = new Profile();
             profile.StartPosition = FormStartPosition.CenterScreen; // Center the form
             profile.Show(); //show the profile form
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            //log out the user and navigate to the login form
+            this.Hide();
+            Login loginForm = new Login();
+            loginForm.StartPosition = FormStartPosition.CenterScreen; // Center the form
+            loginForm.Show(); //show login form
+            // Clear the global user and roleName objects
+            Global.user = new User();
+            Global.RoleName = "";
         }
     }
 }

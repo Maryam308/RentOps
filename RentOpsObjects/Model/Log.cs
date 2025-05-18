@@ -20,7 +20,7 @@ public partial class Log
     public int LogTypeId { get; set; }
 
     [Column("exception")]
-    [StringLength(1000)]
+    [StringLength(4000)]
     public string? Exception { get; set; }
 
     [Column("userAction")]
@@ -35,7 +35,7 @@ public partial class Log
     public string? AffectedData { get; set; }
 
     [Required]
-    [MaxLength(2000)]
+    [MaxLength(4000)]
     [Column("currentValue")]
     public string CurrentValue { get; set; } = string.Empty;
 

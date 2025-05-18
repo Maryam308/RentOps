@@ -73,10 +73,10 @@
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(22, 23);
-            btnBack.Margin = new Padding(6, 4, 6, 4);
+            btnBack.Location = new Point(12, 11);
+            btnBack.Margin = new Padding(3, 2, 3, 2);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(288, 94);
+            btnBack.Size = new Size(155, 44);
             btnBack.TabIndex = 15;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
@@ -87,10 +87,9 @@
             lblAuditLog.AutoSize = true;
             lblAuditLog.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0, true);
             lblAuditLog.ForeColor = Color.FromArgb(135, 66, 62);
-            lblAuditLog.Location = new Point(685, 28);
-            lblAuditLog.Margin = new Padding(6, 0, 6, 0);
+            lblAuditLog.Location = new Point(369, 13);
             lblAuditLog.Name = "lblAuditLog";
-            lblAuditLog.Size = new Size(530, 82);
+            lblAuditLog.Size = new Size(272, 42);
             lblAuditLog.TabIndex = 14;
             lblAuditLog.Text = "Audit Log Details";
             // 
@@ -98,10 +97,9 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(48, 41);
-            label1.Margin = new Padding(6, 0, 6, 0);
+            label1.Location = new Point(26, 19);
             label1.Name = "label1";
-            label1.Size = new Size(135, 51);
+            label1.Size = new Size(68, 25);
             label1.TabIndex = 16;
             label1.Text = "Log ID";
             // 
@@ -116,19 +114,17 @@
             pnlLogDetails.Controls.Add(label4);
             pnlLogDetails.Controls.Add(label3);
             pnlLogDetails.Controls.Add(label1);
-            pnlLogDetails.Location = new Point(74, 230);
-            pnlLogDetails.Margin = new Padding(6, 6, 6, 6);
+            pnlLogDetails.Location = new Point(40, 108);
             pnlLogDetails.Name = "pnlLogDetails";
-            pnlLogDetails.Size = new Size(368, 689);
+            pnlLogDetails.Size = new Size(199, 324);
             pnlLogDetails.TabIndex = 17;
             // 
             // lblSource
             // 
             lblSource.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblSource.Location = new Point(33, 538);
-            lblSource.Margin = new Padding(6, 0, 6, 0);
+            lblSource.Location = new Point(18, 252);
             lblSource.Name = "lblSource";
-            lblSource.Size = new Size(305, 45);
+            lblSource.Size = new Size(164, 21);
             lblSource.TabIndex = 23;
             lblSource.Text = "xx-xx-xx-xx-xx";
             lblSource.TextAlign = ContentAlignment.MiddleCenter;
@@ -136,10 +132,9 @@
             // lblLogType
             // 
             lblLogType.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblLogType.Location = new Point(33, 395);
-            lblLogType.Margin = new Padding(6, 0, 6, 0);
+            lblLogType.Location = new Point(18, 185);
             lblLogType.Name = "lblLogType";
-            lblLogType.Size = new Size(305, 45);
+            lblLogType.Size = new Size(164, 21);
             lblLogType.TabIndex = 22;
             lblLogType.Text = "xx-xx-xx-xx-xx";
             lblLogType.TextAlign = ContentAlignment.MiddleCenter;
@@ -148,10 +143,9 @@
             // 
             lblLogTimestamp.AutoSize = true;
             lblLogTimestamp.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblLogTimestamp.Location = new Point(33, 241);
-            lblLogTimestamp.Margin = new Padding(6, 0, 6, 0);
+            lblLogTimestamp.Location = new Point(18, 113);
             lblLogTimestamp.Name = "lblLogTimestamp";
-            lblLogTimestamp.Size = new Size(351, 45);
+            lblLogTimestamp.Size = new Size(164, 21);
             lblLogTimestamp.TabIndex = 21;
             lblLogTimestamp.Text = "xx-xx-xx-xx-xx-xx-xx-xx";
             lblLogTimestamp.TextAlign = ContentAlignment.MiddleCenter;
@@ -160,10 +154,9 @@
             // 
             lblLogID.AutoSize = true;
             lblLogID.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblLogID.Location = new Point(202, 41);
-            lblLogID.Margin = new Padding(6, 0, 6, 0);
+            lblLogID.Location = new Point(109, 19);
             lblLogID.Name = "lblLogID";
-            lblLogID.Size = new Size(50, 45);
+            lblLogID.Size = new Size(24, 21);
             lblLogID.TabIndex = 20;
             lblLogID.Text = "xx";
             lblLogID.TextAlign = ContentAlignment.MiddleCenter;
@@ -172,10 +165,9 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(119, 478);
-            label5.Margin = new Padding(6, 0, 6, 0);
+            label5.Location = new Point(64, 224);
             label5.Name = "label5";
-            label5.Size = new Size(140, 51);
+            label5.Size = new Size(70, 25);
             label5.TabIndex = 19;
             label5.Text = "Source";
             // 
@@ -183,10 +175,9 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(102, 322);
-            label4.Margin = new Padding(6, 0, 6, 0);
+            label4.Location = new Point(55, 151);
             label4.Name = "label4";
-            label4.Size = new Size(178, 51);
+            label4.Size = new Size(88, 25);
             label4.TabIndex = 18;
             label4.Text = "Log Type";
             // 
@@ -194,10 +185,9 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(52, 162);
-            label3.Margin = new Padding(6, 0, 6, 0);
+            label3.Location = new Point(28, 76);
             label3.Name = "label3";
-            label3.Size = new Size(289, 51);
+            label3.Size = new Size(143, 25);
             label3.TabIndex = 17;
             label3.Text = "Log Timestamp";
             // 
@@ -205,10 +195,9 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
-            label2.Location = new Point(150, 149);
-            label2.Margin = new Padding(6, 0, 6, 0);
+            label2.Location = new Point(81, 70);
             label2.Name = "label2";
-            label2.Size = new Size(223, 51);
+            label2.Size = new Size(111, 25);
             label2.TabIndex = 17;
             label2.Text = "Log Details";
             // 
@@ -216,10 +205,9 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
-            label6.Location = new Point(535, 149);
-            label6.Margin = new Padding(6, 0, 6, 0);
+            label6.Location = new Point(288, 70);
             label6.Name = "label6";
-            label6.Size = new Size(238, 51);
+            label6.Size = new Size(119, 25);
             label6.TabIndex = 18;
             label6.Text = "User Details";
             // 
@@ -230,20 +218,17 @@
             panel1.Controls.Add(lblUserID);
             panel1.Controls.Add(label13);
             panel1.Controls.Add(label14);
-            panel1.Location = new Point(494, 230);
-            panel1.Margin = new Padding(6, 6, 6, 6);
+            panel1.Location = new Point(266, 108);
             panel1.Name = "panel1";
-            panel1.Size = new Size(294, 689);
+            panel1.Size = new Size(159, 324);
             panel1.TabIndex = 19;
             // 
             // lblUserName
             // 
-            lblUserName.AutoSize = true;
             lblUserName.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblUserName.Location = new Point(45, 316);
-            lblUserName.Margin = new Padding(6, 0, 6, 0);
+            lblUserName.Location = new Point(22, 148);
             lblUserName.Name = "lblUserName";
-            lblUserName.Size = new Size(222, 45);
+            lblUserName.Size = new Size(116, 28);
             lblUserName.TabIndex = 21;
             lblUserName.Text = "xx-xx-xx-xx-xx";
             lblUserName.TextAlign = ContentAlignment.MiddleCenter;
@@ -252,10 +237,9 @@
             // 
             lblUserID.AutoSize = true;
             lblUserID.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblUserID.Location = new Point(111, 132);
-            lblUserID.Margin = new Padding(6, 0, 6, 0);
+            lblUserID.Location = new Point(60, 62);
             lblUserID.Name = "lblUserID";
-            lblUserID.Size = new Size(50, 45);
+            lblUserID.Size = new Size(24, 21);
             lblUserID.TabIndex = 20;
             lblUserID.Text = "xx";
             lblUserID.TextAlign = ContentAlignment.MiddleCenter;
@@ -264,10 +248,9 @@
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label13.Location = new Point(39, 235);
-            label13.Margin = new Padding(6, 0, 6, 0);
+            label13.Location = new Point(21, 110);
             label13.Name = "label13";
-            label13.Size = new Size(212, 51);
+            label13.Size = new Size(107, 25);
             label13.TabIndex = 17;
             label13.Text = "User Name";
             // 
@@ -275,10 +258,9 @@
             // 
             label14.AutoSize = true;
             label14.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label14.Location = new Point(69, 66);
-            label14.Margin = new Padding(6, 0, 6, 0);
+            label14.Location = new Point(37, 31);
             label14.Name = "label14";
-            label14.Size = new Size(147, 51);
+            label14.Size = new Size(75, 25);
             label14.TabIndex = 16;
             label14.Text = "User ID";
             // 
@@ -297,19 +279,17 @@
             panel2.Controls.Add(label8);
             panel2.Controls.Add(label17);
             panel2.Controls.Add(label18);
-            panel2.Location = new Point(825, 230);
-            panel2.Margin = new Padding(6, 6, 6, 6);
+            panel2.Location = new Point(444, 108);
             panel2.Name = "panel2";
-            panel2.Size = new Size(866, 689);
+            panel2.Size = new Size(467, 324);
             panel2.TabIndex = 20;
             // 
             // lblException
             // 
             lblException.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblException.Location = new Point(312, 567);
-            lblException.Margin = new Padding(6, 0, 6, 0);
+            lblException.Location = new Point(168, 266);
             lblException.Name = "lblException";
-            lblException.Size = new Size(490, 100);
+            lblException.Size = new Size(264, 47);
             lblException.TabIndex = 25;
             lblException.Text = "None";
             lblException.TextAlign = ContentAlignment.MiddleCenter;
@@ -318,20 +298,18 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.Location = new Point(93, 567);
-            label7.Margin = new Padding(6, 0, 6, 0);
+            label7.Location = new Point(50, 266);
             label7.Name = "label7";
-            label7.Size = new Size(191, 51);
+            label7.Size = new Size(96, 25);
             label7.TabIndex = 24;
             label7.Text = "Exception";
             // 
             // AffectedData
             // 
             AffectedData.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            AffectedData.Location = new Point(431, 444);
-            AffectedData.Margin = new Padding(6, 0, 6, 0);
+            AffectedData.Location = new Point(232, 208);
             AffectedData.Name = "AffectedData";
-            AffectedData.Size = new Size(370, 102);
+            AffectedData.Size = new Size(199, 48);
             AffectedData.TabIndex = 23;
             AffectedData.Text = "No Data";
             AffectedData.TextAlign = ContentAlignment.MiddleCenter;
@@ -339,10 +317,9 @@
             // lblUserAction
             // 
             lblUserAction.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblUserAction.Location = new Point(41, 444);
-            lblUserAction.Margin = new Padding(6, 0, 6, 0);
+            lblUserAction.Location = new Point(22, 208);
             lblUserAction.Name = "lblUserAction";
-            lblUserAction.Size = new Size(370, 102);
+            lblUserAction.Size = new Size(199, 48);
             lblUserAction.TabIndex = 22;
             lblUserAction.Text = "No Data";
             lblUserAction.TextAlign = ContentAlignment.MiddleCenter;
@@ -350,10 +327,9 @@
             // label9
             // 
             label9.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label9.Location = new Point(41, 132);
-            label9.Margin = new Padding(6, 0, 6, 0);
+            label9.Location = new Point(22, 62);
             label9.Name = "label9";
-            label9.Size = new Size(347, 209);
+            label9.Size = new Size(187, 98);
             label9.TabIndex = 21;
             label9.Text = "No Data ";
             label9.TextAlign = ContentAlignment.MiddleCenter;
@@ -361,10 +337,9 @@
             // lblCurrentValue
             // 
             lblCurrentValue.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblCurrentValue.Location = new Point(41, 132);
-            lblCurrentValue.Margin = new Padding(6, 0, 6, 0);
+            lblCurrentValue.Location = new Point(22, 62);
             lblCurrentValue.Name = "lblCurrentValue";
-            lblCurrentValue.Size = new Size(347, 209);
+            lblCurrentValue.Size = new Size(187, 98);
             lblCurrentValue.TabIndex = 21;
             lblCurrentValue.Text = "xx-xx-xx-xx-xx";
             lblCurrentValue.TextAlign = ContentAlignment.MiddleCenter;
@@ -372,10 +347,9 @@
             // lblOriginalValue
             // 
             lblOriginalValue.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblOriginalValue.Location = new Point(455, 132);
-            lblOriginalValue.Margin = new Padding(6, 0, 6, 0);
+            lblOriginalValue.Location = new Point(245, 62);
             lblOriginalValue.Name = "lblOriginalValue";
-            lblOriginalValue.Size = new Size(347, 209);
+            lblOriginalValue.Size = new Size(187, 98);
             lblOriginalValue.TabIndex = 20;
             lblOriginalValue.Text = "No Data";
             lblOriginalValue.TextAlign = ContentAlignment.MiddleCenter;
@@ -384,10 +358,9 @@
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label15.Location = new Point(492, 390);
-            label15.Margin = new Padding(6, 0, 6, 0);
+            label15.Location = new Point(265, 183);
             label15.Name = "label15";
-            label15.Size = new Size(260, 51);
+            label15.Size = new Size(132, 25);
             label15.TabIndex = 19;
             label15.Text = "Affected Data";
             // 
@@ -395,10 +368,9 @@
             // 
             label16.AutoSize = true;
             label16.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label16.Location = new Point(123, 390);
-            label16.Margin = new Padding(6, 0, 6, 0);
+            label16.Location = new Point(66, 183);
             label16.Name = "label16";
-            label16.Size = new Size(222, 51);
+            label16.Size = new Size(111, 25);
             label16.TabIndex = 18;
             label16.Text = "User Action";
             // 
@@ -406,10 +378,9 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(91, 41);
-            label8.Margin = new Padding(6, 0, 6, 0);
+            label8.Location = new Point(49, 19);
             label8.Name = "label8";
-            label8.Size = new Size(263, 51);
+            label8.Size = new Size(132, 25);
             label8.TabIndex = 16;
             label8.Text = "Original Value";
             // 
@@ -417,10 +388,9 @@
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label17.Location = new Point(509, 41);
-            label17.Margin = new Padding(6, 0, 6, 0);
+            label17.Location = new Point(274, 19);
             label17.Name = "label17";
-            label17.Size = new Size(255, 51);
+            label17.Size = new Size(129, 25);
             label17.TabIndex = 17;
             label17.Text = "Current Value";
             // 
@@ -428,10 +398,9 @@
             // 
             label18.AutoSize = true;
             label18.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label18.Location = new Point(97, 41);
-            label18.Margin = new Padding(6, 0, 6, 0);
+            label18.Location = new Point(52, 19);
             label18.Name = "label18";
-            label18.Size = new Size(263, 51);
+            label18.Size = new Size(132, 25);
             label18.TabIndex = 16;
             label18.Text = "Original Value";
             // 
@@ -439,18 +408,17 @@
             // 
             label19.AutoSize = true;
             label19.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline);
-            label19.Location = new Point(1055, 149);
-            label19.Margin = new Padding(6, 0, 6, 0);
+            label19.Location = new Point(568, 70);
             label19.Name = "label19";
-            label19.Size = new Size(397, 51);
+            label19.Size = new Size(196, 25);
             label19.TabIndex = 21;
             label19.Text = "Action Affected Data";
             // 
             // LogDetails
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1768, 977);
+            ClientSize = new Size(952, 458);
             Controls.Add(label19);
             Controls.Add(panel2);
             Controls.Add(label6);
@@ -459,7 +427,6 @@
             Controls.Add(pnlLogDetails);
             Controls.Add(btnBack);
             Controls.Add(lblAuditLog);
-            Margin = new Padding(6, 6, 6, 6);
             Name = "LogDetails";
             Text = "LogDetails";
             Load += LogDetails_Load;

@@ -17,6 +17,7 @@ namespace RentOpsDesktop
         RentOpsDBContext dbContext;
         AuditLogger auditLogger;
         int currentUserId;
+        bool isAdmin = false;
 
         public UserEquipmentDashboard()
         {
@@ -27,6 +28,19 @@ namespace RentOpsDesktop
             //fetch the user id from global
             currentUserId = Global.user.UserId;
 
+
+            //check if the current user is an admin (if so display the statistics for all the system)
+
+            if (Global.RoleName == "Administrator")
+            {
+                isAdmin = true;
+            }
+            else
+            {
+
+                isAdmin = false;
+
+            }
         }
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -58,7 +72,14 @@ namespace RentOpsDesktop
             {
 
                 // Fetch the filtered equipment list and select relevant fields
-                var equipmentList = dbContext.Equipment.Where(e => e.UserId == currentUserId).Select(e => new
+                var equipmentQuery = dbContext.Equipment.AsQueryable();
+
+                if (!isAdmin)
+                {
+                    equipmentQuery = equipmentQuery.Where(e => e.UserId == currentUserId);
+                }
+
+                var equipmentList = equipmentQuery.Select(e => new
                 {
                     EquipmentID = e.EquipmentId, // Select the equipment ID
                     EquipmentName = e.EquipmentName, // Select the equipment name
@@ -104,12 +125,12 @@ namespace RentOpsDesktop
             {
 
                 // Fetch the total number of current user equipment 
-                var totalEquipment = dbContext.Equipment.Where(e => e.UserId == currentUserId).Count();
+                var totalEquipment = dbContext.Equipment.Where(e => isAdmin ? true : e.UserId == currentUserId).Count();
 
 
                 //fetch frequently rented equipment object
                 var frequentlyRentedEquipment = dbContext.RentalTransactions
-                    .Where(rt => rt.EmployeeId == currentUserId)
+                    .Where(rt => isAdmin ? true : rt.EmployeeId == currentUserId)
                     .GroupBy(rt => rt.EquipmentId)
                     .Select(g => new
                     {
@@ -131,7 +152,7 @@ namespace RentOpsDesktop
 
 
                 //fech the number of the damaged equipment
-                var damagedEquipment = dbContext.Equipment.Where(e => e.UserId == currentUserId)
+                var damagedEquipment = dbContext.Equipment.Where(e => isAdmin ? true : e.UserId == currentUserId)
                     .Count(e => e.ConditionStatusId == damaged.ConditionStatusId); // Assuming 2 is the ID for damaged status
 
 
@@ -139,15 +160,15 @@ namespace RentOpsDesktop
                 AvailabilityStatus availableStatusId = dbContext.AvailabilityStatuses.Where(a => a.AvailabilityStatusTitle == "Available").FirstOrDefault();
 
                 // Fetch the total number of available equipment
-                var availableEquipment = dbContext.Equipment.Where(e => e.UserId == currentUserId)
+                var availableEquipment = dbContext.Equipment.Where(e => isAdmin ? true : e.UserId == currentUserId)
                     .Count(e => e.AvailabilityStatusId == availableStatusId.AvailabilityStatusId);
-
 
                 //display the statistics in the labels
                 lblEquipmentCount.Text = totalEquipment.ToString();
                 lblDamagedEquipment.Text = damagedEquipment.ToString();
                 lblAvailableForRental.Text = availableEquipment.ToString();
                 lblFrequentlyRented.Text = frequentlyRentedEquipmentName;
+
 
 
             }
@@ -233,6 +254,18 @@ namespace RentOpsDesktop
             Profile screen = new Profile();
             screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
             screen.Show();
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            //log out the user and navigate to the login form
+            this.Hide();
+            Login loginForm = new Login();
+            loginForm.StartPosition = FormStartPosition.CenterScreen; // Center the form
+            loginForm.Show(); //show login form
+            // Clear the global user and roleName objects
+            Global.user = new User();
+            Global.RoleName = "";
         }
     }
 }

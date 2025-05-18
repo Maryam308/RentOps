@@ -94,6 +94,7 @@
             btnBack.TabIndex = 16;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
+            btnBack.Click += btnBack_Click;
             // 
             // Reports
             // 

@@ -247,6 +247,12 @@ Number of Lost Returns: {numberOfLostReturns}
 
                 if (result == DialogResult.Yes)
                 {
+
+                    //refresh the document list in the combobox
+                    cmbCustomerReports.DataSource = dbContext.Documents
+                        .Where(d => d.FileTypeId == 1).ToList();
+
+
                     // Open the file automatically if user clicks "Yes"
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
                     {
