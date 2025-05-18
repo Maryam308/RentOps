@@ -20,7 +20,7 @@ namespace RentOpsDesktop
 {
     public partial class Login : Form
     {
-
+        //declaring variables
         RentOpsDBContext dbContext;
         private IServiceProvider serviceProvider;
         private RentOpsWebApp.Data.RentOpsWebAppContext identityDbContext;
