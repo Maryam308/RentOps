@@ -68,7 +68,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // Log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 //show error message
                 MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -137,7 +137,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // Log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 //show error message
                 MessageBox.Show(" An error occurred while loading the equipment list: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -207,7 +207,7 @@ namespace RentOpsDesktop
                     context.Equipment.Add(addEquipment.equipment);
 
                     // Track changes 
-                    logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                    logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
                 
 
                     context.SaveChanges(); // Save changes to the database
@@ -219,7 +219,7 @@ namespace RentOpsDesktop
 
 
                 // log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 //show the error message
                 MessageBox.Show("An error occurred while adding the equipment: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -290,7 +290,7 @@ namespace RentOpsDesktop
                         context.Equipment.Update(editEquipmentInformation.equipmentToEdit);
 
                         // Track changes
-                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                         // Save changes to the database
                         context.SaveChanges(); // Save changes to the database
@@ -301,7 +301,7 @@ namespace RentOpsDesktop
             catch(Exception ex)
             {
                 // Log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 
                 //show error message
                 MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -360,7 +360,7 @@ namespace RentOpsDesktop
                         context.Equipment.Remove(equipment);
                         
                         // Track changes
-                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
                         // Save changes to the database
                         
                         context.SaveChanges();
@@ -379,7 +379,7 @@ namespace RentOpsDesktop
                 catch (Exception ex)
                 {
                     // Log the exception
-                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                     // Handle exceptions by showing a message box
                     MessageBox.Show("An error occurred while attempting to delete the selected equipment. Please try again or contact support if the issue persists.", "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -460,7 +460,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // Log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
 
                 // Show error message if an exception occurs

@@ -27,7 +27,7 @@ namespace RentOpsDesktop
 
             dbContext = new RentOpsDBContext();
             logger = new AuditLogger(dbContext); //create a logger object
-            currentUserId = Global.EmployeeID; //get the current user id
+            currentUserId = Global.user.UserId; //get the current user id
             this.logId = logId;
             LoadData();
 
@@ -80,7 +80,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 //show the error message
                 MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

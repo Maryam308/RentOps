@@ -53,10 +53,9 @@
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(21, 18);
-            btnBack.Margin = new Padding(3, 2, 3, 2);
+            btnBack.Location = new Point(24, 24);
             btnBack.Name = "btnBack";
-            btnBack.Size = new Size(155, 44);
+            btnBack.Size = new Size(177, 59);
             btnBack.TabIndex = 84;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
@@ -67,9 +66,9 @@
             lblTitle.AutoSize = true;
             lblTitle.Font = new Font("Segoe UI", 22.125F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             lblTitle.ForeColor = Color.FromArgb(135, 66, 62);
-            lblTitle.Location = new Point(240, 26);
+            lblTitle.Location = new Point(274, 35);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(561, 41);
+            lblTitle.Size = new Size(689, 50);
             lblTitle.TabIndex = 85;
             lblTitle.Text = "Upload Rental Transaction Documents";
             // 
@@ -81,11 +80,11 @@
             gbIdentityVerification.Controls.Add(btnUploadIDVerificationDocuments);
             gbIdentityVerification.Controls.Add(label1);
             gbIdentityVerification.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            gbIdentityVerification.Location = new Point(114, 109);
+            gbIdentityVerification.Location = new Point(130, 145);
             gbIdentityVerification.Margin = new Padding(2, 1, 2, 1);
             gbIdentityVerification.Name = "gbIdentityVerification";
             gbIdentityVerification.Padding = new Padding(2, 1, 2, 1);
-            gbIdentityVerification.Size = new Size(765, 125);
+            gbIdentityVerification.Size = new Size(874, 167);
             gbIdentityVerification.TabIndex = 86;
             gbIdentityVerification.TabStop = false;
             gbIdentityVerification.Text = "Upload Identity Verificaton Document";
@@ -96,10 +95,9 @@
             btnRemoveIDDecument.FlatStyle = FlatStyle.Flat;
             btnRemoveIDDecument.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnRemoveIDDecument.ForeColor = Color.White;
-            btnRemoveIDDecument.Location = new Point(534, 72);
-            btnRemoveIDDecument.Margin = new Padding(3, 2, 3, 2);
+            btnRemoveIDDecument.Location = new Point(610, 96);
             btnRemoveIDDecument.Name = "btnRemoveIDDecument";
-            btnRemoveIDDecument.Size = new Size(99, 38);
+            btnRemoveIDDecument.Size = new Size(113, 51);
             btnRemoveIDDecument.TabIndex = 114;
             btnRemoveIDDecument.Text = "Remove";
             btnRemoveIDDecument.UseVisualStyleBackColor = false;
@@ -111,10 +109,9 @@
             btnDownloadIDDocument.FlatStyle = FlatStyle.Flat;
             btnDownloadIDDocument.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnDownloadIDDocument.ForeColor = Color.White;
-            btnDownloadIDDocument.Location = new Point(648, 72);
-            btnDownloadIDDocument.Margin = new Padding(3, 2, 3, 2);
+            btnDownloadIDDocument.Location = new Point(741, 96);
             btnDownloadIDDocument.Name = "btnDownloadIDDocument";
-            btnDownloadIDDocument.Size = new Size(99, 38);
+            btnDownloadIDDocument.Size = new Size(113, 51);
             btnDownloadIDDocument.TabIndex = 113;
             btnDownloadIDDocument.Text = "Download";
             btnDownloadIDDocument.UseVisualStyleBackColor = false;
@@ -125,9 +122,9 @@
             lblIDFilename.AutoSize = true;
             lblIDFilename.Font = new Font("Segoe UI", 10.125F, FontStyle.Bold);
             lblIDFilename.ForeColor = Color.Green;
-            lblIDFilename.Location = new Point(252, 50);
+            lblIDFilename.Location = new Point(288, 67);
             lblIDFilename.Name = "lblIDFilename";
-            lblIDFilename.Size = new Size(0, 19);
+            lblIDFilename.Size = new Size(0, 23);
             lblIDFilename.TabIndex = 112;
             // 
             // btnUploadIDVerificationDocuments
@@ -136,10 +133,9 @@
             btnUploadIDVerificationDocuments.FlatStyle = FlatStyle.Flat;
             btnUploadIDVerificationDocuments.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnUploadIDVerificationDocuments.ForeColor = Color.White;
-            btnUploadIDVerificationDocuments.Location = new Point(534, 25);
-            btnUploadIDVerificationDocuments.Margin = new Padding(3, 2, 3, 2);
+            btnUploadIDVerificationDocuments.Location = new Point(610, 33);
             btnUploadIDVerificationDocuments.Name = "btnUploadIDVerificationDocuments";
-            btnUploadIDVerificationDocuments.Size = new Size(213, 38);
+            btnUploadIDVerificationDocuments.Size = new Size(243, 51);
             btnUploadIDVerificationDocuments.TabIndex = 111;
             btnUploadIDVerificationDocuments.Text = "Upload";
             btnUploadIDVerificationDocuments.UseVisualStyleBackColor = false;
@@ -149,10 +145,10 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(20, 43);
+            label1.Location = new Point(23, 57);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(233, 32);
+            label1.Size = new Size(289, 41);
             label1.TabIndex = 0;
             label1.Text = "Identity Verification: ";
             // 
@@ -164,11 +160,11 @@
             gbRentalAgreement.Controls.Add(btnUploadREntalAgreement);
             gbRentalAgreement.Controls.Add(label3);
             gbRentalAgreement.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
-            gbRentalAgreement.Location = new Point(114, 258);
+            gbRentalAgreement.Location = new Point(130, 344);
             gbRentalAgreement.Margin = new Padding(2, 1, 2, 1);
             gbRentalAgreement.Name = "gbRentalAgreement";
             gbRentalAgreement.Padding = new Padding(2, 1, 2, 1);
-            gbRentalAgreement.Size = new Size(765, 125);
+            gbRentalAgreement.Size = new Size(874, 167);
             gbRentalAgreement.TabIndex = 113;
             gbRentalAgreement.TabStop = false;
             gbRentalAgreement.Text = "Upload Rental Agreement Document";
@@ -179,10 +175,9 @@
             btnRemoveAgreementDocument.FlatStyle = FlatStyle.Flat;
             btnRemoveAgreementDocument.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnRemoveAgreementDocument.ForeColor = Color.White;
-            btnRemoveAgreementDocument.Location = new Point(534, 69);
-            btnRemoveAgreementDocument.Margin = new Padding(3, 2, 3, 2);
+            btnRemoveAgreementDocument.Location = new Point(610, 92);
             btnRemoveAgreementDocument.Name = "btnRemoveAgreementDocument";
-            btnRemoveAgreementDocument.Size = new Size(99, 38);
+            btnRemoveAgreementDocument.Size = new Size(113, 51);
             btnRemoveAgreementDocument.TabIndex = 116;
             btnRemoveAgreementDocument.Text = "Remove";
             btnRemoveAgreementDocument.UseVisualStyleBackColor = false;
@@ -193,9 +188,9 @@
             lblAgreementFilename.AutoSize = true;
             lblAgreementFilename.Font = new Font("Segoe UI", 10.125F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblAgreementFilename.ForeColor = Color.Green;
-            lblAgreementFilename.Location = new Point(240, 50);
+            lblAgreementFilename.Location = new Point(274, 67);
             lblAgreementFilename.Name = "lblAgreementFilename";
-            lblAgreementFilename.Size = new Size(0, 19);
+            lblAgreementFilename.Size = new Size(0, 23);
             lblAgreementFilename.TabIndex = 112;
             // 
             // btnDownloadAgreementDocument
@@ -204,10 +199,9 @@
             btnDownloadAgreementDocument.FlatStyle = FlatStyle.Flat;
             btnDownloadAgreementDocument.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnDownloadAgreementDocument.ForeColor = Color.White;
-            btnDownloadAgreementDocument.Location = new Point(648, 69);
-            btnDownloadAgreementDocument.Margin = new Padding(3, 2, 3, 2);
+            btnDownloadAgreementDocument.Location = new Point(741, 92);
             btnDownloadAgreementDocument.Name = "btnDownloadAgreementDocument";
-            btnDownloadAgreementDocument.Size = new Size(99, 38);
+            btnDownloadAgreementDocument.Size = new Size(113, 51);
             btnDownloadAgreementDocument.TabIndex = 115;
             btnDownloadAgreementDocument.Text = "Download";
             btnDownloadAgreementDocument.UseVisualStyleBackColor = false;
@@ -219,10 +213,9 @@
             btnUploadREntalAgreement.FlatStyle = FlatStyle.Flat;
             btnUploadREntalAgreement.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnUploadREntalAgreement.ForeColor = Color.White;
-            btnUploadREntalAgreement.Location = new Point(534, 27);
-            btnUploadREntalAgreement.Margin = new Padding(3, 2, 3, 2);
+            btnUploadREntalAgreement.Location = new Point(610, 36);
             btnUploadREntalAgreement.Name = "btnUploadREntalAgreement";
-            btnUploadREntalAgreement.Size = new Size(213, 38);
+            btnUploadREntalAgreement.Size = new Size(243, 51);
             btnUploadREntalAgreement.TabIndex = 111;
             btnUploadREntalAgreement.Text = "Upload";
             btnUploadREntalAgreement.UseVisualStyleBackColor = false;
@@ -232,10 +225,10 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(20, 43);
+            label3.Location = new Point(23, 57);
             label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
-            label3.Size = new Size(211, 32);
+            label3.Size = new Size(263, 41);
             label3.TabIndex = 0;
             label3.Text = "Rental Agreement:";
             // 
@@ -245,20 +238,19 @@
             btnAdd.FlatStyle = FlatStyle.Flat;
             btnAdd.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point, 0);
             btnAdd.ForeColor = Color.White;
-            btnAdd.Location = new Point(773, 399);
-            btnAdd.Margin = new Padding(3, 2, 3, 2);
+            btnAdd.Location = new Point(883, 532);
             btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(160, 41);
+            btnAdd.Size = new Size(183, 55);
             btnAdd.TabIndex = 113;
-            btnAdd.Text = "Add Documents";
+            btnAdd.Text = "Done";
             btnAdd.UseVisualStyleBackColor = false;
             btnAdd.Click += btnAdd_Click;
             // 
             // UploadTransactionDocuments
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(957, 458);
+            ClientSize = new Size(1094, 611);
             Controls.Add(btnAdd);
             Controls.Add(gbRentalAgreement);
             Controls.Add(gbIdentityVerification);

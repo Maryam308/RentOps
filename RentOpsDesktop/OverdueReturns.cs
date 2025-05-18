@@ -109,7 +109,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //print the exception message in a message box
                 MessageBox.Show("Error: " + ex.Message);
             }
@@ -141,7 +141,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //print the exception message 
                 MessageBox.Show("Error: " + ex.Message);
             }
@@ -227,7 +227,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //print the exception message 
                 MessageBox.Show("An error occurred while searching: " + ex.Message);
             }
@@ -288,7 +288,7 @@ namespace RentOpsDesktop
             } catch (Exception ex) {
 
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //print the exception message 
                 MessageBox.Show("An error has occured: " + ex.Message) ; return;
 

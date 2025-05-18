@@ -59,7 +59,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUser.UserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUser.UserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //print the exception message 
                 MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -100,7 +100,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUser.UserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUser.UserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //print the exception message 
                 MessageBox.Show("Error logging out: " + ex.Message);
             }

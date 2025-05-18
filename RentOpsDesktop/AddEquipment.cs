@@ -38,7 +38,7 @@ namespace RentOpsDesktop
             InitializeComponent();
             context = new RentOpsDBContext();
             logger = new AuditLogger(context); //create a logger object
-            currentUserId = Global.EmployeeID;
+            currentUserId = Global.user.UserId;
         }
 
         private void AddEquipment_Load(object sender, EventArgs e)
@@ -78,7 +78,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId );
 
                 // show a message to the user
                 MessageBox.Show($"An error occurred while loading data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -272,7 +272,7 @@ namespace RentOpsDesktop
                 catch (Exception ex)
                 {
                     // log the error
-                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                     // show a message to the user
                     MessageBox.Show($"An error occurred while adding the equipment: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

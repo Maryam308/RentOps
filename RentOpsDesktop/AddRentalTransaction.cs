@@ -89,7 +89,7 @@ namespace RentOpsDesktop
                     RentalTransaction rentalTransaction = new RentalTransaction
                     {
                         EquipmentId = equipmentId,
-                        EmployeeId = Global.EmployeeID,
+                        EmployeeId = Global.user.UserId,
                         UserId = Convert.ToInt32(txtUserId.Text),
                         PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value.Date),
                         ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value.Date),
@@ -123,7 +123,7 @@ namespace RentOpsDesktop
                         }
 
                         // Track changes 
-                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                         //save changes in the db and then link the objects to the transaction
                         context.SaveChanges();
@@ -151,7 +151,7 @@ namespace RentOpsDesktop
                         rentalTransaction.Payment = payment;
 
                         // Track changes 
-                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                         //save changes again
                         context.SaveChanges();
@@ -174,7 +174,7 @@ namespace RentOpsDesktop
                         }
 
                         // Track changes 
-                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                         //save changes in the db and then link the objects to the transaction
                         context.SaveChanges();
@@ -198,7 +198,7 @@ namespace RentOpsDesktop
                             }
 
                             // Track changes 
-                            logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                            logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                             context.SaveChanges();
 
@@ -210,7 +210,7 @@ namespace RentOpsDesktop
                 catch (Exception ex)
                 {
                     // log the error
-                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                     // show the error message
                     MessageBox.Show("An error occurred while saving the customer's rental transaction:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -261,7 +261,7 @@ namespace RentOpsDesktop
                     RentalTransaction rentalTransaction = new RentalTransaction
                     {
                         EquipmentId = equipmentId,
-                        EmployeeId = Global.EmployeeID,
+                        EmployeeId = Global.user.UserId,
                         PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value.Date),
                         ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value.Date),
                         RentalFee = totalPrice,
@@ -293,7 +293,7 @@ namespace RentOpsDesktop
                         }
 
                         // Track changes 
-                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                         //save changes in the db and then link the objects to the transaction
                         context.SaveChanges();
@@ -306,7 +306,7 @@ namespace RentOpsDesktop
                         rentalTransaction.CustomerId = externalCustomer.CustomerId;
 
                         // Track changes 
-                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                         //save changes again
                         context.SaveChanges();
@@ -328,7 +328,7 @@ namespace RentOpsDesktop
                         }
 
                         // Track changes 
-                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                         //save changes in the db and then link the objects to the transaction
                         context.SaveChanges();
@@ -355,7 +355,7 @@ namespace RentOpsDesktop
                         }
 
                         // Track changes 
-                        logger.TrackChanges(Global.user.UserId, Global.sourceId ?? 2); //call track changes function to insert the logs
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                         //save changes again
                         context.SaveChanges();
@@ -369,7 +369,7 @@ namespace RentOpsDesktop
                 catch (Exception ex)
                 {
                     // log the error
-                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                     // show the error message
                     MessageBox.Show("An error occurred while saving the external customer's rental transaction:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -435,7 +435,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 // show the error message
                 MessageBox.Show("An error occurred while loading the form:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -658,7 +658,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 // show the error message
                 MessageBox.Show("An error occurred while switching between user modes:\n" + ex.Message, "Checkbox Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -774,7 +774,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // Log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 // Show the error message
                 MessageBox.Show($"An error occurred while uploading documents: {ex.Message}", "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

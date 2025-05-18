@@ -42,13 +42,14 @@ namespace RentOpsDesktop
             int currentUserId = Global.user.UserId;
 
             //check if the current user is an admin (if so display the statistics for all the system)
-            bool isAdmin ;
+            bool isAdmin;
             if (Global.RoleName == "Administrator")
             {
                 isAdmin = true;
             }
-            else { 
-            
+            else
+            {
+
                 isAdmin = false;
 
             }
@@ -149,7 +150,7 @@ namespace RentOpsDesktop
                     }
 
                     // track changes before saving them to the database
-                    logger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+                    logger.TrackChanges(currentUserId, Global.sourceId);
 
                     // save changes outside the loop and for once to avoid multiple writes to the database
                     dbContext.SaveChanges();
@@ -172,14 +173,14 @@ namespace RentOpsDesktop
             }
 
             catch (Exception ex)
-             {
+            {
 
-                    //log the exception using the auditlogger
-                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
-                    //print the exception message 
-                    MessageBox.Show("An Error has occured: " + ex.Message);
+                //log the exception using the auditlogger
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
+                //print the exception message 
+                MessageBox.Show("An Error has occured: " + ex.Message);
 
-             }
+            }
 
 
         }
@@ -258,6 +259,16 @@ namespace RentOpsDesktop
             reports.StartPosition = FormStartPosition.CenterScreen;
             reports.Show();
             this.Hide();
+        }
+
+        private void btnProfile_Click(object sender, EventArgs e)
+        {
+            //hide the current form
+            this.Hide(); //hide the current form
+            //navigate to the user profile form
+            Profile profile = new Profile();
+            profile.StartPosition = FormStartPosition.CenterScreen; // Center the form
+            profile.Show(); //show the profile form
         }
     }
 }

@@ -27,7 +27,7 @@ namespace RentOpsDesktop
             InitializeComponent();
             dbContext = new RentOpsDBContext();
             auditLogger = new AuditLogger(dbContext);
-            currentUserId = 1;
+            currentUserId = Global.user.UserId;
         }
 
         //a function to refresh the data grid view 
@@ -141,7 +141,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log error
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 //show error message 
                 MessageBox.Show("Error occoured while loading data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -179,7 +179,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
@@ -286,7 +286,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 MessageBox.Show("An error occurred while searching: " + ex.Message);
             }
         }
@@ -352,8 +352,8 @@ namespace RentOpsDesktop
                 //find the object 
                 RentalTransaction returnTransactionToEdit = dbContext.RentalTransactions.Find(selectedTransactionID);
 
-                //try
-                //{
+                try
+                {
                     // Pass the object to the edit screen constructor and show the form
                     EditRentalTransaction editRentalTransaction = new EditRentalTransaction(returnTransactionToEdit);
                     editRentalTransaction.StartPosition = FormStartPosition.CenterScreen; // Center the form
@@ -370,16 +370,16 @@ namespace RentOpsDesktop
                         RefreshDataGridView(); // Refresh the DataGridVi
                     }
 
-                //}
-                //catch (Exception ex)
-                //{
-                //    //log the exception using the auditlogger
-                //    auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
-                //    MessageBox.Show("Error: " + ex.Message);
-                //}
-
-
             }
+                catch (Exception ex)
+                {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
+                MessageBox.Show("Error: " + ex.Message);
+            }
+
+
+        }
 
         }
 
@@ -433,7 +433,7 @@ namespace RentOpsDesktop
                     dbContext.RentalTransactions.Remove(rentalTransaction);
 
                     //track changes using the logger
-                    auditLogger.TrackChanges(currentUserId, Global.sourceId ?? 2);
+                    auditLogger.TrackChanges(currentUserId, Global.sourceId);
 
                     dbContext.SaveChanges(); // Save changes to the database
                     RefreshDataGridView(); // Refresh the DataGridView
@@ -443,7 +443,7 @@ namespace RentOpsDesktop
                 catch (Exception ex)
                 {
                     //log the exception using the auditlogger
-                    auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                    auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                     MessageBox.Show("An error occurred while deleting the Rental Transaction: " + ex.Message);
                 }
             }

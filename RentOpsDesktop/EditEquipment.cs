@@ -34,7 +34,7 @@ namespace RentOpsDesktop
             this.equipmentId = equipmentId;
             context = new RentOpsDBContext();
             logger = new AuditLogger(context); //create a logger object
-            currentUserId = Global.EmployeeID;
+            currentUserId = Global.user.UserId;
         }
 
         private void btnBack_Click(object sender, EventArgs e)
@@ -81,7 +81,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 // show the error message
                 MessageBox.Show("An error occurred while loading the data. Please try again or contact support if the issue persists.", "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -137,7 +137,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 // log the error
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                 // shw the error message
                 MessageBox.Show("An error occurred while loading the equipment details. Please try again or contact support if the issue persists.", "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -177,7 +177,7 @@ namespace RentOpsDesktop
                 catch (Exception ex)
                 {
                     // Log the error
-                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
 
                     // show the error message
                     MessageBox.Show($"Error: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

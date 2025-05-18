@@ -25,7 +25,7 @@ namespace RentOpsDesktop
 
         AuditLogger auditLogger;
         RentOpsDBContext dbContext;
-        int currentUserId = 1; //Global.user.UserId;
+        int currentUserId = Global.user.UserId;
 
 
         public UploadTransactionDocuments()
@@ -66,11 +66,13 @@ namespace RentOpsDesktop
             // Show download/remove if documents exist
             btnDownloadIDDocument.Visible = idVerification != null;
             btnRemoveIDDecument.Visible = idVerification != null;
+
             btnDownloadIDDocument.Enabled = idVerification != null;
             btnRemoveIDDecument.Enabled = idVerification != null;
 
             btnDownloadAgreementDocument.Visible = agreement != null;
             btnRemoveAgreementDocument.Visible = agreement != null;
+            
             btnDownloadAgreementDocument.Enabled = agreement != null;
             btnRemoveAgreementDocument.Enabled = agreement != null;
 
@@ -87,8 +89,8 @@ namespace RentOpsDesktop
 
         private void btnUploadIDVerificationDocuments_Click(object sender, EventArgs e)
         {
-            //try
-            //{
+            try
+            {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Filter = "PDF Files (*.pdf)|*.pdf";
                 openFileDialog.Title = "Select a PDF Document";
@@ -129,17 +131,21 @@ Uploaded Successfully";
                     btnDownloadIDDocument.Visible = true;
                     btnRemoveIDDecument.Visible = true;
 
+                    //enable the buttons
+                    btnDownloadIDDocument.Enabled = true;
+                    btnRemoveIDDecument.Enabled = true;
+
 
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    //log the exception using the auditlogger
-            //    auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
-            //    //print the exception message 
-            //    MessageBox.Show("An error occurred while uploading the file:\n" + ex.Message, "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
         }
+            catch (Exception ex)
+            {
+                //log the exception using the auditlogger
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
+                //print the exception message 
+                MessageBox.Show("An error occurred while uploading the file:\n" + ex.Message, "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+}
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
@@ -192,13 +198,17 @@ Uploaded Successfully";
                     btnDownloadAgreementDocument.Visible = true;
                     btnRemoveAgreementDocument.Visible = true;
 
+                    //enable the buttons
+                    btnDownloadAgreementDocument.Enabled = true;
+                    btnRemoveAgreementDocument.Enabled = true;
+
 
                 }
             }
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //print the exception message 
                 MessageBox.Show("An error occurred while uploading the file:\n" + ex.Message, "Upload Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -227,7 +237,7 @@ Uploaded Successfully";
             catch(Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //print the exception message 
                 MessageBox.Show("An error occurred while downloading the file:\n" + ex.Message, "Download Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -273,7 +283,7 @@ Uploaded Successfully";
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 //print the exception message 
                 MessageBox.Show("An error occurred while downloading the file:\n" + ex.Message, "Download Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

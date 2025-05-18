@@ -24,7 +24,7 @@ namespace RentOpsDesktop
             InitializeComponent();
 
             dbContext = new RentOpsDBContext();
-            currentUserId = Global.EmployeeID;
+            currentUserId = Global.user.UserId;
 
         }
 

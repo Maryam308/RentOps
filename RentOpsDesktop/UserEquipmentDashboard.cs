@@ -25,7 +25,7 @@ namespace RentOpsDesktop
             auditLogger = new AuditLogger(dbContext);
 
             //fetch the user id from global
-            currentUserId = Global.EmployeeID;
+            currentUserId = Global.user.UserId;
 
         }
 
@@ -87,7 +87,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 MessageBox.Show("Error: " + ex.Message);
             }
 
@@ -140,7 +140,7 @@ namespace RentOpsDesktop
 
                 // Fetch the total number of available equipment
                 var availableEquipment = dbContext.Equipment.Where(e => e.UserId == currentUserId)
-                    .Count(e => e.AvailabilityStatusId == availableStatusId.AvailabilityStatusId); 
+                    .Count(e => e.AvailabilityStatusId == availableStatusId.AvailabilityStatusId);
 
 
                 //display the statistics in the labels
@@ -154,7 +154,7 @@ namespace RentOpsDesktop
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
-                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
                 MessageBox.Show("Error: " + ex.Message);
             }
 
@@ -224,6 +224,15 @@ namespace RentOpsDesktop
         private void btnUpdateEquipment_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnProfile_Click(object sender, EventArgs e)
+        {
+            //navigate to the profile form
+            this.Hide();
+            Profile screen = new Profile();
+            screen.StartPosition = FormStartPosition.CenterScreen; // Center the form
+            screen.Show();
         }
     }
 }
