@@ -51,7 +51,7 @@ namespace RentOpsWebApp.Controllers
                 {
                     logList = logList.Where(l => l.LogTimestamp.Date == searchTimestamp.Date);
                 }
-                
+
             }
 
 

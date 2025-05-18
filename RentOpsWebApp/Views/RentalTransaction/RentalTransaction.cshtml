@@ -137,7 +137,7 @@
 						<td>Documents</td>
 						<!--print the ids of the docuemnts-->
 						<td>
-							<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
+							<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
 					
 						</td>
 					</tr>
@@ -187,7 +187,7 @@
 		<tbody>
 				@foreach (var record in Model.rentalTransactions)
 			{
-				@if (record.UserId != null && record.RentalRequest == null)
+				@if (record.UserId != null)
 				{
 
 					<tr class="text-center">
@@ -205,11 +205,38 @@
 							@(record.PaymentId == null ? "Not Paid" : "Paid")
 						</td>
 						<td>
-							<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
+							<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
 							
 						</td>
 					</tr>
-				}		}
+				}
+
+					@if ( record.CustomerId !=null)
+					{
+						
+						<tr class="text-center">
+							<td>@record.RentalTransactionId</td>
+							<td>@record.RentalTransactionTimestamp</td>
+							<td>@record.EmployeeId</td>
+							<td>@record.Employee.FirstName @record.Employee.LastName</td>
+							<td>@record.CustomerId </td>
+							<td>@record.Customer.FirstName @record.Customer.LastName </td>
+							<td>@record.RentalFee</td>
+							<td>@record.PickupDate</td>
+							<td>@record.ReturnDate</td>
+							<td>@record.Equipment.EquipmentName</td>
+							<td>
+								@(record.PaymentId == null ? "Not Paid" : "Paid")
+							</td>
+							<td>
+								<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
+
+							</td>
+						</tr>
+					}
+
+
+			}
 		</tbody>
 </table>
 }

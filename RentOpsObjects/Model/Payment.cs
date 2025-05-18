@@ -21,11 +21,11 @@ public partial class Payment
 
     [ForeignKey("PaymentMethodId")]
     [InverseProperty("Payments")]
-    public virtual PaymentMethod PaymentMethod { get; set; } = null!;
+    public virtual PaymentMethod? PaymentMethod { get; set; } 
 
     [ForeignKey("PaymentStatusId")]
     [InverseProperty("Payments")]
-    public virtual PaymentStatus PaymentStatus { get; set; } = null!;
+    public virtual PaymentStatus? PaymentStatus { get; set; }
 
     [InverseProperty("Payment")]
     public virtual ICollection<RentalTransaction> RentalTransactions { get; set; } = new List<RentalTransaction>();

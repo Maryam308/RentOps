@@ -30,7 +30,7 @@ namespace RentOpsDesktop
             InitializeComponent();
             dbContext = new RentOpsDBContext();
             logger = new AuditLogger(dbContext); //create a logger object
-            //currentUserId = Global.EmployeeID; //assign the current user id to the global user id
+            currentUserId = Global.user.UserId; //assign the current user id to the global user id
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -47,6 +47,35 @@ namespace RentOpsDesktop
             cmbReturnCondition.ValueMember = "ConditionStatusId";
             //select the default
             cmbReturnCondition.SelectedIndex = -1;
+
+            
+            //save the ids of the rental transactions that has a return record in a list
+            List<int> rentalTransactionIds = new List<int>();
+
+            //loop through the return records and add the ids of the transactions to the list
+            var returnRecords = dbContext.ReturnRecords.ToList();
+            foreach (var returnRecord in returnRecords)
+            {
+                rentalTransactionIds.Add(returnRecord.RentalTransactionId);
+            }
+
+            // Get all rental transactions that are not in the list
+            var rentalTransactions = dbContext.RentalTransactions
+                .Where(x => !rentalTransactionIds.Contains(x.RentalTransactionId))
+                .Select(x => new
+                {
+                    x.RentalTransactionId,
+                    DisplayText = $"{x.RentalTransactionId} | at  {x.RentalTransactionTimestamp}"
+                })
+                .ToList();
+
+            // Set the data source of the combo box
+            cmbAssociatedTransaction.DataSource = rentalTransactions;
+            cmbAssociatedTransaction.DisplayMember = "DisplayText";
+            cmbAssociatedTransaction.ValueMember = "RentalTransactionId";
+            cmbAssociatedTransaction.SelectedIndex = -1; // Select default (none)
+
+
         }
 
         private void txtLateReturnPenalty_TextChanged(object sender, EventArgs e)
@@ -118,19 +147,15 @@ namespace RentOpsDesktop
             try
             {
                 //check if the associated transaction id is empty
-                if (string.IsNullOrWhiteSpace(txtAssociatedTransaction.Text))
+                if (string.IsNullOrWhiteSpace(cmbAssociatedTransaction.Text))
                 {
                     MessageBox.Show("Please enter the associated rental transaction id", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 //check if the associated rental transaction exist
-                var rentalTransaction = dbContext.RentalTransactions.Find(Convert.ToInt32(txtAssociatedTransaction.Text));
-                if (rentalTransaction == null)
-                {
-                    MessageBox.Show("The associated rental transaction does not exist", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                var rentalTransaction = dbContext.RentalTransactions.Find(Convert.ToInt32(cmbAssociatedTransaction.SelectedValue));
+
 
                 //check if a return condition is selected
                 if (cmbReturnCondition.SelectedIndex == -1)
@@ -155,7 +180,7 @@ namespace RentOpsDesktop
     ? 0
     : Convert.ToDouble(txtAdditionalCharge.Text);
                 newReturnRecord.ReturnConditionId = (int)cmbReturnCondition.SelectedValue;
-                newReturnRecord.RentalTransactionId = Convert.ToInt32(txtAssociatedTransaction.Text);
+                newReturnRecord.RentalTransactionId = Convert.ToInt32(cmbAssociatedTransaction.SelectedValue);
                 //convert datetime to date only
                 DateOnly dateOnly = DateOnly.FromDateTime(dtpReturnDate.Value);
                 newReturnRecord.ActualReturnDate = dateOnly;
@@ -182,12 +207,13 @@ namespace RentOpsDesktop
                     newReturnRecord.DocumentId = uploadedDocument.DocumentId;
                 }
 
+        
 
-                //save the changes to the database
-                dbContext.ReturnRecords.Add(newReturnRecord);
+            //save the changes to the database
+            dbContext.ReturnRecords.Add(newReturnRecord);
 
                 //log the changes to the database
-                logger.TrackChanges(currentUserId, newReturnRecord.ReturnRecordId);
+                logger.TrackChanges(currentUserId, 2);
 
                 dbContext.SaveChanges(); // Save changes to the database
 

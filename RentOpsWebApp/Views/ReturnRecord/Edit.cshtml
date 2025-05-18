@@ -64,18 +64,19 @@
 
 
                 <!-- Additional Documents - Damage Report -- should be uploaded to the documents -->
-                <!-- File Upload Input (optional replacement) --> <div class="mb-3">
+                <!-- File Upload Input (optional replacement) -->
+                <div class="mb-3">
                     <label asp-for="UploadedFile" class="form-label">Replace Document (optional)</label> 
                     <input asp-for="UploadedFile" class="form-control" type="file" accept=".pdf" /> 
                     <span asp-validation-for="UploadedFile" class="text-danger"></span> 
-                    </div>
+                </div>
 
                 @if (Model.theReturnRecord.DocumentId != null)
                 {
                     <div class="mb-3">
-                        <label class="form-label">Existing Document:</label>
                         <div>
-                            <a asp-controller="ReturnRecord" asp-action="Download" asp-route-id="@Model.theReturnRecord.DocumentId" class="btn btn-outline-primary btn-sm" target="_blank">
+							<span class="form-label">Current Document: @Model.theReturnRecord.Document.FileName</span>
+                            <a asp-controller="ReturnRecord" asp-action="Download" asp-route-id="@Model.theReturnRecord.DocumentId" class="btn btn-outline-primary btn-sm ms-5" target="_blank">
                                 Download Attached PDF
                             </a>
                         </div>

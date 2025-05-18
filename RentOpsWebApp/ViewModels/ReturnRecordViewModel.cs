@@ -19,6 +19,8 @@ namespace RentOpsWebApp.ViewModels
         public string? SearchConditionStatus { get; set; }
         public string? SearchActualReturnDate { get; set; }
 
+        
+
         //object used for crud operations
         public ReturnRecord theReturnRecord { get; set; }
 
