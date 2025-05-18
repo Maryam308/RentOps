@@ -518,6 +518,18 @@ namespace RentOpsWebApp.Controllers
 
         }
 
-
+        [HttpPost]
+        public ActionResult ToggleFeedbackVisibility(int id)
+        {
+            var feedback = _context.Feedbacks.Find(id);
+            if (feedback != null)
+            {
+                feedback.IsHidden = !feedback.IsHidden;
+                _context.SaveChanges();
+            }
+            return Json(new { success = true });
         }
+
+
+    }
 }

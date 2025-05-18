@@ -52,27 +52,55 @@
                             <tr>
                                 <td>@feedback.FeedbackId</td>
                                 <td>@feedback.RentalTransactionId</td>
-                                <td>@(feedback.IsHidden == true ? "Yes" : "No")</td>
+                                <td>
+                                    <button type="button"
+                                      class="mx-2 btn @(feedback.IsHidden ? "btn-danger" : "btn-success")"
+                                      data-bs-toggle="modal"
+                                      data-bs-target="#confirmationModal"
+                                      data-feedback-id="@feedback.FeedbackId">
+                                        @(feedback.IsHidden ? "Show" : "Hide")
+                                    </button>
+                                </td>
                                 <td>@feedback.Rating / 5</td>
                                 <td>@feedback.FeedbackTimestamp.ToString("yyyy-MM-dd HH:mm")</td>
                                 <td>@feedback.CommentText</td>
 
                                 <!--if the user is not customer -->
-								@if (User.IsInRole("Admin"))
-								{
-									<td>
-										<form asp-action="DeleteFeedback" method="post">
-											<input type="hidden" name="feedbackId" value="@feedback.FeedbackId" />
-											<button type="submit" class="btn btn-danger btn-sm">Delete</button>
-										</form>
-									</td>
-								}
+								@* @if (User.IsInRole("Admin")) *@
+								@* { *@
+									
+								@* } *@
 
+                                
+
+
+                                
 
                             </tr>
                         }
                     </tbody>
                 </table>
+
+                <!-- Place this after the table, outside the foreach loop -->
+                <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to toggle feedback visibility?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" id="confirmBtn" class="btn btn-primary">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
             }
             else
             {
@@ -81,4 +109,27 @@
         </div>
     </div>
 </div>
+<!-- Include JS and jQuery -->
+    <script>
+        let selectedFeedbackId = null;
+
+        // Listen for modal show event to get the feedback ID
+        var confirmationModal = document.getElementById('confirmationModal');
+        confirmationModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            selectedFeedbackId = button.getAttribute('data-feedback-id');
+        });
+
+        // Handle confirm button click
+        document.getElementById("confirmBtn").onclick = function () {
+            if (selectedFeedbackId) {
+                fetch(`/Equipment/ToggleFeedbackVisibility/${selectedFeedbackId}`, {
+                    method: "POST"
+                }).then(() => {
+                    location.reload();
+                });
+            }
+        };
+    </script>
+
 
