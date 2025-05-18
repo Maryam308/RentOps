@@ -402,7 +402,8 @@ namespace RentOpsWebApp.Controllers
             } 
             
             model.RentalRequest.UserId = _context.Users
-        .FirstOrDefault(u => u.Email == User.Identity.Name).UserId;
+                .FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId ?? 1;
+
             model.RentalRequest.EquipmentId = model.NewEquipment.EquipmentId; // Set the EquipmentId to the selected equipment
             model.RentalRequest.RentalRequestTimestamp = DateTime.Now; // Set the RentalRequestTimestamp to the current date and time
             model.RentalRequest.RentalRequestStatusId = 1; // Set the RentalRequestStatusId to 1 
