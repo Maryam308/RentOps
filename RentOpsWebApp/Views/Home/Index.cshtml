@@ -122,7 +122,8 @@
             <div class="carousel-caption">
                 <h1 style="padding-left: 40px;">HEAVY MACHINERY<br>WITH TOP QUALITY PERFORMANCE</h1>
                 <p style="padding-left: 40px;">Bulldozers, Excavators, and more heavy-duty tools for large projects.</p>
-                <a href="#" class="btn btn-primary" style="margin-left: 40px;">Rent Now</a>
+                <a asp-controller="Equipment" asp-action="Equipment" class="btn btn-primary" style="margin-left: 40px;">Rent Now</a>
+
 
             </div>
         </div>
@@ -130,35 +131,35 @@
             <div class="carousel-caption">
                 <h1 style="padding-left: 40px;">POWER TOOLS<br>FOR EVERY PROJECT</h1>
                 <p style="padding-left: 40px;">High-powered drills, saws, and tools for precision work.</p>
-                <a href="#" class="btn btn-primary" style="margin-left: 40px;">Check Equipment</a>
+                <a asp-controller="Equipment" asp-action="Equipment" class="btn btn-primary" style="margin-left: 40px;">Check Equipment</a>
             </div>
         </div>
         <div class="carousel-item" style="background-image: url('@Url.Content("~/images/concrete_equipment.jpeg")');">
             <div class="carousel-caption">
                 <h1 style="padding-left: 40px;">CONCRETE EQUIPMENT<br>BUILT FOR DURABILITY</h1>
                 <p style="padding-left: 40px;">Mixers, pumps, and tools to handle all your concrete work with ease.</p>
-                <a href="#" class="btn btn-primary" style="margin-left: 40px;">Explore Prices</a>
+                <a asp-controller="Equipment" asp-action="Equipment" class="btn btn-primary" style="margin-left: 40px;">Explore Prices</a>
             </div>
         </div>
         <div class="carousel-item" style="background-image: url('@Url.Content("~/images/ladders_and_scaffolding.jpg")');">
             <div class="carousel-caption">
                 <h1 style="padding-left: 40px;">LADDERS & SCAFFOLDING<br>SAFE AND RELIABLE ACCESS</h1>
                 <p style="padding-left: 40px;">High-quality ladders and scaffolding systems for all your elevation needs.</p>
-                <a href="#" class="btn btn-primary" style="margin-left: 40px;">View Options</a>
+                <a asp-controller="Equipment" asp-action="Equipment" class="btn btn-primary" style="margin-left: 40px;">View Options</a>
             </div>
         </div>
         <div class="carousel-item" style="background-image: url('@Url.Content("~/images/safety_tools.jpg")');">
             <div class="carousel-caption">
                 <h1 style="padding-left: 40px;">SAFETY TOOLS<br>FOR YOUR PROTECTION</h1>
                 <p style="padding-left: 40px;">Helmets, gloves, harnesses, and all essential safety equipment for your site.</p>
-                <a href="#" class="btn btn-primary" style="margin-left: 40px;">Browse Safety Gear</a>
+                <a asp-controller="Equipment" asp-action="Equipment" class="btn btn-primary" style="margin-left: 40px;">Browse Safety Gear</a>
             </div>
         </div>
         <div class="carousel-item" style="background-image: url('@Url.Content("~/images/surveying_instruments.jpg")');">
             <div class="carousel-caption">
                 <h1 style="padding-left: 40px;">SURVEYING INSTRUMENTS<br>PRECISION MEASUREMENT SOLUTIONS</h1>
                 <p style="padding-left: 40px;">Levels, theodolites, and tools for accurate land and construction surveying.</p>
-                <a href="#" class="btn btn-primary" style="margin-left: 40px;">Get A Quote</a>
+                <a asp-controller="Equipment" asp-action="Equipment" class="btn btn-primary" style="margin-left: 40px;">Get A Quote</a>
             </div>
         </div>
     </div>
@@ -198,7 +199,7 @@
     <h2 class="mb-4" style="color: #2c3e50;">Our Statistics</h2>
     <div class="row text-center">
         <div class="col-md-3 mb-4">
-            <div class="card border-primary">
+            <div class="card border-info">
                 <div class="card-header">Total Customers</div>
                 <div class="card-body">
                     <h4 class="card-title">@Model.TotalCustomers</h4> <!-- Replace with query -->
@@ -207,7 +208,7 @@
             </div>
         </div>
         <div class="col-md-3 mb-4">
-            <div class="card border-success">
+            <div class="card border-info">
                 <div class="card-header">Total Employees</div>
                 <div class="card-body">
                     <h4 class="card-title">@Model.TotalEmployees</h4> <!-- Replace with query -->
@@ -225,7 +226,7 @@
             </div>
         </div>
         <div class="col-md-3 mb-4">
-            <div class="card border-warning">
+            <div class="card border-info">
                 <div class="card-header">Total Equipment</div>
                 <div class="card-body">
                     <h4 class="card-title">@Model.TotalEquipments</h4> <!-- Replace with query -->
@@ -238,8 +239,8 @@
 
 <div class="container mt-5">
     <div class="d-flex justify-content-center mb-4">
-        <a href="/signup" class="btn btn-success btn-lg mr-5" style="height: 60px; width:250px; line-height:38px;">Sign Up</a>
-        <a href="/login" class="btn btn-primary btn-lg" style="height: 60px; width:250px; line-height:38px;">Login</a>
+        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-success btn-lg mr-5" style="height: 60px; width:250px; line-height:38px;">Register</a>
+        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary btn-lg" style="height: 60px; width:250px; line-height:38px;">Login</a>
     </div>
 </div>
 

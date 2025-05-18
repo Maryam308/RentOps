@@ -26,8 +26,8 @@ namespace RentOpsDesktop
         {
             InitializeComponent();
             dbContext = new RentOpsDBContext();
-            auditLogger= new AuditLogger(dbContext);
-            currentUserId = Global.user.UserId;
+            auditLogger = new AuditLogger(dbContext);
+            currentUserId = 1;
         }
 
         //a function to refresh the data grid view 
@@ -36,78 +36,115 @@ namespace RentOpsDesktop
 
             try
             {
-                //select the overdue transactions that do not have a return record and its retuned date is less than the current date
+                // based on the selected radio button, filter the data
+                IQueryable<RentalTransaction> baseQuery = dbContext.RentalTransactions;
 
-                //select as queryable
-                IEnumerable<RentalTransaction> rentalTransactions = dbContext.RentalTransactions.AsQueryable();
-
-                //check if filters apply
-
-                //check the return date
+                // Apply filters if selected
+                //check the transaction date
                 if (dtpTransctionDate.Checked)
                 {
-                    DateTime selectedDate = dtpTransctionDate.Value;
-                    rentalTransactions = rentalTransactions.Where(r => r.RentalTransactionTimestamp.Date == selectedDate.Date);
+                    DateTime selectedDate = dtpTransctionDate.Value.Date;
+                    baseQuery = baseQuery.Where(r => r.RentalTransactionTimestamp.Date == selectedDate);
                 }
 
-                //check if equipment is selected to filter
+                //checks the equipment combo box
                 if (cmbEquipment.SelectedIndex != -1)
                 {
-
-                    //filter the rental transactions by equipment id
                     int equipmentId = (int)cmbEquipment.SelectedValue;
-                    rentalTransactions = rentalTransactions.Where(r => r.EquipmentId == equipmentId);
-
+                    baseQuery = baseQuery.Where(r => r.EquipmentId == equipmentId);
                 }
 
-                //check if payment status is selected to filter
+                //checks the payment status combo box
                 if (cmbPaymentStatus.SelectedIndex != -1)
                 {
-                    //filter the rental transactions by payment status
                     string paymentStatus = cmbPaymentStatus.SelectedItem.ToString();
                     if (paymentStatus == "Paid")
-                    {
-                        rentalTransactions = rentalTransactions.Where(r => r.PaymentId != null);
-                    }
+                        baseQuery = baseQuery.Where(r => r.PaymentId != null);
                     else if (paymentStatus == "Not Paid")
-                    {
-                        rentalTransactions = rentalTransactions.Where(r => r.PaymentId == null);
-                    }
+                        baseQuery = baseQuery.Where(r => r.PaymentId == null);
                 }
 
-                var filteredTransactions = rentalTransactions.ToList();
-
-                var rentalTransactionsList = filteredTransactions.Select(rt => new
+                // fetch the rental transactions based on the selected radio button
+                // fetching the website app transactions
+                if (this.rbWebsiteAppTransactions.Checked)
                 {
-                    RentalTransactionId = rt.RentalTransactionId,
-                    PickupDate = rt.PickupDate,
-                    ReturnDate = rt.ReturnDate,
-                    Deposit = rt.Deposit,
-                    RentalFee = rt.RentalFee,
-                    RentalTransactionTimestamp = rt.RentalTransactionTimestamp,
-                    PaymentId = rt.PaymentId,
-                    RentalRequestId = rt.RentalRequestId,
-                    EmployeeId = rt.EmployeeId,
-                    EquipmentId = rt.EquipmentId,
-                    EquipmentName = dbContext.Equipment
-                        .Where(e => e.EquipmentId == rt.EquipmentId)
-                        .Select(e => e.EquipmentName)
-                        .FirstOrDefault(),
-                    EmployeeName = dbContext.Users
-                        .Where(emp => emp.UserId == rt.EmployeeId)
-                        .Select(emp => emp.FirstName + " " + emp.LastName)
-                        .FirstOrDefault()
-                }).OrderByDescending(d => d.ReturnDate).ToList();
+                    var websiteTransactions = baseQuery
+                        .Where(r => r.RentalRequestId != null)
+                        .Select(rt => new
+                        {
+                            rt.RentalTransactionId,
+                            rt.PickupDate,
+                            rt.ReturnDate,
+                            rt.PaymentId,
+                            rt.RentalRequestId,
+                            rt.Deposit,
+                            rt.EmployeeId,
+                            rt.RentalFee,
+                            rt.EquipmentId,
+                            rt.RentalTransactionTimestamp
+                        })
+                        .OrderByDescending(r => r.RentalTransactionTimestamp)
+                        .ToList();
 
+                    dgvRentalTransactions.DataSource = websiteTransactions;
+                }
+                // fetching the desktop app transactions
+                else if (rbDesktopAppTransactions.Checked)
+                {
+                    var desktopTransactions = baseQuery
+                        .Where(r => r.RentalRequestId == null)
+                        .Select(rt => new
+                        {
+                            rt.RentalTransactionId,
+                            rt.PickupDate,
+                            rt.ReturnDate,
+                            rt.PaymentId,
+                            rt.Deposit,
+                            rt.EmployeeId,
+                            rt.RentalFee,
+                            rt.CustomerId,
+                            rt.UserId,
+                            rt.EquipmentId,
+                            rt.RentalTransactionTimestamp
+                        })
+                        .OrderByDescending(r => r.RentalTransactionTimestamp)
+                        .ToList();
 
-                dgvRentalTransactions.DataSource = rentalTransactionsList;
+                    dgvRentalTransactions.DataSource = desktopTransactions;
+                }
+                // fetching all transactions
+                else if (rbAllTransactions.Checked)
+                {
+                    var allTransactions = baseQuery
+                        .Select(rt => new
+                        {
+                            rt.RentalTransactionId,
+                            rt.PickupDate,
+                            rt.ReturnDate,
+                            rt.PaymentId,
+                            rt.RentalRequestId,
+                            rt.Deposit,
+                            rt.EmployeeId,
+                            rt.RentalFee,
+                            rt.CustomerId,
+                            rt.UserId,
+                            rt.EquipmentId,
+                            rt.RentalTransactionTimestamp
+                        })
+                        .OrderByDescending(r => r.RentalTransactionTimestamp)
+                        .ToList();
+
+                    dgvRentalTransactions.DataSource = allTransactions;
+                }
 
             }
             catch (Exception ex)
             {
-                //log the exception using the auditlogger
+                //log error
                 auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId ?? 2);
-                MessageBox.Show("Error: " + ex.Message);
+
+                //show error message 
+                MessageBox.Show("Error occoured while loading data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
 
@@ -115,6 +152,9 @@ namespace RentOpsDesktop
 
         private void RentalTransactions_Load(object sender, EventArgs e)
         {
+            bool websiteAppTransactionsChecked = rbWebsiteAppTransactions.Checked;
+            bool desktopAppTransactionsChecked = rbDesktopAppTransactions.Checked;
+            bool allTransactionsChecked = rbAllTransactions.Checked;
             try
             {
                 //laod conditions into the combo box
@@ -426,6 +466,35 @@ namespace RentOpsDesktop
             UserEquipmentDashboard userEquipmentDashboard = new UserEquipmentDashboard();
             userEquipmentDashboard.StartPosition = FormStartPosition.CenterScreen; // Center the form
             userEquipmentDashboard.Show();
+        }
+
+        private void dgvRentalTransactions_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+           
+        }
+
+        private void rbWebsiteAppTransactions_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                RefreshDataGridView();
+            }
+        }
+
+        private void rbDesktopAppTransactions_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                RefreshDataGridView();
+            }
+        }
+
+        private void rbAllTransactions_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+            {
+                RefreshDataGridView();
+            }
         }
     }
 

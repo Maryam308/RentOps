@@ -99,17 +99,44 @@ namespace RentOpsDesktop
                     lblRentalPeriod.Text = rentalPeriod.Days.ToString() + " days";
 
 
-                    //determine if paid
+                    // Fetch payment statuses and methods (like AddRentalTransaction form)
+                    var paymentStatus = dbContext.PaymentStatuses.ToList();
+                    var paymentMethod = dbContext.PaymentMethods.ToList();
+
+                    cmbPaymentStatus.DataSource = paymentStatus;
+                    cmbPaymentMethod.DataSource = paymentMethod;
+
+                    cmbPaymentStatus.DisplayMember = "PaymentStatusTitle";
+                    cmbPaymentMethod.DisplayMember = "PaymentMethodTitle";
+
+                    cmbPaymentStatus.ValueMember = "PaymentStatusId";
+                    cmbPaymentMethod.ValueMember = "PaymentMethodId";
+
+                    cmbPaymentStatus.SelectedIndex = -1;
+                    cmbPaymentMethod.SelectedIndex = -1;
+
                     if (rentalTransaction.PaymentId == null)
                     {
                         lblPayment.Text = "Not Paid";
                         lblPayment.ForeColor = Color.Red;
+
+                        txtDeposit.Enabled = false;
+                        txtRentalFee.Enabled = false;
+                        dtpPickupDate.Enabled = false;
+                        dtpReturnDate.Enabled = false;
+                        btnUpdateRentalTransaction.Enabled = false;
+
+                        cmbPaymentStatus.Enabled = true;
+                        cmbPaymentMethod.Enabled = true;
+
+                        cmbPaymentStatus.SelectedIndexChanged += CmbPayment_SelectedIndexChanged;
+                        cmbPaymentMethod.SelectedIndexChanged += CmbPayment_SelectedIndexChanged;
                     }
                 }
                 else
                 {
                     //show an error message if the rental transaction is not found
-                    MessageBox.Show("Rental transaction not found.","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Rental transaction not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
             }
@@ -121,10 +148,20 @@ namespace RentOpsDesktop
                 //show the error message
                 MessageBox.Show("An error occurred while loading the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-
-
         }
+
+        private void CmbPayment_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbPaymentStatus.SelectedIndex != -1 && cmbPaymentMethod.SelectedIndex != -1)
+            {
+                txtDeposit.Enabled = true;
+                txtRentalFee.Enabled = true;
+                dtpPickupDate.Enabled = true;
+                dtpReturnDate.Enabled = true;
+                btnUpdateRentalTransaction.Enabled = true;
+            }
+        }
+
 
         private void txtDeposit_TextChanged(object sender, EventArgs e)
         {

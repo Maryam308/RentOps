@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using RentOpsObjects.Model
+@inject RentOpsObjects.Model.RentOpsDBContext _context
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -68,12 +72,24 @@
                     <div class="d-flex">
                         <!--drop down with two options logout and profile-->
                         <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                User
+                            @{
+                                var currentUserEmail = User.Identity?.Name;
+                                var currentUser = _context.Users.FirstOrDefault(u => u.Email == currentUserEmail);
+                                var fullName = currentUser != null ? $"{currentUser.FirstName} {currentUser.LastName}" : "User";
+                            }
+
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 1em; width: 180px;">
+                                @fullName
                             </button>
+
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Profile" asp-action="Profile">Profile</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="Profile" asp-action="Details">Profile</a></li>
+                                <li>
+                                    <form asp-area="Identity" asp-page="/Account/Logout"
+                                          asp-route-returnUrl="@Url.Action("Index", "Home")" method="post" class="dropdown-item m-0 p-0">
+                                        <button type="submit" class="btn btn-link dropdown-item text-start">Logout</button>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </div>

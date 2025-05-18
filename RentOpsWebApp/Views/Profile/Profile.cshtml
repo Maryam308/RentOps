@@ -1,8 +1,77 @@
-﻿
+﻿@using RentOpsWebApp.ViewModels
+@model ProfileViewModel
 @{
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<br />
 <h1>Profile</h1>
+<br />
+
+<!-- SECTION 1: Total Rentals -->
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card bg-light shadow-sm p-4" style="border-radius: 10px;">
+                <div class="card-body text-center">
+                    <h3 class="card-title mb-3" style="font-size: 1.8rem;">Total Rentals</h3>
+                    <h2 class="fw-semibold" style="font-size: 3rem;">@Model.TotalRentals</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION 2: Quick Links & Profile Info -->
+<div class="container mb-5">
+    <div class="row align-items-stretch">
+
+        <!-- Quick Links Sidebar -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm h-100" style="border-radius: 10px;">
+                <div class="card-header">
+                    <h5 class="mb-0">Quick Links</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush fs-5">
+                        <li class="list-group-item py-4">
+                            <a asp-controller ="MyReturnRecord" asp-action="MyReturnRecord">View My Return Records</a>
+                        </li>
+                        <li class="list-group-item py-4">
+                            <a sp-controller="MyRentalTransaction" asp-action="MyRentalTransaction">View My Transaction Records</a>
+                        </li>
+                        <li class="list-group-item py-4">
+                            <a asp-controller="MyRentalRequest" asp-action="MyRentalRequest">View My Request Records</a>
+                        </li>
+                        <li class="list-group-item py-4">
+                            <a asp-controller="Notification" asp-action="Notification">Notifications</a>
+                        </li>
+                        <li class="list-group-item py-4">
+                            <a asp-controller="Profile" asp-action="EditProfile">Edit Profile</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Info Card with border-primary and matching height -->
+        <div class="col-md-9 mb-4">
+            <div class="card border-primary h-100" style="border-radius: 10px;">
+                <div class="card-header bg-white fs-5 fw-semibold"><h3>Personal Information</h3></div>
+                <div class="card-body fs-4">
+                    <div class="mb-4" style="padding-top:1em; padding-bottom:1em;">
+                        <strong>Name:</strong> @($"{Model.FirstName} {Model.LastName}")
+                    </div>
+                    <div class="mb-4" style="padding-top:1em; padding-bottom:1em;">
+                        <strong>Email:</strong> @Model.EmailAddress
+                    </div>
+                    <div class="mb-4" style="padding-top:1em; padding-bottom:1em;">
+                        <strong>Phone Number:</strong> @Model.PhoneNumber
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 

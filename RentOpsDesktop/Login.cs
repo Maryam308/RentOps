@@ -173,7 +173,14 @@ namespace RentOpsDesktop
 
         private void Login_Load(object sender, EventArgs e)
         {
+            //closing the form when the user clicks the close button
+            this.FormClosing += Login_FormClosing;
+        }
 
+        // handles exiting the application
+        private void Login_FormClosing(object sender, FormClosingEventArgs e)
+        {
+          Application.Exit();
         }
     }
 }
