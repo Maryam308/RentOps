@@ -265,7 +265,7 @@
             lblPayment.AutoSize = true;
             lblPayment.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold | FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Point, 0);
             lblPayment.ForeColor = Color.Green;
-            lblPayment.Location = new Point(25, 103);
+            lblPayment.Location = new Point(10, 118);
             lblPayment.Margin = new Padding(4, 0, 4, 0);
             lblPayment.Name = "lblPayment";
             lblPayment.Size = new Size(114, 57);
@@ -386,7 +386,7 @@
             // lblPaymentMethod
             // 
             lblPaymentMethod.AutoSize = true;
-            lblPaymentMethod.Location = new Point(160, 171);
+            lblPaymentMethod.Location = new Point(202, 172);
             lblPaymentMethod.Name = "lblPaymentMethod";
             lblPaymentMethod.Size = new Size(127, 40);
             lblPaymentMethod.TabIndex = 93;
@@ -395,7 +395,7 @@
             // lblPaymentStatus
             // 
             lblPaymentStatus.AutoSize = true;
-            lblPaymentStatus.Location = new Point(160, 87);
+            lblPaymentStatus.Location = new Point(202, 86);
             lblPaymentStatus.Name = "lblPaymentStatus";
             lblPaymentStatus.Size = new Size(104, 40);
             lblPaymentStatus.TabIndex = 92;
@@ -405,7 +405,7 @@
             // 
             cmbPaymentMethod.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbPaymentMethod.FormattingEnabled = true;
-            cmbPaymentMethod.Location = new Point(300, 163);
+            cmbPaymentMethod.Location = new Point(342, 164);
             cmbPaymentMethod.Name = "cmbPaymentMethod";
             cmbPaymentMethod.Size = new Size(370, 48);
             cmbPaymentMethod.TabIndex = 91;
@@ -414,7 +414,7 @@
             // 
             cmbPaymentStatus.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbPaymentStatus.FormattingEnabled = true;
-            cmbPaymentStatus.Location = new Point(300, 79);
+            cmbPaymentStatus.Location = new Point(342, 78);
             cmbPaymentStatus.Name = "cmbPaymentStatus";
             cmbPaymentStatus.Size = new Size(370, 48);
             cmbPaymentStatus.TabIndex = 90;
