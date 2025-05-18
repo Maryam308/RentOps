@@ -74,9 +74,9 @@
             // progressBar1
             // 
             progressBar1.ForeColor = SystemColors.ControlDarkDark;
-            progressBar1.Location = new Point(622, 383);
+            progressBar1.Location = new Point(579, 383);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(281, 23);
+            progressBar1.Size = new Size(324, 23);
             progressBar1.Style = ProgressBarStyle.Marquee;
             progressBar1.TabIndex = 30;
             progressBar1.Visible = false;
@@ -113,11 +113,11 @@
             // 
             // cmbRentalReports
             // 
-            cmbRentalReports.Font = new Font("Segoe UI Semibold", 16F, FontStyle.Bold);
+            cmbRentalReports.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             cmbRentalReports.FormattingEnabled = true;
-            cmbRentalReports.Location = new Point(622, 328);
+            cmbRentalReports.Location = new Point(579, 328);
             cmbRentalReports.Name = "cmbRentalReports";
-            cmbRentalReports.Size = new Size(281, 38);
+            cmbRentalReports.Size = new Size(324, 33);
             cmbRentalReports.TabIndex = 26;
             cmbRentalReports.SelectedIndexChanged += cmbRentalReports_SelectedIndexChanged;
             // 

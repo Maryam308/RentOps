@@ -24,6 +24,8 @@ namespace RentOpsDesktop
         private void btnLogin_Click(object sender, EventArgs e)
         {
             Login login = new Login();
+            //center the form
+            login.StartPosition = FormStartPosition.CenterScreen;
             this.Hide();
             login.Show();
 

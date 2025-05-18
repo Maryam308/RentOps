@@ -116,8 +116,8 @@ namespace RentOpsDesktop
                 var logData = logList.Select(l => new
                 {
                     l.LogId,
-                    l.User.FirstName,
-                    l.User.LastName,
+                    l.User?.FirstName,
+                    l.User?.LastName,
                     l.LogType.LogTypeTitle,
                     l.Source.SourceTitle,
                     l.LogTimestamp,

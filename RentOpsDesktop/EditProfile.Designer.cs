@@ -51,7 +51,6 @@
             lblFirstNameError = new Label();
             lblLastNameError = new Label();
             lblPhoneNumberError = new Label();
-            lblEmailError = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
@@ -345,7 +344,7 @@
             lblFirstNameError.AutoSize = true;
             lblFirstNameError.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblFirstNameError.ForeColor = Color.Red;
-            lblFirstNameError.Location = new Point(547, 158);
+            lblFirstNameError.Location = new Point(560, 169);
             lblFirstNameError.Margin = new Padding(2, 0, 2, 0);
             lblFirstNameError.Name = "lblFirstNameError";
             lblFirstNameError.Size = new Size(35, 15);
@@ -357,7 +356,7 @@
             lblLastNameError.AutoSize = true;
             lblLastNameError.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblLastNameError.ForeColor = Color.Red;
-            lblLastNameError.Location = new Point(547, 221);
+            lblLastNameError.Location = new Point(560, 232);
             lblLastNameError.Margin = new Padding(2, 0, 2, 0);
             lblLastNameError.Name = "lblLastNameError";
             lblLastNameError.Size = new Size(35, 15);
@@ -369,31 +368,19 @@
             lblPhoneNumberError.AutoSize = true;
             lblPhoneNumberError.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblPhoneNumberError.ForeColor = Color.Red;
-            lblPhoneNumberError.Location = new Point(547, 284);
+            lblPhoneNumberError.Location = new Point(560, 295);
             lblPhoneNumberError.Margin = new Padding(2, 0, 2, 0);
             lblPhoneNumberError.Name = "lblPhoneNumberError";
             lblPhoneNumberError.Size = new Size(35, 15);
             lblPhoneNumberError.TabIndex = 43;
             lblPhoneNumberError.Text = "Error";
-            // 
-            // lblEmailError
-            // 
-            lblEmailError.AutoSize = true;
-            lblEmailError.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblEmailError.ForeColor = Color.Red;
-            lblEmailError.Location = new Point(547, 345);
-            lblEmailError.Margin = new Padding(2, 0, 2, 0);
-            lblEmailError.Name = "lblEmailError";
-            lblEmailError.Size = new Size(35, 15);
-            lblEmailError.TabIndex = 44;
-            lblEmailError.Text = "Error";
+            lblPhoneNumberError.Click += lblPhoneNumberError_Click;
             // 
             // EditProfile
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(952, 458);
-            Controls.Add(lblEmailError);
             Controls.Add(lblPhoneNumberError);
             Controls.Add(lblLastNameError);
             Controls.Add(lblFirstNameError);
@@ -443,6 +430,5 @@
         private Label lblFirstNameError;
         private Label lblLastNameError;
         private Label lblPhoneNumberError;
-        private Label lblEmailError;
     }
 }

@@ -79,15 +79,16 @@
             pnlNavigationSideBar.Location = new Point(0, 0);
             pnlNavigationSideBar.Margin = new Padding(0);
             pnlNavigationSideBar.Name = "pnlNavigationSideBar";
-            pnlNavigationSideBar.Size = new Size(259, 611);
+            pnlNavigationSideBar.Size = new Size(227, 458);
             pnlNavigationSideBar.TabIndex = 15;
             // 
             // picLogo
             // 
             picLogo.Image = Properties.Resources.rentOpsLogo;
-            picLogo.Location = new Point(54, 12);
+            picLogo.Location = new Point(47, 9);
+            picLogo.Margin = new Padding(3, 2, 3, 2);
             picLogo.Name = "picLogo";
-            picLogo.Size = new Size(121, 120);
+            picLogo.Size = new Size(106, 90);
             picLogo.SizeMode = PictureBoxSizeMode.StretchImage;
             picLogo.TabIndex = 52;
             picLogo.TabStop = false;
@@ -100,9 +101,10 @@
             btnEquipmentInformation.FlatStyle = FlatStyle.Flat;
             btnEquipmentInformation.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnEquipmentInformation.ForeColor = Color.White;
-            btnEquipmentInformation.Location = new Point(14, 448);
+            btnEquipmentInformation.Location = new Point(12, 336);
+            btnEquipmentInformation.Margin = new Padding(3, 2, 3, 2);
             btnEquipmentInformation.Name = "btnEquipmentInformation";
-            btnEquipmentInformation.Size = new Size(230, 51);
+            btnEquipmentInformation.Size = new Size(201, 38);
             btnEquipmentInformation.TabIndex = 20;
             btnEquipmentInformation.Text = "Equipment Information";
             btnEquipmentInformation.UseVisualStyleBackColor = false;
@@ -116,9 +118,10 @@
             btnReturnRecords.FlatStyle = FlatStyle.Flat;
             btnReturnRecords.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnReturnRecords.ForeColor = Color.White;
-            btnReturnRecords.Location = new Point(26, 396);
+            btnReturnRecords.Location = new Point(23, 297);
+            btnReturnRecords.Margin = new Padding(3, 2, 3, 2);
             btnReturnRecords.Name = "btnReturnRecords";
-            btnReturnRecords.Size = new Size(206, 51);
+            btnReturnRecords.Size = new Size(180, 38);
             btnReturnRecords.TabIndex = 19;
             btnReturnRecords.Text = "Return Records";
             btnReturnRecords.UseVisualStyleBackColor = false;
@@ -132,9 +135,10 @@
             btnRentalTransactions.FlatStyle = FlatStyle.Flat;
             btnRentalTransactions.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnRentalTransactions.ForeColor = Color.White;
-            btnRentalTransactions.Location = new Point(26, 336);
+            btnRentalTransactions.Location = new Point(23, 252);
+            btnRentalTransactions.Margin = new Padding(3, 2, 3, 2);
             btnRentalTransactions.Name = "btnRentalTransactions";
-            btnRentalTransactions.Size = new Size(206, 51);
+            btnRentalTransactions.Size = new Size(180, 38);
             btnRentalTransactions.TabIndex = 18;
             btnRentalTransactions.Text = "Rental Transactions";
             btnRentalTransactions.UseVisualStyleBackColor = false;
@@ -148,9 +152,10 @@
             btnRentalDashboard.FlatStyle = FlatStyle.Flat;
             btnRentalDashboard.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             btnRentalDashboard.ForeColor = Color.FromArgb(135, 66, 62);
-            btnRentalDashboard.Location = new Point(3, 201);
+            btnRentalDashboard.Location = new Point(3, 151);
+            btnRentalDashboard.Margin = new Padding(3, 2, 3, 2);
             btnRentalDashboard.Name = "btnRentalDashboard";
-            btnRentalDashboard.Size = new Size(253, 51);
+            btnRentalDashboard.Size = new Size(221, 38);
             btnRentalDashboard.TabIndex = 17;
             btnRentalDashboard.Text = "Rental Dashboard";
             btnRentalDashboard.TextAlign = ContentAlignment.MiddleLeft;
@@ -165,12 +170,14 @@
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(141, 531);
+            btnLogout.Location = new Point(123, 398);
+            btnLogout.Margin = new Padding(3, 2, 3, 2);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(94, 53);
+            btnLogout.Size = new Size(82, 40);
             btnLogout.TabIndex = 16;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = false;
+            btnLogout.Click += btnLogout_Click;
             // 
             // btnProfile
             // 
@@ -180,9 +187,10 @@
             btnProfile.FlatStyle = FlatStyle.Flat;
             btnProfile.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             btnProfile.ForeColor = Color.White;
-            btnProfile.Location = new Point(25, 531);
+            btnProfile.Location = new Point(22, 398);
+            btnProfile.Margin = new Padding(3, 2, 3, 2);
             btnProfile.Name = "btnProfile";
-            btnProfile.Size = new Size(94, 53);
+            btnProfile.Size = new Size(82, 40);
             btnProfile.TabIndex = 15;
             btnProfile.Text = "Profile";
             btnProfile.UseVisualStyleBackColor = false;
@@ -196,9 +204,10 @@
             btnRentalRequests.FlatStyle = FlatStyle.Flat;
             btnRentalRequests.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
             btnRentalRequests.ForeColor = Color.White;
-            btnRentalRequests.Location = new Point(26, 276);
+            btnRentalRequests.Location = new Point(23, 207);
+            btnRentalRequests.Margin = new Padding(3, 2, 3, 2);
             btnRentalRequests.Name = "btnRentalRequests";
-            btnRentalRequests.Size = new Size(206, 51);
+            btnRentalRequests.Size = new Size(180, 38);
             btnRentalRequests.TabIndex = 12;
             btnRentalRequests.Text = "Rental Requests";
             btnRentalRequests.UseVisualStyleBackColor = false;
@@ -212,9 +221,10 @@
             btnEquipmentDashboard.FlatStyle = FlatStyle.Flat;
             btnEquipmentDashboard.Font = new Font("Segoe UI Semibold", 14F, FontStyle.Bold);
             btnEquipmentDashboard.ForeColor = Color.White;
-            btnEquipmentDashboard.Location = new Point(3, 145);
+            btnEquipmentDashboard.Location = new Point(3, 109);
+            btnEquipmentDashboard.Margin = new Padding(3, 2, 3, 2);
             btnEquipmentDashboard.Name = "btnEquipmentDashboard";
-            btnEquipmentDashboard.Size = new Size(253, 51);
+            btnEquipmentDashboard.Size = new Size(221, 38);
             btnEquipmentDashboard.TabIndex = 10;
             btnEquipmentDashboard.Text = "Equipment Dashboard";
             btnEquipmentDashboard.TextAlign = ContentAlignment.MiddleLeft;
@@ -226,9 +236,9 @@
             lblRentalDashboard.AutoSize = true;
             lblRentalDashboard.Font = new Font("Segoe UI", 22.8000011F, FontStyle.Bold | FontStyle.Italic);
             lblRentalDashboard.ForeColor = Color.FromArgb(135, 66, 62);
-            lblRentalDashboard.Location = new Point(509, 28);
+            lblRentalDashboard.Location = new Point(445, 21);
             lblRentalDashboard.Name = "lblRentalDashboard";
-            lblRentalDashboard.Size = new Size(350, 52);
+            lblRentalDashboard.Size = new Size(280, 42);
             lblRentalDashboard.TabIndex = 13;
             lblRentalDashboard.Text = "Rental Dashboard";
             // 
@@ -236,34 +246,30 @@
             // 
             groupBox2.Controls.Add(lblTotalIncome);
             groupBox2.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
-            groupBox2.Location = new Point(285, 160);
-            groupBox2.Margin = new Padding(3, 4, 3, 4);
+            groupBox2.Location = new Point(249, 120);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(3, 4, 3, 4);
-            groupBox2.Size = new Size(254, 111);
+            groupBox2.Size = new Size(222, 83);
             groupBox2.TabIndex = 52;
             groupBox2.TabStop = false;
             groupBox2.Text = "Total Income";
             // 
             // lblTotalIncome
             // 
-            lblTotalIncome.AutoSize = true;
             lblTotalIncome.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            lblTotalIncome.Location = new Point(101, 56);
+            lblTotalIncome.Location = new Point(21, 42);
             lblTotalIncome.Name = "lblTotalIncome";
-            lblTotalIncome.Size = new Size(34, 30);
+            lblTotalIncome.Size = new Size(178, 23);
             lblTotalIncome.TabIndex = 40;
             lblTotalIncome.Text = "10";
+            lblTotalIncome.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // groupBox1
             // 
             groupBox1.Controls.Add(lblAverageRentalPeriod);
             groupBox1.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
-            groupBox1.Location = new Point(545, 160);
-            groupBox1.Margin = new Padding(3, 4, 3, 4);
+            groupBox1.Location = new Point(477, 120);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(3, 4, 3, 4);
-            groupBox1.Size = new Size(254, 111);
+            groupBox1.Size = new Size(222, 83);
             groupBox1.TabIndex = 53;
             groupBox1.TabStop = false;
             groupBox1.Text = "Avarage Rental Period";
@@ -272,9 +278,9 @@
             // 
             lblAverageRentalPeriod.AutoSize = true;
             lblAverageRentalPeriod.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            lblAverageRentalPeriod.Location = new Point(101, 56);
+            lblAverageRentalPeriod.Location = new Point(88, 42);
             lblAverageRentalPeriod.Name = "lblAverageRentalPeriod";
-            lblAverageRentalPeriod.Size = new Size(34, 30);
+            lblAverageRentalPeriod.Size = new Size(26, 23);
             lblAverageRentalPeriod.TabIndex = 40;
             lblAverageRentalPeriod.Text = "10";
             // 
@@ -282,11 +288,9 @@
             // 
             groupBox3.Controls.Add(lblAvailableEquipments);
             groupBox3.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
-            groupBox3.Location = new Point(806, 160);
-            groupBox3.Margin = new Padding(3, 4, 3, 4);
+            groupBox3.Location = new Point(705, 120);
             groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(3, 4, 3, 4);
-            groupBox3.Size = new Size(254, 111);
+            groupBox3.Size = new Size(222, 83);
             groupBox3.TabIndex = 54;
             groupBox3.TabStop = false;
             groupBox3.Text = "Available Equipment";
@@ -295,9 +299,9 @@
             // 
             lblAvailableEquipments.AutoSize = true;
             lblAvailableEquipments.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            lblAvailableEquipments.Location = new Point(101, 56);
+            lblAvailableEquipments.Location = new Point(88, 42);
             lblAvailableEquipments.Name = "lblAvailableEquipments";
-            lblAvailableEquipments.Size = new Size(34, 30);
+            lblAvailableEquipments.Size = new Size(26, 23);
             lblAvailableEquipments.TabIndex = 40;
             lblAvailableEquipments.Text = "10";
             // 
@@ -305,11 +309,9 @@
             // 
             groupBox4.Controls.Add(lblTodayRentalRequest);
             groupBox4.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
-            groupBox4.Location = new Point(806, 307);
-            groupBox4.Margin = new Padding(3, 4, 3, 4);
+            groupBox4.Location = new Point(705, 230);
             groupBox4.Name = "groupBox4";
-            groupBox4.Padding = new Padding(3, 4, 3, 4);
-            groupBox4.Size = new Size(254, 111);
+            groupBox4.Size = new Size(222, 83);
             groupBox4.TabIndex = 57;
             groupBox4.TabStop = false;
             groupBox4.Text = "Today's Rental Requests";
@@ -318,9 +320,9 @@
             // 
             lblTodayRentalRequest.AutoSize = true;
             lblTodayRentalRequest.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            lblTodayRentalRequest.Location = new Point(101, 56);
+            lblTodayRentalRequest.Location = new Point(88, 42);
             lblTodayRentalRequest.Name = "lblTodayRentalRequest";
-            lblTodayRentalRequest.Size = new Size(34, 30);
+            lblTodayRentalRequest.Size = new Size(26, 23);
             lblTodayRentalRequest.TabIndex = 40;
             lblTodayRentalRequest.Text = "10";
             // 
@@ -328,11 +330,9 @@
             // 
             groupBox5.Controls.Add(lblLastMonthRentals);
             groupBox5.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
-            groupBox5.Location = new Point(545, 307);
-            groupBox5.Margin = new Padding(3, 4, 3, 4);
+            groupBox5.Location = new Point(477, 230);
             groupBox5.Name = "groupBox5";
-            groupBox5.Padding = new Padding(3, 4, 3, 4);
-            groupBox5.Size = new Size(254, 111);
+            groupBox5.Size = new Size(222, 83);
             groupBox5.TabIndex = 56;
             groupBox5.TabStop = false;
             groupBox5.Text = "Last Month's Rentals";
@@ -341,9 +341,9 @@
             // 
             lblLastMonthRentals.AutoSize = true;
             lblLastMonthRentals.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            lblLastMonthRentals.Location = new Point(101, 56);
+            lblLastMonthRentals.Location = new Point(88, 42);
             lblLastMonthRentals.Name = "lblLastMonthRentals";
-            lblLastMonthRentals.Size = new Size(34, 30);
+            lblLastMonthRentals.Size = new Size(26, 23);
             lblLastMonthRentals.TabIndex = 40;
             lblLastMonthRentals.Text = "10";
             // 
@@ -351,11 +351,9 @@
             // 
             groupBox6.Controls.Add(lblCurrentlyRented);
             groupBox6.Font = new Font("Segoe UI Semibold", 13.5F, FontStyle.Bold | FontStyle.Italic);
-            groupBox6.Location = new Point(285, 307);
-            groupBox6.Margin = new Padding(3, 4, 3, 4);
+            groupBox6.Location = new Point(249, 230);
             groupBox6.Name = "groupBox6";
-            groupBox6.Padding = new Padding(3, 4, 3, 4);
-            groupBox6.Size = new Size(254, 111);
+            groupBox6.Size = new Size(222, 83);
             groupBox6.TabIndex = 55;
             groupBox6.TabStop = false;
             groupBox6.Text = "Currently Rented";
@@ -364,9 +362,9 @@
             // 
             lblCurrentlyRented.AutoSize = true;
             lblCurrentlyRented.Font = new Font("Segoe UI Semibold", 12.75F, FontStyle.Bold);
-            lblCurrentlyRented.Location = new Point(101, 56);
+            lblCurrentlyRented.Location = new Point(88, 42);
             lblCurrentlyRented.Name = "lblCurrentlyRented";
-            lblCurrentlyRented.Size = new Size(34, 30);
+            lblCurrentlyRented.Size = new Size(26, 23);
             lblCurrentlyRented.TabIndex = 40;
             lblCurrentlyRented.Text = "10";
             // 
@@ -378,10 +376,10 @@
             btnRefreshStatistics.FlatStyle = FlatStyle.Flat;
             btnRefreshStatistics.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnRefreshStatistics.ForeColor = Color.FromArgb(241, 240, 234);
-            btnRefreshStatistics.Location = new Point(385, 479);
+            btnRefreshStatistics.Location = new Point(337, 359);
             btnRefreshStatistics.Margin = new Padding(0);
             btnRefreshStatistics.Name = "btnRefreshStatistics";
-            btnRefreshStatistics.Size = new Size(255, 52);
+            btnRefreshStatistics.Size = new Size(223, 39);
             btnRefreshStatistics.TabIndex = 58;
             btnRefreshStatistics.Text = "Refresh Statistics";
             btnRefreshStatistics.UseVisualStyleBackColor = false;
@@ -395,10 +393,10 @@
             btnOverdueReturns.FlatStyle = FlatStyle.Flat;
             btnOverdueReturns.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnOverdueReturns.ForeColor = Color.FromArgb(241, 240, 234);
-            btnOverdueReturns.Location = new Point(681, 479);
+            btnOverdueReturns.Location = new Point(596, 359);
             btnOverdueReturns.Margin = new Padding(0);
             btnOverdueReturns.Name = "btnOverdueReturns";
-            btnOverdueReturns.Size = new Size(255, 52);
+            btnOverdueReturns.Size = new Size(223, 39);
             btnOverdueReturns.TabIndex = 59;
             btnOverdueReturns.Text = "Overdue Returns";
             btnOverdueReturns.UseVisualStyleBackColor = false;
@@ -412,10 +410,10 @@
             btnReports.FlatStyle = FlatStyle.Flat;
             btnReports.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnReports.ForeColor = Color.FromArgb(241, 240, 234);
-            btnReports.Location = new Point(681, 532);
+            btnReports.Location = new Point(596, 399);
             btnReports.Margin = new Padding(0);
             btnReports.Name = "btnReports";
-            btnReports.Size = new Size(255, 52);
+            btnReports.Size = new Size(223, 39);
             btnReports.TabIndex = 60;
             btnReports.Text = "Reports";
             btnReports.UseVisualStyleBackColor = false;
@@ -423,9 +421,9 @@
             // 
             // RentalDashboard
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1088, 611);
+            ClientSize = new Size(952, 458);
             Controls.Add(btnReports);
             Controls.Add(btnOverdueReturns);
             Controls.Add(btnRefreshStatistics);
@@ -437,14 +435,12 @@
             Controls.Add(pnlNavigationSideBar);
             Controls.Add(groupBox2);
             Controls.Add(lblRentalDashboard);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "RentalDashboard";
             Text = "RentalDashboard";
             Load += RentalDashboard_Load;
             pnlNavigationSideBar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)picLogo).EndInit();
             groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox3.ResumeLayout(false);

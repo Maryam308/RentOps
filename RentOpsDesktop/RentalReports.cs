@@ -197,9 +197,9 @@ Average latency period: {averageLatencyPeriod}
                     string block = $@"
 Rental Transaction ID: {r.RentalTransactionId}
 Rented from (website/application): {(r.RentalRequestId != null ? "Website" : "Application")}
-Rented by: {(r.UserId != null ? r.User.FirstName + " " + r.User.LastName : (r.CustomerId != null ? r.Customer.FirstName + " " + r.Customer.LastName : "Rental Request ID: " + r.RentalRequestId))}
-	Contact information: {(r.UserId != null ? r.User.PhoneNumber + " - " + r.User.Email : (r.CustomerId != null ? r.Customer.PhoneNumber + " - " + r.Customer.Email : "N/A"))}
-Approved by: {r.Employee.FirstName + " " + r.Employee.LastName}
+Rented by: {(r.UserId != null ? r.User?.FirstName + " " + r.User?.LastName : (r.CustomerId != null ? r.Customer?.FirstName + " " + r.Customer?.LastName : "Rental Request ID: " + r.RentalRequestId))}
+	Contact information: {(r.UserId != null ? r.User?.PhoneNumber + " - " + r.User.Email : (r.CustomerId != null ? r.Customer?.PhoneNumber + " - " + r.Customer.Email : "N/A"))}
+Approved by: {r.Employee?.FirstName + " " + r.Employee?.LastName}
 	Contact information: {r.Employee.Email}
 Rented Equipment: {r.Equipment.EquipmentName}
 Rental Period: {r.PickupDate} -> {r.ReturnDate}
@@ -292,9 +292,6 @@ Payment method: {(r.PaymentId != null ? r.Payment.PaymentMethod.PaymentMethodTit
 
                 dbContext.Documents.Add(newDocument);
 
-                //track the changes and add a log
-                auditLogger.TrackChanges(employeeID, Global.sourceId);
-
                 dbContext.SaveChanges();
 
                 // Show custom dialog with Open option
@@ -302,13 +299,17 @@ Payment method: {(r.PaymentId != null ? r.Payment.PaymentMethod.PaymentMethodTit
 
                 if (result == DialogResult.Yes)
                 {
+                    //refresh the rental reports combobox
+                    cmbRentalReports.DataSource = dbContext.Documents
+                        .Where(d => d.FileTypeId == 2).ToList();
+
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo()
                     {
                         FileName = filename,
                         UseShellExecute = true
                     });
                 }
-            }
+        }
             catch (Exception ex)
             {
                 //log the exception using the auditlogger
@@ -319,7 +320,7 @@ Payment method: {(r.PaymentId != null ? r.Payment.PaymentMethod.PaymentMethodTit
 
 
 
-        }
+}
 
         private async void cmbRentalReports_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -368,15 +369,15 @@ Payment method: {(r.PaymentId != null ? r.Payment.PaymentMethod.PaymentMethodTit
                             UseShellExecute = true,
                             Verb = "open"
                         });
-                    }
+                }
                     catch (Exception ex)
                     {
-                        //log the exception using the auditlogger
-                        auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
-                        //print the exception message 
-                        MessageBox.Show($"Error opening file: {ex.Message}");
-                    }
+                    //log the exception using the auditlogger
+                    auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
+                    //print the exception message 
+                    MessageBox.Show($"Error opening file: {ex.Message}");
                 }
+            }
             }
 
             // Hide spinner

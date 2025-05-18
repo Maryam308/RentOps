@@ -75,6 +75,8 @@ namespace RentOpsDesktop
 
                     //do something.. i.e. navigate to next forms
                     UserEquipmentDashboard home = new UserEquipmentDashboard();
+                    //centeralize the form
+                    home.StartPosition = FormStartPosition.CenterScreen;
                     this.Hide();
                     home.Show();
                 }
@@ -131,7 +133,10 @@ namespace RentOpsDesktop
                         //fetch the user from the dbcontext to match the one from the identity context 
                         Global.user = dbContext.Users.FirstOrDefault(x => x.Email == founduser.Email) ?? null;
 
-                        Global.RoleName = roles.FirstOrDefault();
+                        var roleTile = dbContext.Roles.FirstOrDefault(x => x.RoleId == Global.user.RoleId);
+
+                        //fetch the role name from the identity context
+                        Global.RoleName = roleTile.RoleTitle;
 
 
                     }

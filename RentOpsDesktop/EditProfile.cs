@@ -19,7 +19,6 @@ namespace RentOpsDesktop
     {
         bool isFirstNameValid;
         bool isLastNameValid;
-        bool isEmailValid;
         bool isPhoneNumberValid;
 
         int currentUserId;
@@ -65,6 +64,9 @@ namespace RentOpsDesktop
                 txtFirstName.Text = employee.FirstName;
                 txtLastName.Text = employee.LastName;
                 txtEmail.Text = employee.Email;
+                //set the email text box to read only
+                txtEmail.ReadOnly = true;
+
                 txtPhone.Text = employee.PhoneNumber?.ToString() ?? string.Empty;
             }
             catch (Exception ex)
@@ -121,18 +123,27 @@ namespace RentOpsDesktop
                 // Update the employee details
                 employee.FirstName = txtFirstName.Text.Trim();
                 employee.LastName = txtLastName.Text.Trim();
-                employee.Email = txtEmail.Text.Trim();
                 employee.PhoneNumber = txtPhone.Text.Trim();
 
                 dbContext.Users.Update(employee);
-                
+
                 // Track changes 
                 logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                 //save the changes
                 dbContext.SaveChanges();
 
-                MessageBox.Show("Profile updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+                //if pressed on ok navigate to the profile form
+                DialogResult navigate = MessageBox.Show("Profile updated successfully!", "Profile Updated", MessageBoxButtons.OK, MessageBoxIcon.Information);
+              
+                    this.Hide(); //hide the current form
+                    Profile profileForm = new Profile();
+                profileForm.StartPosition = FormStartPosition.CenterScreen; // Center the form
+                profileForm.Show(); //show profile form
+              
+
             }
             catch (Exception ex)
             {
@@ -225,12 +236,13 @@ namespace RentOpsDesktop
 
         private void txtPhone_TextChanged(object sender, EventArgs e)
         {
-            //Validate that the phone number input is exactly 8 digits long
-            string pattern = @"^\d{8}$";
+            //Validate that the phone number input
+            string pattern = @"^\d+$";
+
 
             if (!Regex.IsMatch(txtPhone.Text.Trim(), pattern))
             {
-                lblPhoneNumberError.Text = "Invalid Phone Number. Must be exactly 8 digits.";
+                lblPhoneNumberError.Text = "Invalid Phone Number.";
                 isPhoneNumberValid = false;
             }
             else
@@ -242,19 +254,7 @@ namespace RentOpsDesktop
 
         private void txtEmailError_TextChanged(object sender, EventArgs e)
         {
-            //Validate that the email input is in the correct format
-            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
 
-            if (!Regex.IsMatch(txtEmail.Text.Trim(), pattern))
-            {
-                lblEmailError.Text = "Invalid Email Address";
-                isEmailValid = false;
-            }
-            else
-            {
-                lblEmailError.Text = "";
-                isEmailValid = true;
-            }
         }
 
 
@@ -262,15 +262,14 @@ namespace RentOpsDesktop
         {
             // Check for empty fields
             if (string.IsNullOrWhiteSpace(txtFirstName.Text) ||
-                string.IsNullOrWhiteSpace(txtLastName.Text) ||
-                string.IsNullOrWhiteSpace(txtEmail.Text))
+                string.IsNullOrWhiteSpace(txtLastName.Text))
             {
                 MessageBox.Show("Please fill in all fields.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
             // Check if all individual field validations passed
-            if (!isFirstNameValid || !isLastNameValid || !isEmailValid || !isPhoneNumberValid)
+            if (!isFirstNameValid || !isLastNameValid || !isPhoneNumberValid)
             {
                 MessageBox.Show("Please correct the highlighted errors.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
@@ -279,6 +278,9 @@ namespace RentOpsDesktop
             return true; // Everything is valid
         }
 
-      
+        private void lblPhoneNumberError_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
