@@ -1,4 +1,5 @@
-﻿using RentOpsObjects.Model;
+﻿using System.Security.Cryptography.X509Certificates;
+using RentOpsObjects.Model;
 
 namespace RentOpsWebApp.ViewModels
 {
@@ -24,5 +25,8 @@ namespace RentOpsWebApp.ViewModels
         //object used for crud operations
         public ReturnRecord theReturnRecord { get; set; }
 
+        //properties used in the feedback form
+        public Feedback NewFeedback { get; set; }
+        public Equipment Equipment { get; set; }
     }
 }
