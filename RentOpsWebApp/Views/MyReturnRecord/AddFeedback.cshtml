@@ -1,0 +1,52 @@
+﻿@using RentOpsWebApp.ViewModels
+@model ReturnRecordViewModel 
+@{
+    ViewData["Title"] = "AddFeedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<h1>AddFeedback</h1>
+<br />
+
+<div class="container mt-4">
+    <!-- Equipment Details -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>@Model.Equipment.EquipmentName</h3>
+        </div>
+        <div class="card-body">
+
+            <p><strong>Category:</strong> @Model.Equipment.EquipmentCategory?.EquipmentCategoryTitle</p>
+            <p><strong>Status:</strong> @Model.Equipment.ConditionStatus?.ConditionStatusTitle </p>
+            <p><strong>Availability:</strong> @Model.Equipment.AvailabilityStatus?.AvailabilityStatusTitle</p>
+            <p><strong>Description:</strong> @Model.Equipment.EquipmentDescription"</p>
+        </div>
+    </div>
+
+    <!-- Feedback Form -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Add Customer Feedback</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="AddFeedback" method="post">
+                <!-- Comments -->
+                <div class="form-group mb-3">
+                    <label asp-for="NewFeedback.CommentText" class="form-label">Comments</label>
+                    <input asp-for="NewFeedback.CommentText" class="form-control" />
+                    <span asp-validation-for="NewFeedback.CommentText" class="text-danger"></span>
+                </div>
+
+                <!-- Rating -->
+                <div class="form-group mb-3">
+                    <label asp-for="NewFeedback.Rating" class="form-label">Rating</label>
+                    <input asp-for="NewFeedback.Rating" class="form-control" type="number" min="1" max="5" />
+                    <span asp-validation-for="NewFeedback.Rating" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Add Feedback</button>
+            </form>
+        </div>
+    </div>
+
+ </div>
