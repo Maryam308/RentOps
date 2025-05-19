@@ -149,60 +149,68 @@ namespace RentOpsWebApp.Areas.Identity.Pages.Account
                 };
                 await _userManager.CreateAsync(admin, "Test@123");
                 await _userManager.AddToRoleAsync(admin, "Administrator");
-            
-           
 
-                //var manager = new IdentityUser
-                //{
-                //    UserName = "manager@test.com",
-                //    Email = "manager@test.com",
-                //    EmailConfirmed = true,
-                //    PhoneNumberConfirmed = true
-                //};
-                //await _userManager.CreateAsync(manager, "Test@123");
-                //await _userManager.AddToRoleAsync(manager, "Rental Manager");
+                var managerext = new IdentityUser
+                {
+                    UserName = "ali@example.com",
+                    Email = "ali@example.com",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true
+                };
+                await _userManager.CreateAsync(managerext, "Test@123");
+                await _userManager.AddToRoleAsync(managerext, "Rental Manager");
 
-            
-                //var tech1 = new IdentityUser
-                //{
-                //    UserName = "tech1@test.com",
-                //    Email = "tech1@test.com",
-                //    EmailConfirmed = true,
-                //    PhoneNumberConfirmed = true
-                //};
-                //await _userManager.CreateAsync(tech1, "Test@123");
-                //await _userManager.AddToRoleAsync(tech1, "Rental Manager");
-            
-                //var tech2 = new IdentityUser
-                //{
-                //    UserName = "tech2@test.com",
-                //    Email = "tech2@test.com",
-                //    EmailConfirmed = true,
-                //    PhoneNumberConfirmed = true
-                //};
-                //await _userManager.CreateAsync(tech2, "Test@123");
-                //await _userManager.AddToRoleAsync(tech2, "Rental Manager");
-            
-                //var user1 = new IdentityUser
-                //{
-                //    UserName = "user1@test.com",
-                //    Email = "user1@test.com",
-                //    EmailConfirmed = true,
-                //    PhoneNumberConfirmed = true
-                //};
-                //await _userManager.CreateAsync(user1, "Test@123");
-                //await _userManager.AddToRoleAsync(user1, "Customer");
+                var manager = new IdentityUser
+                {
+                    UserName = "maryam@example.com",
+                    Email = "maryam@example.com",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true
+                };
+                await _userManager.CreateAsync(manager, "Test@123");
+                await _userManager.AddToRoleAsync(manager, "Rental Manager");
 
-            
-                //var user2 = new IdentityUser
-                //{
-                //    UserName = "user2@test.com",
-                //    Email = "user2@test.com",
-                //    EmailConfirmed = true,
-                //    PhoneNumberConfirmed = true
-                //};
-                //await _userManager.CreateAsync(user2, "Test@123");
-                //await _userManager.AddToRoleAsync(user2, "Customer");
+
+                var tech1 = new IdentityUser
+                {
+                    UserName = "youssef@example.com",
+                    Email = "youssef@example.com",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true
+                };
+                await _userManager.CreateAsync(tech1, "Test@123");
+                await _userManager.AddToRoleAsync(tech1, "Rental Manager");
+
+                var tech2 = new IdentityUser
+                {
+                    UserName = "noura@example.com",
+                    Email = "noura@example.com",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true
+                };
+                await _userManager.CreateAsync(tech2, "Test@123");
+                await _userManager.AddToRoleAsync(tech2, "Rental Manager");
+
+                var user1 = new IdentityUser
+                {
+                    UserName = "abdullah@example.com",
+                    Email = "abdullah@example.com",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true
+                };
+                await _userManager.CreateAsync(user1, "Test@123");
+                await _userManager.AddToRoleAsync(user1, "Rental Manager");
+
+
+                var user2 = new IdentityUser
+                {
+                    UserName = "hind@example.com",
+                    Email = "hind@example.com",
+                    EmailConfirmed = true,
+                    PhoneNumberConfirmed = true
+                };
+                await _userManager.CreateAsync(user2, "Test@123");
+                await _userManager.AddToRoleAsync(user2, "Rental Manager");
 
             }
 
@@ -211,10 +219,7 @@ namespace RentOpsWebApp.Areas.Identity.Pages.Account
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            //Input = new InputModel()
-            //{
-            //    RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem { Text = i, Value = i })
-            //};
+            
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)

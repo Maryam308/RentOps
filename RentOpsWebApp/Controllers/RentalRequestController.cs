@@ -262,28 +262,7 @@ namespace RentOpsWebApp.Controllers
 
 
 
-        //this is used to delete transaction record
-        [HttpPost]
-        public IActionResult Delete(int id)
-        {
-            var transaction = _context.RentalTransactions
-                .Include(rt => rt.Payment)
-                .FirstOrDefault(rt => rt.RentalTransactionId == id);
-
-            if (transaction == null) return NotFound();
-
-            // If payment exists, delete it first
-            if (transaction.Payment != null)
-            {
-                _context.Payments.Remove(transaction.Payment);
-            }
-
-            _context.RentalTransactions.Remove(transaction);
-            _context.SaveChanges();
-
-            TempData["Success"] = $"Rental Transaction #{id} was successfully deleted.";
-            return RedirectToAction("MyRentalTransaction");
-        }
+        
 
     }
 }

@@ -228,36 +228,42 @@ namespace RentOpsWebApp.Controllers
                     transaction.Payment = payment;
 
                     //after the payment is done and added to the transaction send a notification to the user that made the request
-                    var notifyUserId = transaction.RentalRequest.UserId;
-
-                    var approvedMessageContent = _context.MessageContents.Include(mc => mc.MessageType)
-                        .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Successful Payment");
-
-                    if (approvedMessageContent == null)
+                    if (transaction.RentalRequest != null)
                     {
-                        //create a new message content
-                        approvedMessageContent  = new MessageContent
+
+
+
+                        var notifyUserId = transaction.RentalRequest.UserId;
+                        if (notifyUserId != null)
                         {
-                            MessageTypeId = _context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Successful Payment").Select(mt => mt.MessageTypeId).FirstOrDefault(),
-                            MessageContentText = "Your payment has been successfully processed.",
-                        };
+                            var approvedMessageContent = _context.MessageContents.Include(mc => mc.MessageType)
+                                .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Successful Payment");
+
+                            if (approvedMessageContent == null)
+                            {
+                                //create a new message content
+                                approvedMessageContent = new MessageContent
+                                {
+                                    MessageTypeId = _context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Successful Payment").Select(mt => mt.MessageTypeId).FirstOrDefault(),
+                                    MessageContentText = "Your payment has been successfully processed.",
+                                };
+                            }
+
+                            if (approvedMessageContent != null)
+                            {
+                                var notification = new Notification
+                                {
+                                    UserId = notifyUserId,
+                                    MessageContentId = approvedMessageContent.MessageContentId,
+                                    NotificationStatusId = 1,
+                                    NotificationTimestamp = DateTime.Now
+                                };
+
+                                _context.Notifications.Add(notification);
+                                _context.SaveChanges();
+                            }
+                        }
                     }
-                        
-                    if (approvedMessageContent != null)
-                    {
-                        var notification = new Notification
-                        {
-                            UserId = notifyUserId,
-                            MessageContentId = approvedMessageContent.MessageContentId,
-                            NotificationStatusId = 1,
-                            NotificationTimestamp = DateTime.Now
-                        };
-
-                        _context.Notifications.Add(notification);
-                        _context.SaveChanges();
-                    }
-
-
 
                 }
                 else
@@ -338,6 +344,8 @@ namespace RentOpsWebApp.Controllers
 
             return RedirectToAction("RentalTransaction");
         }
+
+
 
     }
 

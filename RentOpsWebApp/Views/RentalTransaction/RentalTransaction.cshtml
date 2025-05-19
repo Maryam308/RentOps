@@ -138,6 +138,7 @@
 						<!--print the ids of the docuemnts-->
 						<td>
 							<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
+
 					
 						</td>
 					</tr>
@@ -206,6 +207,7 @@
 						</td>
 						<td>
 							<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
+				
 							
 						</td>
 					</tr>
@@ -230,14 +232,7 @@
 							</td>
 							<td>
 								<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
-								<button type="button"
-										class="btn btn-danger"
-										data-bs-toggle="modal"
-										data-bs-target="#deleteConfirmationModal"
-										data-transaction-id="@record.RentalTransactionId"
-										data-transaction-label="Rental Transaction #@record.RentalTransactionId">
-									Delete
-								</button>
+							
 
 							</td>
 						</tr>
@@ -246,40 +241,7 @@
 		</tbody>
 </table>
 
-		<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header bg-danger text-white">
-						<h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Deletion</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						Are you sure you want to delete <strong id="transactionLabel"></strong>? This will remove all associated data.
-					</div>
-					<div class="modal-footer">
-						<form id="deleteForm" method="post">
-							<input type="hidden" name="id" id="transactionIdToDelete" />
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-							<button type="submit" class="btn btn-danger">Delete</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
+
 }
 </div>
 
-<script>
-	var deleteModal = document.getElementById('deleteConfirmationModal');
-	deleteModal.addEventListener('show.bs.modal', function (event) {
-		var button = event.relatedTarget;
-		var transactionId = button.getAttribute('data-transaction-id');
-		var label = button.getAttribute('data-transaction-label');
-
-		document.getElementById('transactionLabel').textContent = label;
-		document.getElementById('transactionIdToDelete').value = transactionId;
-
-		// Update the form's action dynamically
-		document.getElementById('deleteForm').action = '/MyRentalTransaction/Delete/' + transactionId;
-	});
-</script>

@@ -40,7 +40,6 @@ namespace RentOpsWebApp.Controllers
             };
 
             return View("RentalTransctionDetails", viewModel);
-            // Expects Views/MyRentalTransaction/RentalTransactionDetails.cshtml
         }
 
 
