@@ -1,17 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
+using RentOpsWebApp.Services;
+using System.Collections.Generic;
+using RentOpsObjects.Services;
+using Azure.Core;
 
 namespace RentOpsWebApp.Controllers
 {
+    [Authorize(Roles = "Customer")]
     public class MyRentalTransactionController : Controller
     {
         private readonly RentOpsDBContext _context;
+        AuditLogger auditLogger;
+        IHttpContextAccessor _httpContextAccessor;
 
-        public MyRentalTransactionController(RentOpsDBContext context)
+        public MyRentalTransactionController(RentOpsDBContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            auditLogger = new AuditLogger(_context);
+            _httpContextAccessor = httpContextAccessor;
         }
         public IActionResult Index()
         {
@@ -20,6 +31,8 @@ namespace RentOpsWebApp.Controllers
 
         public IActionResult RentalTransactionDetails(int id)
         {
+
+
             var transaction = _context.RentalTransactions
                 .Include(rt => rt.Equipment)
                 .ThenInclude(e => e.EquipmentCategory)
@@ -33,6 +46,18 @@ namespace RentOpsWebApp.Controllers
             if (transaction == null)
                 return NotFound();
 
+            //the user id could be saved in the rental transaction or the rental request
+            int? userId = transaction.UserId ?? transaction.RentalRequest?.UserId;
+
+
+            // Fetch the current user id
+            var userEmail = User?.Identity?.Name;
+            var currentUserId = _context.Users
+                .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+
+            if (currentUserId == null || currentUserId != userId)
+                return Forbid(); // Only allow the owner
+
 
             var viewModel = new RentalTransactionViewModel
             {
@@ -45,7 +70,12 @@ namespace RentOpsWebApp.Controllers
 
         public IActionResult MyRentalTransaction(string searchRentalTransactionId, string SearchRentalRequestId, string searchEmployeeId, string SearchEquipment, string SearchTransactionDate, string SearchPayment)
         {
-            int currentUserId = 30;
+            //fetch the current user id
+            int? currentUserId = _context.Users
+                    .FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
+
+            if (currentUserId == null) return Unauthorized(); // Ensure user exists
+
             IEnumerable<RentalTransaction> rentalTransactions = _context.RentalTransactions
                 .Include(rt => rt.Equipment)
                 .Include(rt => rt.Employee)
@@ -56,6 +86,7 @@ namespace RentOpsWebApp.Controllers
                 .OrderByDescending(rt => rt.RentalTransactionTimestamp)
                 .Where(rt => rt.RentalRequest.UserId == currentUserId)
                 .ToList();
+
 
             //filtering system
 

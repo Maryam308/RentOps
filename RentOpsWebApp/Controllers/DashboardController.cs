@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
 
 namespace RentOpsWebApp.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         RentOpsDBContext _context;
@@ -20,8 +22,6 @@ namespace RentOpsWebApp.Controllers
         }
         public IActionResult Dashboard()
         {
-            int currentUserId = 9; // Replace with your actual logic
-
 
             //Equipmint Dashboard
 
@@ -100,7 +100,6 @@ namespace RentOpsWebApp.Controllers
             var averageRentalPeriod = _context.RentalTransactions
                 .Include(r => r.Equipment)
                 .Include(r => r.RentalRequest)
-                .Where(r => r.RentalRequest.Equipment.UserId == currentUserId)
                 .Select(r => EF.Functions.DateDiffDay(r.PickupDate, r.ReturnDate))
                 .Average();
 

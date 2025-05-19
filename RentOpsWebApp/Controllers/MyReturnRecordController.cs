@@ -1,18 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
+using RentOpsWebApp.Services;
+using RentOpsObjects.Services;
 
 namespace RentOpsWebApp.Controllers
 {
+    [Authorize(Roles = "Customer")]
     public class MyReturnRecordController : Controller
     {
 
         private readonly RentOpsDBContext _context;
+        AuditLogger auditLogger;
+        IHttpContextAccessor _httpContextAccessor;
 
-        public MyReturnRecordController(RentOpsDBContext context)
+        public MyReturnRecordController(RentOpsDBContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            auditLogger = new AuditLogger(_context);
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -27,12 +35,29 @@ namespace RentOpsWebApp.Controllers
             var record = _context.ReturnRecords
                 .Include(r => r.RentalTransaction)
                 .ThenInclude(rt => rt.Employee)
+                .Include(r => r.RentalTransaction)
+                .ThenInclude(rt => rt.User)
+                .Include(r => r.RentalTransaction)
+                .ThenInclude(rt => rt.RentalRequest)
+                .ThenInclude(rr => rr.User)
                 .Include(r => r.ReturnCondition)
                 .Include(r => r.Document)
                 .FirstOrDefault(r => r.ReturnRecordId == id);
 
             if (record == null)
                 return NotFound();
+
+            //the user id could be saved in the rental transaction or the rental request within the rental transaction
+            int? userId = record.RentalTransaction.UserId ?? record.RentalTransaction.RentalRequest?.UserId;
+
+
+            // Fetch the current user id
+            var userEmail = User?.Identity?.Name;
+            var currentUserId = _context.Users
+                .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+
+            if (currentUserId == null || currentUserId != userId)
+                return Unauthorized(); // Only allow the owner
 
             var viewModel = new ReturnRecordViewModel
             {
@@ -45,8 +70,11 @@ namespace RentOpsWebApp.Controllers
         public IActionResult MyReturnRecord(string searchReturnRecordId, string searchRentalTransactionId, string searchActualReturnDate, string searchConditionStatus)
         {
 
-            //for now the user id is hardcoded to 1
-            int userId = 16;
+            //fetch the current user id
+            int? userId = _context.Users
+                    .FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
+
+            if (userId == null) return Unauthorized(); // Ensure user exists
 
             IEnumerable<ReturnRecord> returnRecords = _context.ReturnRecords
                 .Include(e => e.ReturnCondition)
@@ -121,6 +149,13 @@ namespace RentOpsWebApp.Controllers
             if (transaction == null)
                 return NotFound();
 
+            // Fetch the current user id
+            var userEmail = User?.Identity?.Name;
+            var currentUserId = _context.Users
+                .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+            if (currentUserId == null || currentUserId != transaction.UserId)
+                return Unauthorized(); // Only allow the owner
+
             var viewModel = new ReturnRecordViewModel
             {
                 NewFeedback = new Feedback
@@ -137,23 +172,35 @@ namespace RentOpsWebApp.Controllers
         [HttpPost]
         public IActionResult AddFeedback(ReturnRecordViewModel model)
         {
+
             if (ModelState.IsValid)
             {
+
+                //only allow the user who rented the equipment to add feedback
+
+                var transaction = _context.RentalTransactions
+                    .Include(t => t.Equipment)
+                    .ThenInclude(e => e.EquipmentCategory)
+                    .FirstOrDefault(t => t.RentalTransactionId == model.NewFeedback.RentalTransactionId);
+
+                if (transaction == null)
+                    return NotFound();
+
+                // Fetch the current user id
+                var userEmail = User?.Identity?.Name;
+                var currentUserId = _context.Users
+                    .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+                if (currentUserId == null || currentUserId != transaction.UserId)
+                    return Forbid(); // Only allow the owner
+
                 model.NewFeedback.FeedbackTimestamp = DateTime.Now;
                 model.NewFeedback.IsHidden = false;
 
                 _context.Feedbacks.Add(model.NewFeedback);
                 _context.SaveChanges();
-
-                //Find the return record for this transaction to redirect to details view
-                var returnRecord = _context.ReturnRecords
-                    .FirstOrDefault(r => r.RentalTransactionId == model.NewFeedback.RentalTransactionId);
-
-                if (returnRecord != null)
-                {
-                    TempData["CreateSuccess"] = "Feedback added successfully!";
-                    return RedirectToAction("MyReturnRecord", new { id = returnRecord.ReturnRecordId });
-                }
+                
+                 TempData["CreateSuccess"] = "Feedback added successfully!";
+                   
 
                 return RedirectToAction("MyReturnRecord");
             }

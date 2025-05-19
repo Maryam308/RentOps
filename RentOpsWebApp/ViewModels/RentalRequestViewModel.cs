@@ -6,7 +6,7 @@ namespace RentOpsWebApp.ViewModels
     {
         public IEnumerable<RentalRequest>? rentalRequests { get; set; }
 
-        public RentalRequest rentalRequest { get; set; }
+        public RentalRequest? rentalRequest { get; set; }
 
         public IEnumerable<RentalRequestStatus>? rentalRequestStatuses { get; set; }
 
@@ -20,10 +20,10 @@ namespace RentOpsWebApp.ViewModels
         public string? SearchEquipmentId { get; set; }
 
 
-        public RentalRequest RentalRequest { get; set; } = new RentalRequest();
+        public RentalRequest? RentalRequest { get; set; } = new RentalRequest();
 
 
-        public RentalTransaction NewRentalTransaction { get; set; } = new RentalTransaction();
+        public RentalTransaction? NewRentalTransaction { get; set; } = new RentalTransaction();
 
     }
 }

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
 
 namespace RentOpsWebApp.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class AuditLogController : Controller
     {
         private  RentOpsDBContext _context;

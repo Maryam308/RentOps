@@ -3,14 +3,18 @@ using Microsoft.AspNetCore.Mvc;
 using RentOpsObjects.Model;
 using Microsoft.EntityFrameworkCore;
 using RentOpsWebApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using RentOpsObjects.Services;
 
 
 namespace RentOpsWebApp.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
-        private readonly RentOpsDBContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private  RentOpsDBContext _context;
+        private  UserManager<IdentityUser> _userManager;
+
 
         public ProfileController(RentOpsDBContext context, UserManager<IdentityUser> userManager)
         {
@@ -26,22 +30,24 @@ namespace RentOpsWebApp.Controllers
             return View();
         }
 
+        //get user profile
         public async Task<IActionResult> Details()
         {
 
             // Get current user's email from login
-            // var userEmail = User.Identity?.Name;
-            // if (string.IsNullOrEmpty(userEmail))
-            //     return Unauthorized();
-            // var user = await _context.Users
-            //     .Include(u => u.RentalTransactionUsers)
-            //     .FirstOrDefaultAsync(u => u.Email == userEmail);
-
-            // INSTEAD: Fetch user by hardcoded user ID
-            int userId = 16;
+            var userEmail = User.Identity?.Name;
+            if (string.IsNullOrEmpty(userEmail))
+                return Unauthorized();
             var user = await _context.Users
                 .Include(u => u.RentalTransactionUsers)
-                .FirstOrDefaultAsync(u => u.UserId == userId);
+                .FirstOrDefaultAsync(u => u.Email == userEmail);
+
+            int currentUserId = user.UserId;
+
+            //only allow user to see their own profile
+            if (user == null || user.UserId != currentUserId)
+                return Forbid();
+
 
             if (user == null)
                 return NotFound();
@@ -50,6 +56,7 @@ namespace RentOpsWebApp.Controllers
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                UserId = user.UserId,
                 EmailAddress = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 TotalRentals = user.RentalTransactionUsers.Count()

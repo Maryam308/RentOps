@@ -5,18 +5,24 @@ using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
 using System.Collections.Generic;
 using RentOpsObjects.Services;
+using Azure.Core;
 
 namespace RentOpsWebApp.Controllers
 {
+    [Authorize(Roles = "Customer")]
     public class MyRentalRequestController : Controller
     {
         private RentOpsDBContext _context;
         AuditLogger auditLogger;
+        IHttpContextAccessor _httpContextAccessor;
 
-        public MyRentalRequestController(RentOpsDBContext context)
+        public MyRentalRequestController(RentOpsDBContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             auditLogger = new AuditLogger(_context);
+            _httpContextAccessor = httpContextAccessor;
+
+
         }
         public IActionResult Index()
         {
@@ -25,7 +31,12 @@ namespace RentOpsWebApp.Controllers
 
         public IActionResult MyRentalRequest(string SearchRentalRequestId, string SearchRentalRequestStatusId, string searchequipmentId)
         {
-            int currentUserId = 30;
+            //fetch the current user id
+            int? currentUserId = _context.Users
+                    .FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
+
+            if (currentUserId == null) return Unauthorized(); // Ensure user exists
+
 
             IEnumerable<RentalRequest> rentalRequestsList = _context.RentalRequests
                 .Include(r => r.RentalRequestStatus)
@@ -34,6 +45,7 @@ namespace RentOpsWebApp.Controllers
                 .Where(r => r.UserId == currentUserId)
                 .OrderByDescending(r => r.RentalStartDate)
                 .ToList();
+
 
             //filtering system
 
@@ -69,7 +81,6 @@ namespace RentOpsWebApp.Controllers
             return View(rentalRequestViewModel);
         }
 
-        //[Authorize(Roles = "Customer")]
         public IActionResult ViewDetails(int id)
         {
             var request = _context.RentalRequests
@@ -81,6 +92,16 @@ namespace RentOpsWebApp.Controllers
 
             if (request == null)
                 return NotFound();
+
+            // Fetch the current user id
+            var userEmail = User?.Identity?.Name;
+            var currentUserId = _context.Users
+                .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+
+            if (currentUserId == null || currentUserId != request.UserId)
+                return Forbid(); // Only allow the owner
+
+
 
             var model = new RentalRequestViewModel
             {
@@ -100,6 +121,15 @@ namespace RentOpsWebApp.Controllers
             
             if (rentalRequest == null)
                 return NotFound();
+
+
+            // Fetch the current user id
+            var userEmail = User?.Identity?.Name;
+            var currentUserId = _context.Users
+                .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+
+            if (currentUserId == null || currentUserId != rentalRequest.UserId)
+                return Unauthorized(); // Only allow the owner
 
             var model = new RentalRequestViewModel
             {
@@ -128,7 +158,22 @@ namespace RentOpsWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingRequest = _context.RentalRequests.Find(rentalRequest.RentalRequestId);
+
+                var userEmail = User.Identity.Name;
+                var currentUser = _context.Users.FirstOrDefault(u => u.Email == userEmail);
+
+                if (currentUser == null) return Unauthorized();
+                
+                int currentUserId = currentUser.UserId;
+
+
+                var existingRequest = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == rentalRequest.RentalRequestId && r.UserId == currentUser.UserId);
+
+                if (existingRequest == null)
+                    return Forbid(); // Ensure user owns the request before modifying it
+
+
+
                 if (existingRequest != null)
                 {
                     existingRequest.RentalStartDate = rentalRequest.RentalStartDate;
@@ -137,8 +182,7 @@ namespace RentOpsWebApp.Controllers
                     existingRequest.RentalTotalCost = rentalRequest.RentalTotalCost;
 
                     //track the changes
-                    
-
+                    auditLogger.TrackChanges(currentUserId, 2);
 
                     _context.SaveChanges();
                     return RedirectToAction("MyRentalRequest");
