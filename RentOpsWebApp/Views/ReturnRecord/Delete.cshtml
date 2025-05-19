@@ -31,13 +31,13 @@
 
                 <!-- Actual Return Date -->
                 <div class="form-group mb-3">
-                    <label asp-for="theReturnRecord.ActualReturnDate" class="form-label">Equipment Description</label>
+                    <label asp-for="theReturnRecord.ActualReturnDate" class="form-label">Actual Return Date</label>
                     <input disabled asp-for="theReturnRecord.ActualReturnDate" class="form-control" type="date" />
                 </div>
 
                 <!-- Return Conditions Dropdown -->
                 <div class="form-group mb-3">
-                    <label asp-for="theReturnRecord.ReturnConditionId" class="form-label">Equipment Category</label>
+                    <label asp-for="theReturnRecord.ReturnConditionId" class="form-label">Return Condition</label>
                     <select disabled asp-for="theReturnRecord.ReturnConditionId"
                             asp-items="@Model.conditionStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
                             class="form-select">
@@ -53,7 +53,7 @@
 
                 <!-- Additional Charge -->
                 <div class="form-group mb-3">
-                    <label asp-for="theReturnRecord.AdditionalCharge" class="form-label">Late Return Fee</label>
+                    <label asp-for="theReturnRecord.AdditionalCharge" class="form-label">Additional Charges</label>
                     <input disabled asp-for="theReturnRecord.AdditionalCharge" class="form-control" type="number" step="0.01" />
                     <span asp-validation-for="theReturnRecord.AdditionalCharge" class="text-danger"></span>
                 </div>
@@ -65,7 +65,7 @@
                     <input disabled asp-for="theReturnRecord.DocumentId" class="form-control" type="file" id="formFile">
                 </div>
 
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="submit" class="btn btn-danger my-2">Delete</button>
 
                 <!--Add a Link to go back to the list without deleting-->
                 <a asp-controller="ReturnRecord" asp-action="ReturnRecord" class="btn btn-secondary" style="width:180px">Back to List</a>

@@ -51,7 +51,7 @@
 
 						<div class="input-group">
 							<select asp-for="SearchEquipmentId"
-							asp-items="@Model.equipmentTitle
+							asp-items="@Model.equipmentTitle?
                                .Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
 							class="form-select  mb-3 mx-4">
 								<option value="" disabled selected>Select an Equipment</option>
@@ -106,16 +106,16 @@
 					<tr class="text-center">
 						<td>@record.RentalRequestId</td>
 						<td>@record.RentalRequestTimestamp</td>
-						<td>@record.User.UserId</td>
-						<td>@record.User.FirstName @record.User.LastName</td>
+						<td>@record.User?.UserId</td>
+						<td>@record.User?.FirstName @record.User?.LastName</td>
 						<td>@record.RentalStartDate</td>
 						<td>@record.RentalReturnDate</td>
 						<td>@record.RentalTotalCost</td>
-						<td>@record.Equipment.EquipmentName</td>
-						<td>@record.RentalRequestStatus.RentalRequestStatusTitle</td>
+						<td>@record.Equipment?.EquipmentName</td>
+						<td>@record.RentalRequestStatus?.RentalRequestStatusTitle</td>
 						<td>
 							<!--if the request is not pending approval then show the button in light style-->
-							@if (record.RentalRequestStatus.RentalRequestStatusTitle != "Pending Approval")
+							@if (record.RentalRequestStatus?.RentalRequestStatusTitle != "Pending Approval")
 							{
 								<a asp-action="Review" asp-route-id="@record.RentalRequestId" class="btn btn-outline-primary">Review Request</a>
 							}

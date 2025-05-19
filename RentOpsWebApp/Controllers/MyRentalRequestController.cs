@@ -37,48 +37,61 @@ namespace RentOpsWebApp.Controllers
 
             if (currentUserId == null) return Unauthorized(); // Ensure user exists
 
+            try { 
+            
+                IEnumerable<RentalRequest> rentalRequestsList = _context.RentalRequests
+                    .Include(r => r.RentalRequestStatus)
+                    .Include(r => r.Equipment)
+                    .Include(r => r.User)
+                    .Where(r => r.UserId == currentUserId)
+                    .OrderByDescending(r => r.RentalStartDate)
+                    .ToList();
 
-            IEnumerable<RentalRequest> rentalRequestsList = _context.RentalRequests
-                .Include(r => r.RentalRequestStatus)
-                .Include(r => r.Equipment)
-                .Include(r => r.User)
-                .Where(r => r.UserId == currentUserId)
-                .OrderByDescending(r => r.RentalStartDate)
-                .ToList();
 
+                //filtering system
 
-            //filtering system
+                //If id is used, we filter the list retrieved above
+                if (!String.IsNullOrEmpty(SearchRentalRequestId))
+                {
+                    rentalRequestsList = rentalRequestsList.Where(p =>
+                        p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId)
+                    );
+                }
 
-            //If id is used, we filter the list retrieved above
-            if (!String.IsNullOrEmpty(SearchRentalRequestId))
-            {
-                rentalRequestsList = rentalRequestsList.Where(p =>
-                    p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId)
-                );
+                if (!String.IsNullOrEmpty(searchequipmentId))
+                {
+                    rentalRequestsList = rentalRequestsList.Where(p =>
+                        p.EquipmentId == Convert.ToInt32(searchequipmentId)
+                    );
+                }
+
+                if (!String.IsNullOrEmpty(SearchRentalRequestStatusId))
+                {
+                    rentalRequestsList = rentalRequestsList.Where(p =>
+                        p.RentalRequestStatusId == Convert.ToInt32(SearchRentalRequestStatusId)
+                    );
+                }
+
+                var rentalRequestViewModel = new RentalRequestViewModel
+                {
+                    rentalRequests = rentalRequestsList,
+                    rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
+                    equipmentTitle = _context.Equipment.ToList(),
+                };
+
+                return View(rentalRequestViewModel);
+            
+            }catch (Exception ex) {
+
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace, 1);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+
             }
 
-            if (!String.IsNullOrEmpty(searchequipmentId))
-            {
-                rentalRequestsList = rentalRequestsList.Where(p =>
-                    p.EquipmentId == Convert.ToInt32(searchequipmentId)
-                );
-            }
-
-            if (!String.IsNullOrEmpty(SearchRentalRequestStatusId))
-            {
-                rentalRequestsList = rentalRequestsList.Where(p =>
-                    p.RentalRequestStatusId == Convert.ToInt32(SearchRentalRequestStatusId)
-                );
-            }
-
-            var rentalRequestViewModel = new RentalRequestViewModel
-            {
-                rentalRequests = rentalRequestsList,
-                rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
-                equipmentTitle = _context.Equipment.ToList(),
-            };
-
-            return View(rentalRequestViewModel);
+            
         }
 
         public IActionResult ViewDetails(int id)
@@ -156,39 +169,53 @@ namespace RentOpsWebApp.Controllers
         [HttpPost]
         public IActionResult Edit(RentalRequest rentalRequest)
         {
-            if (ModelState.IsValid)
-            {
+            var userEmail = User.Identity.Name;
+                    var currentUser = _context.Users.FirstOrDefault(u => u.Email == userEmail);
 
-                var userEmail = User.Identity.Name;
-                var currentUser = _context.Users.FirstOrDefault(u => u.Email == userEmail);
-
-                if (currentUser == null) return Unauthorized();
+                    if (currentUser == null) return Unauthorized();
                 
-                int currentUserId = currentUser.UserId;
-
-
-                var existingRequest = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == rentalRequest.RentalRequestId && r.UserId == currentUser.UserId);
-
-                if (existingRequest == null)
-                    return Forbid(); // Ensure user owns the request before modifying it
-
-
-
-                if (existingRequest != null)
+                    int currentUserId = currentUser.UserId;
+            
+            
+            try { 
+                if (ModelState.IsValid)
                 {
-                    existingRequest.RentalStartDate = rentalRequest.RentalStartDate;
-                    existingRequest.RentalReturnDate = rentalRequest.RentalReturnDate;
-                    existingRequest.EquipmentId = rentalRequest.EquipmentId;
-                    existingRequest.RentalTotalCost = rentalRequest.RentalTotalCost;
 
-                    //track the changes
-                    auditLogger.TrackChanges(currentUserId, 2);
+                    var existingRequest = _context.RentalRequests.FirstOrDefault(r => r.RentalRequestId == rentalRequest.RentalRequestId && r.UserId == currentUser.UserId);
 
-                    _context.SaveChanges();
-                    return RedirectToAction("MyRentalRequest");
+                    if (existingRequest == null)
+                        return Forbid(); // Ensure user owns the request before modifying it
+
+
+
+                    if (existingRequest != null)
+                    {
+                        existingRequest.RentalStartDate = rentalRequest.RentalStartDate;
+                        existingRequest.RentalReturnDate = rentalRequest.RentalReturnDate;
+                        existingRequest.EquipmentId = rentalRequest.EquipmentId;
+                        existingRequest.RentalTotalCost = rentalRequest.RentalTotalCost;
+
+                        //track the changes
+                        auditLogger.TrackChanges(currentUserId, 1);
+
+                        _context.SaveChanges();
+                        return RedirectToAction("MyRentalRequest");
+                    }
                 }
+                return View(rentalRequest);
+            
             }
-            return View(rentalRequest);
+            catch (Exception ex)
+            {
+                //log the exception
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace, 1);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+            }
+            
+            
         }
 
 

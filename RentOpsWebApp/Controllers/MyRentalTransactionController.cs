@@ -76,90 +76,105 @@ namespace RentOpsWebApp.Controllers
 
             if (currentUserId == null) return Unauthorized(); // Ensure user exists
 
-            IEnumerable<RentalTransaction> rentalTransactions = _context.RentalTransactions
-                .Include(rt => rt.Equipment)
-                .Include(rt => rt.Employee)
-                .Include(rt => rt.RentalRequest)
-                    .ThenInclude(rr => rr.User)
-                .Include(rt => rt.User)
-                .Include(rt => rt.Payment)
-                .OrderByDescending(rt => rt.RentalTransactionTimestamp)
-                .Where(rt => rt.RentalRequest.UserId == currentUserId)
-                .ToList();
+            try { 
+                IEnumerable<RentalTransaction> rentalTransactions = _context.RentalTransactions
+                    .Include(rt => rt.Equipment)
+                    .Include(rt => rt.Employee)
+                    .Include(rt => rt.RentalRequest)
+                        .ThenInclude(rr => rr.User)
+                    .Include(rt => rt.User)
+                    .Include(rt => rt.Payment)
+                    .OrderByDescending(rt => rt.RentalTransactionTimestamp)
+                    .Where(rt => rt.RentalRequest.UserId == currentUserId)
+                    .ToList();
 
 
-            //filtering system
+                //filtering system
 
-            //If return record id is used, we filter the list retrieved above
-            if (!String.IsNullOrEmpty(searchRentalTransactionId))
-            {
-                rentalTransactions = rentalTransactions.Where(p =>
-                    p.RentalTransactionId == Convert.ToInt32(searchRentalTransactionId)
-                );
-            }
-
-            if (!String.IsNullOrEmpty(SearchRentalRequestId))
-            {
-                rentalTransactions = rentalTransactions.Where(p =>
-                    p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId)
-                );
-            }
-
-            if (!String.IsNullOrEmpty(searchEmployeeId))
-            {
-                rentalTransactions = rentalTransactions.Where(p =>
-                    p.EmployeeId == Convert.ToInt32(searchEmployeeId)
-                );
-            }
-
-            if (!String.IsNullOrEmpty(SearchEquipment))
-            {
-                rentalTransactions = rentalTransactions.Where(p =>
-                    p.EquipmentId == Convert.ToInt32(SearchEquipment)
-                );
-            }
-
-
-            if (!String.IsNullOrEmpty(SearchPayment))
-            {
-
-                //if searchpayment is = paid then we filter the list to show only the paid transactions
-                if (SearchPayment == "Paid")
+                //If return record id is used, we filter the list retrieved above
+                if (!String.IsNullOrEmpty(searchRentalTransactionId))
                 {
                     rentalTransactions = rentalTransactions.Where(p =>
-                        p.Payment != null
+                        p.RentalTransactionId == Convert.ToInt32(searchRentalTransactionId)
                     );
                 }
-                else if (SearchPayment == "Not Paid")
-                {
 
+                if (!String.IsNullOrEmpty(SearchRentalRequestId))
+                {
                     rentalTransactions = rentalTransactions.Where(p =>
-                        p.Payment == null
+                        p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId)
                     );
-
                 }
-            }
 
-
-            if (!string.IsNullOrEmpty(SearchTransactionDate))
-            {
-                DateTime searchTimestamp;
-                if (DateTime.TryParse(SearchTransactionDate, out searchTimestamp))
+                if (!String.IsNullOrEmpty(searchEmployeeId))
                 {
-                    rentalTransactions = rentalTransactions.Where(p => p.RentalTransactionTimestamp.Date == searchTimestamp.Date);
+                    rentalTransactions = rentalTransactions.Where(p =>
+                        p.EmployeeId == Convert.ToInt32(searchEmployeeId)
+                    );
                 }
+
+                if (!String.IsNullOrEmpty(SearchEquipment))
+                {
+                    rentalTransactions = rentalTransactions.Where(p =>
+                        p.EquipmentId == Convert.ToInt32(SearchEquipment)
+                    );
+                }
+
+
+                if (!String.IsNullOrEmpty(SearchPayment))
+                {
+
+                    //if searchpayment is = paid then we filter the list to show only the paid transactions
+                    if (SearchPayment == "Paid")
+                    {
+                        rentalTransactions = rentalTransactions.Where(p =>
+                            p.Payment != null
+                        );
+                    }
+                    else if (SearchPayment == "Not Paid")
+                    {
+
+                        rentalTransactions = rentalTransactions.Where(p =>
+                            p.Payment == null
+                        );
+
+                    }
+                }
+
+
+                if (!string.IsNullOrEmpty(SearchTransactionDate))
+                {
+                    DateTime searchTimestamp;
+                    if (DateTime.TryParse(SearchTransactionDate, out searchTimestamp))
+                    {
+                        rentalTransactions = rentalTransactions.Where(p => p.RentalTransactionTimestamp.Date == searchTimestamp.Date);
+                    }
+                }
+
+
+
+
+                var rentalTransactionViewModel = new RentalTransactionViewModel
+                {
+                    rentalTransactions = rentalTransactions,
+                    equipmentTitle = _context.Equipment.ToList(),
+                };
+
+                return View(rentalTransactionViewModel);
+            
+            
+            }
+            catch (Exception ex)
+            {
+                //log the exception
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace, 1);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
             }
 
-
-
-
-            var rentalTransactionViewModel = new RentalTransactionViewModel
-            {
-                rentalTransactions = rentalTransactions,
-                equipmentTitle = _context.Equipment.ToList(),
-            };
-
-            return View(rentalTransactionViewModel);
+            
         }
     }
 }
