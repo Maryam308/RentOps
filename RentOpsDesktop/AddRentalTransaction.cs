@@ -101,17 +101,6 @@ namespace RentOpsDesktop
                     //add the rental transaction to the database
                     context.RentalTransactions.Add(rentalTransaction);
 
-                    //update the equipment status to rented
-                    var equipment = context.Equipment.FirstOrDefault(e => e.EquipmentId == equipmentId);
-                    if (equipment != null)
-                    {
-                        equipment.AvailabilityStatusId = 2; // out for rent
-                        context.Equipment.Update(equipment);
-
-                        //save changes
-                        context.SaveChanges();
-                    }
-
                     if (isPaid)
                     {
                         //creat a payment object
@@ -138,6 +127,7 @@ namespace RentOpsDesktop
 
                         //save changes in the db and then link the objects to the transaction
                         context.SaveChanges();
+                        
 
                         if (hasDocument)
                         {
@@ -213,10 +203,10 @@ namespace RentOpsDesktop
 
                             context.SaveChanges();
 
-
-
                         }
                     }
+                    //call the function to update the equipment status
+                    UpdateEquipmentStatus();
                     //save the rental transaction id
                     rentalTransactionID = rentalTransaction.RentalTransactionId;
                 }
@@ -285,6 +275,8 @@ namespace RentOpsDesktop
                     //add the rental transaction to the database
                     context.RentalTransactions.Add(rentalTransaction);
 
+                    
+
                     if (isPaid)
                     {
                         //creat a payment object
@@ -311,6 +303,7 @@ namespace RentOpsDesktop
                         //save changes in the db and then link the objects to the transaction
                         context.SaveChanges();
 
+                        
                         //attach the payment to the transaction
                         rentalTransaction.PaymentId = payment.PaymentId;
                         rentalTransaction.Payment = payment;
@@ -373,8 +366,12 @@ namespace RentOpsDesktop
                         //save changes again
                         context.SaveChanges();
 
+                        
+
 
                     }
+                    //call the function to update the equipment status
+                    UpdateEquipmentStatus();
 
                     //save the rental transaction id
                     rentalTransactionID = rentalTransaction.RentalTransactionId;
@@ -397,6 +394,31 @@ namespace RentOpsDesktop
             rentalTransactions.Show();
 
 
+        }
+
+        //a function to update the equipment status
+        private void UpdateEquipmentStatus()
+        {
+            try
+            {
+                //get the equipment
+                var equipment = context.Equipment.FirstOrDefault(e => e.EquipmentId == equipmentId);
+                //update the status to rented
+                equipment.AvailabilityStatusId = 2;
+                // Track changes 
+                logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
+                context.Equipment.Update(equipment);
+                //save changes
+                context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                // log the error
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
+                // show the error message
+                MessageBox.Show("An error occurred while updating the equipment status:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
         }
 
         private void btnBack_Click(object sender, EventArgs e)
