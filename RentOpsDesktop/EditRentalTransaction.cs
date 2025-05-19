@@ -123,11 +123,6 @@ namespace RentOpsDesktop
                         lblPayment.Text = "Not Paid";
                         lblPayment.ForeColor = Color.Red;
 
-                        txtDeposit.Enabled = false;
-                        txtRentalFee.Enabled = false;
-                        dtpPickupDate.Enabled = false;
-                        dtpReturnDate.Enabled = false;
-                        btnUpdateRentalTransaction.Enabled = false;
 
                         cmbPaymentStatus.Enabled = true;
                         cmbPaymentMethod.Enabled = true;
@@ -149,12 +144,6 @@ namespace RentOpsDesktop
                         cmbPaymentStatus.Enabled = false;
                         cmbPaymentMethod.Enabled = false;
 
-                        // Enable editing fields
-                        txtDeposit.Enabled = true;
-                        txtRentalFee.Enabled = true;
-                        dtpPickupDate.Enabled = true;
-                        dtpReturnDate.Enabled = true;
-                        btnUpdateRentalTransaction.Enabled = true;
 
                     }
                 }
@@ -177,14 +166,7 @@ namespace RentOpsDesktop
 
         private void CmbPayment_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cmbPaymentStatus.SelectedIndex != -1 && cmbPaymentMethod.SelectedIndex != -1)
-            {
-                txtDeposit.Enabled = true;
-                txtRentalFee.Enabled = true;
-                dtpPickupDate.Enabled = true;
-                dtpReturnDate.Enabled = true;
-                btnUpdateRentalTransaction.Enabled = true;
-            }
+
         }
 
 
@@ -227,122 +209,94 @@ namespace RentOpsDesktop
 
         private void btnUpdateRentalTransaction_Click(object sender, EventArgs e)
         {
-            // Check if all the fields are valid
             if (validDeposit && validRentalFee && validPickupDate)
             {
-                // If there's no payment and the combo boxes are enabled, validate that both selections are made
                 if (rentalTransactionToEdit.PaymentId == null &&
                     cmbPaymentStatus.Enabled && cmbPaymentMethod.Enabled &&
                     (cmbPaymentStatus.SelectedIndex == -1 || cmbPaymentMethod.SelectedIndex == -1))
                 {
                     MessageBox.Show("Please select both Payment Status and Payment Method before saving.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return; // Prevent save
+                    return;
                 }
 
                 try
                 {
-                    // Update the record
+                    // Update rental transaction fields
                     rentalTransactionToEdit.RentalFee = Convert.ToDouble(txtRentalFee.Text);
                     rentalTransactionToEdit.Deposit = Convert.ToDouble(txtDeposit.Text);
                     rentalTransactionToEdit.ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value);
                     rentalTransactionToEdit.PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value);
 
-                    // If the payment was not initially set, and the comboboxes are enabled
+                    // If new payment needs to be created
                     if (rentalTransactionToEdit.PaymentId == null &&
                         cmbPaymentStatus.Enabled && cmbPaymentMethod.Enabled)
                     {
-                        // Create a new Payment record
                         var newPayment = new Payment
                         {
                             PaymentMethodId = (int)cmbPaymentMethod.SelectedValue,
                             PaymentStatusId = (int)cmbPaymentStatus.SelectedValue
                         };
 
-                        // Add the payment to the database
                         dbContext.Payments.Add(newPayment);
-                        dbContext.SaveChanges(); // Save to generate PaymentId
+                        dbContext.SaveChanges();
 
-                        // Link the new payment to the transaction
                         rentalTransactionToEdit.PaymentId = newPayment.PaymentId;
                         rentalTransactionToEdit.Payment = newPayment;
                     }
 
+                    // Load related documents into the tracked instance
+                    dbContext.Entry(rentalTransactionToEdit).Collection(rt => rt.Documents).Load();
 
-
-
-
-                // Handle Agreement Document
-                var trackedTransaction = dbContext.RentalTransactions
-    .Include(rt => rt.Documents)
-    .FirstOrDefault(rt => rt.RentalTransactionId == rentalTransactionToEdit.RentalTransactionId);
-
-                if (theUploadForm != null && theUploadForm.isAgreementModified)
-                {
-                    if (agreement == null)
+                    // Handle Agreement Document
+                    if (theUploadForm != null && theUploadForm.isAgreementModified)
                     {
-                        var oldAgreement = trackedTransaction.Documents.FirstOrDefault(d => d.FileTypeId == 4);
-                        if (oldAgreement != null)
-                            trackedTransaction.Documents.Remove(oldAgreement);
-                    }
-                    else if (!trackedTransaction.Documents.Contains(agreement))
-                    {
-                        dbContext.Documents.Add(agreement);
-                        dbContext.SaveChanges();
-                        trackedTransaction.Documents.Add(agreement);
-                    }
-                }
-
-                if (theUploadForm != null && theUploadForm.isIDModified)
-                {
-                    if (idVerification == null)
-                    {
-                        var oldID = trackedTransaction.Documents.FirstOrDefault(d => d.FileTypeId == 5);
-                        if (oldID != null)
-                            trackedTransaction.Documents.Remove(oldID);
-                    }
-                    else if (!trackedTransaction.Documents.Contains(idVerification))
-                    {
-                        dbContext.Documents.Add(idVerification);
-                        dbContext.SaveChanges();
-                        trackedTransaction.Documents.Add(idVerification);
-                    }
-                }
-
-                dbContext.SaveChanges();
-
-
-
-                //update the rental transaction in the dbcontext
-
-                if (!dbContext.Entry(rentalTransactionToEdit).IsKeySet)
-                    {
-                        dbContext.RentalTransactions.Update(rentalTransactionToEdit);
+                        var oldAgreement = rentalTransactionToEdit.Documents.FirstOrDefault(d => d.FileTypeId == 4);
+                        if (agreement == null && oldAgreement != null)
+                        {
+                            rentalTransactionToEdit.Documents.Remove(oldAgreement);
+                        }
+                        else if (agreement != null && !rentalTransactionToEdit.Documents.Contains(agreement))
+                        {
+                            dbContext.Documents.Add(agreement);
+                            dbContext.SaveChanges();
+                            rentalTransactionToEdit.Documents.Add(agreement);
+                        }
                     }
 
+                    // Handle ID Verification Document
+                    if (theUploadForm != null && theUploadForm.isIDModified)
+                    {
+                        var oldID = rentalTransactionToEdit.Documents.FirstOrDefault(d => d.FileTypeId == 5);
+                        if (idVerification == null && oldID != null)
+                        {
+                            rentalTransactionToEdit.Documents.Remove(oldID);
+                        }
+                        else if (idVerification != null && !rentalTransactionToEdit.Documents.Contains(idVerification))
+                        {
+                            dbContext.Documents.Add(idVerification);
+                            dbContext.SaveChanges();
+                            rentalTransactionToEdit.Documents.Add(idVerification);
+                        }
+                    }
 
-                //log the changes
-                logger.TrackChanges(currentUserId, Global.sourceId);
+                    // Log the changes
+                    logger.TrackChanges(currentUserId, Global.sourceId);
 
-                    // Save the final updates (transaction and optionally the link to payment)
+                    // Save all changes
                     dbContext.SaveChanges();
 
                     MessageBox.Show("The rental transaction has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                     this.DialogResult = DialogResult.OK;
-                this.Close();
+                    this.Close();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId);
+                    MessageBox.Show("An error occurred while updating the transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-                    catch (Exception ex)
-                    {
-                // log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId);
-
-                // show the error message
-                MessageBox.Show("An error occurred while updating the transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
             else
             {
-                // show a message box indicating that the fields are not valid
                 MessageBox.Show("Please fill all the fields correctly.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

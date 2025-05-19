@@ -36,7 +36,7 @@ namespace RentOpsDesktop
 
         private void EquipmentDashboard_Load(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 //load data to the equipment cateogry combobox
                 cmbEquipmentCategory.DataSource = context.EquipmentCategories.ToList();
@@ -73,7 +73,7 @@ namespace RentOpsDesktop
                 //show error message
                 MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
         }
         private void RefreshEquipmentGridview()
         {
@@ -127,7 +127,7 @@ namespace RentOpsDesktop
                         .FirstOrDefault(), // Fetch the equipment category title
                     AddedBy = context.Users
                         .Where(u => u.UserId == e.UserId)
-                        .Select(u => u.FirstName)
+                        .Select(u => u.FirstName + " " + u.LastName)
                         .FirstOrDefault() // Fetch the user's full name
                 }).ToList(); // Convert the result to a list
 
@@ -170,7 +170,6 @@ namespace RentOpsDesktop
             cmbConditionStatus.SelectedItem = null;
             cmbUser.SelectedItem = null;
             txtEquipID.Text = "";
-            txtEquipName.Text = "";
             RefreshEquipmentGridview();
         }
 
@@ -192,9 +191,10 @@ namespace RentOpsDesktop
             AddEquipment addEquipment = new AddEquipment();
             addEquipment.StartPosition = FormStartPosition.CenterScreen; // Center the form
             addEquipment.ShowDialog(); // Show the add equipment form
-            
-            try { 
-            
+
+            try
+            {
+
                 if (addEquipment.DialogResult == DialogResult.OK)
                 {
                     // Detach any existing entity with the same key value
@@ -208,14 +208,16 @@ namespace RentOpsDesktop
 
                     // Track changes 
                     logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
-                
+
 
                     context.SaveChanges(); // Save changes to the database
                     RefreshEquipmentGridview(); // Refresh the DataGridView
                 }
-            
-            
-            }catch(Exception ex) {
+
+
+            }
+            catch (Exception ex)
+            {
 
 
                 // log the exception
@@ -225,13 +227,13 @@ namespace RentOpsDesktop
                 MessageBox.Show("An error occurred while adding the equipment: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 
-            }   
+            }
 
         }
 
         private void btnEditEquipmentInformation_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 // Check if the DataGridView is empty
                 if (dgvEquipment.Rows.Count == 0)
@@ -298,17 +300,82 @@ namespace RentOpsDesktop
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Log the exception
                 logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
-                
+
                 //show error message
                 MessageBox.Show("An error occurred while loading the form: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void btnDeleteEquipmentInformation_Click(object sender, EventArgs e)
+
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                // Start with all equipment
+                var equipmentToShow = context.Equipment.AsQueryable();
+
+                // Apply search by Equipment ID if entered
+                if (!string.IsNullOrEmpty(txtEquipID.Text))
+                {
+                    int equipmentId;
+                    if (int.TryParse(txtEquipID.Text, out equipmentId))
+                    {
+                        equipmentToShow = equipmentToShow.Where(e => e.EquipmentId == equipmentId);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter a valid Equipment ID.");
+                        return;
+                    }
+                }
+
+                // Fetch the filtered list based on search criteria and select relevant fields
+                var searchedList = equipmentToShow.Select(e => new
+                {
+                    EquipmentID = e.EquipmentId,
+                    EquipmentName = e.EquipmentName,
+                    EquipmentDescription = e.EquipmentDescription,
+                    RentalPrice = e.RentalPrice,
+                    ConditionStatus = context.ConditionStatuses
+                        .Where(cs => cs.ConditionStatusId == e.ConditionStatusId)
+                        .Select(cs => cs.ConditionStatusTitle)
+                        .FirstOrDefault(),
+                    AvailabilityStatus = context.AvailabilityStatuses
+                        .Where(a => a.AvailabilityStatusId == e.AvailabilityStatusId)
+                        .Select(a => a.AvailabilityStatusTitle)
+                        .FirstOrDefault(),
+                    EquipmentCategory = context.EquipmentCategories
+                        .Where(ec => ec.EquipmentCategoryId == e.EquipmentCategoryId)
+                        .Select(ec => ec.EquipmentCategoryTitle)
+                        .FirstOrDefault(),
+                    AddedBy = context.Users
+                        .Where(u => u.UserId == e.UserId)
+                        .Select(u => u.FirstName)
+                        .FirstOrDefault()
+                }).ToList();
+
+                // Bind the fetched data to the DataGridView
+                dgvEquipment.DataSource = searchedList;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
+
+
+                // Show error message if an exception occurs
+                MessageBox.Show("An unexpected error occurred while searching for equipment. Please try again or contact support if the problem persists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
         {
             // Check if the DataGridView is empty
             if (dgvEquipment.Rows.Count == 0)
@@ -358,11 +425,11 @@ namespace RentOpsDesktop
                     {
                         // remove the equipment
                         context.Equipment.Remove(equipment);
-                        
+
                         // Track changes
                         logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
-                        // Save changes to the database
-                        
+                                                                                  // Save changes to the database
+
                         context.SaveChanges();
 
                         // Show success message
@@ -386,87 +453,5 @@ namespace RentOpsDesktop
                 }
             }
         }
-
-        private void btnSearch_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                // Check if both fields are empty
-                if (string.IsNullOrEmpty(txtEquipID.Text) && string.IsNullOrEmpty(txtEquipName.Text))
-                {
-                    MessageBox.Show("Please enter either an Equipment ID or Equipment Name to search.");
-                    return;
-                }
-
-                // Check if both fields are filled
-                if (!string.IsNullOrEmpty(txtEquipID.Text) && !string.IsNullOrEmpty(txtEquipName.Text))
-                {
-                    MessageBox.Show("Please enter either an Equipment ID or Equipment Name, not both.");
-                    return;
-                }
-
-                // Start with all equipment
-                var equipmentToShow = context.Equipment.AsQueryable();
-
-                // Apply search by Equipment ID if entered
-                if (!string.IsNullOrEmpty(txtEquipID.Text))
-                {
-                    int equipmentId;
-                    if (int.TryParse(txtEquipID.Text, out equipmentId))
-                    {
-                        equipmentToShow = equipmentToShow.Where(e => e.EquipmentId == equipmentId);
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please enter a valid Equipment ID.");
-                        return;
-                    }
-                }
-                // Apply search by Equipment Name if entered
-                else if (!string.IsNullOrEmpty(txtEquipName.Text))
-                {
-                    string equipmentName = txtEquipName.Text.Trim();
-                    equipmentToShow = equipmentToShow.Where(e => e.EquipmentName.Contains(equipmentName));
-                }
-
-                // Fetch the filtered list based on search criteria and select relevant fields
-                var searchedList = equipmentToShow.Select(e => new
-                {
-                    EquipmentID = e.EquipmentId,
-                    EquipmentName = e.EquipmentName,
-                    EquipmentDescription = e.EquipmentDescription,
-                    RentalPrice = e.RentalPrice,
-                    ConditionStatus = context.ConditionStatuses
-                        .Where(cs => cs.ConditionStatusId == e.ConditionStatusId)
-                        .Select(cs => cs.ConditionStatusTitle)
-                        .FirstOrDefault(),
-                    AvailabilityStatus = context.AvailabilityStatuses
-                        .Where(a => a.AvailabilityStatusId == e.AvailabilityStatusId)
-                        .Select(a => a.AvailabilityStatusTitle)
-                        .FirstOrDefault(),
-                    EquipmentCategory = context.EquipmentCategories
-                        .Where(ec => ec.EquipmentCategoryId == e.EquipmentCategoryId)
-                        .Select(ec => ec.EquipmentCategoryTitle)
-                        .FirstOrDefault(),
-                    AddedBy = context.Users
-                        .Where(u => u.UserId == e.UserId)
-                        .Select(u => u.FirstName)
-                        .FirstOrDefault()
-                }).ToList();
-
-                // Bind the fetched data to the DataGridView
-                dgvEquipment.DataSource = searchedList;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
-
-
-                // Show error message if an exception occurs
-                MessageBox.Show("An unexpected error occurred while searching for equipment. Please try again or contact support if the problem persists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
-        }
-        }
     }
+}

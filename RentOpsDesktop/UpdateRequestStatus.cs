@@ -27,6 +27,7 @@ namespace RentOpsDesktop
             InitializeComponent();
             this.rentalRequestId = rentalRequestId;
             context = new RentOpsDBContext();
+            currentUserId = Global.user.UserId; ;
 
             auditLogger = new AuditLogger(context);
 
@@ -92,8 +93,9 @@ namespace RentOpsDesktop
                 if (requestToUpdate != null)
                 {
 
-                    // Load all statuses into the list box
+                    // Load only Approve (2) and Reject (3) statuses into the list box
                     var statuses = context.RentalRequestStatuses
+                        .Where(rs => rs.RentalRequestStatusId == 2 || rs.RentalRequestStatusId == 3)
                         .Select(rs => new { rs.RentalRequestStatusId, rs.RentalRequestStatusTitle })
                         .ToList();
 
@@ -101,12 +103,15 @@ namespace RentOpsDesktop
                     lstStatus.DisplayMember = "RentalRequestStatusTitle";
                     lstStatus.ValueMember = "RentalRequestStatusId";
 
-                    // Select the current status of the rental request
-                    lstStatus.SelectedValue = requestToUpdate.RentalRequestStatusId;
-                }
-                else
-                {
-                    MessageBox.Show("Rental request not found.");
+                    // Pre-select the current status of the rental request (if it's 2 or 3)
+                    if (requestToUpdate.RentalRequestStatusId == 2 || requestToUpdate.RentalRequestStatusId == 3)
+                    {
+                        lstStatus.SelectedValue = requestToUpdate.RentalRequestStatusId;
+                    }
+                    else
+                    {
+                        lstStatus.ClearSelected(); // Otherwise don't preselect
+                    }
                 }
             }
             catch (Exception ex)

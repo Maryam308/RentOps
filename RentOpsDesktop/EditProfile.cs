@@ -125,6 +125,11 @@ namespace RentOpsDesktop
                 employee.LastName = txtLastName.Text.Trim();
                 employee.PhoneNumber = txtPhone.Text.Trim();
 
+                // Update the global user object
+                Global.user.FirstName = txtFirstName.Text.Trim();
+                Global.user.LastName = txtLastName.Text.Trim();
+                Global.user.PhoneNumber = txtPhone.Text.Trim();
+
                 dbContext.Users.Update(employee);
 
                 // Track changes 

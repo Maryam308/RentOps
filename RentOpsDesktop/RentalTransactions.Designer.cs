@@ -31,7 +31,6 @@
             dgvRentalTransactions = new DataGridView();
             lblReturnRecords = new Label();
             pnlNavigationSideBar = new Panel();
-            btnDeleteRentalTransaction = new Button();
             btnSelectRecord = new Button();
             btnEditRentalTransaction = new Button();
             btnAddnewRentalTransaction = new Button();
@@ -85,7 +84,6 @@
             // pnlNavigationSideBar
             // 
             pnlNavigationSideBar.BackColor = Color.FromArgb(187, 178, 169);
-            pnlNavigationSideBar.Controls.Add(btnDeleteRentalTransaction);
             pnlNavigationSideBar.Controls.Add(btnSelectRecord);
             pnlNavigationSideBar.Controls.Add(btnEditRentalTransaction);
             pnlNavigationSideBar.Controls.Add(btnAddnewRentalTransaction);
@@ -95,23 +93,6 @@
             pnlNavigationSideBar.Name = "pnlNavigationSideBar";
             pnlNavigationSideBar.Size = new Size(444, 977);
             pnlNavigationSideBar.TabIndex = 21;
-            // 
-            // btnDeleteRentalTransaction
-            // 
-            btnDeleteRentalTransaction.BackColor = Color.FromArgb(187, 178, 169);
-            btnDeleteRentalTransaction.BackgroundImageLayout = ImageLayout.None;
-            btnDeleteRentalTransaction.FlatAppearance.BorderSize = 0;
-            btnDeleteRentalTransaction.FlatStyle = FlatStyle.Flat;
-            btnDeleteRentalTransaction.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
-            btnDeleteRentalTransaction.ForeColor = Color.White;
-            btnDeleteRentalTransaction.Location = new Point(17, 578);
-            btnDeleteRentalTransaction.Margin = new Padding(6, 4, 6, 4);
-            btnDeleteRentalTransaction.Name = "btnDeleteRentalTransaction";
-            btnDeleteRentalTransaction.Size = new Size(412, 81);
-            btnDeleteRentalTransaction.TabIndex = 18;
-            btnDeleteRentalTransaction.Text = "Delete Rental Transaction";
-            btnDeleteRentalTransaction.UseVisualStyleBackColor = false;
-            btnDeleteRentalTransaction.Click += btnDeleteRentalTransaction_Click;
             // 
             // btnSelectRecord
             // 
@@ -420,7 +401,6 @@
         private DataGridView dgvRentalTransactions;
         private Label lblReturnRecords;
         private Panel pnlNavigationSideBar;
-        private Button btnDeleteRentalTransaction;
         private Button btnSelectRecord;
         private Button btnEditRentalTransaction;
         private Button btnAddnewRentalTransaction;
