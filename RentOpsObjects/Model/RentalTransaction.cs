@@ -25,6 +25,8 @@ public partial class RentalTransaction
     [Column("rentalRequestID")]
     public int? RentalRequestId { get; set; }
 
+    //dont allow negative values
+    [Range(0, double.MaxValue, ErrorMessage = "Deposit cannot be negative or zero.")]
     [Column("deposit")]
     public double Deposit { get; set; }
 
@@ -34,6 +36,8 @@ public partial class RentalTransaction
     [Column("customerID")]
     public int? CustomerId { get; set; }
 
+    // dont allow negative values
+    [Range(0, double.MaxValue, ErrorMessage = "Rental Fee cannot be negative.")]
     [Column("rentalFee")]
     public double RentalFee { get; set; }
 

@@ -6,9 +6,9 @@
 }
 
 @{
-	// var userRoleTitle = ViewBag.UserRoleTitle.ToString();
-	// var isAdminOrManager = userRoleTitle == "Administrator" || userRoleTitle == "Rental Manager"; Check roles
-	// var isAdmin = userRoleTitle == "Administrator";
+	var userRoleTitle = ViewBag.UserRoleTitle.ToString();
+	var isAdminOrManager = userRoleTitle == "Administrator" || userRoleTitle == "Rental Manager"; //Check roles
+	var isAdmin = userRoleTitle == "Administrator";
 }
 
 <!--Check if there is a success message to display-->
@@ -89,19 +89,19 @@
 
 		
 		<div class="col-4 text-center mt-5 pt-4 ">
-			@* @if (isAdminOrManager) *@
-			@* 		{ *@
+			 @if (isAdminOrManager) 
+			 		{ 
 <a asp-controller="Equipment" asp-action="AddEquipment"  class="btn btn-primary my-2 px-5 py-3" >
 				<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
 			</a>
-					@* } *@
+					 } 
 			<br/>
-			@* @if (isAdmin) *@
-			@* 		{ *@
+			@if (isAdmin) 
+			 		{ 
 			<a asp-controller="Equipment" asp-action="ManageCategories" class="btn btn-primary my-2 px-4 py-3">
 				Manage Equipment Categories
 			</a>
-					@* } *@
+					 } 
         </div>
 
 		
@@ -153,13 +153,13 @@
 				</td>
 
 					<!-- Conditional rendering based on role title -->
-					@* @if (isAdminOrManager) *@
-					@* { *@
+					 @if (isAdminOrManager) 
+					 {
 						<td>
 							<a asp-action="Edit" asp-route-id="@record.EquipmentId" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Edit</a>
 							<a asp-action="Delete" asp-route-id="@record.EquipmentId" class="btn btn-danger"><i class="bi bi-trash-fill"></i>Delete</a>
 						</td>
-					@* } *@
+					 } 
 
 
 

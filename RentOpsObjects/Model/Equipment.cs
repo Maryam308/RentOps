@@ -20,6 +20,8 @@ public partial class Equipment
     [StringLength(250)]
     public string EquipmentDescription { get; set; } = null!;
 
+    //dont allow negative values or zero
+    [Range(0.001, double.MaxValue, ErrorMessage = "Invalid Rental Price")]
     [Column("rentalPrice")]
     public double RentalPrice { get; set; }
 

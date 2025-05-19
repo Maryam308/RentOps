@@ -14,6 +14,15 @@
 			@TempData["CreateSuccess"].ToString()
 		</div>
 	}
+
+	//check RuturnRecordError tempdata
+	if (TempData["ReturnRecordError"] != null)
+	{
+		<div class="alert alert-danger" role="alert">
+			@TempData["ReturnRecordError"].ToString()
+		</div>
+	}
+
 }
 
 <div class="container p-3">

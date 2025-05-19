@@ -93,7 +93,24 @@
 						<td>@record.RentalRequestStatus.RentalRequestStatusTitle</td>
 						<td>
 							<a asp-action="ViewDetails" asp-route-id="@record.RentalRequestId" class="btn btn-primary">View Details</a>
-							<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-secondary">Edit</a>
+
+							@{
+								bool isPending = @record.RentalRequestStatus?.RentalRequestStatusTitle == "Pending Approval";
+
+								if (isPending)
+								{
+									<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-primary">Edit</a>
+								}
+								else
+								{
+									<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-secondary">Edit</a>
+								}
+
+							}
+
+
+
+							
 						</td>
 					</tr>
 				}

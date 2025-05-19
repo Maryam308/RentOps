@@ -33,45 +33,72 @@
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Notification" asp-action="Notification">Notifications</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Equipment" asp-action="Equipment">Equipment</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Dashboard" asp-action="Dashboard">Dashboard</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Notification" asp-action="Notification">Notifications</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Equipment" asp-action="Equipment">Equipment</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="AuditLog" asp-action="AuditLog">Audit Logs</a>
-                        </li>
+                            @* Fetch the user from the database *@
+                            var user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
+                            string roleName = null;
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Rental Details</a>
-                            <div class="dropdown-menu">
+                            if (user != null)
+                            {
+                                // Get the role using the RoleId from the user
+                                roleName = _context.Roles.FirstOrDefault(r => r.RoleId == user.RoleId)?.RoleTitle;
+                            }
 
-                                <a class="nav-link" asp-area="" asp-controller="RentalRequest" asp-action="RentalRequest">Rental Requests</a>
-                                <a class="nav-link" asp-area="" asp-controller="RentalTransaction" asp-action="RentalTransaction">Rental Transactions</a>
-                                <a class="nav-link" asp-area="" asp-controller="ReturnRecord" asp-action="ReturnRecord">Return Records</a>
+                            @* Display Dashboard and Audit Logs based on roles *@
+                            if (roleName == "Administrator" || roleName == "Rental Manager")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Dashboard" asp-action="Dashboard">Dashboard</a>
+                                </li>
+                            }
 
-                            </div>
-                        </li>
+                            if (roleName == "Administrator")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="AuditLog" asp-action="AuditLog">Audit Logs</a>
+                                </li>
+                            }
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Rentals</a>
-                            <div class="dropdown-menu">
+                            @* Display Rental Details for Admins and Managers *@
+                            if (roleName == "Administrator" || roleName == "Rental Manager")
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Rental Details</a>
+                                    <div class="dropdown-menu">
+                                        <a class="nav-link" asp-area="" asp-controller="RentalRequest" asp-action="RentalRequest">Rental Requests</a>
+                                        <a class="nav-link" asp-area="" asp-controller="RentalTransaction" asp-action="RentalTransaction">Rental Transactions</a>
+                                        <a class="nav-link" asp-area="" asp-controller="ReturnRecord" asp-action="ReturnRecord">Return Records</a>
+                                    </div>
+                                </li>
+                            }
 
-                                <a class="dropdown-item" asp-area="" asp-controller="MyRentalRequest" asp-action="MyRentalRequest">My Rental Request</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction">My Rental Transactions</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="MyReturnRecord" asp-action="MyReturnRecord">My Return Records</a>
-
-                            </div>
-                        </li>
+                            @* Display My Rentals for Customers *@
+                            if (roleName == "Customer")
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Rentals</a>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-area="" asp-controller="MyRentalRequest" asp-action="MyRentalRequest">My Rental Requests</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction">My Rental Transactions</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="MyReturnRecord" asp-action="MyReturnRecord">My Return Records</a>
+                                    </div>
+                                </li>
+                            }
+                        }
                     </ul>
-                    <div class="d-flex">
+                     <div class="d-flex"> 
                         <!--drop down with two options logout and profile-->
-                        <div class="dropdown">
+                         @if (User.Identity.IsAuthenticated)
+                        {
+                           <div class="dropdown"> 
                             @{
                                 var currentUserEmail = User.Identity?.Name;
                                 var currentUser = _context.Users.FirstOrDefault(u => u.Email == currentUserEmail);
@@ -80,9 +107,9 @@
 
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 1em; width: 180px;">
                                 @fullName
-                            </button>
+                                 </button>
 
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"> 
                                 <li><a class="dropdown-item" asp-area="" asp-controller="Profile" asp-action="Details">Profile</a></li>
                                 <li>
                                     <form asp-area="Identity" asp-page="/Account/Logout"
@@ -90,9 +117,13 @@
                                         <button type="submit" class="btn btn-link dropdown-item text-start">Logout</button>
                                     </form>
                                 </li>
-                            </ul>
-                        </div>
-                    </div>
+								</ul>
+
+							</div>
+						}
+
+                          
+                     </div> 
                 </div>
                 <partial name="_LoginPartial" />
         </nav>
