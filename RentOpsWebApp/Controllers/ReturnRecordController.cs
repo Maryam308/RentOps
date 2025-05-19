@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
+using RentOpsObjects.Services;
 
 namespace RentOpsWebApp.Controllers
 {
@@ -10,11 +11,14 @@ namespace RentOpsWebApp.Controllers
     public class ReturnRecordController : Controller
     {
         private  RentOpsDBContext _context;
+        AuditLogger _auditLogger;
 
         public ReturnRecordController(RentOpsDBContext context)
         {
             _context = context;
+            _auditLogger = new AuditLogger(context);
         }
+
         public IActionResult Index()
         {
             return View();
@@ -84,6 +88,8 @@ namespace RentOpsWebApp.Controllers
         {
 
             //fetch only the rental transactions without return records
+
+
             //save the ids of the rental transactions that has a return record in a list
             List<int> rentalTransactionIds = new List<int>();
 
@@ -115,8 +121,8 @@ namespace RentOpsWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ReturnRecordViewModel model)
         {
-            
 
+            //check if the model state is valid else return the view with the error message
             if (!ModelState.IsValid)
             {
                 IEnumerable<ReturnRecord> returnRecords = _context.ReturnRecords
@@ -139,10 +145,25 @@ namespace RentOpsWebApp.Controllers
                 return View("ReturnRecord");
             }
 
+            // Fetch the current user id
+            var userEmail = User?.Identity?.Name;
+            var currentUserId = _context.Users
+                .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+
+
+
+            //try to add the return record to the database if the model state is valid
             try
             {
+                int userId = 1; 
+                if (currentUserId != null)
+                {
+                    userId = (int)currentUserId;
+                }
+
                 var returnRecord = model.theReturnRecord;
 
+                //check for  uploaded file
                 if (model.UploadedFile != null && model.UploadedFile.Length > 0)
                 {
                     if (Path.GetExtension(model.UploadedFile.FileName).ToLower() != ".pdf")
@@ -151,20 +172,22 @@ namespace RentOpsWebApp.Controllers
                         return View("Error");
                     }
 
+                    //create a new document object and save it to the database
                     using var memoryStream = new MemoryStream();
                     await model.UploadedFile.CopyToAsync(memoryStream);
 
                     var document = new Document
                     {
-                        UserId = 1, // Replace with actual user context
+                        UserId = userId,
                         FileName = model.UploadedFile.FileName,
                         UploadDate = DateTime.UtcNow,
-                        FileTypeId = 3, 
+                        FileTypeId = 3, //file type id for damage report
                         StoragePath = "",
                         FileData = memoryStream.ToArray()
                     };
 
                     _context.Documents.Add(document);
+
                     await _context.SaveChangesAsync();
 
                     returnRecord.DocumentId = document.DocumentId;
@@ -183,14 +206,6 @@ namespace RentOpsWebApp.Controllers
                 //check if the rental transaction is null
                 if (rentalTransaction == null)
                 {
-                    //the user id could be in the transactino or the rental request
-                    int? userId = rentalTransaction.UserId != null ? (int)rentalTransaction.UserId : (int)rentalTransaction.RentalRequest.UserId;
-
-                    //if the user id is not null, send a feedback request
-                    if (userId != null)
-                    {
-                        //save notifing user id
-                        int notifiedUserId = (int)userId;
 
                         var feedbackMessageContent = _context.MessageContents.Include(mc => mc.MessageType)
                                     .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Returned Request Feedback");
@@ -209,23 +224,28 @@ namespace RentOpsWebApp.Controllers
                          {
                               var notification = new Notification
                               {
-                                        UserId = notifiedUserId,
+                                        UserId = userId,
                                         MessageContentId = feedbackMessageContent.MessageContentId,
                                         NotificationStatusId = 1,
                                         NotificationTimestamp = DateTime.Now
                               };
 
                               _context.Notifications.Add(notification);
-                              _context.SaveChanges();
+
+                        _auditLogger.TrackChanges(userId, 1); // 1 is the source id for website
+
+                        _context.SaveChanges();
                               
                          }
-                    }
+                    
 
                 }
                 //before adding set the equipment condition to the one selected
                 var equipment = _context.Equipment
                     .Include(e => e.ConditionStatus)
                     .FirstOrDefault(e => e.EquipmentId == rentalTransaction.EquipmentId);
+
+
                 //update the condition status of the equipment
                 if (equipment != null)
                 {
@@ -239,6 +259,8 @@ namespace RentOpsWebApp.Controllers
 
 
                 _context.ReturnRecords.Add(returnRecord);
+                //track the changes 
+                _auditLogger.TrackChanges(userId, 1); // 1 is the source id for website
                 await _context.SaveChangesAsync();
 
                 TempData["CreateSuccess"] = "Return Record Created Successfully.";
@@ -246,11 +268,14 @@ namespace RentOpsWebApp.Controllers
             }
             catch (Exception ex)
             {
+                //track the exception
+                _auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace, 1); // 1 is the source id for website
                 //save the error message to the viewbag
                 ViewBag.ErrorMessage = ex.Message;
                 // return  error view 
                 return View("Error");
             }
+
         }
 
 

@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using RentOpsObjects.Services;
 
 namespace RentOpsWebApp.Controllers
 {
@@ -15,10 +16,12 @@ namespace RentOpsWebApp.Controllers
     public class RentalRequestController : Controller
     {
         private RentOpsDBContext _context;
+        AuditLogger _auditLogger;  
 
         public RentalRequestController(RentOpsDBContext context)
         {
             _context = context;
+            _auditLogger = new AuditLogger(context);
         }
 
         public IActionResult Index()
@@ -93,6 +96,18 @@ namespace RentOpsWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Review(RentalRequestViewModel model)
         {
+            // Fetch the current user id
+            var userEmail = User?.Identity?.Name;
+            var currentUserId = _context.Users
+                .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+
+            int userId = 1;
+            if (currentUserId != null)
+            {
+                userId = (int)currentUserId;
+            }
+
+
             try
             {
                 if (model.RentalRequest.RentalRequestId == 0)
@@ -130,6 +145,8 @@ namespace RentOpsWebApp.Controllers
                 {
                     rentalRequest.RentalRequestStatusId = 1;
                     _context.Entry(rentalRequest).Property(r => r.RentalRequestStatusId).IsModified = true;
+                    //log before saving changes
+                    _auditLogger.TrackChanges(userId, 1);
                     _context.SaveChanges();
 
                     var pendingMessageContent = _context.MessageContents
@@ -202,6 +219,9 @@ namespace RentOpsWebApp.Controllers
                         };
 
                         _context.Notifications.Add(notification);
+                        //log before saving changes
+                        _auditLogger.TrackChanges(userId, 1);
+
                         _context.SaveChanges();
                     }
 
@@ -212,7 +232,7 @@ namespace RentOpsWebApp.Controllers
                         EquipmentId = rentalRequest.EquipmentId,
                         PickupDate = rentalRequest.RentalStartDate,
                         ReturnDate = rentalRequest.RentalReturnDate,
-                        RentalFee = model.RentalRequest.RentalTotalCost,
+                        RentalFee = rentalRequest.RentalTotalCost,
                         EmployeeId = _context.Users
                                     .FirstOrDefault(u => u.Email == User.Identity.Name).UserId,
                         PaymentId = null
@@ -240,7 +260,7 @@ namespace RentOpsWebApp.Controllers
 
                         var document = new Document
                         {
-                            UserId = 1,
+                            UserId = userId,
                             FileName = model.UploadedAgreement.FileName,
                             UploadDate = currentTime,
                             FileTypeId = 4,
@@ -264,9 +284,16 @@ namespace RentOpsWebApp.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "An error occurred while processing the rental request.";
-                Console.WriteLine(ex.Message);
-                return RedirectToAction("Review", new { id = model.RentalRequest.EquipmentId });
+                //log the exception
+                _auditLogger.LogException(userId,ex.Message, ex.StackTrace.ToString(),1);
+                //save the error message to the viewbag
+
+                ViewBag.ErrorMessage = ex.Message;
+
+                // return  error view 
+
+                return View("Error");
+
             }
         }
 

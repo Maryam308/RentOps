@@ -76,7 +76,10 @@ namespace RentOpsWebApp.Controllers
 
             if (userId == null) return Unauthorized(); // Ensure user exists
 
-            IEnumerable<ReturnRecord> returnRecords = _context.ReturnRecords
+            try {
+
+
+                IEnumerable<ReturnRecord> returnRecords = _context.ReturnRecords
                 .Include(e => e.ReturnCondition)
                 .Include(e => e.RentalTransaction)
                 .Include(e => e.Document)
@@ -85,57 +88,73 @@ namespace RentOpsWebApp.Controllers
                 .ToList();
 
 
-            var transactionIdsWithFeedback = _context.Feedbacks
-            .Select(f => f.RentalTransactionId)
-            .Distinct()
-            .ToList();
+                var transactionIdsWithFeedback = _context.Feedbacks
+                .Select(f => f.RentalTransactionId)
+                .Distinct()
+                .ToList();
 
 
 
-            //filtering system
+                //filtering system
 
-            //If return record id is used, we filter the list retrieved above
-            if (!String.IsNullOrEmpty(searchReturnRecordId))
-            {
-                returnRecords = returnRecords.Where(p =>
-                    p.ReturnRecordId == Convert.ToInt32(searchReturnRecordId)
-                );
-            }
-
-            if (!String.IsNullOrEmpty(searchRentalTransactionId))
-            {
-                returnRecords = returnRecords.Where(p =>
-                    p.RentalTransactionId == Convert.ToInt32(searchRentalTransactionId)
-                );
-            }
-
-            if (!String.IsNullOrEmpty(searchConditionStatus))
-            {
-                returnRecords = returnRecords.Where(p =>
-                    p.ReturnConditionId == Convert.ToInt32(searchConditionStatus)
-                );
-            }
-
-
-            if (!string.IsNullOrEmpty(searchActualReturnDate))
-            {
-                DateOnly searchDate;
-                if (DateOnly.TryParse(searchActualReturnDate, out searchDate))
+                //If return record id is used, we filter the list retrieved above
+                if (!String.IsNullOrEmpty(searchReturnRecordId))
                 {
-                    returnRecords = returnRecords.Where(p => p.ActualReturnDate == searchDate);
+                    returnRecords = returnRecords.Where(p =>
+                        p.ReturnRecordId == Convert.ToInt32(searchReturnRecordId)
+                    );
                 }
+
+                if (!String.IsNullOrEmpty(searchRentalTransactionId))
+                {
+                    returnRecords = returnRecords.Where(p =>
+                        p.RentalTransactionId == Convert.ToInt32(searchRentalTransactionId)
+                    );
+                }
+
+                if (!String.IsNullOrEmpty(searchConditionStatus))
+                {
+                    returnRecords = returnRecords.Where(p =>
+                        p.ReturnConditionId == Convert.ToInt32(searchConditionStatus)
+                    );
+                }
+
+
+                if (!string.IsNullOrEmpty(searchActualReturnDate))
+                {
+                    DateOnly searchDate;
+                    if (DateOnly.TryParse(searchActualReturnDate, out searchDate))
+                    {
+                        returnRecords = returnRecords.Where(p => p.ActualReturnDate == searchDate);
+                    }
+                }
+
+
+
+                var returnRecordViewModel = new ReturnRecordViewModel
+                {
+                    returnRecords = returnRecords,
+                    conditionStatuses = _context.ConditionStatuses.ToList(),
+                    RentalTransactionIdsWithFeedback = transactionIdsWithFeedback,
+                };
+
+                return View(returnRecordViewModel);
+
+            }
+            catch (Exception ex)
+            {
+                auditLogger.LogException(userId, ex.Message, ex.StackTrace, 1);
+                //save the error message to the viewbag
+
+                ViewBag.ErrorMessage = ex.Message;
+
+                // return  error view 
+
+                return View("Error");
+
             }
 
-
-
-            var returnRecordViewModel = new ReturnRecordViewModel
-            {
-                returnRecords = returnRecords,
-                conditionStatuses = _context.ConditionStatuses.ToList(),
-                RentalTransactionIdsWithFeedback = transactionIdsWithFeedback,
-            };
-
-            return View(returnRecordViewModel);
+            
         }
 
         [HttpGet]
@@ -154,7 +173,7 @@ namespace RentOpsWebApp.Controllers
             var currentUserId = _context.Users
                 .FirstOrDefault(u => u.Email == userEmail)?.UserId;
             if (currentUserId == null || currentUserId != transaction.UserId)
-                return Unauthorized(); // Only allow the owner
+                return Forbid(); // Only allow the owner
 
             var viewModel = new ReturnRecordViewModel
             {
@@ -172,48 +191,62 @@ namespace RentOpsWebApp.Controllers
         [HttpPost]
         public IActionResult AddFeedback(ReturnRecordViewModel model)
         {
+            //only allow the user who rented the equipment to add feedback
 
-            if (ModelState.IsValid)
-            {
-
-                //only allow the user who rented the equipment to add feedback
-
-                var transaction = _context.RentalTransactions
-                    .Include(t => t.Equipment)
-                    .ThenInclude(e => e.EquipmentCategory)
-                    .FirstOrDefault(t => t.RentalTransactionId == model.NewFeedback.RentalTransactionId);
-
-                if (transaction == null)
-                    return NotFound();
-
-                // Fetch the current user id
-                var userEmail = User?.Identity?.Name;
-                var currentUserId = _context.Users
-                    .FirstOrDefault(u => u.Email == userEmail)?.UserId;
-                if (currentUserId == null || currentUserId != transaction.UserId)
-                    return Forbid(); // Only allow the owner
-
-                model.NewFeedback.FeedbackTimestamp = DateTime.Now;
-                model.NewFeedback.IsHidden = false;
-
-                _context.Feedbacks.Add(model.NewFeedback);
-                _context.SaveChanges();
-                
-                 TempData["CreateSuccess"] = "Feedback added successfully!";
-                   
-
-                return RedirectToAction("MyReturnRecord");
-            }
-
-            // If validation fails, re-fetch equipment to redisplay
-            model.Equipment = _context.RentalTransactions
-                .Include(rt => rt.Equipment)
+            var transaction = _context.RentalTransactions
+                .Include(t => t.Equipment)
                 .ThenInclude(e => e.EquipmentCategory)
-                .Where(rt => rt.RentalTransactionId == model.NewFeedback.RentalTransactionId)
-                .Select(rt => rt.Equipment)
-                .FirstOrDefault();
+                .FirstOrDefault(t => t.RentalTransactionId == model.NewFeedback.RentalTransactionId);
 
-            return View(model);
+            if (transaction == null)
+                return NotFound();
+
+            // Fetch the current user id
+            var userEmail = User?.Identity?.Name;
+            var currentUserId = _context.Users
+                .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+            if (currentUserId == null || currentUserId != transaction.UserId)
+                return Forbid(); // Only allow the owner
+
+            try {
+
+                if (ModelState.IsValid)
+                {
+
+                    model.NewFeedback.FeedbackTimestamp = DateTime.Now;
+                    model.NewFeedback.IsHidden = false;
+
+                    _context.Feedbacks.Add(model.NewFeedback);
+                    //log before saving changes
+                    auditLogger.TrackChanges(currentUserId, 1);
+                    _context.SaveChanges();
+
+                    TempData["CreateSuccess"] = "Feedback added successfully!";
+
+
+                    return RedirectToAction("MyReturnRecord");
+                }
+
+                // If validation fails, re-fetch equipment to redisplay
+                model.Equipment = _context.RentalTransactions
+                    .Include(rt => rt.Equipment)
+                    .ThenInclude(e => e.EquipmentCategory)
+                    .Where(rt => rt.RentalTransactionId == model.NewFeedback.RentalTransactionId)
+                    .Select(rt => rt.Equipment)
+                    .FirstOrDefault();
+
+                return View(model);
+
+            }
+            catch (Exception ex)
+            {
+                auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace, 1);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+            }
+            
         }
 
 

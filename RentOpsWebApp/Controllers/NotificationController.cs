@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using RentOpsObjects.Services;
 
 namespace RentOpsWebApp.Controllers
 {
@@ -11,10 +12,12 @@ namespace RentOpsWebApp.Controllers
     {
         private readonly RentOpsDBContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private  AuditLogger _auditLogger;
 
         public NotificationController(RentOpsDBContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _auditLogger = new AuditLogger(_context);
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -65,58 +68,73 @@ namespace RentOpsWebApp.Controllers
             var userId = _context.Users
                 .FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
 
-            var notification = await _context.Notifications
+            try {
+
+                var notification = await _context.Notifications
                 .Include(n => n.MessageContent)
                 .Include(n => n.NotificationStatus)
                 .FirstOrDefaultAsync(n => n.NotificationId == id);
 
-            if (notification == null)
-                return NotFound();
+                if (notification == null)
+                    return NotFound();
 
-            if (notification.UserId != userId)
-                return Forbid();
+                if (notification.UserId != userId)
+                    return Forbid();
 
-            // Mark as read
-            if (notification.NotificationStatus.NotificationStatusTitle == "Unread")
-            {
-                var readStatus = await _context.NotificationStatuses
-                    .FirstOrDefaultAsync(s => s.NotificationStatusTitle == "Read");
-
-                if (readStatus != null)
+                // Mark as read
+                if (notification.NotificationStatus.NotificationStatusTitle == "Unread")
                 {
-                    notification.NotificationStatusId = readStatus.NotificationStatusId;
-                    await _context.SaveChangesAsync();
-                }
-            }
+                    var readStatus = await _context.NotificationStatuses
+                        .FirstOrDefaultAsync(s => s.NotificationStatusTitle == "Read");
 
-            // Build base view model
-            var viewModel = new NotificationDetailsViewModel
-            {
-                MessageContentText = notification.MessageContent?.MessageContentText,
-                NotificationStatusTitle = notification.NotificationStatus?.NotificationStatusTitle,
-                NotificationTimestamp = notification.NotificationTimestamp
-            };
+                    if (readStatus != null)
+                    {
+                        notification.NotificationStatusId = readStatus.NotificationStatusId;
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
+                // Build base view model
+                var viewModel = new NotificationDetailsViewModel
+                {
+                    MessageContentText = notification.MessageContent?.MessageContentText,
+                    NotificationStatusTitle = notification.NotificationStatus?.NotificationStatusTitle,
+                    NotificationTimestamp = notification.NotificationTimestamp
+                };
+
+
+                var rentalRequest = await _context.RentalRequests
+                    .Include(r => r.RentalRequestStatus)
+                    .Include(r => r.Equipment)
+                    .Include(r => r.User)
+                    .FirstOrDefaultAsync(r =>
+                        r.UserId == notification.UserId &&
+                        r.RentalRequestTimestamp.Date == notification.NotificationTimestamp.Date);
+
+                if (rentalRequest != null)
+                {
+                    viewModel.RentalRequestId = rentalRequest.RentalRequestId;
+                    viewModel.RentalRequestStatusTitle = rentalRequest.RentalRequestStatus?.RentalRequestStatusTitle;
+                    viewModel.EquipmentTitle = rentalRequest.Equipment?.EquipmentName;
+                    viewModel.UserFullName = rentalRequest.User?.FirstName;
+                    viewModel.RentalStartDate = rentalRequest.RentalStartDate.ToDateTime(TimeOnly.MinValue);
+                    viewModel.RentalReturnDate = rentalRequest.RentalReturnDate.ToDateTime(TimeOnly.MinValue);
+                }
+
+                return View(viewModel);
+
+
+            }
+            catch(Exception ex) {
+
+                _auditLogger.LogException(userId, ex.Message, ex.StackTrace, 1);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+            }
 
             
-            var rentalRequest = await _context.RentalRequests
-                .Include(r => r.RentalRequestStatus)
-                .Include(r => r.Equipment)
-                .Include(r => r.User)
-                .FirstOrDefaultAsync(r =>
-                    r.UserId == notification.UserId &&
-                    r.RentalRequestTimestamp.Date == notification.NotificationTimestamp.Date);
-
-            if (rentalRequest != null)
-            {
-                viewModel.RentalRequestId = rentalRequest.RentalRequestId;
-                viewModel.RentalRequestStatusTitle = rentalRequest.RentalRequestStatus?.RentalRequestStatusTitle;
-                viewModel.EquipmentTitle = rentalRequest.Equipment?.EquipmentName;
-                viewModel.UserFullName = rentalRequest.User?.FirstName;
-                viewModel.RentalStartDate = rentalRequest.RentalStartDate.ToDateTime(TimeOnly.MinValue);
-                viewModel.RentalReturnDate = rentalRequest.RentalReturnDate.ToDateTime(TimeOnly.MinValue);
-            }
-
-            return View(viewModel);
         }
 
     }

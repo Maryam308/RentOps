@@ -166,20 +166,37 @@ namespace RentOpsWebApp.Controllers
         //the function for downloading a file
         public async Task<IActionResult> Download(int id)
         {
-            var document = await _context.Documents.FindAsync(id);
+            try { 
+                var document = await _context.Documents.FindAsync(id);
 
 
-            if (document == null)
-            {
-                return NotFound();
+                if (document == null)
+                {
+                    return NotFound();
+                }
+
+                // Return the file as a downloadable response
+                return File(
+                    fileContents: document.FileData,
+                    contentType: "application/pdf", // Assuming all stored files are PDFs
+                    fileDownloadName: document.FileName
+                );
+            
+            }catch (Exception ex) {
+
+                // Log the exception using the logger
+                logger.LogException(null, ex.Message, ex.StackTrace, 0);
+                //save the error message to the viewbag
+
+                ViewBag.ErrorMessage = ex.Message;
+
+                // return  error view 
+
+                return View("Error");
+
+
             }
-
-            // Return the file as a downloadable response
-            return File(
-                fileContents: document.FileData,
-                contentType: "application/pdf", // Assuming all stored files are PDFs
-                fileDownloadName: document.FileName
-            );
+            
 
         }
 
@@ -188,163 +205,195 @@ namespace RentOpsWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(RentalTransactionViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                // Return the view with validation errors
-                return View("Edit", model);
-            }
+            try {
 
-            // Fetch the transaction from the database, including the join table
-            var transaction = await _context.RentalTransactions
-                .Include(t => t.Payment)
-                .Include(t => t.Documents)
-                .FirstOrDefaultAsync(t => t.RentalTransactionId == model.rentalTransaction.RentalTransactionId);
 
-            if (transaction == null)
-            {
-                return NotFound();
-            }
-
-            // Update transaction details
-            transaction.Deposit = model.rentalTransaction.Deposit;
-            transaction.PickupDate = model.rentalTransaction.PickupDate;
-            transaction.ReturnDate = model.rentalTransaction.ReturnDate;
-            transaction.RentalFee = model.rentalTransaction.RentalFee;
-
-            // Handle payment details
-            if (model.rentalTransaction.Payment != null)
-            {
-                if (transaction.Payment == null)
+                if (!ModelState.IsValid)
                 {
-                    // Create new payment record
-                    var payment = new Payment
+                    // Return the view with validation errors
+                    return View("Edit", model);
+                }
+
+                // Fetch the transaction from the database, including the join table
+                var transaction = await _context.RentalTransactions
+                    .Include(t => t.Payment)
+                    .Include(t => t.Documents)
+                    .FirstOrDefaultAsync(t => t.RentalTransactionId == model.rentalTransaction.RentalTransactionId);
+
+                if (transaction == null)
+                {
+                    return NotFound();
+                }
+
+                // Fetch the current user id
+                var userEmail = User?.Identity?.Name;
+                var currentUserId = _context.Users
+                    .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+
+                //inside the try 
+                int userId = 1;
+                if (currentUserId != null)
+                {
+                    userId = (int)currentUserId;
+                }
+
+                // Update transaction details
+                transaction.Deposit = model.rentalTransaction.Deposit;
+                transaction.PickupDate = model.rentalTransaction.PickupDate;
+                transaction.ReturnDate = model.rentalTransaction.ReturnDate;
+                transaction.RentalFee = model.rentalTransaction.RentalFee;
+
+                // Handle payment details
+                if (model.rentalTransaction.Payment != null)
+                {
+                    if (transaction.Payment == null)
                     {
-                        PaymentMethodId = model.rentalTransaction.Payment.PaymentMethodId,
-                        PaymentStatusId = model.rentalTransaction.Payment.PaymentStatusId,
-                        // Set other payment properties as needed
-                    };
-                    _context.Payments.Add(payment);
-                    await _context.SaveChangesAsync(); // Save to get PaymentId
-
-                    transaction.PaymentId = payment.PaymentId;
-                    transaction.Payment = payment;
-
-                    //after the payment is done and added to the transaction send a notification to the user that made the request
-                    if (transaction.RentalRequest != null)
-                    {
-
-
-
-                        var notifyUserId = transaction.RentalRequest.UserId;
-                        if (notifyUserId != null)
+                        // Create new payment record
+                        var payment = new Payment
                         {
-                            var approvedMessageContent = _context.MessageContents.Include(mc => mc.MessageType)
-                                .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Successful Payment");
+                            PaymentMethodId = model.rentalTransaction.Payment.PaymentMethodId,
+                            PaymentStatusId = model.rentalTransaction.Payment.PaymentStatusId,
+                            // Set other payment properties as needed
+                        };
+                        _context.Payments.Add(payment);
 
-                            if (approvedMessageContent == null)
+                        //log before saving the payment
+                        logger.TrackChanges(userId, 1);
+
+                        await _context.SaveChangesAsync(); // Save to get PaymentId
+
+                        transaction.PaymentId = payment.PaymentId;
+                        transaction.Payment = payment;
+
+                        //after the payment is done and added to the transaction send a notification to the user that made the request
+                        if (transaction.RentalRequest != null)
+                        {
+
+                            var notifyUserId = transaction.RentalRequest.UserId;
+                            if (notifyUserId != null)
                             {
-                                //create a new message content
-                                approvedMessageContent = new MessageContent
-                                {
-                                    MessageTypeId = _context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Successful Payment").Select(mt => mt.MessageTypeId).FirstOrDefault(),
-                                    MessageContentText = "Your payment has been successfully processed.",
-                                };
-                            }
+                                var approvedMessageContent = _context.MessageContents.Include(mc => mc.MessageType)
+                                    .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Successful Payment");
 
-                            if (approvedMessageContent != null)
-                            {
-                                var notification = new Notification
+                                if (approvedMessageContent == null)
                                 {
-                                    UserId = notifyUserId,
-                                    MessageContentId = approvedMessageContent.MessageContentId,
-                                    NotificationStatusId = 1,
-                                    NotificationTimestamp = DateTime.Now
-                                };
+                                    //create a new message content
+                                    approvedMessageContent = new MessageContent
+                                    {
+                                        MessageTypeId = _context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Successful Payment").Select(mt => mt.MessageTypeId).FirstOrDefault(),
+                                        MessageContentText = "Your payment has been successfully processed.",
+                                    };
+                                }
 
-                                _context.Notifications.Add(notification);
-                                _context.SaveChanges();
+                                if (approvedMessageContent != null)
+                                {
+                                    var notification = new Notification
+                                    {
+                                        UserId = notifyUserId,
+                                        MessageContentId = approvedMessageContent.MessageContentId,
+                                        NotificationStatusId = 1,
+                                        NotificationTimestamp = DateTime.Now
+                                    };
+
+                                    _context.Notifications.Add(notification);
+                                    //log before saving the notification
+                                    logger.TrackChanges(userId, 1);
+                                    _context.SaveChanges();
+                                }
                             }
                         }
+
+                    }
+                    else
+                    {
+                        // Update existing payment
+                        transaction.Payment.PaymentMethodId = model.rentalTransaction.Payment.PaymentMethodId;
+                        transaction.Payment.PaymentStatusId = model.rentalTransaction.Payment.PaymentStatusId;
+                    }
+                }
+
+                // Handle document updates (m:n resolving table)
+                // Rental Agreement
+                if (model.agreementIsModified)
+                {
+                    // Remove old rental agreement if exists
+                    var oldAgreement = transaction.Documents.FirstOrDefault(d => d.FileTypeId == 4);
+                    if (oldAgreement != null)
+                    {
+                        transaction.Documents.Remove(oldAgreement);
+                        _context.Documents.Remove(oldAgreement);
+                    }
+
+                    // Add new rental agreement if uploaded
+                    if (model.UploadedAgreement != null && model.UploadedAgreement.Length > 0)
+                    {
+                        using var ms = new MemoryStream();
+                        await model.UploadedAgreement.CopyToAsync(ms);
+                        var document = new Document
+                        {
+                            UserId = 1, // Replace with actual user ID
+                            FileName = model.UploadedAgreement.FileName,
+                            FileTypeId = 4,
+                            StoragePath = "",
+                            UploadDate = DateTime.UtcNow,
+                            FileData = ms.ToArray(),
+                        };
+                        _context.Documents.Add(document);
+                        // Add to resolving table (EF Core will handle m:n)
+                        transaction.Documents.Add(document);
                     }
 
                 }
-                else
-                {
-                    // Update existing payment
-                    transaction.Payment.PaymentMethodId = model.rentalTransaction.Payment.PaymentMethodId;
-                    transaction.Payment.PaymentStatusId = model.rentalTransaction.Payment.PaymentStatusId;
-                }
-            }
 
-            // Handle document updates (m:n resolving table)
-            // Rental Agreement
-            if (model.agreementIsModified)
-            {
-                // Remove old rental agreement if exists
-                var oldAgreement = transaction.Documents.FirstOrDefault(d => d.FileTypeId == 4);
-                if (oldAgreement != null)
+                // ID Verification
+                if (model.idVerificationIsModified)
                 {
-                    transaction.Documents.Remove(oldAgreement);
-                    _context.Documents.Remove(oldAgreement);
-                }
-
-                // Add new rental agreement if uploaded
-                if (model.UploadedAgreement != null && model.UploadedAgreement.Length > 0)
-                {
-                    using var ms = new MemoryStream();
-                    await model.UploadedAgreement.CopyToAsync(ms);
-                    var document = new Document
+                    // Remove old ID verification if exists
+                    var oldIdVerification = transaction.Documents.FirstOrDefault(d => d.FileTypeId == 5);
+                    if (oldIdVerification != null)
                     {
-                        UserId = 1, // Replace with actual user ID
-                        FileName = model.UploadedAgreement.FileName,
-                        FileTypeId = 4,
-                        StoragePath = "",
-                        UploadDate = DateTime.UtcNow,
-                        FileData = ms.ToArray(),
-                    };
-                    _context.Documents.Add(document);
-                    // Add to resolving table (EF Core will handle m:n)
-                    transaction.Documents.Add(document);
-                }
+                        transaction.Documents.Remove(oldIdVerification);
+                        _context.Documents.Remove(oldIdVerification);
+                    }
 
-            }
-
-            // ID Verification
-            if (model.idVerificationIsModified)
-            {
-                // Remove old ID verification if exists
-                var oldIdVerification = transaction.Documents.FirstOrDefault(d => d.FileTypeId == 5);
-                if (oldIdVerification != null)
-                {
-                    transaction.Documents.Remove(oldIdVerification);
-                    _context.Documents.Remove(oldIdVerification);
-                }
-
-                // Add new ID verification if uploaded
-                if (model.UploadedIdVerification != null && model.UploadedIdVerification.Length > 0)
-                {
-                    using var ms = new MemoryStream();
-                    await model.UploadedIdVerification.CopyToAsync(ms);
-                    var document = new Document
+                    // Add new ID verification if uploaded
+                    if (model.UploadedIdVerification != null && model.UploadedIdVerification.Length > 0)
                     {
-                        UserId = 1, // Replace with actual user ID
-                        FileName = model.UploadedIdVerification.FileName,
-                        StoragePath = "",
-                        UploadDate = DateTime.UtcNow,
-                        FileTypeId = 5,
-                        FileData = ms.ToArray(),
-                    };
-                    _context.Documents.Add(document);
-                    // Add to resolving table (EF Core will handle m:n)
-                    transaction.Documents.Add(document);
+                        using var ms = new MemoryStream();
+                        await model.UploadedIdVerification.CopyToAsync(ms);
+                        var document = new Document
+                        {
+                            UserId = 1, // Replace with actual user ID
+                            FileName = model.UploadedIdVerification.FileName,
+                            StoragePath = "",
+                            UploadDate = DateTime.UtcNow,
+                            FileTypeId = 5,
+                            FileData = ms.ToArray(),
+                        };
+                        _context.Documents.Add(document);
+                        // Add to resolving table (EF Core will handle m:n)
+                        transaction.Documents.Add(document);
+                    }
+
                 }
 
+                _context.RentalTransactions.Update(transaction);
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("RentalTransaction");
+
+            }
+            catch (Exception ex)
+            {
+                // Log the exception using the logger
+                logger.LogException(null, ex.Message, ex.StackTrace, 1);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
             }
 
-            _context.RentalTransactions.Update(transaction);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("RentalTransaction");
         }
 
 

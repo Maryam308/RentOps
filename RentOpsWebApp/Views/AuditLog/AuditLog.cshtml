@@ -7,7 +7,7 @@
 }
 
 
-<div class="container p-3">
+<div class="container mt-5">
 	<h1 class="m-2">System Audit Log</h1>
 	<div class="row py-3 px-5">
 
@@ -73,7 +73,6 @@
 					<td>Source</td>
 					<td>User ID</td>
 					<td>User Name</td>
-					<td>Exception</td>
 					<td>UserAction</td>
 					<td>Affected Data</td>
 					<th></th>
@@ -89,7 +88,6 @@
 						<td>@record.Source.SourceTitle</td>
 						<td>@record.User?.UserId</td>
 						<td>@record.User?.FirstName @record.User?.LastName</td>
-						<td>@record.Exception</td>
 						<td>@record.UserAction</td>
 						<td>@record.AffectedData</td>
 						<td>

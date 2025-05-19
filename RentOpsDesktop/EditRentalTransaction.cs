@@ -221,14 +221,25 @@ namespace RentOpsDesktop
 
                 try
                 {
-                    // Update rental transaction fields
-                    rentalTransactionToEdit.RentalFee = Convert.ToDouble(txtRentalFee.Text);
-                    rentalTransactionToEdit.Deposit = Convert.ToDouble(txtDeposit.Text);
-                    rentalTransactionToEdit.ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value);
-                    rentalTransactionToEdit.PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value);
+                    // Get a fresh, tracked instance
+                    var rentalTransaction = dbContext.RentalTransactions
+                        .Include(rt => rt.Documents)
+                        .FirstOrDefault(rt => rt.RentalTransactionId == rentalTransactionToEdit.RentalTransactionId);
 
-                    // If new payment needs to be created
-                    if (rentalTransactionToEdit.PaymentId == null &&
+                    if (rentalTransaction == null)
+                    {
+                        MessageBox.Show("Rental transaction not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Update basic fields
+                    rentalTransaction.RentalFee = Convert.ToDouble(txtRentalFee.Text);
+                    rentalTransaction.Deposit = Convert.ToDouble(txtDeposit.Text);
+                    rentalTransaction.ReturnDate = DateOnly.FromDateTime(dtpReturnDate.Value);
+                    rentalTransaction.PickupDate = DateOnly.FromDateTime(dtpPickupDate.Value);
+
+                    // Add new Payment if needed
+                    if (rentalTransaction.PaymentId == null &&
                         cmbPaymentStatus.Enabled && cmbPaymentMethod.Enabled)
                     {
                         var newPayment = new Payment
@@ -240,49 +251,13 @@ namespace RentOpsDesktop
                         dbContext.Payments.Add(newPayment);
                         dbContext.SaveChanges();
 
-                        rentalTransactionToEdit.PaymentId = newPayment.PaymentId;
-                        rentalTransactionToEdit.Payment = newPayment;
+                        rentalTransaction.PaymentId = newPayment.PaymentId;
                     }
 
-                    // Load related documents into the tracked instance
-                    dbContext.Entry(rentalTransactionToEdit).Collection(rt => rt.Documents).Load();
+                    // Update documents
+                    UpdateDocument(rentalTransaction, agreement, 4, theUploadForm?.isAgreementModified == true);
+                    UpdateDocument(rentalTransaction, idVerification, 5, theUploadForm?.isIDModified == true);
 
-                    // Handle Agreement Document
-                    if (theUploadForm != null && theUploadForm.isAgreementModified)
-                    {
-                        var oldAgreement = rentalTransactionToEdit.Documents.FirstOrDefault(d => d.FileTypeId == 4);
-                        if (agreement == null && oldAgreement != null)
-                        {
-                            rentalTransactionToEdit.Documents.Remove(oldAgreement);
-                        }
-                        else if (agreement != null && !rentalTransactionToEdit.Documents.Contains(agreement))
-                        {
-                            dbContext.Documents.Add(agreement);
-                            dbContext.SaveChanges();
-                            rentalTransactionToEdit.Documents.Add(agreement);
-                        }
-                    }
-
-                    // Handle ID Verification Document
-                    if (theUploadForm != null && theUploadForm.isIDModified)
-                    {
-                        var oldID = rentalTransactionToEdit.Documents.FirstOrDefault(d => d.FileTypeId == 5);
-                        if (idVerification == null && oldID != null)
-                        {
-                            rentalTransactionToEdit.Documents.Remove(oldID);
-                        }
-                        else if (idVerification != null && !rentalTransactionToEdit.Documents.Contains(idVerification))
-                        {
-                            dbContext.Documents.Add(idVerification);
-                            dbContext.SaveChanges();
-                            rentalTransactionToEdit.Documents.Add(idVerification);
-                        }
-                    }
-
-                    // Log the changes
-                    logger.TrackChanges(currentUserId, Global.sourceId);
-
-                    // Save all changes
                     dbContext.SaveChanges();
 
                     MessageBox.Show("The rental transaction has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -291,7 +266,6 @@ namespace RentOpsDesktop
                 }
                 catch (Exception ex)
                 {
-                    logger.LogException(currentUserId, ex.Message, ex.StackTrace, Global.sourceId);
                     MessageBox.Show("An error occurred while updating the transaction: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -300,6 +274,38 @@ namespace RentOpsDesktop
                 MessageBox.Show("Please fill all the fields correctly.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void UpdateDocument(RentalTransaction rentalTransaction, Document newDoc, int fileTypeId, bool isModified)
+        {
+            if (!isModified) return;
+
+            var existing = rentalTransaction.Documents.FirstOrDefault(d => d.FileTypeId == fileTypeId);
+
+            if (newDoc == null)
+            {
+                if (existing != null)
+                {
+                    rentalTransaction.Documents.Remove(existing);
+                }
+            }
+            else
+            {
+                if (existing != null && existing.DocumentId == newDoc.DocumentId)
+                    return;
+
+                // Avoid tracking multiple instances
+                var trackedDoc = dbContext.Documents.Local.FirstOrDefault(d => d.DocumentId == newDoc.DocumentId);
+                if (trackedDoc == null)
+                {
+                    dbContext.Documents.Attach(newDoc);
+                    trackedDoc = newDoc;
+                }
+
+                rentalTransaction.Documents.Remove(existing);
+                rentalTransaction.Documents.Add(trackedDoc);
+            }
+        }
+
 
         private void dtpReturnDate_ValueChanged(object sender, EventArgs e)
         {
