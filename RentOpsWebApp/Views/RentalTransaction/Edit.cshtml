@@ -65,14 +65,14 @@
                         <!-- Rental Request Start Date -->
                         <div class="form-group mb-3">
                             <label disabled asp-for="rentalTransaction.RentalRequest.RentalStartDate" class="form-label">Pickup Date</label>
-                            <input disabled asp-for="rentalTransaction.RentalRequest.RentalStartDate" class="form-control" type="date" id="PickupDate" />
+                            <input disabled asp-for="rentalTransaction.RentalRequest.RentalStartDate" class="form-control" type="date"  />
 
                         </div>
 
                         <!-- Rental Request End Date -->
                         <div class="form-group mb-3">
                             <label disabled asp-for="rentalTransaction.RentalRequest.RentalReturnDate" class="form-label">Return Date</label>
-                            <input disabled asp-for="rentalTransaction.RentalRequest.RentalReturnDate" class="form-control" type="date" id="ReturnDate" />
+                            <input disabled asp-for="rentalTransaction.RentalRequest.RentalReturnDate" class="form-control" type="date"  />
                         </div>
 
                         <!-- Total Cost -->
@@ -164,7 +164,7 @@
             <form asp-action="Update" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <!--Add the rental transaction id in a hidden field-->
-                <input type="hidden" name="RentalTransaction.RentalTransactionId" value="@Model.rentalTransaction.RentalTransactionId" />
+                <input type="hidden" name="RentalTransaction.RentalTransactionId" value="@Model.rentalTransaction?.RentalTransactionId" />
 
                 <!-- deposite -->
                 <div class="form-group mb-3">
@@ -186,13 +186,13 @@
                     <input  asp-for="rentalTransaction.ReturnDate"  class="form-control" type="date" id="ReturnDate" />
                 </div>
 
-                <!-- .RentalFee" -->
+                <!-- RentalFee" -->
                 <div class="form-group mb-3">
-                    <label asp-for="rentalTransaction.RentalFee" class="form-label">Total Cost</label>
-                    <input asp-for="rentalTransaction.RentalFee" type="text" class="form-control" id="TotalCost" name="TotalCost" />
+                    <label asp-for="rentalTransaction.RentalFee" class="form-label">Rental Fee</label>
+                    <input type="text" class="form-control" id="TotalCost" value="@Model.rentalTransaction.RentalFee" disabled />
                     <input type="hidden" asp-for="rentalTransaction.RentalFee" id="HiddenTotalCost" />
-
                 </div>
+
 
 
                 <!--if the rental request status is not pending-->
@@ -353,14 +353,38 @@
 
     <script>
 
-			// Function to calculate rental cost based on dates
+        function updateFileName(inputElement, labelId, flagId) {
+            if (inputElement.files.length > 0) {
+                const fileName = inputElement.files[0].name;
 
-                document.addEventListener("DOMContentLoaded", function () {
+                // Update displayed file name
+                document.getElementById(labelId).innerText = fileName;
+
+                // Set modification flag
+                document.getElementById(flagId).value = "true";
+
+                // Show the section again (if previously hidden)
+                const sectionId = labelId.includes("rentalAgreement") ? "rentalAgreementSection" : "idVerificationSection";
+                document.getElementById(sectionId).style.display = "block";
+            }
+
+        }
+
+    function removeFile(sectionId, labelId, flagId) {
+        document.getElementById(sectionId).style.display = "none"; // Hide section visually
+        document.getElementById(labelId).innerText = "No file selected";
+        document.getElementById(flagId).value = "true"; // Mark as removed
+    }
+
+                 document.addEventListener("DOMContentLoaded", function () {
             const startDate = document.getElementById("PickupDate");
             const endDate = document.getElementById("ReturnDate");
             const totalCost = document.getElementById("TotalCost");
             const hiddenTotalCost = document.getElementById("HiddenTotalCost");
             const rentalPrice = parseFloat('@price');
+
+            // Set initial value for visible field from hidden field (model value)
+            totalCost.value = hiddenTotalCost.value;
 
             function calculateCost() {
                 if (startDate.value && endDate.value) {
@@ -384,31 +408,11 @@
         });
 
 
-        function updateFileName(inputElement, labelId, flagId) {
-            if (inputElement.files.length > 0) {
-                const fileName = inputElement.files[0].name;
-
-                // Update displayed file name
-                document.getElementById(labelId).innerText = fileName;
-
-                // Set modification flag
-                document.getElementById(flagId).value = "true";
-
-                // Show the section again (if previously hidden)
-                const sectionId = labelId.includes("rentalAgreement") ? "rentalAgreementSection" : "idVerificationSection";
-                document.getElementById(sectionId).style.display = "block";
-            }
-
-        }
-
-    function removeFile(sectionId, labelId, flagId) {
-        document.getElementById(sectionId).style.display = "none"; // Hide section visually
-        document.getElementById(labelId).innerText = "No file selected";
-        document.getElementById(flagId).value = "true"; // Mark as removed
-    }
     </script>
 
 </div>
+
+
 
 @section Scripts {
     @{

@@ -17,7 +17,7 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">@ViewData["Title"]</h2>
-        <span class="badge bg-secondary">Total: @Model.Count</span>
+        <span class="badge bg-secondary" style="font-size:medium">Total: @Model.Count</span>
     </div>
 
     <!-- Filter and Sorting Controls -->
@@ -25,51 +25,51 @@
         <!-- Status Filter Toggle -->
         <div>
             <a href="@Url.Action("Notification", "Notification", new { statusFilter = "All", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-primary @((ViewData["CurrentStatusFilter"]?.ToString() == "All") ? "active" : "")">All</a>
-            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "Unread", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-warning @((ViewData["CurrentStatusFilter"]?.ToString() == "Unread") ? "active" : "")">Unread</a>
-            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "Read", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-success @((ViewData["CurrentStatusFilter"]?.ToString() == "Read") ? "active" : "")">Read</a>
+            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "Unread", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-primary @((ViewData["CurrentStatusFilter"]?.ToString() == "Unread") ? "active" : "")">Unread</a>
+            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "Read", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-primary @((ViewData["CurrentStatusFilter"]?.ToString() == "Read") ? "active" : "")">Read</a>
         </div>
 
         <!-- Sort Order Dropdown -->
         <div>
-            <a href="@Url.Action("Notification", "Notification", new { statusFilter = ViewData["CurrentStatusFilter"], sortOrder = "Descending" })" class="btn btn-outline-info @((ViewData["CurrentSortOrder"]?.ToString() == "Descending") ? "active" : "")">Sort: Newest</a>
-            <a href="@Url.Action("Notification", "Notification", new { statusFilter = ViewData["CurrentStatusFilter"], sortOrder = "Ascending" })" class="btn btn-outline-info @((ViewData["CurrentSortOrder"]?.ToString() == "Ascending") ? "active" : "")">Sort: Oldest</a>
+            <a href="@Url.Action("Notification", "Notification", new { statusFilter = ViewData["CurrentStatusFilter"], sortOrder = "Descending" })" class="btn btn-outline-dark @((ViewData["CurrentSortOrder"]?.ToString() == "Descending") ? "active" : "")">Sort: Newest</a>
+            <a href="@Url.Action("Notification", "Notification", new { statusFilter = ViewData["CurrentStatusFilter"], sortOrder = "Ascending" })" class="btn btn-outline-dark @((ViewData["CurrentSortOrder"]?.ToString() == "Ascending") ? "active" : "")">Sort: Oldest</a>
         </div>
 
         <!-- Reset Button -->
         <div>
-            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "All", sortOrder = "Descending" })" class="btn btn-outline-danger">Reset</a>
+            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "All", sortOrder = "Descending" })" class="btn btn-danger me-2">Reset</a>
         </div>
     </div>
 
     <!-- Notifications Table -->
     <div class="table-responsive">
-        <table class="table table-hover table-bordered align-middle shadow-sm">
-            <thead class="table-dark">
+        <table class="table table-hover align-middle shadow-sm">
+            <thead class="table-primary">
                 <tr>
-                    <th style="width: 15%;">Status</th>
-                    <th>Message</th>
-                    <th style="width: 20%;">Received At</th>
-                    <th style="width: 10%;">Action</th> <!-- Added View button column -->
+                    <th style="width: 15%; text-align:center">Status</th>
+                    <th style="text-align:center">Message</th>
+                    <th style="width: 20%; text-align:center">Received At</th>
+                    <th style="width: 10%; text-align:center"></th> <!-- Added View button column -->
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
                     var isUnread = item.NotificationStatus.NotificationStatusTitle == "Unread";
-                    var rowClass = isUnread ? "table-primary fw-bold" : "";
+                    var rowClass = isUnread ? "table-active fw-bold" : "";
 
                     <tr class="notification-row @rowClass">
-                        <td>@item.NotificationStatus.NotificationStatusTitle</td>
+                        <td style ="text-align:center">@item.NotificationStatus.NotificationStatusTitle</td>
                         <td>
-                            <a href="@Url.Action("Details", "Notification", new { id = item.NotificationId })" class="text-decoration-none @(isUnread ? "text-dark" : "text-muted")">
+                            <a href="@Url.Action("Details", "Notification", new { id = item.NotificationId })" class="text-decoration-none @(isUnread ? "text-primary" : "text-muted")">
                                 @item.MessageContent.MessageContentText
                             </a>
                         </td>
-                        <td>@item.NotificationTimestamp.ToString("g")</td>
+                        <td style="text-align:center">@item.NotificationTimestamp.ToString("g")</td>
 
                         <td>
                             <!-- View button -->
-                            <a href="@Url.Action("Details", "Notification", new { id = item.NotificationId })" class="btn btn-info btn-sm">View</a>
+                            <a href="@Url.Action("Details", "Notification", new { id = item.NotificationId })" class="btn btn-primary btn-sm ms-4">View</a>
                         </td>
                     </tr>
                 }

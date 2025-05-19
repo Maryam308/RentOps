@@ -37,7 +37,7 @@
                     <select asp-for="theReturnRecord.ReturnConditionId"
                             asp-items="@Model.conditionStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
                             class="form-select">
-                        <option value="">-- Select Category --</option>
+                        <option value="">-- Select Return Condition --</option>
                     </select>
                     <span asp-validation-for="theReturnRecord.ReturnConditionId" class="text-danger"></span>
                 </div>
@@ -64,7 +64,7 @@
                     <span asp-validation-for="@Model.UploadedFile" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Add Return Record</button>
+                <button type="submit" class="btn btn-primary mt-3">Add Return Record</button>
             </form>
         </div>
     </div>
