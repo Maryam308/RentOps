@@ -130,7 +130,8 @@ namespace RentOpsDesktop
 
                 //fetch frequently rented equipment object
                 var frequentlyRentedEquipment = dbContext.RentalTransactions
-                    .Where(rt => isAdmin ? true : rt.EmployeeId == currentUserId)
+                    .Where(rt => isAdmin ? true : rt.EmployeeId == currentUserId
+                    && rt.EquipmentId != null)
                     .GroupBy(rt => rt.EquipmentId)
                     .Select(g => new
                     {
@@ -150,10 +151,12 @@ namespace RentOpsDesktop
                 //fetch the condition status 
                 ConditionStatus damaged = dbContext.ConditionStatuses.Where(cs => cs.ConditionStatusTitle == "Requires Maintenance").FirstOrDefault();
 
+               ConditionStatus outOfOrder = dbContext.ConditionStatuses.Where(cs => cs.ConditionStatusTitle == "Out of Order").FirstOrDefault();
+
 
                 //fech the number of the damaged equipment
                 var damagedEquipment = dbContext.Equipment.Where(e => isAdmin ? true : e.UserId == currentUserId)
-                    .Count(e => e.ConditionStatusId == damaged.ConditionStatusId); // Assuming 2 is the ID for damaged status
+                    .Count(e => e.ConditionStatusId == damaged.ConditionStatusId ||e.ConditionStatusId == outOfOrder.ConditionStatusId); // under maintainance or out of order
 
 
                 //fetch the condition status id

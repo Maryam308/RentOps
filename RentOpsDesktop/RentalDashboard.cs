@@ -110,10 +110,12 @@ namespace RentOpsDesktop
                     .Count();
 
                 // total rental request of the day
+                var day1 = DateTime.Today;
+                var day2 = day1.AddDays(1);
                 var totalRentalRequest = dbContext.RentalRequests
                     .Include(i => i.Equipment)
                     .ThenInclude(t => t.RentalRequests)
-                    .Where(r => r.RentalRequestTimestamp.Date == now.Date &&
+                    .Where(r => r.RentalRequestTimestamp >= day1 && r.RentalRequestTimestamp < day2 &&
                                 (isAdmin ? true : r.Equipment.UserId == currentUserId))
                     .Count();
 

@@ -4,9 +4,6 @@
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-
-
 <div class="container mt-5">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
@@ -19,7 +16,12 @@
                     <label asp-for="NewEquipment.EquipmentId"></label>
                     <input asp-for="NewEquipment.EquipmentId" class="form-control" readonly="readonly" />
                     <span asp-validation-for="NewEquipment.EquipmentId" class="text-danger"></span>
+
+                    <label asp-for="NewEquipment.UserId" class="form-label"></label>
+                    <input type="hidden" asp-for="NewEquipment.UserId" />
                 </div>
+
+                
                 <!-- Equipment Name -->
                 <div class="form-group mb-3">
                     <label asp-for="NewEquipment.EquipmentName" class="form-label">Equipment Name</label>

@@ -24,52 +24,60 @@ namespace RentOpsWebApp.Controllers
 
         public IActionResult AuditLog(string SearchLogType, string SearchSource, string SearchTimestamp, string SearchException)
         {
-
-            IEnumerable<Log> logList = _context.Logs
+            try
+            {
+                IEnumerable<Log> logList = _context.Logs
                 .Include(e => e.User)
                 .Include(e => e.LogType)
                 .Include(e => e.Source)
                 .ToList();
 
 
-            //filter the logs based on the search criteria
-            //if the search log type is not null or empty, we filter the logs based on the log type
-            if (!string.IsNullOrEmpty(SearchLogType))
-            {
-                logList = logList.Where(e => e.LogType.LogTypeId == Convert.ToInt32(SearchLogType));
-            }
-
-            //if the search source is not null or empty, we filter the logs based on the source
-            if (!string.IsNullOrEmpty(SearchSource))
-            {
-                logList = logList.Where(e => e.Source.SourceId == Convert.ToInt32(SearchSource));
-            }
-
-            //if the search timestamp is not null or empty, we filter the logs based on the date
-            if (!string.IsNullOrEmpty(SearchTimestamp))
-            {
-                DateTime searchTimestamp;
-                if (DateTime.TryParse(SearchTimestamp, out searchTimestamp))
+                //filter the logs based on the search criteria
+                //if the search log type is not null or empty, we filter the logs based on the log type
+                if (!string.IsNullOrEmpty(SearchLogType))
                 {
-                    logList = logList.Where(l => l.LogTimestamp.Date == searchTimestamp.Date);
+                    logList = logList.Where(e => e.LogType.LogTypeId == Convert.ToInt32(SearchLogType));
                 }
 
+                //if the search source is not null or empty, we filter the logs based on the source
+                if (!string.IsNullOrEmpty(SearchSource))
+                {
+                    logList = logList.Where(e => e.Source.SourceId == Convert.ToInt32(SearchSource));
+                }
+
+                //if the search timestamp is not null or empty, we filter the logs based on the date
+                if (!string.IsNullOrEmpty(SearchTimestamp))
+                {
+                    DateTime searchTimestamp;
+                    if (DateTime.TryParse(SearchTimestamp, out searchTimestamp))
+                    {
+                        logList = logList.Where(l => l.LogTimestamp.Date == searchTimestamp.Date);
+                    }
+
+                }
+
+
+
+                //create a new instance of the viewmodel
+                var auditLogViewModel = new AuditLogViewModel
+                {
+
+                    Logs = logList,
+                    LogTypes = _context.LogTypes.ToList(),
+                    Sources = _context.Sources.ToList()
+
+                };
+
+                return View(auditLogViewModel);
             }
-
-
-
-            //create a new instance of the viewmodel
-            var auditLogViewModel = new AuditLogViewModel {
-
-                Logs = logList,
-                LogTypes = _context.LogTypes.ToList(),
-                Sources = _context.Sources.ToList()
-
-            };
-
-
-
-            return View(auditLogViewModel);
+            catch (Exception ex)
+            {
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+            }
         }
 
         public IActionResult Details(int? id)
