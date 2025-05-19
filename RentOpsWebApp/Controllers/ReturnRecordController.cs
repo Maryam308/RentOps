@@ -113,6 +113,8 @@ namespace RentOpsWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ReturnRecordViewModel model)
         {
+            
+
             if (!ModelState.IsValid)
             {
                 IEnumerable<ReturnRecord> returnRecords = _context.ReturnRecords
@@ -128,7 +130,11 @@ namespace RentOpsWebApp.Controllers
                     conditionStatuses = _context.ConditionStatuses.ToList(),
                 };
 
-                return View(returnRecordViewModel);
+                //add to the temp data that the return record was not created because of invalid model state
+                TempData["RuturnRecordError"] = "Return Record was not created because of invalid entries.";
+
+
+                return View("ReturnRecord");
             }
 
             try
@@ -140,7 +146,7 @@ namespace RentOpsWebApp.Controllers
                     if (Path.GetExtension(model.UploadedFile.FileName).ToLower() != ".pdf")
                     {
                         ModelState.AddModelError("UploadedFile", "Only PDF files are allowed.");
-                        return View(model);
+                        return View("Error");
                     }
 
                     using var memoryStream = new MemoryStream();
@@ -223,10 +229,10 @@ namespace RentOpsWebApp.Controllers
             }
             catch (Exception ex)
             {
-                // Log the error
-                Console.WriteLine(ex.Message);
-                // Optionally, return an error view or message
-                return View(model);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
             }
         }
 
@@ -234,24 +240,37 @@ namespace RentOpsWebApp.Controllers
         //navigate to the delete page
         public IActionResult Delete(int id)
         {
-            //check if the id is null or 0
-            if (id == null || id == 0)
-                return NotFound();
+            try { 
+                //check if the id is null or 0
+                if (id == null || id == 0)
+                    return NotFound();
 
-            //find the return record object in the database
-            var returnRecordObj = _context.ReturnRecords.Find(id);
+                //find the return record object in the database
+                var returnRecordObj = _context.ReturnRecords.Find(id);
 
-            //check if the return record object is null
-            if (returnRecordObj == null)
-                return NotFound();
+                //check if the return record object is null
+                if (returnRecordObj == null)
+                    return NotFound();
 
-            var viewmodel = new ReturnRecordViewModel
+                var viewmodel = new ReturnRecordViewModel
+                {
+                    theReturnRecord = returnRecordObj,
+                    conditionStatuses = _context.ConditionStatuses.ToList(),
+                    rentalTransactions = _context.RentalTransactions.ToList(),
+                };
+                return View(viewmodel);
+            
+            }
+            catch (Exception ex)
             {
-                theReturnRecord = returnRecordObj,
-                conditionStatuses = _context.ConditionStatuses.ToList(),
-                rentalTransactions = _context.RentalTransactions.ToList(),
-            };
-            return View(viewmodel);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+            }
+
+
+            
         }
 
 
@@ -272,39 +291,51 @@ namespace RentOpsWebApp.Controllers
 
                 //add success message to tempdata
                 TempData["CreateSuccess"] = "Return Record Deleted Successfully.";
-
+                return RedirectToAction("ReturnRecord");
             }
             catch (Exception ex)
             {
-                //log the error
-                Console.WriteLine(ex.Message);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
             }
-            
-            return RedirectToAction("ReturnRecord");
+  
 
         }
 
         //get the edit page
         public IActionResult Edit(int id)
         {
-            //check if the id is null or 0
-            if (id == null || id == 0)
-                return NotFound();
+            try { 
+                //check if the id is null or 0
+                if (id == null || id == 0)
+                    return NotFound();
 
-            //find the return record object in the database
-            var returnRecordObj = _context.ReturnRecords.Include(rr => rr.Document).FirstOrDefault(rr => rr.ReturnRecordId == id);
+                //find the return record object in the database
+                var returnRecordObj = _context.ReturnRecords.Include(rr => rr.Document).FirstOrDefault(rr => rr.ReturnRecordId == id);
 
-            //check if the return record object is null
-            if (returnRecordObj == null)
-                return NotFound();
+                //check if the return record object is null
+                if (returnRecordObj == null)
+                    return NotFound();
 
-            var viewmodel = new ReturnRecordViewModel
+                var viewmodel = new ReturnRecordViewModel
+                {
+                    theReturnRecord = returnRecordObj,
+                    conditionStatuses = _context.ConditionStatuses.ToList(),
+                    rentalTransactions = _context.RentalTransactions.ToList(),
+                };
+                return View(viewmodel);
+            
+            }
+            catch (Exception ex)
             {
-                theReturnRecord = returnRecordObj,
-                conditionStatuses = _context.ConditionStatuses.ToList(),
-                rentalTransactions = _context.RentalTransactions.ToList(),
-            };
-            return View(viewmodel);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+            }
+            
         }
 
         //post edit method
@@ -368,10 +399,10 @@ namespace RentOpsWebApp.Controllers
             }
             catch (Exception ex)
             {
-                // Log the error
-                Console.WriteLine(ex.Message);
-                // Optionally, return an error view or message
-                return View(model);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
             }
 
         }
@@ -379,20 +410,32 @@ namespace RentOpsWebApp.Controllers
         //a method to download a document
         public async Task<IActionResult> Download(int id)
         {
-            var document = await _context.Documents.FindAsync(id);
+            try { 
+            
+                var document = await _context.Documents.FindAsync(id);
 
 
-            if (document == null)
-            {
-                return NotFound();
+                if (document == null)
+                {
+                    return NotFound();
+                }
+
+                // Return the file as a downloadable response
+                return File(
+                    fileContents: document.FileData,
+                    contentType: "application/pdf", // Assuming all stored files are PDFs
+                    fileDownloadName: document.FileName
+                );
+            
             }
-
-            // Return the file as a downloadable response
-            return File(
-                fileContents: document.FileData,
-                contentType: "application/pdf", // Assuming all stored files are PDFs
-                fileDownloadName: document.FileName
-            );
+            catch (Exception ex)
+            {
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+            }
+            
 
         }
 

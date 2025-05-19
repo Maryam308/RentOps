@@ -22,9 +22,13 @@ public partial class ReturnRecord
     [Column("returnConditionID")]
     public int ReturnConditionId { get; set; }
 
+    //dont allow negative values
+    [Range(0, double.MaxValue, ErrorMessage = "Late Return Fee cannot be negative.")]
     [Column("lateReturnFee")]
     public double LateReturnFee { get; set; }
 
+    //dont allow negative values
+    [Range(0, double.MaxValue, ErrorMessage = "Additional Charges cannot be negative.")]
     [Column("additionalCharge")]
     public double AdditionalCharge { get; set; }
 

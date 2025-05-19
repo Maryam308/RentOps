@@ -115,34 +115,34 @@ namespace RentOpsWebApp.Controllers
 
         }
 
-        // POST: Handle form submission from modal (Save button)
+        // POST: Handle form submission from modal (Save button)(add and edit categories)
         [HttpPost]
-        public IActionResult SubmitModal(string categoryTitle)
+        public IActionResult SubmitModal(int CategoryId, string CategoryTitle)
         {
-            // we will use the user input to create a new category in equipment category table
-            try {
+            if (string.IsNullOrWhiteSpace(CategoryTitle))
+            {
+                TempData["CreateSuccess"] = "Category title cannot be empty!";
+                return RedirectToAction("ManageCategories");
+            }
 
-                //create a new category
-                EquipmentCategory newCategory = new EquipmentCategory
-                {
-                    EquipmentCategoryTitle = categoryTitle
-                };
+            if (CategoryId > 0) // If CategoryId exists, update instead of adding
+            {
+                var category = _context.EquipmentCategories.Find(CategoryId);
+                if (category == null) return NotFound();
 
-                //save the new category to the database
+                category.EquipmentCategoryTitle = CategoryTitle;
+                _context.SaveChanges();
+                TempData["CreateSuccess"] = "Category updated successfully!";
+            }
+            else // Otherwise, it's a new category
+            {
+                var newCategory = new EquipmentCategory { EquipmentCategoryTitle = CategoryTitle };
                 _context.EquipmentCategories.Add(newCategory);
                 _context.SaveChanges();
-
-
-            }
-            catch (Exception ex)
-            {
-                // Handle the exception
-                Console.WriteLine(ex.Message);
+                TempData["CreateSuccess"] = "Category added successfully!";
             }
 
-
-            // Return with modal hidden
-            return LoadManageCategoriesView();
+            return RedirectToAction("ManageCategories");
         }
 
         public IActionResult ManageCategories()
@@ -205,11 +205,11 @@ namespace RentOpsWebApp.Controllers
 
             };
 
-            //var user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
-            //var userId = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
-            //var userRoleTitle = _context.Roles.FirstOrDefault(r => r.RoleId == user.RoleId)?.RoleTitle; // Assuming RoleId is foreign key in Users table
-            //ViewBag.UserId = userId;
-            //ViewBag.UserRoleTitle = userRoleTitle; // Store role title in ViewBag
+            var user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
+            var userId = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
+            var userRoleTitle = _context.Roles.FirstOrDefault(r => r.RoleId == user.RoleId)?.RoleTitle; // Assuming RoleId is foreign key in Users table
+            ViewBag.UserId = userId;
+            ViewBag.UserRoleTitle = userRoleTitle; // Store role title in ViewBag
 
             return View(viewmodel);
 
@@ -529,6 +529,94 @@ namespace RentOpsWebApp.Controllers
             }
             return Json(new { success = true });
         }
+
+
+        //delete equipment category and all its equipment
+
+        [HttpGet]
+        public IActionResult DeleteCategory(int id)
+        {
+            try { 
+
+                //find the equipment category object in the database
+                var equipmentCategoryObject = _context.EquipmentCategories.Find(id);
+                //check if the equipment category object is null
+                if (equipmentCategoryObject == null)
+                    return NotFound();
+
+                //remove all the equipment that belongs to this category
+                var equipmentList = _context.Equipment.Where(e => e.EquipmentCategoryId == id).ToList();
+                foreach (var equipment in equipmentList)
+                {
+                    _context.Equipment.Remove(equipment);
+                }
+                //save changes to the database
+                _context.SaveChanges();
+
+                //remove the equipment category object from the database and save changes
+                _context.EquipmentCategories.Remove(equipmentCategoryObject);
+                _context.SaveChanges();
+                //add success message to tempdata
+                TempData["CreateSuccess"] = "Equipment Category Deleted Successfully";
+                return RedirectToAction("ManageCategories");
+            
+            
+            }catch(Exception ex) {
+
+
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+
+            }
+            
+
+        }
+
+        [HttpPost]
+        public IActionResult SaveCategory(int CategoryId, string CategoryTitle)
+        {
+            try { 
+                    if (string.IsNullOrEmpty(CategoryTitle))
+                {
+                    TempData["CreateSuccess"] = "Category title cannot be empty!";
+                    return RedirectToAction("ManageCategories");
+                }
+
+                if (CategoryId > 0) // Editing existing category
+                {
+                    var category = _context.EquipmentCategories.Find(CategoryId);
+                    if (category == null) return NotFound();
+
+                    category.EquipmentCategoryTitle = CategoryTitle;
+                    _context.SaveChanges();
+                    TempData["CreateSuccess"] = "Category updated successfully!";
+                }
+                else // Adding new category
+                {
+                    var newCategory = new EquipmentCategory { EquipmentCategoryTitle = CategoryTitle };
+                    _context.EquipmentCategories.Add(newCategory);
+                    _context.SaveChanges();
+                    TempData["CreateSuccess"] = "Category added successfully!";
+                }
+
+                return RedirectToAction("ManageCategories");
+            
+            
+            }catch (Exception ex)
+            {
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+            }
+
+            
+        }
+
+
+
 
 
     }
