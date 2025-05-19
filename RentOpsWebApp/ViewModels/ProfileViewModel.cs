@@ -11,6 +11,7 @@ namespace RentOpsWebApp.ViewModels
         public string? EmailAddress { get; set; }
         public string? PhoneNumber { get; set; }
         public int? TotalRentals { get; set; }
+        public int? UserId { get; set; }
 
     }
 }

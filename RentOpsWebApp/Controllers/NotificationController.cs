@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentOpsWebApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class NotificationController : Controller
     {
         private readonly RentOpsDBContext _context;
@@ -17,16 +18,24 @@ namespace RentOpsWebApp.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        // GET: Notification
         public async Task<IActionResult> Notification(string statusFilter = "All", string sortOrder = "Descending")
         {
             var userId = _context.Users
                 .FirstOrDefault(u => u.Email == User.Identity.Name)?.UserId;
 
+            
+
+            //only allow the user to see their own notifications
+            if (userId == null)
+                return NotFound();
+            
             // Get notifications based on the status filter
             var notificationsQuery = _context.Notifications
                 .Include(n => n.MessageContent)
                 .Include(n => n.NotificationStatus)
                 .Where(n => n.UserId == userId);
+
 
             // Filter by status (All, Unread, Read)
             if (statusFilter != "All")

@@ -9,6 +9,7 @@
 	var userRoleTitle = ViewBag.UserRoleTitle.ToString();
 	var isAdminOrManager = userRoleTitle == "Administrator" || userRoleTitle == "Rental Manager"; //Check roles
 	var isAdmin = userRoleTitle == "Administrator";
+	var isCustomer = userRoleTitle == "Customer";
 }
 
 <!--Check if there is a success message to display-->
@@ -20,14 +21,6 @@
 			@TempData["CreateSuccess"].ToString()
 		</div>
 	}
-	
-	//check the viewbag for the success message
-	// if (ViewBag.UserId != null)
-	// {
-	// 	<div class="alert alert-danger" role="alert">
-	// 		@ViewBag.UserId.ToString()
-	// 	</div>
-	// }
 
 
 }
@@ -35,13 +28,13 @@
 
 <div class="container p-3 px-0">
 	<h1 class="mt-2">Equipment List</h1>
-    <div class="row pt-2">
-        <div class="col-8 p-3">
+	<div class="row pt-2">
+		<div class="col-8 p-3">
 
 			<div class="card border-primary mx-5 mb-2">
 				<div class="card-header p-3"><h4>Search & Filter Equipment</h4></div>
 				<div class="card-body p-4">
-			
+
 					<form asp-controller="Equipment" asp-action="Equipment" method="get">
 						<div class="input-group">
 
@@ -50,65 +43,65 @@
 							<input type="text" name="SearchEquipmentName" value="@Context.Request.Query["SearchEquipmentName"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Equipment Name" />
 						</div>
 
-				
-                <div class="input-group pt-2">
-                   <select asp-for="SearchCategory"
-                           asp-items="@Model.EquipmentCategories
-                               .Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
-                           class="form-select mb-3 mx-4">
-                       <option value="" disabled selected>Select an Equipment Category</option>
-                   </select>
-                </div> 
 
-				<div class="input-group">
-					<select asp-for="SearchAvailability"
+						<div class="input-group pt-2">
+							<select asp-for="SearchCategory"
+							asp-items="@Model.EquipmentCategories
+                               .Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
+							class="form-select mb-3 mx-4">
+								<option value="" disabled selected>Select an Equipment Category</option>
+							</select>
+						</div> 
+
+						<div class="input-group">
+							<select asp-for="SearchAvailability"
 							asp-items="@Model.EquipmentAvailability
                                .Select(i => new SelectListItem { Text = i.AvailabilityStatusTitle, Value = i.AvailabilityStatusId.ToString() })"
 							class="form-select mb-3 mx-4">
-						<option value="" disabled selected>Select an Availability Status</option>
-					</select>
-				</div>
+								<option value="" disabled selected>Select an Availability Status</option>
+							</select>
+						</div>
 
-				<div class="input-group">
-					<select asp-for="SearchCondition"
+						<div class="input-group">
+							<select asp-for="SearchCondition"
 							asp-items="@Model.EquipmentStatuses
                                .Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
 							class="form-select mb-3 mx-4">
-						<option value="" disabled selected>Select a ConditionStatus </option>
-					</select>
-				</div>
-				<div class="align-items-end text-end pe-2" >
-				<input type="submit" value="Search" class="px-4 btn btn-secondary" />
-				<a asp-controller="Equipment" asp-action="Equipment" class="px-4 btn btn-danger m-2">Clear</a>
-				</div>
-			</form>
+								<option value="" disabled selected>Select a ConditionStatus </option>
+							</select>
+						</div>
+						<div class="align-items-end text-end pe-2" >
+							<input type="submit" value="Search" class="px-4 btn btn-secondary" />
+							<a asp-controller="Equipment" asp-action="Equipment" class="px-4 btn btn-danger m-2">Clear</a>
+						</div>
+					</form>
 
 				</div>
 			</div>
 		</div>
 
-		
+
 		<div class="col-4 text-center mt-5 pt-4 ">
-			 @if (isAdminOrManager) 
-			 		{ 
-<a asp-controller="Equipment" asp-action="AddEquipment"  class="btn btn-primary my-2 px-5 py-3" >
-				<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
-			</a>
-					 } 
+			@if (isAdminOrManager) 
+			{ 
+				<a asp-controller="Equipment" asp-action="AddEquipment"  class="btn btn-primary my-2 px-5 py-3" >
+					<i class="bi bi-plus-square-fill"></i>&nbsp; Add New Equipment
+				</a>
+			} 
 			<br/>
 			@if (isAdmin) 
-			 		{ 
-			<a asp-controller="Equipment" asp-action="ManageCategories" class="btn btn-primary my-2 px-4 py-3">
-				Manage Equipment Categories
-			</a>
-					 } 
-        </div>
-
-		
+			{ 
+				<a asp-controller="Equipment" asp-action="ManageCategories" class="btn btn-primary my-2 px-4 py-3">
+					Manage Equipment Categories
+				</a>
+			} 
 		</div>
-	
 
-    @if (Model.Equipment == null || !Model.Equipment.Any())
+
+	</div>
+
+
+	@if (Model.Equipment == null || !Model.Equipment.Any())
 	{
 		<div class="alert alert-light text-center" role="alert">
 			There are no equipment to display.
@@ -117,39 +110,53 @@
 	else
 	{
 
-<!--Equipment Table-->
+		<!--Equipment Table-->
 
-<table class="table table-striped">
-	<thead>
-			<tr class="text-center table-primary">
-			<th>Equipment ID</th>
-			<th>Equipment Name</th>
-			<th>Equipment Description</th>
-			<th>Equipment Category</th>
-			<th>Equipment Status</th>
-			<th>Availability</th>
-			<th>Rental Price</th>
-			<th>Details & Reviews</th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var record in Model.Equipment)
-		{
-			<tr class="text-center">
-				<td>@record.EquipmentId</td>
-				<td>@record.EquipmentName</td>
-				<td style="font-size:medium">@record.EquipmentDescription</td>
-				<td>@record.EquipmentCategory.EquipmentCategoryTitle</td>
-				<td>@record.ConditionStatus.ConditionStatusTitle</td>
-				<td>@record.AvailabilityStatus.AvailabilityStatusTitle</td>
-				<td>@record.RentalPrice</td>
-					<td><a asp-action="Details" asp-route-id="@record.EquipmentId">Info</a></td>
+		<table class="table table-striped">
+			<thead>
+				<tr class="text-center table-primary">
+					<th>Equipment ID</th>
+					<th>Equipment Name</th>
+					<th>Equipment Description</th>
+					<th>Equipment Category</th>
+					<th>Equipment Status</th>
+					<th>Availability</th>
+					<th>Rental Price</th>
+					<th>Details & Reviews</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var record in Model.Equipment)
+				{
+					<tr class="text-center">
+						<td>@record.EquipmentId</td>
+						<td>@record.EquipmentName</td>
+						<td style="font-size:medium">@record.EquipmentDescription</td>
+						<td>@record.EquipmentCategory.EquipmentCategoryTitle</td>
+						<td>@record.ConditionStatus.ConditionStatusTitle</td>
+						<td>@record.AvailabilityStatus.AvailabilityStatusTitle</td>
+						<td>@record.RentalPrice</td>
+						<td><a asp-action="Details" asp-route-id="@record.EquipmentId">Info</a></td>
 
-				<!--if role is customer-->
-				<td>
-					<a asp-action="Request" asp-route-id="@record.EquipmentId" class="btn btn-primary">Request for Rental</a>
+						<!--if role is customer-->
+						<td>
+							@if (isCustomer)
+							{
+								// Check if the equipment is available for rental
+								if (record.AvailabilityStatus.AvailabilityStatusTitle == "Available")
+								{
+									<a asp-action="Request" asp-route-id="@record.EquipmentId" class="btn btn-primary">Request for Rental</a>
+								}
+								else
+								{
+									<a class="btn btn-secondary" disabled>Request for Rental</a>
+								}
+
+							}
+
+					
 				</td>
 
 					<!-- Conditional rendering based on role title -->

@@ -5,24 +5,32 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Abstractions;
 using RentOpsObjects.Services;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace RentOpsWebApp.Controllers
 {
+    [Authorize]
     public class EquipmentController : Controller
     {
 
         RentOpsDBContext _context;
+        AuditLogger logger;
+        IHttpContextAccessor _httpContextAccessor;
 
-        public EquipmentController(RentOpsDBContext context)
+        public EquipmentController(RentOpsDBContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            logger = new AuditLogger(_context);
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public IActionResult Index()
         {
             return View();
         }
-        
+
+        [Authorize(Roles = "Administrator,Rental Manager")]
         public IActionResult AddEquipment()
         {
             var viewmodel = new EquipmentViewModel
@@ -42,6 +50,7 @@ namespace RentOpsWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator,Rental Manager")]
         public IActionResult AddEquipment(EquipmentViewModel model)
         {
             if (model.NewEquipment.RentalPrice <= 0)
@@ -61,7 +70,7 @@ namespace RentOpsWebApp.Controllers
                 _context.Equipment.Add(model.NewEquipment);
 
                 // Track changes before the new entity is saved
-                var logger = new AuditLogger(_context);
+                
                 logger.TrackChanges(model.NewEquipment.UserId, 1);
 
 
@@ -98,7 +107,7 @@ namespace RentOpsWebApp.Controllers
 
 
 
-
+        [Authorize(Roles = "Administrator")]
         private ViewResult LoadManageCategoriesView(bool showModal = false)
         {
             var categories = _context.EquipmentCategories.ToList();
@@ -108,6 +117,7 @@ namespace RentOpsWebApp.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult AddCategory()
         {
             // Just set flag to show modal
@@ -117,6 +127,7 @@ namespace RentOpsWebApp.Controllers
 
         // POST: Handle form submission from modal (Save button)(add and edit categories)
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult SubmitModal(int CategoryId, string CategoryTitle)
         {
             if (string.IsNullOrWhiteSpace(CategoryTitle))
@@ -145,6 +156,7 @@ namespace RentOpsWebApp.Controllers
             return RedirectToAction("ManageCategories");
         }
 
+        [Authorize(Roles = "Administrator")]
         public IActionResult ManageCategories()
         {
             // Return with modal hidden
@@ -216,6 +228,7 @@ namespace RentOpsWebApp.Controllers
         }
 
         //GET to navigate to the delete page
+        [Authorize(Roles = "Administrator,Rental Manager")]
         public IActionResult Delete(int? id)
         {
             //check if the id is null or 0
@@ -245,6 +258,7 @@ namespace RentOpsWebApp.Controllers
         //POST to delete the equipment object from the database
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator,Rental Manager")]
         public IActionResult DeletePost(int? id)
         {
             //print to console for debugging
@@ -279,6 +293,7 @@ namespace RentOpsWebApp.Controllers
         }
 
         //GET to navigate to the edit page
+        [Authorize(Roles = "Administrator,Rental Manager")]
         public IActionResult Edit(int? id)
         {
             //check if the id is null or 0
@@ -308,6 +323,7 @@ namespace RentOpsWebApp.Controllers
         //POST to edit the equipment object in the database
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator,Rental Manager")]
         public IActionResult Edit(EquipmentViewModel toEditEquipment)
         {
             //check if the id is null or 0
@@ -360,6 +376,7 @@ namespace RentOpsWebApp.Controllers
         }
 
         //get to navigate to the request page
+        [Authorize(Roles = "Customer")]
         public IActionResult Request(int? id)
         {
             //check if the id is null or 0
@@ -391,6 +408,7 @@ namespace RentOpsWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Customer")]
         public IActionResult Request(EquipmentViewModel model)
         {
            
@@ -519,6 +537,7 @@ namespace RentOpsWebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator,Rental Manager")]
         public ActionResult ToggleFeedbackVisibility(int id)
         {
             var feedback = _context.Feedbacks.Find(id);
@@ -534,6 +553,7 @@ namespace RentOpsWebApp.Controllers
         //delete equipment category and all its equipment
 
         [HttpGet]
+        [Authorize(Roles = "Administrator")]
         public IActionResult DeleteCategory(int id)
         {
             try { 
@@ -575,6 +595,7 @@ namespace RentOpsWebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult SaveCategory(int CategoryId, string CategoryTitle)
         {
             try { 

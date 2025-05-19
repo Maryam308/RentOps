@@ -19,8 +19,6 @@ public partial class RentalRequest
     [Column("rentalReturnDate")]
     public DateOnly RentalReturnDate { get; set; }
 
-    // dont allow negative values
-    [Range(0.001, double.MaxValue, ErrorMessage = "Total Cost cannot be negative or zero.")]
     [Column("rentalTotalCost")]
     public double RentalTotalCost { get; set; }
 

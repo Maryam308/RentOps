@@ -7,9 +7,11 @@ using System.Linq;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentOpsWebApp.Controllers
 {
+    [Authorize(Roles = "Administrator,Rental Manager")]
     public class RentalRequestController : Controller
     {
         private RentOpsDBContext _context;
@@ -215,6 +217,15 @@ namespace RentOpsWebApp.Controllers
                                     .FirstOrDefault(u => u.Email == User.Identity.Name).UserId,
                         PaymentId = null
                     };
+
+                    //change the equipment status to rented
+                    var equipment = _context.Equipment.FirstOrDefault(e => e.EquipmentId == rentalRequest.EquipmentId);
+                    if (equipment != null)
+                    {
+                        equipment.AvailabilityStatusId = 2; 
+                        _context.Entry(equipment).Property(e => e.AvailabilityStatusId).IsModified = true;
+                        _context.SaveChanges();
+                    }
 
                     if (model.UploadedAgreement != null && model.UploadedAgreement.Length > 0)
                     {

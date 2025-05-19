@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
 
 namespace RentOpsWebApp.Controllers
 {
+    [Authorize(Roles = "Administrator,Rental Manager")]
     public class ReturnRecordController : Controller
     {
         private  RentOpsDBContext _context;
@@ -172,6 +174,7 @@ namespace RentOpsWebApp.Controllers
 
                 //get the user from the transaction
                 var rentalTransaction = _context.RentalTransactions
+                    .Include(rt => rt.Equipment)
                     .Include(rt => rt.User)
                     .Include(rt => rt.RentalRequest)
                     .ThenInclude(rt => rt.User)
@@ -218,6 +221,20 @@ namespace RentOpsWebApp.Controllers
                          }
                     }
 
+                }
+                //before adding set the equipment condition to the one selected
+                var equipment = _context.Equipment
+                    .Include(e => e.ConditionStatus)
+                    .FirstOrDefault(e => e.EquipmentId == rentalTransaction.EquipmentId);
+                //update the condition status of the equipment
+                if (equipment != null)
+                {
+                    equipment.ConditionStatusId = returnRecord.ReturnConditionId;
+
+                    //update the availability status of the equipment
+                    equipment.AvailabilityStatusId = 1; // Set to available
+
+                    _context.Equipment.Update(equipment);
                 }
 
 

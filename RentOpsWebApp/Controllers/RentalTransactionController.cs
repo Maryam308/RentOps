@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
 using RentOpsObjects.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RentOpsWebApp.Controllers
 {
+    [Authorize(Roles = "Administrator,Rental Manager")]
     public class RentalTransactionController : Controller
     {
 
