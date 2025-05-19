@@ -20,27 +20,38 @@ namespace RentOpsWebApp.Controllers
 
         public IActionResult Index()
         {
-            var totalCustomers = _context.Users
+            try 
+            {
+                var totalCustomers = _context.Users
                 .Where(e => e.RoleId == 3)
                 .Count();
 
-            var totalEquipments = _context.Equipment.Count();
+                var totalEquipments = _context.Equipment.Count();
 
 
-            var totalEmployees = _context.Users
-                .Where(e => e.RoleId == 2)
-                .Count();
+                var totalEmployees = _context.Users
+                    .Where(e => e.RoleId == 2)
+                    .Count();
 
-            var totalRentals = _context.RentalRequests.Count();
+                var totalRentals = _context.RentalRequests.Count();
 
-            var viewModel = new HomeViewModel
+                var viewModel = new HomeViewModel
+                {
+                    TotalCustomers = Convert.ToInt32(totalCustomers),
+                    TotalEquipments = Convert.ToInt32(totalEquipments),
+                    TotalEmployees = Convert.ToInt32(totalEmployees),
+                    TotalRentals = Convert.ToInt32(totalRentals)
+                };
+                return View(viewModel);
+            }
+            catch (Exception ex)
             {
-                TotalCustomers = Convert.ToInt32(totalCustomers),
-                TotalEquipments = Convert.ToInt32(totalEquipments),
-                TotalEmployees = Convert.ToInt32(totalEmployees),
-                TotalRentals = Convert.ToInt32(totalRentals)
-            };
-            return View(viewModel);
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+            }
+
         }
 
         public IActionResult Privacy()
