@@ -423,6 +423,19 @@ namespace RentOpsDesktop
                     var equipment = context.Equipment.Find(selectedEquipmentID);
                     if (equipment != null)
                     {
+
+                        //loop through all the equipments in the rental transaction and set the equipment id to null
+                        foreach (var rentalTransaction in context.RentalTransactions.Where(r => r.EquipmentId == selectedEquipmentID))
+                        {
+                            rentalTransaction.EquipmentId = null;
+                        }
+
+                        //loop through all the equipments in the rental request and set the equipment id to null
+                        foreach (var rentalRequest in context.RentalRequests.Where(r => r.EquipmentId == selectedEquipmentID))
+                        {
+                            rentalRequest.EquipmentId = null;
+                        }
+
                         // remove the equipment
                         context.Equipment.Remove(equipment);
 
