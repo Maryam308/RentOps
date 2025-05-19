@@ -5,8 +5,6 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-
 <div class="container p-3">
 	<h1 class="m-2">My Rental Requests</h1>
 	<div class="row py-3 px-5">
@@ -95,7 +93,7 @@
 						<td>@record.RentalRequestStatus.RentalRequestStatusTitle</td>
 						<td>
 							<a asp-action="ViewDetails" asp-route-id="@record.RentalRequestId" class="btn btn-primary">View Details</a>
-							@* <a asp-action="Delete" asp-route-id="@record.RentalRequestId" class="btn btn-danger">Delete</a> *@
+							<a asp-action="Edit" asp-route-id="@record.RentalRequestId" class="btn btn-secondary">Edit</a>
 						</td>
 					</tr>
 				}

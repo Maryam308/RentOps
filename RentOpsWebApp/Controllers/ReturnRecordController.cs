@@ -162,6 +162,59 @@ namespace RentOpsWebApp.Controllers
                     returnRecord.DocumentId = document.DocumentId;
                 }
 
+                //notify the user that the record has been created and request for a feedback
+
+                //get the user from the transaction
+                var rentalTransaction = _context.RentalTransactions
+                    .Include(rt => rt.User)
+                    .Include(rt => rt.RentalRequest)
+                    .ThenInclude(rt => rt.User)
+                    .FirstOrDefault(rt => rt.RentalTransactionId == returnRecord.RentalTransactionId);
+
+                //check if the rental transaction is null
+                if (rentalTransaction == null)
+                {
+                    //the user id could be in the transactino or the rental request
+                    int? userId = rentalTransaction.UserId != null ? (int)rentalTransaction.UserId : (int)rentalTransaction.RentalRequest.UserId;
+
+                    //if the user id is not null, send a feedback request
+                    if (userId != null)
+                    {
+                        //save notifing user id
+                        int notifiedUserId = (int)userId;
+
+                        var feedbackMessageContent = _context.MessageContents.Include(mc => mc.MessageType)
+                                    .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Returned Request Feedback");
+
+                        if (feedbackMessageContent == null)
+                        {
+                           //create a new message content
+                            feedbackMessageContent = new MessageContent
+                            {
+                                 MessageTypeId = _context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Feedback Request").Select(mt => mt.MessageTypeId).FirstOrDefault(),
+                                 MessageContentText = "Thank you for using RentOps. Your Feedback matter, Find your returns under My Return Records section.",
+                            };
+                        }
+
+                         if (feedbackMessageContent != null)
+                         {
+                              var notification = new Notification
+                              {
+                                        UserId = notifiedUserId,
+                                        MessageContentId = feedbackMessageContent.MessageContentId,
+                                        NotificationStatusId = 1,
+                                        NotificationTimestamp = DateTime.Now
+                              };
+
+                              _context.Notifications.Add(notification);
+                              _context.SaveChanges();
+                              
+                         }
+                    }
+
+                }
+
+
                 _context.ReturnRecords.Add(returnRecord);
                 await _context.SaveChangesAsync();
 

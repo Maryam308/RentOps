@@ -1,0 +1,147 @@
+﻿@using RentOpsWebApp.ViewModels;
+@model RentalRequestViewModel;
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool isPending = Model.RentalRequest.RentalRequestStatus?.RentalRequestStatusTitle == "Pending Approval";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>Request for Rental</h3>
+            <h4>You can edit your request as long as it is still pending.</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                
+                <input type="hidden" name="RentalRequest.RentalRequestId" value="@Model.RentalRequest.RentalRequestId" />
+
+                @if (isPending)
+                {
+                    <!-- Editable fields -->
+                    @* Equipment select with data attributes for price *@
+					<label asp-for="RentalRequest.Equipment.EquipmentName"></label>
+                    <select asp-for="RentalRequest.EquipmentId" id="EquipmentSelect"
+                            asp-items="@Model.equipmentTitle.Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
+                            class="form-select">
+                        <option value="" disabled>-- Select equipment --</option>
+                    </select>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="RentalRequest.RentalStartDate" class="form-label">Pickup Date</label>
+                        <input asp-for="RentalRequest.RentalStartDate" class="form-control" type="date" id="PickupDate" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="RentalRequest.RentalReturnDate" class="form-label">Return Date</label>
+                        <input asp-for="RentalRequest.RentalReturnDate" class="form-control" type="date" id="ReturnDate" />
+                    </div>
+                    <!-- Total Cost (Disabled) -->
+                    <div class="form-group mb-3">
+                        <label asp-for="RentalRequest.RentalTotalCost" class="form-label">Total Cost</label>
+                        <input asp-for="RentalRequest.RentalTotalCost" type="text" class="form-control" id="TotalCost" name="TotalCost" readonly />
+                        <!-- Hidden field to ensure value is submitted -->
+                        <input type="hidden" asp-for="RentalRequest.RentalTotalCost" id="HiddenTotalCost" />
+
+                    </div>
+                    
+                    <button type="submit" class="btn btn-info">Save Changes</button>
+                }
+                else
+                {
+                    <!-- Read-only/disabled fields -->
+					<label asp-for="RentalRequest.Equipment.EquipmentName"></label>
+                    <select disabled asp-for="RentalRequest.EquipmentId"
+                            asp-items="@Model.equipmentTitle.Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
+                            class="form-select">
+                        <option value="" disabled>-- Select equipment --</option>
+                    </select>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="RentalRequest.RentalStartDate" class="form-label">Pickup Date</label>
+                        <input asp-for="RentalRequest.RentalStartDate" class="form-control" type="date" id="PickupDate" readonly disabled />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="RentalRequest.RentalReturnDate" class="form-label">Return Date</label>
+                        <input asp-for="RentalRequest.RentalReturnDate" class="form-control" type="date" id="ReturnDate" readonly disabled />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="RentalRequest.RentalTotalCost" class="form-label">Total Cost</label>
+                        <input asp-for="RentalRequest.RentalTotalCost" type="text" class="form-control" name="TotalCost" readonly disabled />
+                    </div>
+                   
+               
+                    <button type="button" class="btn btn-info" disabled>Save Changes</button>
+                }
+
+                <a asp-controller="MyRentalRequest" asp-action="MyRentalRequest" class="btn btn-secondary" style="width:180px">Back to List</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--JS function to dynamically update the rental cost -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const startDate = document.getElementById("PickupDate");
+        const endDate = document.getElementById("ReturnDate");
+        const totalCost = document.getElementById("TotalCost");
+        const hiddenTotalCost = document.getElementById("HiddenTotalCost");
+        const equipmentSelect = document.getElementById("EquipmentSelect");
+
+        let currentRentalPrice = 0;
+
+        function calculateCost() {
+            if (!startDate.value || !endDate.value || currentRentalPrice === 0) {
+                totalCost.value = "";
+                hiddenTotalCost.value = "";
+                return;
+            }
+
+            const start = new Date(startDate.value);
+            const end = new Date(endDate.value);
+            const days = (end - start) / (1000 * 60 * 60 * 24);
+
+            if (days > 0) {
+                let cost = (days * currentRentalPrice).toFixed(2);
+                totalCost.value = cost;
+                hiddenTotalCost.value = cost;
+            } else {
+                totalCost.value = "";
+                hiddenTotalCost.value = "";
+            }
+        }
+
+        function fetchRentalPriceAndCalculate() {
+            const equipmentId = equipmentSelect.value;
+            if (!equipmentId) {
+                currentRentalPrice = 0;
+                calculateCost();
+                return;
+            }
+
+            fetch(`../GetRentalPrice?id=${equipmentId}`)
+                .then(response => response.json())
+                .then(data => {
+                    currentRentalPrice = data.rentalPrice || 0;
+                    calculateCost();
+                })
+                .catch(() => {
+                    currentRentalPrice = 0;
+                    calculateCost();
+                });
+        }
+
+        startDate.addEventListener("change", calculateCost);
+        endDate.addEventListener("change", calculateCost);
+        equipmentSelect.addEventListener("change", fetchRentalPriceAndCalculate);
+
+        // Prefetch rental price for pre-selected equipment on page load
+        if (equipmentSelect.value) {
+            fetchRentalPriceAndCalculate();
+        }
+    });
+    </script>
+
+

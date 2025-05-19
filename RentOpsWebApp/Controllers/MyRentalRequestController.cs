@@ -4,16 +4,19 @@ using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsWebApp.ViewModels;
 using System.Collections.Generic;
+using RentOpsObjects.Services;
 
 namespace RentOpsWebApp.Controllers
 {
     public class MyRentalRequestController : Controller
     {
-        private readonly RentOpsDBContext _context;
+        private RentOpsDBContext _context;
+        AuditLogger auditLogger;
 
         public MyRentalRequestController(RentOpsDBContext context)
         {
             _context = context;
+            auditLogger = new AuditLogger(_context);
         }
         public IActionResult Index()
         {
@@ -87,6 +90,62 @@ namespace RentOpsWebApp.Controllers
             return View("RentalRequestDetails", model);
         }
 
+        //get for the edit page
+        public IActionResult Edit(int id)
+        {
+            var rentalRequest = _context.RentalRequests
+                .Include(r => r.Equipment)
+                .Include(r => r.RentalRequestStatus)
+                .FirstOrDefault(r => r.RentalRequestId == id);
+            
+            if (rentalRequest == null)
+                return NotFound();
+
+            var model = new RentalRequestViewModel
+            {
+                RentalRequest = rentalRequest,
+                equipmentTitle = _context.Equipment.ToList()
+            };
+
+            return View("Edit", model);
+        }
+
+        //function to get the rental price of an equipment
+        [HttpGet]
+        public IActionResult GetRentalPrice(int id)
+        {
+            Console.WriteLine("GetRentalPrice called with id: " + id);
+
+            var equipment = _context.Equipment.FirstOrDefault(e => e.EquipmentId == id);
+            if (equipment == null)
+                return NotFound();
+            return Json(new { rentalPrice = equipment.RentalPrice });
+        }
+
+        //post for the edit page
+        [HttpPost]
+        public IActionResult Edit(RentalRequest rentalRequest)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingRequest = _context.RentalRequests.Find(rentalRequest.RentalRequestId);
+                if (existingRequest != null)
+                {
+                    existingRequest.RentalStartDate = rentalRequest.RentalStartDate;
+                    existingRequest.RentalReturnDate = rentalRequest.RentalReturnDate;
+                    existingRequest.EquipmentId = rentalRequest.EquipmentId;
+                    existingRequest.RentalTotalCost = rentalRequest.RentalTotalCost;
+
+                    //track the changes
+                    
+
+
+                    _context.SaveChanges();
+                    return RedirectToAction("MyRentalRequest");
+                }
+            }
+            return View(rentalRequest);
+        }
 
 
     }

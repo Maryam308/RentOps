@@ -93,22 +93,8 @@
 
                 <!--if the rental request status is not pending-->
                 @{
-                    bool isPending = Model.RentalRequest.RentalRequestStatus.RentalRequestStatusTitle == "Pending";
+                    bool isPending = Model.RentalRequest.RentalRequestStatus.RentalRequestStatusTitle == "Pending Approval";
                 }
-
-                <!-- Requested Deposit -->
-                <div class="form-group mb-3">
-                    <label asp-for="NewRentalTransaction.Deposit" class="form-label">Deposit</label>
-                    @if (!isPending)
-                    {
-                        <input asp-for="NewRentalTransaction.Deposit" type="text" class="form-control" disabled />
-                    }
-                    else
-                    {
-                        <input asp-for="NewRentalTransaction.Deposit" type="text" class="form-control" />
-                    }
-
-                </div>
 
 				<!-- Rental Request Status -->
                 <div class="form-group mb-4">
