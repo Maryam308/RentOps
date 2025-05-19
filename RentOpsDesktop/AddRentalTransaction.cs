@@ -101,6 +101,17 @@ namespace RentOpsDesktop
                     //add the rental transaction to the database
                     context.RentalTransactions.Add(rentalTransaction);
 
+                    //update the equipment status to rented
+                    var equipment = context.Equipment.FirstOrDefault(e => e.EquipmentId == equipmentId);
+                    if (equipment != null)
+                    {
+                        equipment.AvailabilityStatusId = 2; // out for rent
+                        context.Equipment.Update(equipment);
+
+                        //save changes
+                        context.SaveChanges();
+                    }
+
                     if (isPaid)
                     {
                         //creat a payment object
@@ -201,6 +212,8 @@ namespace RentOpsDesktop
                             logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
 
                             context.SaveChanges();
+
+
 
                         }
                     }

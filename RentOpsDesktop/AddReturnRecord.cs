@@ -190,15 +190,27 @@ namespace RentOpsDesktop
                 newReturnRecord.DocumentId = null;
 
 
-                //change the condition of the rented equipment to match the return condition
+                //change the condition of the rented equipment to match the return condition, also change the availability status of the equipment according the return condition
                 var rentedEquipment = dbContext.Equipment.Where(x => x.EquipmentId == rentalTransaction.EquipmentId).ToList();
                 if (rentedEquipment != null)
                 {
                     rentedEquipment[0].ConditionStatusId = newReturnRecord.ReturnConditionId;
+
+                    //check if the condition is under maintenance or out of order
+                    if (rentedEquipment[0].ConditionStatusId == 4 || rentedEquipment[0].ConditionStatusId == 5)
+                    {
+                        rentedEquipment[0].AvailabilityStatusId = 3; // set the availability status to under maintenance
+                    }
+                    else
+                    {
+                        rentedEquipment[0].AvailabilityStatusId = 1; // set the availability status to available
+                    }
+
                     //update the equipment to set the condition
                     dbContext.Equipment.Update(rentedEquipment[0]);
 
                 }
+
 
                 // If a document was uploaded, save it and link it
                 if (uploadedDocument != null)
