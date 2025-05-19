@@ -3,12 +3,16 @@
 @{
     ViewData["Title"] = "Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+
 }
 <br />
 <h1>Profile</h1>
 <br />
 
 <!-- SECTION 1: Total Rentals -->
+@if (User.IsInRole("Customer")) { 
+
 <div class="container mb-5">
     <div class="row justify-content-center">
         <div class="col-12">
@@ -21,6 +25,7 @@
         </div>
     </div>
 </div>
+}
 
 <!-- SECTION 2: Quick Links & Profile Info -->
 <div class="container mb-5">
@@ -34,15 +39,30 @@
                 </div>
                 <div class="card-body p-0">
                     <ul class="list-group list-group-flush fs-5">
-                        <li class="list-group-item py-4">
-                            <a asp-controller ="MyReturnRecord" asp-action="MyReturnRecord">View My Return Records</a>
-                        </li>
-                        <li class="list-group-item py-4">
-                            <a sp-controller="MyRentalTransaction" asp-action="MyRentalTransaction">View My Transaction Records</a>
-                        </li>
-                        <li class="list-group-item py-4">
-                            <a asp-controller="MyRentalRequest" asp-action="MyRentalRequest">View My Request Records</a>
-                        </li>
+                        @if (User.IsInRole("Customer"))
+                        {
+                            <li class="list-group-item py-4">
+                                <a asp-controller="MyReturnRecord" asp-action="MyReturnRecord">View My Return Records</a>
+                            </li>
+                            <li class="list-group-item py-4">
+                                <a asp-controller="MyRentalTransaction" asp-action="MyRentalTransaction">View My Transaction Records</a>
+                            </li>
+                            <li class="list-group-item py-4">
+                                <a asp-controller="MyRentalRequest" asp-action="MyRentalRequest">View My Request Records</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Administrator") || User.IsInRole("Rental Manager"))
+                        {
+                            <li class="list-group-item py-4">
+                                <a asp-controller="RentalTransaction" asp-action="RentalTransaction">All Transactions</a>
+                            </li>
+                            <li class="list-group-item py-4">
+                                <a asp-controller="RentalRequest" asp-action="RentalRequest">All Requests</a>
+                            </li>
+                            <li class="list-group-item py-4">
+                                <a asp-controller="ReturnRecord" asp-action="ReturnRecord">All Return Records</a>
+                            </li>
+                        }
                         <li class="list-group-item py-4">
                             <a asp-controller="Notification" asp-action="Notification">Notifications</a>
                         </li>

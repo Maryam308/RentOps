@@ -201,7 +201,7 @@
 						<td>@record.RentalFee</td>
 						<td>@record.PickupDate</td>
 						<td>@record.ReturnDate</td>
-						<td>@record.Equipment.EquipmentName</td>
+						<td>@record.Equipment?.EquipmentName</td>
 						<td>
 							@(record.PaymentId == null ? "Not Paid" : "Paid")
 						</td>
