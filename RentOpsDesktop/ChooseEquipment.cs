@@ -25,7 +25,6 @@ namespace RentOpsDesktop
             context = new RentOpsDBContext();
             logger = new AuditLogger(context); //create a logger object
             currentUserId = Global.user.UserId;
-            RefreshEquipmentGridview();
 
         }
 
@@ -34,9 +33,14 @@ namespace RentOpsDesktop
             try
             {
                 // Start with all equipment
-                var equipmentToShow = context.Equipment.AsQueryable();
+                var equipmentToShow = context.Equipment
+                    .Where(e =>
+                        (e.ConditionStatusId == 1 || e.ConditionStatusId == 2 || e.ConditionStatusId == 3) // Only equipments in good conditions
+                        && e.AvailabilityStatusId == 1) // Only available equipments
+                    .AsQueryable();
 
-                // Fetch the filtered equipment list and select relevant fields
+
+                // Fetch the equipments with new, good, and used condition statuses
                 var equipmentList = equipmentToShow.Select(e => new
                 {
                     EquipmentID = e.EquipmentId, // Select the equipment ID
@@ -57,7 +61,7 @@ namespace RentOpsDesktop
                         .FirstOrDefault(), // Fetch the equipment category title
                     AddedBy = context.Users
                         .Where(u => u.UserId == e.UserId)
-                        .Select(u => u.FirstName)
+                        .Select(u => u.FirstName + " " + u.LastName)
                         .FirstOrDefault() // Fetch the user's full name
                 }).ToList(); // Convert the result to a list
 
@@ -85,7 +89,7 @@ namespace RentOpsDesktop
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
 
                 // Check if the DataGridView is empty
@@ -143,7 +147,7 @@ namespace RentOpsDesktop
                     {
                         // log the error
                         logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
-                        
+
                         // Show an error message
                         MessageBox.Show("Error: " + ex.Message);
                     }
@@ -154,7 +158,7 @@ namespace RentOpsDesktop
             {
                 // log the error
                 logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
-                
+
                 // Show an error message
                 MessageBox.Show("An error occurred while loading the data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -162,7 +166,78 @@ namespace RentOpsDesktop
 
         private void ChooseEquipment_Load(object sender, EventArgs e)
         {
+            try
+            {
+                // Populate Equipment Category ComboBox
+                cmbEquipmentCategory.DataSource = context.EquipmentCategories.ToList();
+                cmbEquipmentCategory.DisplayMember = "EquipmentCategoryTitle";
+                cmbEquipmentCategory.ValueMember = "EquipmentCategoryId";
+                cmbEquipmentCategory.SelectedItem = null;
 
+                // Populate Condition Status ComboBox 
+                cmbConditionStatus.DataSource = context.ConditionStatuses
+                    .Where(cs => cs.ConditionStatusId == 1 || cs.ConditionStatusId == 2 || cs.ConditionStatusId == 3)
+                    .ToList();
+                cmbConditionStatus.DisplayMember = "ConditionStatusTitle";
+                cmbConditionStatus.ValueMember = "ConditionStatusId";
+                cmbConditionStatus.SelectedItem = null;
+
+                RefreshEquipmentGridview(); // Load initial equipment
+            }
+            catch (Exception ex)
+            {
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
+                MessageBox.Show("Error loading filters: " + ex.Message);
+            }
+        }
+
+        private void dgvEquipment_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void btnFilter_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var equipmentToShow = context.Equipment
+                    .Where(e => e.ConditionStatusId == 1 || e.ConditionStatusId == 2 || e.ConditionStatusId == 3)
+                    .AsQueryable();
+
+                // Apply filters if selected
+                if (cmbEquipmentCategory.SelectedValue != null)
+                    equipmentToShow = equipmentToShow.Where(e => e.EquipmentCategoryId == (int)cmbEquipmentCategory.SelectedValue);
+
+                if (cmbConditionStatus.SelectedValue != null)
+                    equipmentToShow = equipmentToShow.Where(e => e.ConditionStatusId == (int)cmbConditionStatus.SelectedValue);
+
+                var equipmentList = equipmentToShow.Select(e => new
+                {
+                    EquipmentID = e.EquipmentId,
+                    EquipmentName = e.EquipmentName,
+                    EquipmentDescription = e.EquipmentDescription,
+                    RentalPrice = e.RentalPrice,
+                    ConditionStatus = context.ConditionStatuses
+                        .Where(cs => cs.ConditionStatusId == e.ConditionStatusId)
+                        .Select(cs => cs.ConditionStatusTitle)
+                        .FirstOrDefault(),
+                    EquipmentCategory = context.EquipmentCategories
+                        .Where(ec => ec.EquipmentCategoryId == e.EquipmentCategoryId)
+                        .Select(ec => ec.EquipmentCategoryTitle)
+                        .FirstOrDefault(),
+                    AddedBy = context.Users
+                        .Where(u => u.UserId == e.UserId)
+                        .Select(u => u.FirstName)
+                        .FirstOrDefault()
+                }).ToList();
+
+                dgvEquipment.DataSource = equipmentList;
+            }
+            catch (Exception ex)
+            {
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
+                MessageBox.Show("Error applying filters: " + ex.Message);
+            }
         }
     }
 }
