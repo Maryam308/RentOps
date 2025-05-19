@@ -40,6 +40,7 @@ namespace RentOpsDesktop
         {
             try
             {
+
                 //Display the employee details in the text boxes
                 txtFirstName.Text = currentUser.FirstName;
                 txtLastName.Text = currentUser.LastName;

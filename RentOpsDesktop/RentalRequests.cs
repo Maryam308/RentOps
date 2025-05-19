@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.EntityFrameworkCore;
 using RentOpsObjects.Model;
 using RentOpsObjects.Services;
 
@@ -136,6 +137,23 @@ namespace RentOpsDesktop
             // Get the ID of the selected rental request
             int selectedRentalRequestID = Convert.ToInt32(selectedRow.Cells["RequestID"].Value);
 
+            // Check if the request is in "Pending" status
+            var request = context.RentalRequests
+                .Include(r => r.RentalRequestStatus)
+                .FirstOrDefault(r => r.RentalRequestId == selectedRentalRequestID);
+
+            if (request == null)
+            {
+                MessageBox.Show("The selected request could not be found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (request.RentalRequestStatusId != 1)
+            {
+                MessageBox.Show("Only pending requests can be updated.", "Not Allowed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // Confirm the edit action
             DialogResult result = MessageBox.Show($"Are you sure you want to update the rental request with ID {selectedRentalRequestID}?", "Confirm Update", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
@@ -145,9 +163,10 @@ namespace RentOpsDesktop
                 updateRequestStatus.StartPosition = FormStartPosition.CenterScreen; // Center the form
                 updateRequestStatus.ShowDialog();
 
-                // refresh the DataGridView 
-                RefreshRentalRequestsGridview(); 
+                // Refresh the DataGridView
+                RefreshRentalRequestsGridview();
             }
+
 
         }
 
