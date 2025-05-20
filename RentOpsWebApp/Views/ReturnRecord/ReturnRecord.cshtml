@@ -10,7 +10,7 @@
 @{
 	if (TempData["CreateSuccess"] != null)
 	{
-		<div class="alert alert-success" role="alert">
+		<div class="alert alert-success mt-3" role="alert">
 			@TempData["CreateSuccess"].ToString()
 		</div>
 	}
@@ -18,7 +18,7 @@
 	//check RuturnRecordError tempdata
 	if (TempData["ReturnRecordError"] != null)
 	{
-		<div class="alert alert-danger" role="alert">
+		<div class="alert alert-danger mt-3" role="alert">
 			@TempData["ReturnRecordError"].ToString()
 		</div>
 	}
