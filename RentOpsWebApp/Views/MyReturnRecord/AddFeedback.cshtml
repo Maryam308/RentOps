@@ -16,9 +16,9 @@
             <h3>Equipment Details</h3>
         </div>
         <div class="card-body">
-            <p><strong>Name:</strong> @Model.Equipment.EquipmentName</p>
-            <p><strong>Category:</strong> @Model.Equipment.EquipmentCategory?.EquipmentCategoryTitle</p>
-            <p><strong>Description:</strong> @Model.Equipment.EquipmentDescription</p>
+            <p><strong>Name:</strong> @Model.Equipment?.EquipmentName</p>
+            <p><strong>Category:</strong> @Model.Equipment?.EquipmentCategory?.EquipmentCategoryTitle</p>
+            <p><strong>Description:</strong> @Model.Equipment?.EquipmentDescription</p>
         </div>
     </div>
 

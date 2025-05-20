@@ -24,7 +24,7 @@
 
 					 <div class="input-group"> 
 					 	<select asp-for="SearchLogType" 
-								asp-items="@Model.LogTypes
+								asp-items="@Model.LogTypes?
 								.Select(i => new SelectListItem { Text = i.LogTypeTitle, Value = i.LogTypeId.ToString() })"
 					 			class="form-select  mb-3 mx-4"> 
 							<option value="" disabled selected>Select a Log Type</option> 
@@ -33,7 +33,7 @@
 
 					 <div class="input-group"> 
 					 	<select asp-for="SearchSource" 
-					 			asp-items="@Model.Sources
+					 			asp-items="@Model.Sources?
 								.Select(i => new SelectListItem { Text = i.SourceTitle, Value = i.SourceId.ToString() })"
 								class="form-select  mb-3 mx-4"> 
 					 		<option value="" disabled selected>Select a Source</option> 

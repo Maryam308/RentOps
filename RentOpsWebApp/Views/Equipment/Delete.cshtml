@@ -33,7 +33,7 @@
                 <div class="form-group mb-3">
                     <label asp-for="NewEquipment.EquipmentCategoryId" class="form-label">Equipment Category</label>
                     <select disabled asp-for="NewEquipment.EquipmentCategoryId"
-                            asp-items="@Model.EquipmentCategories.Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
+                            asp-items="@Model.EquipmentCategories?.Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
                             class="form-select">
                         <option disabled value="0">-- Select Category --</option>
                     </select>
@@ -49,7 +49,7 @@
                 <div class="form-group mb-3">
                     <label asp-for="NewEquipment.ConditionStatusId" class="form-label">Condition Status</label>
                     <select disabled asp-for="NewEquipment.ConditionStatusId"
-                            asp-items="@Model.EquipmentStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+                            asp-items="@Model.EquipmentStatuses?.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
                             class="form-select">
                         <option disabled value="0">-- Select Condition --</option>
                     </select>
@@ -59,7 +59,7 @@
                 <div class="form-group mb-4">
                     <label asp-for="NewEquipment.AvailabilityStatusId" class="form-label">Availability Status</label>
                     <select disabled asp-for="NewEquipment.AvailabilityStatusId"
-                            asp-items="@Model.EquipmentAvailability.Select(i => new SelectListItem { Text = i.AvailabilityStatusTitle, Value = i.AvailabilityStatusId.ToString() })"
+                            asp-items="@Model.EquipmentAvailability?.Select(i => new SelectListItem { Text = i.AvailabilityStatusTitle, Value = i.AvailabilityStatusId.ToString() })"
                             class="form-select">
                         <option disabled value="0">-- Select Availability --</option>
                     </select>

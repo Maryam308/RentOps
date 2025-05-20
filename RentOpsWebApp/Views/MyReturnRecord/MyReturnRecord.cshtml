@@ -10,8 +10,9 @@
 @{
 	if (TempData["CreateSuccess"] != null)
 	{
-		<div class="alert alert-success mt-3" role="alert">
-			@TempData["CreateSuccess"].ToString()
+
+		<div class="alert alert-success  mt-3" role="alert">
+			@TempData["CreateSuccess"]?.ToString()
 		</div>
 	}
 }
@@ -47,7 +48,7 @@
 
 						<div class="input-group">
 							<select asp-for="SearchConditionStatus"
-									asp-items="@Model.conditionStatuses
+									asp-items="@Model.conditionStatuses?
                                .Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
 									class="form-select  mb-3 mx-4">
 								<option value="" disabled selected>Select a Return Condition</option>
@@ -101,7 +102,7 @@
 						<td>@record.AdditionalCharge</td>
 						<td>@record.LateReturnFee</td>
 						<td>@record.DocumentId</td>
-						<td>@record.ReturnCondition.ConditionStatusTitle</td>
+						<td>@record.ReturnCondition?.ConditionStatusTitle</td>
 						<td>
 							<a asp-action="ReturnRecordDetails" asp-route-id="@record.ReturnRecordId" class="btn btn-primary">View Details</a>
 							<a asp-action="AddFeedback"

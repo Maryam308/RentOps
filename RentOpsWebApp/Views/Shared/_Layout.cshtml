@@ -44,12 +44,12 @@
 
                             @* Fetch the user from the database *@
                             var user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
-                            string roleName = null;
+                            string roleName = "";
 
                             if (user != null)
                             {
                                 // Get the role using the RoleId from the user
-                                roleName = _context.Roles.FirstOrDefault(r => r.RoleId == user.RoleId)?.RoleTitle;
+                                roleName = _context.Roles?.FirstOrDefault(r => r.RoleId == user.RoleId)?.RoleTitle ?? "";
                             }
 
                             @* Display Dashboard and Audit Logs based on roles *@

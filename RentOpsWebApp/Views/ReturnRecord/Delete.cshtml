@@ -23,7 +23,7 @@
                 <div class="form-group mb-3">                    
                     <label asp-for="theReturnRecord.RentalTransactionId" class="form-label">Associated Rental Transaction ID</label>
                     <select disabled asp-for="theReturnRecord.RentalTransactionId"
-                            asp-items="@Model.rentalTransactions.Select(i => new SelectListItem { Text = i.RentalTransactionId.ToString() + i.RentalTransactionTimestamp.Date, Value = i.RentalTransactionId.ToString() })"
+                            asp-items="@Model.rentalTransactions?.Select(i => new SelectListItem { Text = i.RentalTransactionId.ToString() + i.RentalTransactionTimestamp.Date, Value = i.RentalTransactionId.ToString() })"
                             class="form-select">
                         <option disabled value="0">-- Select a Transaction --</option>
                     </select>
@@ -39,7 +39,7 @@
                 <div class="form-group mb-3">
                     <label asp-for="theReturnRecord.ReturnConditionId" class="form-label">Return Condition</label>
                     <select disabled asp-for="theReturnRecord.ReturnConditionId"
-                            asp-items="@Model.conditionStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+                            asp-items="@Model.conditionStatuses?.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
                             class="form-select">
                         <option disabled value="">-- Select Category --</option>
                     </select>

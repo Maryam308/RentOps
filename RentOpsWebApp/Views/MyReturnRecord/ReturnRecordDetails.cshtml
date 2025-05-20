@@ -13,11 +13,11 @@
             <h3>Return Record Details</h3>
         </div>
         <div class="card-body">
-            <p><strong>Return Record ID:</strong> @Model.theReturnRecord.ReturnRecordId</p>
-            <p><strong>Actual Return Date:</strong> @Model.theReturnRecord.ActualReturnDate.ToString("yyyy-MM-dd")</p>
-            <p><strong>Additional Charge:</strong> BHD @Model.theReturnRecord.AdditionalCharge</p>
-            <p><strong>Late Return Fee:</strong> BHD @Model.theReturnRecord.LateReturnFee</p>
-            <p><strong>Return Condition:</strong> @Model.theReturnRecord.ReturnCondition?.ConditionStatusTitle</p>
+            <p><strong>Return Record ID:</strong> @Model.theReturnRecord?.ReturnRecordId</p>
+            <p><strong>Actual Return Date:</strong> @Model.theReturnRecord?.ActualReturnDate.ToString("yyyy-MM-dd")</p>
+            <p><strong>Additional Charge:</strong> BHD @Model.theReturnRecord?.AdditionalCharge</p>
+            <p><strong>Late Return Fee:</strong> BHD @Model.theReturnRecord?.LateReturnFee</p>
+            <p><strong>Return Condition:</strong> @Model.theReturnRecord?.ReturnCondition?.ConditionStatusTitle</p>
         </div>
     </div>
 
@@ -27,11 +27,11 @@
             <h3>Transaction Details</h3>
         </div>
         <div class="card-body">
-            <p><strong>Rental Transaction ID:</strong> @Model.theReturnRecord.RentalTransactionId</p>
-            <p><strong>Transaction Timestamp:</strong> @Model.theReturnRecord.RentalTransaction?.RentalTransactionTimestamp.ToString("g")</p>
-            <p><strong>Rental Fee:</strong> BHD @Model.theReturnRecord.RentalTransaction?.RentalFee</p>
-            <p><strong>Pickup Date:</strong> @Model.theReturnRecord.RentalTransaction?.PickupDate.ToShortDateString()</p>
-            <p><strong>Return Date:</strong> @Model.theReturnRecord.RentalTransaction?.ReturnDate.ToShortDateString()</p>
+            <p><strong>Rental Transaction ID:</strong> @Model.theReturnRecord?.RentalTransactionId</p>
+            <p><strong>Transaction Timestamp:</strong> @Model.theReturnRecord?.RentalTransaction?.RentalTransactionTimestamp.ToString("g")</p>
+            <p><strong>Rental Fee:</strong> BHD @Model.theReturnRecord?.RentalTransaction?.RentalFee</p>
+            <p><strong>Pickup Date:</strong> @Model.theReturnRecord?.RentalTransaction?.PickupDate.ToShortDateString()</p>
+            <p><strong>Return Date:</strong> @Model.theReturnRecord?.RentalTransaction?.ReturnDate.ToShortDateString()</p>
         </div>
     </div>
 
@@ -41,9 +41,9 @@
             <h3>Processed By</h3>
         </div>
         <div class="card-body">
-            <p><strong>Employee Name:</strong> @Model.theReturnRecord.RentalTransaction?.Employee?.FirstName @Model.theReturnRecord.RentalTransaction?.Employee?.LastName</p>
-            <p><strong>Email:</strong> @Model.theReturnRecord.RentalTransaction?.Employee?.Email</p>
-            <p><strong>Phone Number:</strong> @Model.theReturnRecord.RentalTransaction?.Employee?.PhoneNumber</p>
+            <p><strong>Employee Name:</strong> @Model.theReturnRecord?.RentalTransaction?.Employee?.FirstName @Model.theReturnRecord?.RentalTransaction?.Employee?.LastName</p>
+            <p><strong>Email:</strong> @Model.theReturnRecord?.RentalTransaction?.Employee?.Email</p>
+            <p><strong>Phone Number:</strong> @Model.theReturnRecord?.RentalTransaction?.Employee?.PhoneNumber</p>
         </div>
     </div>
 
@@ -53,10 +53,10 @@
             <h3>Attachment</h3>
         </div>
         <div class="card-body">
-            @if (Model.theReturnRecord.Document != null)
+            @if (Model.theReturnRecord?.Document != null)
             {
-                <p><strong>File:</strong> @Model.theReturnRecord.Document.FileName</p>
-                <a asp-controller="ReturnRecord" asp-action="Download" asp-route-id="@Model.theReturnRecord.DocumentId" class="btn btn-outline-light">
+                <p><strong>File:</strong> @Model.theReturnRecord?.Document.FileName</p>
+                <a asp-controller="ReturnRecord" asp-action="Download" asp-route-id="@Model.theReturnRecord?.DocumentId" class="btn btn-outline-light">
                     Download PDF
                 </a>
             }

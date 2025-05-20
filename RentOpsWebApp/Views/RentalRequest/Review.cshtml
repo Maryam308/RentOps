@@ -64,7 +64,7 @@
             <form asp-action="Review" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <!--Add the rental request id in a hidden field-->
-                <input type="hidden" name="RentalRequest.RentalRequestId" value="@Model.RentalRequest.RentalRequestId" />
+                <input type="hidden" name="RentalRequest.RentalRequestId" value="@Model.RentalRequest?.RentalRequestId" />
                 <!--display the equipment name in readonly input field-->
                 <div class="form-group" >
                     <label disabled asp-for="RentalRequest.Equipment.EquipmentName"></label>
@@ -93,7 +93,7 @@
 
                 <!--if the rental request status is not pending-->
                 @{
-                    bool isPending = Model.RentalRequest.RentalRequestStatus.RentalRequestStatusTitle == "Pending Approval";
+                    bool isPending = Model.RentalRequest?.RentalRequestStatus?.RentalRequestStatusTitle == "Pending Approval";
                 }
 
 				<!-- Rental Request Status -->
@@ -103,7 +103,7 @@
                     @if (!isPending)
                     {
                         <select disabled asp-for="RentalRequest.RentalRequestStatusId"
-                                asp-items="@Model.rentalRequestStatuses.Select(i => new SelectListItem { Text = i.RentalRequestStatusTitle, Value = i.RentalRequestStatusId.ToString() })"
+                                asp-items="@Model.rentalRequestStatuses?.Select(i => new SelectListItem { Text = i.RentalRequestStatusTitle, Value = i.RentalRequestStatusId.ToString() })"
                                 class="form-select">
                             <option value="" disabled>-- Select Status --</option>
                         </select>
@@ -111,7 +111,7 @@
                     else
                     {
                         <select asp-for="RentalRequest.RentalRequestStatusId"
-                                asp-items="@Model.rentalRequestStatuses.Select(i => new SelectListItem { Text = i.RentalRequestStatusTitle, Value = i.RentalRequestStatusId.ToString() })"
+                                asp-items="@Model.rentalRequestStatuses?.Select(i => new SelectListItem { Text = i.RentalRequestStatusTitle, Value = i.RentalRequestStatusId.ToString() })"
                                 class="form-select">
                             <option value="">-- Select Status --</option>
                         </select>
@@ -136,7 +136,7 @@
 
                 @if (!isPending)
                 {
-                    <button type="#" class="btn btn-info mt-3">Save Changes</button>
+                    <button class="btn btn-info mt-3" disabled>Save Changes</button>
                 }
                 else
                 {

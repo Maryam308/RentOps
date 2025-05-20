@@ -3,16 +3,29 @@
 @{
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+	
+	RentOpsObjects.Model.RentOpsDBContext _context = new RentOpsObjects.Model.RentOpsDBContext();
+    @* Fetch the user from the database *@
+    var user = _context.Users.FirstOrDefault(u => u.Email == User.Identity.Name);
+    string roleName = "";
+
+    if (user != null)
+    {
+        // Get the role using the RoleId from the user
+        roleName = _context.Roles?.FirstOrDefault(r => r.RoleId == user.RoleId)?.RoleTitle ?? "";
+    }
+
+
 }
 
 <div class="container mt-4">
     <!-- Equipment Details -->
     <div class="card mb-4 shadow-sm">
         <div class="card-header bg-primary text-white">
-			<h3>@Model.NewEquipment?.EquipmentName</h3>
+            <h3>@Model.NewEquipment?.EquipmentName</h3>
         </div>
         <div class="card-body">
-            
+
             <p><strong>Category:</strong> @Model.NewEquipment?.EquipmentCategory?.EquipmentCategoryTitle</p>
             <p><strong>Status:</strong> @Model.NewEquipment?.ConditionStatus?.ConditionStatusTitle </p>
             <p><strong>Availability:</strong> @Model.NewEquipment?.AvailabilityStatus?.AvailabilityStatusTitle</p>
@@ -31,9 +44,14 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Feedback ID</th>
+                            @if (roleName == "Administrator" || roleName == "Rental Manager")
+                            {
+                                <th>Feedback ID</th>
                             <th>Transaction ID</th>
                             <th>Is Hidden</th>
+                            
+                            }
+                            
                             <th>Rating</th>
                             <th>Timestamp</th>
                             <th>Comments</th>
@@ -44,17 +62,13 @@
                         @foreach (var feedback in Model.EquipmentFeedbacks)
                         {
 
-                            // Check if the feedback is hidden and also add that if only the user is customer
-							if (feedback.IsHidden) 
-							 { 
-							 	continue; // Skip this feedback 
-							 } 
+                           
                             <tr>
                                 
                                 
 
                                 <!--if the user is not customer -->
-                                @if (User.IsInRole("Administrator,Rental Manager"))
+                                @if (roleName == "Administrator" || roleName == "Rental Manager")
                                 { 
 									<td>@feedback.FeedbackId</td>
                                 <td>@feedback.RentalTransactionId</td>
@@ -67,6 +81,7 @@
                                         @(feedback.IsHidden ? "Show" : "Hide")
                                     </button>
                                 </td>
+
 								}
 
 								<td>@feedback.Rating / 5</td>

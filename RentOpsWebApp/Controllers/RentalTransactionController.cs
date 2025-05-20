@@ -269,6 +269,7 @@ namespace RentOpsWebApp.Controllers
                         {
 
                             var notifyUserId = transaction.RentalRequest.UserId;
+
                             if (notifyUserId != null)
                             {
 

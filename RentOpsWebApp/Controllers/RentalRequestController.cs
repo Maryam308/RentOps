@@ -140,35 +140,7 @@ namespace RentOpsWebApp.Controllers
                     return RedirectToAction("RentalRequest");
                 }
 
-                // Handle Pending Requests
-                if (model.RentalRequest.RentalRequestStatusId == 1)
-                {
-                    rentalRequest.RentalRequestStatusId = 1;
-                    _context.Entry(rentalRequest).Property(r => r.RentalRequestStatusId).IsModified = true;
-                    //log before saving changes
-                    _auditLogger.TrackChanges(userId, 1);
-                    _context.SaveChanges();
-
-                    var pendingMessageContent = _context.MessageContents
-                        .FirstOrDefault(m => m.MessageContentText == "Rental Request Pending Approval: Your rental request is pending approval. We will notify you once it is reviewed.");
-
-                    if (pendingMessageContent != null)
-                    {
-                        var notification = new Notification
-                        {
-                            UserId = rentalRequest.UserId,
-                            MessageContentId = pendingMessageContent.MessageContentId,
-                            NotificationStatusId = 1,
-                            NotificationTimestamp = currentTime
-                        };
-
-                        _context.Notifications.Add(notification);
-                        _context.SaveChanges();
-                    }
-
-                    TempData["Pending"] = "Rental request is pending approval.";
-                    return RedirectToAction("RentalRequest");
-                }
+                
 
                 // Handle Rejected Requests
                 if (model.RentalRequest.RentalRequestStatusId == 3)
@@ -177,20 +149,34 @@ namespace RentOpsWebApp.Controllers
                     _context.Entry(rentalRequest).Property(r => r.RentalRequestStatusId).IsModified = true;
                     _context.SaveChanges();
 
-                    var rejectedMessageContent = _context.MessageContents
-                        .FirstOrDefault(m => m.MessageContentText == "Your rental request has been rejected. You can contact our department for further carifications: +973 67893143.");
+                    //after rejecting the rental request send a notification to the user that made the request
+                    var notifyUserId = rentalRequest.UserId;
+                    var rejectedRentalRequestMessageContent = _context.MessageContents.Include(mc => mc.MessageType)
+                        .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Rental Request Rejected");
 
-                    if (rejectedMessageContent != null)
+                    if (rejectedRentalRequestMessageContent == null)
+                    {
+                        //create a new message content
+                        rejectedRentalRequestMessageContent = new MessageContent
+                        {
+                            MessageTypeId = _context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Rental Request Approved").Select(mt => mt.MessageTypeId).FirstOrDefault(),
+                            MessageContentText = "Your rental request has been rejected.",
+                        };
+                    }
+
+                    if (rejectedRentalRequestMessageContent != null)
                     {
                         var notification = new Notification
                         {
-                            UserId = rentalRequest.UserId,
-                            MessageContentId = rejectedMessageContent.MessageContentId,
+                            UserId = notifyUserId,
+                            MessageContentId = rejectedRentalRequestMessageContent.MessageContentId,
                             NotificationStatusId = 1,
-                            NotificationTimestamp = currentTime
+                            NotificationTimestamp = DateTime.Now
                         };
 
                         _context.Notifications.Add(notification);
+                        //log before saving changes
+                        _auditLogger.TrackChanges(userId, 1);
                         _context.SaveChanges();
                     }
 
@@ -205,17 +191,30 @@ namespace RentOpsWebApp.Controllers
                     _context.Entry(rentalRequest).Property(r => r.RentalRequestStatusId).IsModified = true;
                     _context.SaveChanges();
 
-                    var approvedMessageContent = _context.MessageContents
-                        .FirstOrDefault(m => m.MessageContentText == "Your rental request has been approved. Please proceed to payment.");
 
-                    if (approvedMessageContent != null)
+                    //after approving the rental request send a notification to the user that made the request
+                    var notifyUserId = rentalRequest.UserId;
+                    var approvedRentalRequestMessageContent = _context.MessageContents.Include(mc => mc.MessageType)
+                         .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Rental Request Approved");
+
+                    if (approvedRentalRequestMessageContent == null)
+                    {
+                        //create a new message content
+                        approvedRentalRequestMessageContent = new MessageContent
+                        {
+                            MessageTypeId = _context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Rental Request Approved").Select(mt => mt.MessageTypeId).FirstOrDefault(),
+                            MessageContentText = "Your rental request has been approved.",
+                        };
+                    }
+
+                    if (approvedRentalRequestMessageContent != null)
                     {
                         var notification = new Notification
                         {
-                            UserId = rentalRequest.UserId,
-                            MessageContentId = approvedMessageContent.MessageContentId,
+                            UserId = notifyUserId,
+                            MessageContentId = approvedRentalRequestMessageContent.MessageContentId,
                             NotificationStatusId = 1,
-                            NotificationTimestamp = currentTime
+                            NotificationTimestamp = DateTime.Now
                         };
 
                         _context.Notifications.Add(notification);

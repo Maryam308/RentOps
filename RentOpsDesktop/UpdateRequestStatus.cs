@@ -138,6 +138,17 @@ namespace RentOpsDesktop
                 // Save changes to the database
                 context.SaveChanges(); // Ensure you save changes to persist the update
 
+
+                // Notify the user based on the selected status
+                if (requestToUpdate.RentalRequestStatusId == 2) // Approved
+                {
+                    notifyApprove(requestToUpdate.UserId);
+                }
+                else if (requestToUpdate.RentalRequestStatusId == 3) // Rejected
+                {
+                    notifyReject(requestToUpdate.UserId);
+                }
+
                 MessageBox.Show("The rental request status has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 this.DialogResult = DialogResult.OK;
@@ -150,5 +161,78 @@ namespace RentOpsDesktop
                 MessageBox.Show("Error updating rental request status: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+        //function to notify the user when rejecting a request
+        private void notifyReject(int userid)
+        {
+            //after rejecting the rental request send a notification to the user that made the request
+            var notifyUserId = userid;
+            var rejectedRentalRequestMessageContent = context.MessageContents.Include(mc => mc.MessageType)
+                .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Rental Request Rejected");
+
+            if (rejectedRentalRequestMessageContent == null)
+            {
+                //create a new message content
+                rejectedRentalRequestMessageContent = new MessageContent
+                {
+                    MessageTypeId = context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Rental Request Approved").Select(mt => mt.MessageTypeId).FirstOrDefault(),
+                    MessageContentText = "Your rental request has been rejected.",
+                };
+            }
+
+            if (rejectedRentalRequestMessageContent != null)
+            {
+                var notification = new Notification
+                {
+                    UserId = notifyUserId,
+                    MessageContentId = rejectedRentalRequestMessageContent.MessageContentId,
+                    NotificationStatusId = 1,
+                    NotificationTimestamp = DateTime.Now
+                };
+
+                context.Notifications.Add(notification);
+                //track the changes
+                auditLogger.TrackChanges(currentUserId, Global.sourceId);
+                context.SaveChanges();
+            }
+        }
+
+        //function to notify the user when approving a request
+        private void notifyApprove(int userId)
+        {
+            //after approving the rental request send a notification to the user that made the request
+            var notifyUserId = userId;
+            var approvedRentalRequestMessageContent = context.MessageContents.Include(mc => mc.MessageType)
+                 .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Rental Request Approved");
+
+            if (approvedRentalRequestMessageContent == null)
+            {
+                //create a new message content
+                approvedRentalRequestMessageContent = new MessageContent
+                {
+                    MessageTypeId = context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Rental Request Approved").Select(mt => mt.MessageTypeId).FirstOrDefault(),
+                    MessageContentText = "Your rental request has been approved.",
+                };
+            }
+
+            if (approvedRentalRequestMessageContent != null)
+            {
+                var notification = new Notification
+                {
+                    UserId = notifyUserId,
+                    MessageContentId = approvedRentalRequestMessageContent.MessageContentId,
+                    NotificationStatusId = 1,
+                    NotificationTimestamp = DateTime.Now
+                };
+
+                context.Notifications.Add(notification);
+                //track the changes
+                auditLogger.TrackChanges(currentUserId, Global.sourceId);
+                context.SaveChanges();
+            }
+        }
+
+
     }
 }

@@ -42,7 +42,7 @@
 
 						<div class="input-group">
 							<select asp-for="SearchRentalRequestStatusId"
-							asp-items="@Model.rentalRequestStatuses
+							asp-items="@Model.rentalRequestStatuses?
                                .Select(i => new SelectListItem { Text = i.RentalRequestStatusTitle, Value = i.RentalRequestStatusId.ToString() })"
 							class="form-select  mb-3 mx-4">
 								<option value="" disabled selected>Select a Rental Request Status</option>
