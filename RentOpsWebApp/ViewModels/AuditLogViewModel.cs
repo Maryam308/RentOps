@@ -28,6 +28,10 @@ namespace RentOpsWebApp.ViewModels
 
         public string? SearchException { get; set; }
 
+        // pagination properties
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+
 
 
 

@@ -25,5 +25,9 @@ namespace RentOpsWebApp.ViewModels
 
         public RentalTransaction? NewRentalTransaction { get; set; } = new RentalTransaction();
 
+        // pagination properties
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+
     }
 }

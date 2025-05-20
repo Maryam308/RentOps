@@ -22,60 +22,58 @@ namespace RentOpsWebApp.Controllers
             return View();
         }
 
-        public IActionResult AuditLog(string SearchLogType, string SearchSource, string SearchTimestamp, string SearchException)
+        public IActionResult AuditLog(string SearchLogType, string SearchSource, string SearchTimestamp, string SearchException, int page = 1)
         {
             try
             {
-                IEnumerable<Log> logList = _context.Logs
-                .Include(e => e.User)
-                .Include(e => e.LogType)
-                .Include(e => e.Source)
-                .ToList();
+                int pageSize = 25;
 
+                // Start with full logs query including relations
+                var logsQuery = _context.Logs
+                    .Include(e => e.User)
+                    .Include(e => e.LogType)
+                    .Include(e => e.Source)
+                    .AsQueryable();
 
-                //filter the logs based on the search criteria
-                //if the search log type is not null or empty, we filter the logs based on the log type
+                // Apply filters if provided
                 if (!string.IsNullOrEmpty(SearchLogType))
-                {
-                    logList = logList.Where(e => e.LogType.LogTypeId == Convert.ToInt32(SearchLogType));
-                }
+                    logsQuery = logsQuery.Where(e => e.LogType.LogTypeId == Convert.ToInt32(SearchLogType));
 
-                //if the search source is not null or empty, we filter the logs based on the source
                 if (!string.IsNullOrEmpty(SearchSource))
-                {
-                    logList = logList.Where(e => e.Source.SourceId == Convert.ToInt32(SearchSource));
-                }
+                    logsQuery = logsQuery.Where(e => e.Source.SourceId == Convert.ToInt32(SearchSource));
 
-                //if the search timestamp is not null or empty, we filter the logs based on the date
-                if (!string.IsNullOrEmpty(SearchTimestamp))
-                {
-                    DateTime searchTimestamp;
-                    if (DateTime.TryParse(SearchTimestamp, out searchTimestamp))
-                    {
-                        logList = logList.Where(l => l.LogTimestamp.Date == searchTimestamp.Date);
-                    }
+                if (!string.IsNullOrEmpty(SearchTimestamp) && DateTime.TryParse(SearchTimestamp, out DateTime parsedDate))
+                    logsQuery = logsQuery.Where(e => e.LogTimestamp.Date == parsedDate.Date);
 
-                }
+                // Get total count for pagination
+                int totalLogs = logsQuery.Count();
 
+                // Fetch the paged logs
+                var logs = logsQuery
+                    .OrderByDescending(e => e.LogTimestamp)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
 
-
-                //create a new instance of the viewmodel
+                // Create the view model with pagination info
                 var auditLogViewModel = new AuditLogViewModel
                 {
-
-                    Logs = logList,
+                    Logs = logs,
                     LogTypes = _context.LogTypes.ToList(),
-                    Sources = _context.Sources.ToList()
-
+                    Sources = _context.Sources.ToList(),
+                    SearchLogType = SearchLogType,
+                    SearchSource = SearchSource,
+                    SearchTimestamp = SearchTimestamp,
+                    SearchException = SearchException,
+                    CurrentPage = page,
+                    TotalPages = (int)Math.Ceiling(totalLogs / (double)pageSize)
                 };
 
                 return View(auditLogViewModel);
             }
             catch (Exception ex)
             {
-                //save the error message to the viewbag
                 ViewBag.ErrorMessage = ex.Message;
-                // return  error view 
                 return View("Error");
             }
         }

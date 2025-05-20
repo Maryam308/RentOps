@@ -29,67 +29,72 @@ namespace RentOpsWebApp.Controllers
             return View();
         }
 
-        public IActionResult RentalRequest(string SearchRentalRequestId, string SearchRentalRequestStatusId, string searchequipmentId)
+        public IActionResult RentalRequest(string SearchRentalRequestId, string SearchRentalRequestStatusId, string searchequipmentId, int page = 1)
         {
-            IEnumerable<RentalRequest> rentalRequestsList = _context.RentalRequests
-                .Include(r => r.RentalRequestStatus)
-                .Include(r => r.Equipment)
-                .Include(r => r.User)
-                .OrderByDescending(r => r.RentalStartDate)
-                .ToList();
-
-            // Filtering system
-            if (!String.IsNullOrEmpty(SearchRentalRequestId))
+            try
             {
-                rentalRequestsList = rentalRequestsList.Where(p =>
-                    p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId)
-                );
+                int pageSize = 25;
+
+                //get all rental requests from the database and include their related entities
+                IEnumerable<RentalRequest> rentalRequestsList = _context.RentalRequests
+                    .Include(r => r.RentalRequestStatus)
+                    .Include(r => r.Equipment)
+                    .Include(r => r.User)
+                    .OrderByDescending(r => r.RentalStartDate)
+                    .ToList();
+
+                // Filtering system
+
+                //if the rental request id filter is used, we filter the list retrieved above
+                if (!String.IsNullOrEmpty(SearchRentalRequestId))
+                {
+                    rentalRequestsList = rentalRequestsList.Where(p =>
+                        p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId)
+                    );
+                }
+
+                //if the equipment id filter is used, we filter the list retrieved above
+                if (!String.IsNullOrEmpty(searchequipmentId))
+                {
+                    rentalRequestsList = rentalRequestsList.Where(p =>
+                        p.EquipmentId == Convert.ToInt32(searchequipmentId)
+                    );
+                }
+
+                //if the rental request status id filter is used, we filter the list retrieved above
+                if (!String.IsNullOrEmpty(SearchRentalRequestStatusId))
+                {
+                    rentalRequestsList = rentalRequestsList.Where(p =>
+                        p.RentalRequestStatusId == Convert.ToInt32(SearchRentalRequestStatusId)
+                    );
+                }
+
+                //calculate total pages and apply pagination on the filtered result
+                int totalCount = rentalRequestsList.Count();
+                var pagedRequests = rentalRequestsList
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                //create viewmodel and assign the lists
+                var rentalRequestViewModel = new RentalRequestViewModel
+                {
+                    rentalRequests = pagedRequests,
+                    rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
+                    equipmentTitle = _context.Equipment.ToList(),
+                    CurrentPage = page,
+                    TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+                };
+
+                return View(rentalRequestViewModel);
             }
-
-            if (!String.IsNullOrEmpty(searchequipmentId))
+            catch (Exception ex)
             {
-                rentalRequestsList = rentalRequestsList.Where(p =>
-                    p.EquipmentId == Convert.ToInt32(searchequipmentId)
-                );
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
             }
-
-            if (!String.IsNullOrEmpty(SearchRentalRequestStatusId))
-            {
-                rentalRequestsList = rentalRequestsList.Where(p =>
-                    p.RentalRequestStatusId == Convert.ToInt32(SearchRentalRequestStatusId)
-                );
-            }
-
-            var rentalRequestViewModel = new RentalRequestViewModel
-            {
-                rentalRequests = rentalRequestsList,
-                rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
-                equipmentTitle = _context.Equipment.ToList(),
-            };
-
-            return View(rentalRequestViewModel);
-        }
-
-        public IActionResult Review(int id)
-        {
-            var rentalRequest = _context.RentalRequests
-                .Include(r => r.RentalRequestStatus)
-                .Include(r => r.Equipment)
-                .Include(r => r.User)
-                .FirstOrDefault(r => r.RentalRequestId == id);
-
-            if (rentalRequest == null)
-            {
-                return NotFound();
-            }
-
-            var rentalRequestViewModel = new RentalRequestViewModel
-            {
-                RentalRequest = rentalRequest,
-                rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
-            };
-
-            return View(rentalRequestViewModel);
         }
 
         [HttpPost]

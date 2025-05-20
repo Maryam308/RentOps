@@ -6,6 +6,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles {
+	<link rel="stylesheet" href="~/css/PaginationStyle.css" />
+}
+
+
+
+
+
 
 <div class="container mt-5">
 	<h1 class="m-2">System Audit Log</h1>
@@ -98,6 +106,39 @@
 			</tbody>
 
 		</table>
+
+		@if (Model.TotalPages > 1)
+		{
+			<nav class="mt-4">
+				<ul class="pagination justify-content-center custom-pagination">
+					<li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+						<a class="page-link" asp-route-page="@(Model.CurrentPage - 1)">&laquo;</a>
+					</li>
+
+					@for (int i = 1; i <= Model.TotalPages; i++)
+					{
+						<li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+							<a class="page-link"
+							   asp-action="AuditLog"
+							   asp-route-SearchLogType="@Model.SearchLogType"
+							   asp-route-SearchSource="@Model.SearchSource"
+							   asp-route-SearchTimestamp="@Model.SearchTimestamp"
+							   asp-route-SearchException="@Model.SearchException"
+							   asp-route-page="@i">
+								@i
+							</a>
+						</li>
+					}
+
+					<li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+						<a class="page-link" asp-route-page="@(Model.CurrentPage + 1)">&raquo;</a>
+					</li>
+				</ul>
+
+			</nav>
+		}
+
+
 
 	}
 

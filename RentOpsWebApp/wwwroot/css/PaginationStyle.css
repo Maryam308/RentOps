@@ -1,0 +1,35 @@
+﻿.custom-pagination .page-link {
+    background-color: #2c3e50;
+    color: white;
+    border: 1px solid #2c3e50;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    padding: 0;
+    font-size: 16px;
+    border-radius: 0;
+    transition: all 0.3s ease;
+}
+
+    .custom-pagination .page-link:hover {
+        background-color: white;
+        color: #2c3e50;
+        border-color: #2c3e50;
+    }
+
+.custom-pagination .active .page-link {
+    background-color: #2c3e50;
+    color: white;
+    border-color: #2c3e50;
+}
+
+.custom-pagination .disabled .page-link {
+    background-color: #ccc;
+    color: #888;
+    border-color: #ccc;
+}
+
+.custom-pagination .page-item {
+    margin: 0;
+}
