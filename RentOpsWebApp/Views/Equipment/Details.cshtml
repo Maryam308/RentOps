@@ -45,12 +45,18 @@
                         {
 
                             // Check if the feedback is hidden and also add that if only the user is customer
-							@* if (feedback.IsHidden) *@
-							@* { *@
-							@* 	continue; // Skip this feedback *@
-							@* } *@
+							if (feedback.IsHidden) 
+							 { 
+							 	continue; // Skip this feedback 
+							 } 
                             <tr>
-                                <td>@feedback.FeedbackId</td>
+                                
+                                
+
+                                <!--if the user is not customer -->
+                                @if (User.IsInRole("Administrator,Rental Manager"))
+                                { 
+									<td>@feedback.FeedbackId</td>
                                 <td>@feedback.RentalTransactionId</td>
                                 <td>
                                     <button type="button"
@@ -61,17 +67,11 @@
                                         @(feedback.IsHidden ? "Show" : "Hide")
                                     </button>
                                 </td>
-                                <td>@feedback.Rating / 5</td>
-                                <td>@feedback.FeedbackTimestamp.ToString("yyyy-MM-dd HH:mm")</td>
-                                <td>@feedback.CommentText</td>
+								}
 
-                                <!--if the user is not customer -->
-								@* @if (User.IsInRole("Admin")) *@
-								@* { *@
-									
-								@* } *@
-
-                                
+								<td>@feedback.Rating / 5</td>
+								<td>@feedback.FeedbackTimestamp.ToString("yyyy-MM-dd HH:mm")</td>
+								<td>@feedback.CommentText</td>
 
 
                                 

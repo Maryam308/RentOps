@@ -25,6 +25,7 @@ namespace RentOpsDesktop
         {
             InitializeComponent();
             dbContext = new RentOpsDBContext();
+            auditLogger = new AuditLogger(dbContext);
             currentUserId = Global.user.UserId;
 
             //check if the current user is an admin (if so display the statistics for all the system)
@@ -46,97 +47,74 @@ namespace RentOpsDesktop
         //a function to refresh the data grid view 
         private void RefreshDataGridView()
         {
+            try
+            {
+                // Start with overdue transactions (ReturnDate < today)
+                var query = dbContext.RentalTransactions
+                    .Include(rt => rt.Equipment)
+                    .Include(rt => rt.Employee) // If you have an Employee navigation property
+                    .Where(rt => rt.ReturnDate < DateOnly.FromDateTime(DateTime.Now));
 
-            try {
-                //select the overdue transactions that do not have a return record and its retuned date is less than the current date
-
-                //select as queryable
-                IEnumerable<RentalTransaction> rentalTransactions = dbContext.RentalTransactions
-                    .Where(x => x.ReturnDate < DateOnly.FromDateTime(DateTime.Now) && (isAdmin ? true : x.EmployeeId == currentUserId))
-                    .OrderByDescending(d => d.ReturnDate)
-                    .AsQueryable();
-
-                //check if filters apply
-
-                //Filter according to a selected date 
+                // Filter by selected date
                 if (dtpTransctionDate.Checked)
                 {
-                    //get the date seleceted from the filter dtp
-                    DateTime selectedDate = dtpTransctionDate.Value;
-                    //filter the transactions to include only the transactions of the selected date
-                    rentalTransactions = rentalTransactions.Where(r => r.RentalTransactionTimestamp.Date == selectedDate.Date);
+                    DateTime selectedDate = dtpTransctionDate.Value.Date;
+                    query = query.Where(rt => rt.RentalTransactionTimestamp.Date == selectedDate);
                 }
 
-                //Filter according to a selected equipment 
-                if (cmbEquipment.SelectedIndex != -1) {
-
-                    //get the selected equipment id
+                // Filter by selected equipment
+                if (cmbEquipment.SelectedIndex != -1)
+                {
                     int equipmentId = (int)cmbEquipment.SelectedValue;
-                    //get the transactions with the specified equipment
-                    rentalTransactions = rentalTransactions.Where(r => r.EquipmentId == equipmentId);
-
+                    query = query.Where(rt => rt.EquipmentId == equipmentId);
                 }
 
-                //check if payment status is selected to filter
+                // Filter by payment status
                 if (cmbPaymentStatus.SelectedIndex != -1)
                 {
-                    //fetch the selected payment status
                     string paymentStatus = cmbPaymentStatus.SelectedItem.ToString();
                     if (paymentStatus == "Paid")
-                    {
-                        //the paid transactions are the one with a payment id 
-                        rentalTransactions = rentalTransactions.Where(r => r.PaymentId != null);
-                    }
+                        query = query.Where(rt => rt.PaymentId != null);
                     else if (paymentStatus == "Not Paid")
-                    {
-                        //The transactions without a payment id connected are not paid
-                        rentalTransactions = rentalTransactions.Where(r => r.PaymentId == null);
-                    }
+                        query = query.Where(rt => rt.PaymentId == null);
                 }
 
-                //fetch the filtered overdue trnsactions  and include extra data for clarity
-                var overdueTransactions = rentalTransactions.Select(rt => new
-                {
-                    RentalTransactionId = rt.RentalTransactionId,
-                    PickupDate = rt.PickupDate,
-                    ReturnDate = rt.ReturnDate,
-                    Deposit = rt.Deposit,
-                    RentalFee = rt.RentalFee,
-                    RentalTransactionTimestamp = rt.RentalTransactionTimestamp,
-                    PaymentId = rt.PaymentId,
-                    RentalRequestId = rt.RentalRequestId,
-                    EmployeeId = rt.EmployeeId,
-                    EquipmentId = rt.EquipmentId,
-                    EquipmentName = dbContext.Equipment
-                        .Where(e => e.EquipmentId == rt.EquipmentId)
-                        .Select(e => e.EquipmentName)
-                        .FirstOrDefault(), // Fetch Equipment Name
-                    EmployeeName = dbContext.Users
-                        .Where(emp => emp.UserId == rt.EmployeeId)
-                        .Select(emp => emp.FirstName + " " + emp.LastName)
-                        .FirstOrDefault() // Fetch Employee Full Name
-                                }).ToList(); // Convert the result to a list
+                // Project to anonymous type for DataGridView
+                var overdueTransactions = query
+                    .OrderByDescending(rt => rt.ReturnDate)
+                    .Select(rt => new
+                    {
+                        rt.RentalTransactionId,
+                        rt.PickupDate,
+                        rt.ReturnDate,
+                        rt.Deposit,
+                        rt.RentalFee,
+                        rt.RentalTransactionTimestamp,
+                        rt.PaymentId,
+                        rt.RentalRequestId,
+                        rt.EmployeeId,
+                        rt.EquipmentId,
+                        EquipmentName = rt.Equipment != null ? rt.Equipment.EquipmentName : "N/A",
+                        EmployeeName = rt.Employee != null ? rt.Employee.FirstName + " " + rt.Employee.LastName : "N/A"
+                    })
+                    .ToList();
 
-                //set the data source of the datagridview to the list
                 dgvReturnRecords.DataSource = overdueTransactions;
-
             }
             catch (Exception ex)
             {
-                //log the exception using the auditlogger
                 auditLogger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
-                //print the exception message in a message box
                 MessageBox.Show("Error: " + ex.Message);
             }
-
         }
+
 
         private void OverdueReturns_Load(object sender, EventArgs e)
         {
             try {
                 //laod filter conditions into the combo boxes
 
-                //load the equipment names 
+                ////load the equipment names 
                 cmbEquipment.DataSource = dbContext.Equipment.ToList();
                 cmbEquipment.DisplayMember = "EquipmentName"; //display the equipment name
                 cmbEquipment.ValueMember = "EquipmentId"; //set the values to hold the equipment ids
