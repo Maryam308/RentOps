@@ -198,22 +198,22 @@ Average latency period: {averageLatencyPeriod}
 Rental Transaction ID: {r.RentalTransactionId}
 Rented from (website/application): {(r.RentalRequestId != null ? "Website" : "Application")}
 Rented by: {(r.UserId != null ? r.User?.FirstName + " " + r.User?.LastName : (r.CustomerId != null ? r.Customer?.FirstName + " " + r.Customer?.LastName : "Rental Request ID: " + r.RentalRequestId))}
-	Contact information: {(r.UserId != null ? r.User?.PhoneNumber + " - " + r.User.Email : (r.CustomerId != null ? r.Customer?.PhoneNumber + " - " + r.Customer.Email : "N/A"))}
+	Contact information: {(r.UserId != null ? r.User?.PhoneNumber + " - " + r.User?.Email : (r.CustomerId != null ? r.Customer?.PhoneNumber + " - " + r.Customer?.Email : "N/A"))}
 Approved by: {r.Employee?.FirstName + " " + r.Employee?.LastName}
-	Contact information: {r.Employee.Email}
-Rented Equipment: {r.Equipment.EquipmentName}
+	Contact information: {r.Employee?.Email}
+Rented Equipment: {r.Equipment?.EquipmentName}
 Rental Period: {r.PickupDate} -> {r.ReturnDate}
 Total amount: {r.RentalFee}
 Deposit amount: {r.Deposit}
-Payment status: {(r.PaymentId != null ? r.Payment.PaymentStatus.PaymentStatusTitle : "Not Paid")}
-Payment method: {(r.PaymentId != null ? r.Payment.PaymentMethod.PaymentMethodTitle : "Not Paid")}
+Payment status: {(r.PaymentId != null ? r.Payment?.PaymentStatus?.PaymentStatusTitle : "Not Paid")}
+Payment method: {(r.PaymentId != null ? r.Payment?.PaymentMethod?.PaymentMethodTitle : "Not Paid")}
 ";
 
                     if (returnRecord != null)
                     {
                         block += $@"Return Record:  
 	Return record id: {returnRecord.ReturnRecordId}
-	Return condition: {returnRecord.ReturnCondition.ConditionStatusTitle}
+	Return condition: {returnRecord.ReturnCondition?.ConditionStatusTitle}
 	Return date: {returnRecord.ActualReturnDate.ToDateTime(TimeOnly.MinValue)}
 	Late return fee: {returnRecord.LateReturnFee}
 	Additional charge: {returnRecord.AdditionalCharge}

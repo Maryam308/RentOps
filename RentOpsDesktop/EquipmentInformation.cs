@@ -176,6 +176,8 @@ namespace RentOpsDesktop
         private void btnBack1_Click(object sender, EventArgs e)
         {
             UserEquipmentDashboard equipmentDashboard = new UserEquipmentDashboard();
+            //set the start position of the form to center screen
+            equipmentDashboard.StartPosition = FormStartPosition.CenterScreen; // Center the form
             this.Hide();
             equipmentDashboard.Show();
         }

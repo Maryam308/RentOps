@@ -257,7 +257,7 @@
             // groupBox1
             // 
             groupBox1.Controls.Add(lblFrequentlyRented);
-            groupBox1.Font = new Font("Segoe UI Semibold", 11.5F, FontStyle.Bold | FontStyle.Italic);
+            groupBox1.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic);
             groupBox1.Location = new Point(397, 77);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(163, 63);
@@ -269,7 +269,7 @@
             // groupBox2
             // 
             groupBox2.Controls.Add(lblEquipmentCount);
-            groupBox2.Font = new Font("Segoe UI Semibold", 11.5F, FontStyle.Bold | FontStyle.Italic);
+            groupBox2.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic);
             groupBox2.Location = new Point(238, 77);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(152, 63);
@@ -290,7 +290,7 @@
             // groupBox3
             // 
             groupBox3.Controls.Add(lblDamagedEquipment);
-            groupBox3.Font = new Font("Segoe UI Semibold", 11.5F, FontStyle.Bold | FontStyle.Italic);
+            groupBox3.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic);
             groupBox3.Location = new Point(567, 77);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(185, 63);
@@ -312,7 +312,7 @@
             // groupBox4
             // 
             groupBox4.Controls.Add(lblAvailableForRental);
-            groupBox4.Font = new Font("Segoe UI Semibold", 11.5F, FontStyle.Bold | FontStyle.Italic);
+            groupBox4.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold | FontStyle.Italic);
             groupBox4.Location = new Point(759, 77);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(178, 63);
