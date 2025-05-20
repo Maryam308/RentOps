@@ -28,6 +28,7 @@
                             class="form-select">
                         <option value="" disabled>-- Select equipment --</option>
                     </select>
+                    <input asp-for="RentalRequest.Equipment.EquipmentName" />
 
                     <div class="form-group mb-3">
                         <label asp-for="RentalRequest.RentalStartDate" class="form-label">Pickup Date</label>
@@ -51,12 +52,10 @@
                 else
                 {
                     <!-- Read-only/disabled fields -->
-					<label asp-for="RentalRequest.Equipment.EquipmentName"></label>
-                    <select disabled asp-for="RentalRequest.EquipmentId"
-                            asp-items="@Model.equipmentTitle?.Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
-                            class="form-select">
-                        <option value="" disabled>-- Select equipment --</option>
-                    </select>
+                    <div class="form-group mb-3">
+                        <label asp-for="RentalRequest.Equipment.EquipmentName"></label>
+                        <input asp-for="RentalRequest.Equipment.EquipmentName" class="form-control" disabled />
+                    </div>
 
                     <div class="form-group mb-3">
                         <label asp-for="RentalRequest.RentalStartDate" class="form-label">Pickup Date</label>

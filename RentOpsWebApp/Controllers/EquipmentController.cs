@@ -183,7 +183,19 @@ namespace RentOpsWebApp.Controllers
                 }
                 else // Otherwise, it's a new category
                 {
-                    var newCategory = new EquipmentCategory { EquipmentCategoryTitle = CategoryTitle };
+                    
+                    //check if the category already exists
+                    var existingCategory = _context.EquipmentCategories
+                        .FirstOrDefault(c => c.EquipmentCategoryTitle.Equals(CategoryTitle));
+
+                    if (existingCategory != null)
+                    {
+                        TempData["CreateSuccess"] = "Category already exists!";
+                        return RedirectToAction("ManageCategories");
+                    }
+
+
+                        var newCategory = new EquipmentCategory { EquipmentCategoryTitle = CategoryTitle };
                     _context.EquipmentCategories.Add(newCategory);
 
                     //track the changes

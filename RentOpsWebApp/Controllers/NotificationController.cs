@@ -115,7 +115,7 @@ namespace RentOpsWebApp.Controllers
                 {
                     viewModel.RentalRequestId = rentalRequest.RentalRequestId;
                     viewModel.RentalRequestStatusTitle = rentalRequest.RentalRequestStatus?.RentalRequestStatusTitle;
-                    viewModel.EquipmentTitle = rentalRequest.Equipment?.EquipmentName;
+                    viewModel.EquipmentTitle = rentalRequest.Equipment?.EquipmentName ?? "Equipment Not Found";
                     viewModel.UserFullName = rentalRequest.User?.FirstName;
                     viewModel.RentalStartDate = rentalRequest.RentalStartDate.ToDateTime(TimeOnly.MinValue);
                     viewModel.RentalReturnDate = rentalRequest.RentalReturnDate.ToDateTime(TimeOnly.MinValue);

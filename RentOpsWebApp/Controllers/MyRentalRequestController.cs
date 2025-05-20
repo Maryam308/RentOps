@@ -147,7 +147,7 @@ namespace RentOpsWebApp.Controllers
             var model = new RentalRequestViewModel
             {
                 RentalRequest = rentalRequest,
-                equipmentTitle = _context.Equipment.ToList()
+                equipmentTitle = _context.Equipment?.ToList()
             };
 
             return View("Edit", model);
