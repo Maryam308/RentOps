@@ -7,7 +7,7 @@ using RentOpsObjects.Services;
 
 namespace RentOpsWebApp.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrator,Rental Manager")]
     public class DashboardController : Controller
     {
         RentOpsDBContext _context;
