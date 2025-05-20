@@ -24,15 +24,15 @@
     <div class="d-flex justify-content-between mb-4">
         <!-- Status Filter Toggle -->
         <div>
-            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "All", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-primary @((ViewData["CurrentStatusFilter"]?.ToString() == "All") ? "active" : "")">All</a>
-            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "Unread", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-primary @((ViewData["CurrentStatusFilter"]?.ToString() == "Unread") ? "active" : "")">Unread</a>
-            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "Read", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-primary @((ViewData["CurrentStatusFilter"]?.ToString() == "Read") ? "active" : "")">Read</a>
+            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "All", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-primary m-2 @((ViewData["CurrentStatusFilter"]?.ToString() == "All") ? "active" : "")">All</a>
+            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "Unread", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-primary m-2 @((ViewData["CurrentStatusFilter"]?.ToString() == "Unread") ? "active" : "")">Unread</a>
+            <a href="@Url.Action("Notification", "Notification", new { statusFilter = "Read", sortOrder = ViewData["CurrentSortOrder"] })" class="btn btn-outline-primary m-2 @((ViewData["CurrentStatusFilter"]?.ToString() == "Read") ? "active" : "")">Read</a>
         </div>
 
         <!-- Sort Order Dropdown -->
         <div>
-            <a href="@Url.Action("Notification", "Notification", new { statusFilter = ViewData["CurrentStatusFilter"], sortOrder = "Descending" })" class="btn btn-outline-dark @((ViewData["CurrentSortOrder"]?.ToString() == "Descending") ? "active" : "")">Sort: Newest</a>
-            <a href="@Url.Action("Notification", "Notification", new { statusFilter = ViewData["CurrentStatusFilter"], sortOrder = "Ascending" })" class="btn btn-outline-dark @((ViewData["CurrentSortOrder"]?.ToString() == "Ascending") ? "active" : "")">Sort: Oldest</a>
+            <a href="@Url.Action("Notification", "Notification", new { statusFilter = ViewData["CurrentStatusFilter"], sortOrder = "Descending" })" class="btn btn-outline-dark m-2 @((ViewData ["CurrentSortOrder"]?.ToString() == "Descending") ? "active" : "")">Sort: Newest</a>
+            <a href="@Url.Action("Notification", "Notification", new { statusFilter = ViewData["CurrentStatusFilter"], sortOrder = "Ascending" })" class="btn btn-outline-dark  m-2 @((ViewData["CurrentSortOrder"]?.ToString() == "Ascending") ? "active" : "")">Sort: Oldest</a>
         </div>
 
         <!-- Reset Button -->
