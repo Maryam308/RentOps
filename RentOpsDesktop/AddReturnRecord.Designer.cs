@@ -239,9 +239,9 @@
             lblFilename.ForeColor = Color.Green;
             lblFilename.Location = new Point(266, 336);
             lblFilename.Name = "lblFilename";
-            lblFilename.Size = new Size(74, 60);
+            lblFilename.Size = new Size(13, 20);
             lblFilename.TabIndex = 53;
-            lblFilename.Text = "filename\r\nuploaded\r\n\r\n";
+            lblFilename.Text = " ";
             // 
             // lblTransctionIDError
             // 
