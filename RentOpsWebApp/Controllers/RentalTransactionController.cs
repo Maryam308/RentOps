@@ -253,7 +253,6 @@ namespace RentOpsWebApp.Controllers
                         {
                             PaymentMethodId = model.rentalTransaction.Payment.PaymentMethodId,
                             PaymentStatusId = model.rentalTransaction.Payment.PaymentStatusId,
-                            // Set other payment properties as needed
                         };
                         _context.Payments.Add(payment);
 
@@ -273,34 +272,65 @@ namespace RentOpsWebApp.Controllers
 
                             if (notifyUserId != null)
                             {
-                                var approvedMessageContent = _context.MessageContents.Include(mc => mc.MessageType)
-                                    .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Successful Payment");
 
-                                if (approvedMessageContent == null)
+                                MessageContent messageContent = null;
+
+                                if (model.rentalTransaction.Payment.PaymentStatusId == 2) // Completed
                                 {
-                                    //create a new message content
-                                    approvedMessageContent = new MessageContent
+                                    messageContent = _context.MessageContents.Include(mc => mc.MessageType)
+                                        .FirstOrDefault(m => m.MessageTypeId == 7);
+
+                                    if (messageContent == null)
                                     {
-                                        MessageTypeId = _context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Successful Payment").Select(mt => mt.MessageTypeId).FirstOrDefault(),
-                                        MessageContentText = "Your payment has been successfully processed.",
-                                    };
+                                        messageContent = new MessageContent
+                                        {
+                                            MessageTypeId = _context.MessageTypes
+                                                .Where(mt => mt.MessageTypeTitle == "Successful Payment")
+                                                .Select(mt => mt.MessageTypeId)
+                                                .FirstOrDefault(),
+                                            MessageContentText = "Your payment has been successfully processed."
+                                        };
+
+                                        _context.MessageContents.Add(messageContent);
+                                        await _context.SaveChangesAsync();
+                                    }
+                                }
+                                else if (model.rentalTransaction.Payment.PaymentStatusId == 3) // Failed
+                                {
+                                    messageContent = _context.MessageContents.Include(mc => mc.MessageType)
+                                        .FirstOrDefault(m => m.MessageTypeId == 2);
+
+                                    if (messageContent == null)
+                                    {
+                                        messageContent = new MessageContent
+                                        {
+                                            MessageTypeId = _context.MessageTypes
+                                                .Where(mt => mt.MessageTypeTitle == "Payment Due Reminder")
+                                                .Select(mt => mt.MessageTypeId)
+                                                .FirstOrDefault(),
+                                            MessageContentText = "Your payment could not be processed. Please retry or contact support."
+                                        };
+
+                                        _context.MessageContents.Add(messageContent);
+                                        await _context.SaveChangesAsync();
+                                    }
                                 }
 
-                                if (approvedMessageContent != null)
+                                if (messageContent != null)
                                 {
                                     var notification = new Notification
                                     {
                                         UserId = notifyUserId,
-                                        MessageContentId = approvedMessageContent.MessageContentId,
+                                        MessageContentId = messageContent.MessageContentId,
                                         NotificationStatusId = 1,
                                         NotificationTimestamp = DateTime.Now
                                     };
 
                                     _context.Notifications.Add(notification);
-                                    //log before saving the notification
                                     logger.TrackChanges(userId, 1);
                                     _context.SaveChanges();
                                 }
+
                             }
                         }
 
@@ -379,6 +409,9 @@ namespace RentOpsWebApp.Controllers
                 }
 
                 _context.RentalTransactions.Update(transaction);
+
+                //Set success message
+                TempData["UpdateSuccess"] = "Rental transaction record edited successfully.";
 
                 await _context.SaveChangesAsync();
 

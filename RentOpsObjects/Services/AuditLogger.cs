@@ -105,77 +105,96 @@ namespace RentOpsObjects.Services
         // This method will be called to log exceptions
         public void LogException(int? userId, string errorMessage, string stackTrace, int sourceId)
         {
-            // Create a new log entry for the exception
-            var log = new Log
+            try 
             {
-                UserId = userId,
-                SourceId = sourceId,
-                LogTypeId = 2, // Special log type for exceptions
-                LogTimestamp = DateTime.UtcNow,
-                AffectedData = "System Error",
-                PreviousValue = "",
-                CurrentValue = JsonConvert.SerializeObject(new { errorMessage, stackTrace }),
-                UserAction = "",
-                Exception = errorMessage
-            };
+                // Create a new log entry for the exception
+                var log = new Log
+                {
+                    UserId = userId,
+                    SourceId = sourceId,
+                    LogTypeId = 2, // Special log type for exceptions
+                    LogTimestamp = DateTime.UtcNow,
+                    AffectedData = "System Error",
+                    PreviousValue = "",
+                    CurrentValue = JsonConvert.SerializeObject(new { errorMessage, stackTrace }),
+                    UserAction = "",
+                    Exception = errorMessage
 
-            // Add the log entry to the context
-            _context.Logs.Add(log);
-            _context.SaveChanges(); // Save the error log immediately because we want to ensure we capture the error and save changes wont be called where the logexception is called
+
+                };
+
+                // Add the log entry to the context
+                _context.Logs.Add(log);
+                _context.SaveChanges(); // Save the error log immediately because we want to ensure we capture the error and save changes wont be called where the logexception is called
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur while creating the log entry
+                Console.WriteLine($"Error while logging exception: {ex.Message}");
+            }
+
+         
         }
 
         // This method will be called to log login activity
         public void LogLoginActivity(int? userId, int sourceId, string userAction, string? previousEmail = null, string? previousPassword = null, string? currentEmail = null, string? currentPassword = null)
         {
-
-            //the affected data will be the user id if it is not null
-            string affectedData = userId.HasValue
-        ? $"AspNetUsers: ID = {userId.Value}"
-        : "AspNetUsers: Unknown or Failed Login Attempt";
-
-            // declare previous and current JSON value holders
-            string previousValue = "";
-            string currentValue = "";
-
-            // log previous input (if available) - this is used in case of multiple failed login attempts
-            if (!string.IsNullOrEmpty(previousEmail) || !string.IsNullOrEmpty(previousPassword))
+            try 
             {
-                var previousValues = new Dictionary<string, object?>
+                //the affected data will be the user id if it is not null
+                string affectedData = userId.HasValue
+            ? $"AspNetUsers: ID = {userId.Value}"
+            : "AspNetUsers: Unknown or Failed Login Attempt";
+
+                // declare previous and current JSON value holders
+                string previousValue = "";
+                string currentValue = "";
+
+                // log previous input (if available) - this is used in case of multiple failed login attempts
+                if (!string.IsNullOrEmpty(previousEmail) || !string.IsNullOrEmpty(previousPassword))
+                {
+                    var previousValues = new Dictionary<string, object?>
         {
             { "Email", previousEmail },
             { "Password", previousPassword }
         };
 
-                previousValue = JsonConvert.SerializeObject(previousValues, Formatting.Indented);
-            }
+                    previousValue = JsonConvert.SerializeObject(previousValues, Formatting.Indented);
+                }
 
-            // log current input (if available)
-            if (!string.IsNullOrEmpty(currentEmail) || !string.IsNullOrEmpty(currentPassword))
-            {
-                var currentValues = new Dictionary<string, object?>
+                // log current input (if available)
+                if (!string.IsNullOrEmpty(currentEmail) || !string.IsNullOrEmpty(currentPassword))
+                {
+                    var currentValues = new Dictionary<string, object?>
         {
             { "Email", currentEmail },
             { "Password", currentPassword }
         };
 
-                currentValue = JsonConvert.SerializeObject(currentValues, Formatting.Indented);
+                    currentValue = JsonConvert.SerializeObject(currentValues, Formatting.Indented);
+                }
+
+                var log = new Log
+                {
+                    UserId = userId,
+                    SourceId = sourceId, // web app or desktop app
+                    LogTypeId = 1, // Action Log 
+                    LogTimestamp = DateTime.UtcNow,
+                    AffectedData = affectedData,
+                    PreviousValue = previousValue,
+                    CurrentValue = currentValue,
+                    UserAction = userAction,
+                    Exception = null
+                };
+
+                _context.Logs.Add(log);
+                _context.SaveChanges();
             }
-
-            var log = new Log
+            catch (Exception ex)
             {
-                UserId = userId,
-                SourceId = sourceId, // web app or desktop app
-                LogTypeId = 1, // Action Log 
-                LogTimestamp = DateTime.UtcNow,
-                AffectedData = affectedData,
-                PreviousValue = previousValue,
-                CurrentValue = currentValue,
-                UserAction = userAction,
-                Exception = null
-            };
-
-            _context.Logs.Add(log);
-            _context.SaveChanges();
+                // Handle any exceptions that occur while creating the log entry
+                Console.WriteLine($"Error while logging login activity: {ex.Message}");
+            }
         }
 
 

@@ -150,12 +150,18 @@ namespace RentOpsDesktop
                 //check if the associated transaction id is empty
                 if (string.IsNullOrWhiteSpace(cmbAssociatedTransaction.Text))
                 {
-                    MessageBox.Show("Please enter the associated rental transaction id", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please select the associated rental transaction id", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 //check if the associated rental transaction exist
                 var rentalTransaction = dbContext.RentalTransactions.Find(Convert.ToInt32(cmbAssociatedTransaction.SelectedValue));
+                if (rentalTransaction == null)
+                {
+                    MessageBox.Show("Selected rental transaction could not be found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
 
 
                 //check if a return condition is selected
@@ -168,7 +174,7 @@ namespace RentOpsDesktop
                 //check if the inputs are valid
                 if (!validLateReturnFee || !validAdditionalCharge)
                 {
-                    MessageBox.Show("Please fill all the fields correctly", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Please ensure that the 'Late Return Penalty'  and the 'Additional Charge' fields are filled correctly.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -192,24 +198,29 @@ namespace RentOpsDesktop
 
 
                 //change the condition of the rented equipment to match the return condition, also change the availability status of the equipment according the return condition
-                var rentedEquipment = dbContext.Equipment.Where(x => x.EquipmentId == rentalTransaction.EquipmentId).ToList();
-                if (rentedEquipment != null)
-                {
-                    rentedEquipment[0].ConditionStatusId = newReturnRecord.ReturnConditionId;
+                // Try to get the equipment associated with the transaction
+                var equipment = dbContext.Equipment.FirstOrDefault(x => x.EquipmentId == rentalTransaction.EquipmentId);
 
-                    //check if the condition is under maintenance or out of order
-                    if (rentedEquipment[0].ConditionStatusId == 4 || rentedEquipment[0].ConditionStatusId == 5)
+                // If equipment is found, update its condition and availability
+                if (equipment != null)
+                {
+                    equipment.ConditionStatusId = newReturnRecord.ReturnConditionId;
+
+                    // Check condition status and set availability
+                    if (equipment.ConditionStatusId == 4 || equipment.ConditionStatusId == 5)
                     {
-                        rentedEquipment[0].AvailabilityStatusId = 3; // set the availability status to under maintenance
+                        equipment.AvailabilityStatusId = 3; // Under maintenance
                     }
                     else
                     {
-                        rentedEquipment[0].AvailabilityStatusId = 1; // set the availability status to available
+                        equipment.AvailabilityStatusId = 1; // Available
                     }
 
-                    //update the equipment to set the condition
-                    dbContext.Equipment.Update(rentedEquipment[0]);
-
+                    dbContext.Equipment.Update(equipment);
+                }
+                else
+                {
+                    logger.LogException(currentUserId, "Associated equipment not found for rentalTransactionId: " + rentalTransaction.RentalTransactionId, "Handled null equipment", Global.sourceId);
                 }
 
 
@@ -217,16 +228,18 @@ namespace RentOpsDesktop
                 if (uploadedDocument != null)
                 {
                     dbContext.Documents.Add(uploadedDocument);
+                    dbContext.SaveChanges(); // Save the document to get the DocumentId
                     newReturnRecord.DocumentId = uploadedDocument.DocumentId;
                 }
 
         
 
-            //save the changes to the database
-            dbContext.ReturnRecords.Add(newReturnRecord);
+                //save the changes to the database
+                dbContext.ReturnRecords.Add(newReturnRecord);
 
-                //log the changes to the database
-                logger.TrackChanges(currentUserId, 2);
+                //log the changes
+                logger.TrackChanges(currentUserId, Global.sourceId);
+
 
                 dbContext.SaveChanges(); // Save changes to the database
 
