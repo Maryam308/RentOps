@@ -8,11 +8,11 @@
 
 
 @{
-	//will be used to display success message for editting 
-	if (TempData["Success"] != null)
+	//will be used to display success message for editting
+	if (TempData["UpdateSuccess"] != null)
 	{
-		<div class="alert alert-success" role="alert">
-			@TempData["Success"].ToString()
+		<div class="alert alert-success mt-3" role="alert">
+			@TempData["UpdateSuccess"].ToString()
 		</div>
 	}
 }

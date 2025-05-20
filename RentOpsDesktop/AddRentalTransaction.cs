@@ -248,17 +248,32 @@ namespace RentOpsDesktop
 
                 try
                 {
-                    //create an external customer object
-                    ExternalCustomer externalCustomer = new ExternalCustomer
-                    {
-                        FirstName = txtFirstName.Text,
-                        LastName = txtLastName.Text,
-                        PhoneNumber = txtPhoneNumber.Text,
-                        Email = txtEmail.Text,
+                    // Check if an external customer with the same fields already exists
+                    var externalCustomer = context.ExternalCustomers.FirstOrDefault(c =>
+                        c.FirstName == txtFirstName.Text &&
+                        c.LastName == txtLastName.Text &&
+                        c.PhoneNumber == txtPhoneNumber.Text &&
+                        c.Email == txtEmail.Text
+                    );
 
-                    };
-                    //add the external customer to the database
-                    context.ExternalCustomers.Add(externalCustomer);
+                    // If not found, create a new one
+                    if (externalCustomer == null)
+                    {
+                        externalCustomer = new ExternalCustomer
+                        {
+                            FirstName = txtFirstName.Text,
+                            LastName = txtLastName.Text,
+                            PhoneNumber = txtPhoneNumber.Text,
+                            Email = txtEmail.Text,
+                        };
+
+                        // Add the external customer to the database
+                        context.ExternalCustomers.Add(externalCustomer);
+                        // Track changes
+                        logger.TrackChanges(Global.user.UserId, Global.sourceId); //call track changes function to insert the logs
+                        // Save changes
+                        context.SaveChanges();
+                    }
 
                     //add the rental transaction
                     RentalTransaction rentalTransaction = new RentalTransaction

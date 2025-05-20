@@ -33,6 +33,8 @@
             txtEmail = new TextBox();
             txtPassword = new TextBox();
             btnLogin = new Button();
+            lblEmail = new Label();
+            lblPassword = new Label();
             ((System.ComponentModel.ISupportInitialize)picLogo).BeginInit();
             SuspendLayout();
             // 
@@ -97,11 +99,33 @@
             btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
             // 
+            // lblEmail
+            // 
+            lblEmail.AutoSize = true;
+            lblEmail.Font = new Font("Segoe UI Semibold", 10.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblEmail.Location = new Point(784, 265);
+            lblEmail.Name = "lblEmail";
+            lblEmail.Size = new Size(217, 40);
+            lblEmail.TabIndex = 7;
+            lblEmail.Text = "Email Address: ";
+            // 
+            // lblPassword
+            // 
+            lblPassword.AutoSize = true;
+            lblPassword.Font = new Font("Segoe UI Semibold", 10.875F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPassword.Location = new Point(784, 421);
+            lblPassword.Name = "lblPassword";
+            lblPassword.Size = new Size(148, 40);
+            lblPassword.TabIndex = 8;
+            lblPassword.Text = "Password:";
+            // 
             // Login
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1768, 977);
+            Controls.Add(lblPassword);
+            Controls.Add(lblEmail);
             Controls.Add(btnLogin);
             Controls.Add(txtPassword);
             Controls.Add(txtEmail);
@@ -123,5 +147,7 @@
         private TextBox txtEmail;
         private TextBox txtPassword;
         private Button btnLogin;
+        private Label lblEmail;
+        private Label lblPassword;
     }
 }
