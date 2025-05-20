@@ -12,12 +12,15 @@ public partial class Equipment
     [Column("equipmentID")]
     public int EquipmentId { get; set; }
 
+    
     [Column("equipmentName")]
     [StringLength(100)]
+    [MinLength(3, ErrorMessage = "Equipment name must be at least 3 characters long.")]
     public string EquipmentName { get; set; } = null!;
 
     [Column("equipmentDescription")]
     [StringLength(250)]
+    [MinLength(10, ErrorMessage = "Equipment description must be at least 3 characters long.")]
     public string EquipmentDescription { get; set; } = null!;
 
     //dont allow negative values or zero

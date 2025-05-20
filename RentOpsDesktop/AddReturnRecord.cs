@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using RentOpsObjects.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace RentOpsDesktop
 {
@@ -229,6 +230,13 @@ namespace RentOpsDesktop
 
                 dbContext.SaveChanges(); // Save changes to the database
 
+                //call the function to notify the user 
+                int? useridnotify = rentalTransaction.UserId ?? rentalTransaction.RentalRequest.UserId;
+                if (useridnotify != null)
+                {
+                    notifyUser((int)useridnotify);
+                }
+
 
                 //set the dialog result to ok
                 this.DialogResult = DialogResult.OK;
@@ -245,6 +253,52 @@ namespace RentOpsDesktop
             }
 
 
+        }
+
+        private void notifyUser(int userId)
+        {
+            try { 
+            //after new return record is added send a notification to the user that made the request
+            var notifyUserId = userId;
+            var returnMessageContent = dbContext.MessageContents.Include(mc => mc.MessageType)
+                 .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Returned Request Feedback");
+
+            if (returnMessageContent == null)
+            {
+                //create a new message content
+                returnMessageContent = new MessageContent
+                {
+                    MessageTypeId = dbContext.MessageTypes.Where(mt => mt.MessageTypeTitle == "Returned Request Feedback").Select(mt => mt.MessageTypeId).FirstOrDefault(),
+                    MessageContentText = "Your rental request has been returned., please provide us with your feedback through My Return Record Page.",
+                };
+            }
+
+            if (returnMessageContent != null)
+            {
+                var notification = new Notification
+                {
+                    UserId = notifyUserId,
+                    MessageContentId = returnMessageContent.MessageContentId,
+                    NotificationStatusId = 1,
+                    NotificationTimestamp = DateTime.Now
+                };
+
+                dbContext.Notifications.Add(notification);
+                //track the changes
+                logger.TrackChanges(currentUserId, 2);
+                dbContext.SaveChanges();
+            }
+            
+            }
+            catch (Exception ex)
+            {
+                // log the error
+                logger.LogException(currentUserId, ex.Message, ex.StackTrace.ToString(), Global.sourceId);
+                // show the error message box to the user
+                MessageBox.Show($"An error occurred while notifying the user: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            
         }
 
         private void btnUpload_Click(object sender, EventArgs e)

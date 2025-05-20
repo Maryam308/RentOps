@@ -270,6 +270,7 @@ namespace RentOpsWebApp.Controllers
                         {
 
                             var notifyUserId = transaction.RentalRequest.UserId;
+
                             if (notifyUserId != null)
                             {
                                 var approvedMessageContent = _context.MessageContents.Include(mc => mc.MessageType)

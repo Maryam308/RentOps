@@ -83,12 +83,12 @@ namespace RentOpsWebApp.Controllers
 
                 //Fetch the number of the rental requests for Heavy Machineries
                 var heavyMachineryRequestCount = _context.RentalRequests
-                    .Where(rr => rr.Equipment.EquipmentCategory.EquipmentCategoryTitle == "Heavy Machinery")
+                    .Where(rr => rr.Equipment != null && rr.Equipment.EquipmentCategory.EquipmentCategoryTitle == "Heavy Machinery")
                     .Count();
 
                 // Power Tools
                 var powerToolsRequestCount = _context.RentalRequests
-                    .Where(rr => rr.Equipment.EquipmentCategory.EquipmentCategoryTitle == "Power Tools")
+                    .Where(rr => rr.Equipment != null && rr.Equipment.EquipmentCategory.EquipmentCategoryTitle == "Power Tools")
                     .Count();
 
                 // Safety Equipment

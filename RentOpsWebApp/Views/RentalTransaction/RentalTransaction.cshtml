@@ -12,7 +12,7 @@
 	if (TempData["Success"] != null)
 	{
 		<div class="alert alert-success" role="alert">
-			@TempData["Success"].ToString()
+			@TempData["Success"]?.ToString()
 		</div>
 	}
 }
@@ -47,7 +47,7 @@
 						Equipment Name: <br />
 						<div class="input-group">
 							<select asp-for="SearchEquipment"
-									asp-items="@Model.equipmentTitle
+									asp-items="@Model.equipmentTitle?
                                .Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
 									class="form-select mb-3 mx-4">
 								<option value="" disabled selected>Select an Equipment</option>
@@ -124,13 +124,13 @@
 						<td>@record.RentalTransactionTimestamp</td>
 						<td>@record.RentalRequestId</td>
 						<td>@record.EmployeeId</td>
-						<td>@record.Employee.FirstName @record.Employee.LastName</td>
+						<td>@record.Employee?.FirstName @record.Employee?.LastName</td>
 						<td>@record.RentalRequest.UserId </td>
-						<td>@record.RentalRequest.User.FirstName @record.RentalRequest.User.LastName </td>	
+						<td>@record.RentalRequest?.User?.FirstName @record.RentalRequest?.User?.LastName </td>	
 						<td>@record.RentalFee</td>
 						<td>@record.PickupDate</td>
 						<td>@record.ReturnDate</td>
-						<td>@record.Equipment.EquipmentName</td>
+						<td>@record.Equipment?.EquipmentName</td>
 						<td>
 							@(record.PaymentId == null ? "Not Paid" : "Paid")
 						</td>
@@ -195,9 +195,9 @@
 						<td>@record.RentalTransactionId</td>
 						<td>@record.RentalTransactionTimestamp</td>
 						<td>@record.EmployeeId</td>
-						<td>@record.Employee.FirstName @record.Employee.LastName</td>
+						<td>@record.Employee?.FirstName @record.Employee?.LastName</td>
 						<td>@record.UserId </td>
-						<td>@record.User.FirstName @record.User.LastName </td>
+						<td>@record.User?.FirstName @record.User?.LastName </td>
 						<td>@record.RentalFee</td>
 						<td>@record.PickupDate</td>
 						<td>@record.ReturnDate</td>
@@ -220,13 +220,13 @@
 							<td>@record.RentalTransactionId</td>
 							<td>@record.RentalTransactionTimestamp</td>
 							<td>@record.EmployeeId</td>
-							<td>@record.Employee.FirstName @record.Employee.LastName</td>
+							<td>@record.Employee?.FirstName @record.Employee?.LastName</td>
 							<td>@record.CustomerId </td>
-							<td>@record.Customer.FirstName @record.Customer.LastName </td>
+							<td>@record.Customer?.FirstName @record.Customer?.LastName </td>
 							<td>@record.RentalFee</td>
 							<td>@record.PickupDate</td>
 							<td>@record.ReturnDate</td>
-							<td>@record.Equipment.EquipmentName</td>
+							<td>@record.Equipment?.EquipmentName</td>
 							<td>
 								@(record.PaymentId == null ? "Not Paid" : "Paid")
 							</td>

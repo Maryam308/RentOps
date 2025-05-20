@@ -21,7 +21,7 @@
 
 					<div class="input-group">
 						<select asp-for="SearchRentalRequestStatusId"
-						asp-items="@Model.rentalRequestStatuses
+						asp-items="@Model.rentalRequestStatuses?
                                .Select(i => new SelectListItem { Text = i.RentalRequestStatusTitle, Value = i.RentalRequestStatusId.ToString() })"
 						class="form-select  mb-3 mx-4">
 							<option value="" disabled selected>Select a Rental Request Status</option>
@@ -30,7 +30,7 @@
 
 					<div class="input-group">
 						<select asp-for="SearchEquipmentId"
-						asp-items="@Model.equipmentTitle
+						asp-items="@Model.equipmentTitle?
                                .Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
 						class="form-select  mb-3 mx-4">
 							<option value="" disabled selected>Select an Equipment</option>
@@ -85,8 +85,8 @@
 						<td>@record.RentalReturnDate</td>
 						<td>@record.RentalTotalCost</td>
 
-						<td>@record.Equipment.EquipmentName</td>
-						<td>@record.RentalRequestStatus.RentalRequestStatusTitle</td>
+						<td>@record.Equipment?.EquipmentName</td>
+						<td>@record.RentalRequestStatus?.RentalRequestStatusTitle</td>
 						<td>
 							<a asp-action="ViewDetails" asp-route-id="@record.RentalRequestId" class="btn btn-primary">View Details</a>
 

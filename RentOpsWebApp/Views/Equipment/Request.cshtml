@@ -10,7 +10,7 @@
     if (TempData["Error"] != null)
     {
         <div class="alert alert-danger mt-3" role="alert">
-            @TempData["Error"].ToString()
+            @TempData["Error"]?.ToString()
         </div>
     }
 }
@@ -45,7 +45,7 @@
             <div class="col-md-6 mb-3">
                 <label asp-for="NewEquipment.EquipmentCategoryId" class="form-label">Equipment Category</label>
                 <select disabled asp-for="NewEquipment.EquipmentCategoryId"
-                asp-items="@Model.EquipmentCategories.Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
+                asp-items="@Model.EquipmentCategories?.Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
                 class="form-select">
                     <option disabled value="">-- Select Category --</option>
                 </select>
@@ -54,7 +54,7 @@
             <div class="col-md-6 mb-3">
                 <label asp-for="NewEquipment.ConditionStatusId" class="form-label">Equipment Condition</label>
                 <select disabled asp-for="NewEquipment.ConditionStatusId"
-                asp-items="@Model.EquipmentStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+                asp-items="@Model.EquipmentStatuses?.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
                 class="form-select">
                     <option disabled value="">-- Select Category --</option>
                 </select>

@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    bool isPending = Model.RentalRequest.RentalRequestStatus?.RentalRequestStatusTitle == "Pending Approval";
+    bool isPending = Model.RentalRequest?.RentalRequestStatus?.RentalRequestStatusTitle == "Pending Approval";
 }
 
 <div class="container mt-5">
@@ -16,7 +16,7 @@
             <form asp-action="Edit" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 
-                <input type="hidden" name="RentalRequest.RentalRequestId" value="@Model.RentalRequest.RentalRequestId" />
+                <input type="hidden" name="RentalRequest.RentalRequestId" value="@Model.RentalRequest?.RentalRequestId" />
 
                 @if (isPending)
                 {
@@ -24,7 +24,7 @@
                     @* Equipment select with data attributes for price *@
 					<label asp-for="RentalRequest.Equipment.EquipmentName"></label>
                     <select asp-for="RentalRequest.EquipmentId" id="EquipmentSelect"
-                            asp-items="@Model.equipmentTitle.Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
+                            asp-items="@Model.equipmentTitle?.Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
                             class="form-select">
                         <option value="" disabled>-- Select equipment --</option>
                     </select>
@@ -53,7 +53,7 @@
                     <!-- Read-only/disabled fields -->
 					<label asp-for="RentalRequest.Equipment.EquipmentName"></label>
                     <select disabled asp-for="RentalRequest.EquipmentId"
-                            asp-items="@Model.equipmentTitle.Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
+                            asp-items="@Model.equipmentTitle?.Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
                             class="form-select">
                         <option value="" disabled>-- Select equipment --</option>
                     </select>

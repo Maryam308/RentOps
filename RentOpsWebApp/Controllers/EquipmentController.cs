@@ -443,9 +443,9 @@ namespace RentOpsWebApp.Controllers
                 userId = (int)currentUserId;
             }
 
-            //try 
-            //{
-                
+            try
+            {
+
                 //check if the id is null or 0
                 if (toEditEquipment.NewEquipment.RentalPrice <= 0)
                 {
@@ -493,16 +493,16 @@ namespace RentOpsWebApp.Controllers
                     return View("Equipment", viewmodel);
 
                 }
-            //}
-            //catch (Exception ex)
-            //{
-            //    //save the error message to the viewbag
-            //    ViewBag.ErrorMessage = ex.Message;
-            //    // return  error view 
-            //    return View("Error");
-            //}
-
         }
+            catch (Exception ex)
+            {
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+    }
+
+}
 
         //get to navigate to the request page
         [Authorize(Roles = "Customer")]
@@ -593,28 +593,38 @@ namespace RentOpsWebApp.Controllers
 
                     _context.SaveChanges();
 
-                    // Retrieve the message content for Pending Approval status from the database
-                    var pendingMessageContent = _context.MessageContents
-                        .FirstOrDefault(m => m.MessageContentText == "Rental Request Pending Approval: Thank you for choosing RentOps! Your rental request has been sent successfully and is pending approval.");
+                    //after making a rental request send a notification to the user that made the request
+                    var notifyUserId = model.RentalRequest.UserId;
 
-                    if (pendingMessageContent != null)
+                    var newRequestMessageContent = _context.MessageContents.Include(mc => mc.MessageType)
+                        .FirstOrDefault(m => m.MessageType.MessageTypeTitle == "Rental Request Pending Approval");
+
+                    if (newRequestMessageContent == null)
                     {
-                        // Create a notification for the user
+                        //create a new message content
+                        newRequestMessageContent = new MessageContent
+                        {
+                            MessageTypeId = _context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Rental Request Pending Approval").Select(mt => mt.MessageTypeId).FirstOrDefault(),
+                            MessageContentText = "Rental Request Pending Approval: Thank you for choosing RentOps! Your rental request has been sent successfully and is pending approval.",
+                        };
+                    }
+
+
+                    if (newRequestMessageContent != null)
+                    {
                         var notification = new Notification
                         {
-                            UserId = model.RentalRequest.UserId,
-                            MessageContentId = pendingMessageContent.MessageContentId,
-                            NotificationStatusId = 1, // 1 means "unread"
+                            UserId = notifyUserId,
+                            MessageContentId = newRequestMessageContent.MessageContentId,
+                            NotificationStatusId = 1,
                             NotificationTimestamp = DateTime.Now
                         };
 
-                        // Add the notification to the database
                         _context.Notifications.Add(notification);
-
                         //track the changes
                         logger.TrackChanges(userId, 1);
-
                         _context.SaveChanges();
+
 
                         // Retrieve the message content for admin and manager notification
                         var adminMessageContent = _context.MessageContents
@@ -682,10 +692,34 @@ namespace RentOpsWebApp.Controllers
                 if (equipmentObject == null)
                     return NotFound();
 
-                // Fetch feedbacks and execute the query immediately
-                var allFeedbacks = _context.Feedbacks
-                    .Include(f => f.RentalTransaction)
-                    .Where(f => f.RentalTransaction != null && f.RentalTransaction.EquipmentId == id);
+                //check the role if the user is admin or rental manager
+                var userEmail = User?.Identity?.Name;
+                var currentUserId = _context.Users
+                    .FirstOrDefault(u => u.Email == userEmail)?.UserId;
+                int userId = 1;
+                if (currentUserId != null)
+                {
+                    userId = (int)currentUserId;
+                }
+                var user = _context.Users
+                    .FirstOrDefault(u => u.Email == userEmail);
+                var userRoleTitle = _context.Roles.FirstOrDefault(r => r.RoleId == user.RoleId)?.RoleTitle; // Assuming RoleId is foreign key in Users table
+
+                
+                    //fetch all feedbacks related to the equipment
+                     var allFeedbacks = _context.Feedbacks
+                        .Include(f => f.RentalTransaction)
+                        .Where(f => f.RentalTransaction != null && f.RentalTransaction.EquipmentId == id);
+
+                if (userRoleTitle == "Customer")
+                {
+                    //filter the feedbacks to not include hidden ones 
+                     allFeedbacks = _context.Feedbacks
+                        .Include(f => f.RentalTransaction)
+                        .Where(f => f.RentalTransaction != null && f.RentalTransaction.EquipmentId == id && f.IsHidden == false);
+                }
+
+                
 
                 var viewmodel = new EquipmentViewModel
                 {

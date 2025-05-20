@@ -23,7 +23,7 @@
                 <div class="form-group mb-3">
                     <label asp-for="theReturnRecord.RentalTransactionId" class="form-label">Associated Rental Transaction ID</label>
                     <select asp-for="theReturnRecord.RentalTransactionId"
-                            asp-items="@Model.rentalTransactions.Select(i => new SelectListItem { Text = i.RentalTransactionId.ToString() + " | at" + i.RentalTransactionTimestamp.Date, Value = i.RentalTransactionId.ToString() })"
+                            asp-items="@Model.rentalTransactions?.Select(i => new SelectListItem { Text = i.RentalTransactionId.ToString() + " | at " + i.RentalTransactionTimestamp.Date, Value = i.RentalTransactionId.ToString() })"
                             class="form-select">
                         <option value="">-- Select a Transaction --</option>
                     </select>
@@ -32,16 +32,16 @@
 
                 <!-- Actual Return Date -->
                 <div class="form-group mb-3">
-                    <label asp-for="theReturnRecord.ActualReturnDate" class="form-label">Equipment Description</label>
+                    <label asp-for="theReturnRecord.ActualReturnDate" class="form-label">Actual Return Date</label>
                     <input asp-for="theReturnRecord.ActualReturnDate" class="form-control" type="date" />
                     <span asp-validation-for="theReturnRecord.ActualReturnDate" class="text-danger"></span>
                 </div>
 
                 <!-- Return Conditions Dropdown -->
                 <div class="form-group mb-3">
-                    <label asp-for="theReturnRecord.ReturnConditionId" class="form-label">Equipment Category</label>
+                    <label asp-for="theReturnRecord.ReturnConditionId" class="form-label">Return Condition</label>
                     <select asp-for="theReturnRecord.ReturnConditionId"
-                            asp-items="@Model.conditionStatuses.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
+                            asp-items="@Model.conditionStatuses?.Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
                             class="form-select">
                         <option value="">-- Select Returned Condition --</option>
                     </select>
@@ -57,7 +57,7 @@
 
                 <!-- Additional Charge -->
                 <div class="form-group mb-3">
-                    <label asp-for="theReturnRecord.AdditionalCharge" class="form-label">Late Return Fee</label>
+                    <label asp-for="theReturnRecord.AdditionalCharge" class="form-label">Additional ChargesS</label>
                     <input asp-for="theReturnRecord.AdditionalCharge" class="form-control" type="number" step="0.01" />
                     <span asp-validation-for="theReturnRecord.AdditionalCharge" class="text-danger"></span>
                 </div>
@@ -71,11 +71,11 @@
                     <span asp-validation-for="UploadedFile" class="text-danger"></span> 
                 </div>
 
-                @if (Model.theReturnRecord.DocumentId != null)
+                @if (Model.theReturnRecord?.DocumentId != null)
                 {
                     <div class="mb-3">
                         <div>
-							<span class="form-label">Current Document: @Model.theReturnRecord.Document.FileName</span>
+							<span class="form-label">Current Document: @Model.theReturnRecord.Document?.FileName</span>
                             <a asp-controller="ReturnRecord" asp-action="Download" asp-route-id="@Model.theReturnRecord.DocumentId" class="btn btn-outline-primary btn-sm ms-5" target="_blank">
                                 Download Attached PDF
                             </a>

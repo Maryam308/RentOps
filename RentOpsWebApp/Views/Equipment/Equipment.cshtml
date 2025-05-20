@@ -18,7 +18,7 @@
 	if (TempData["CreateSuccess"] != null)
 	{
 		<div class="alert alert-success mt-3" role="alert">
-			@TempData["CreateSuccess"].ToString()
+			@TempData["CreateSuccess"]?.ToString()
 		</div>
 	}
 
@@ -46,7 +46,7 @@
 
 						<div class="input-group pt-2">
 							<select asp-for="SearchCategory"
-							asp-items="@Model.EquipmentCategories
+							asp-items="@Model.EquipmentCategories?
                                .Select(i => new SelectListItem { Text = i.EquipmentCategoryTitle, Value = i.EquipmentCategoryId.ToString() })"
 							class="form-select mb-3 mx-4">
 								<option value="" disabled selected>Select an Equipment Category</option>
@@ -55,7 +55,7 @@
 
 						<div class="input-group">
 							<select asp-for="SearchAvailability"
-							asp-items="@Model.EquipmentAvailability
+							asp-items="@Model.EquipmentAvailability?
                                .Select(i => new SelectListItem { Text = i.AvailabilityStatusTitle, Value = i.AvailabilityStatusId.ToString() })"
 							class="form-select mb-3 mx-4">
 								<option value="" disabled selected>Select an Availability Status</option>
@@ -64,7 +64,7 @@
 
 						<div class="input-group">
 							<select asp-for="SearchCondition"
-							asp-items="@Model.EquipmentStatuses
+							asp-items="@Model.EquipmentStatuses?
                                .Select(i => new SelectListItem { Text = i.ConditionStatusTitle, Value = i.ConditionStatusId.ToString() })"
 							class="form-select mb-3 mx-4">
 								<option value="" disabled selected>Select a ConditionStatus </option>
@@ -134,9 +134,9 @@
 						<td>@record.EquipmentId</td>
 						<td>@record.EquipmentName</td>
 						<td style="font-size:medium">@record.EquipmentDescription</td>
-						<td>@record.EquipmentCategory.EquipmentCategoryTitle</td>
-						<td>@record.ConditionStatus.ConditionStatusTitle</td>
-						<td>@record.AvailabilityStatus.AvailabilityStatusTitle</td>
+						<td>@record.EquipmentCategory?.EquipmentCategoryTitle</td>
+						<td>@record.ConditionStatus?.ConditionStatusTitle</td>
+						<td>@record.AvailabilityStatus?.AvailabilityStatusTitle</td>
 						<td>@record.RentalPrice</td>
 						<td><a asp-action="Details" asp-route-id="@record.EquipmentId">Info</a></td>
 
@@ -145,7 +145,7 @@
 							@if (isCustomer)
 							{
 								// Check if the equipment is available for rental
-								if (record.AvailabilityStatus.AvailabilityStatusTitle == "Available")
+								if (record.AvailabilityStatus?.AvailabilityStatusTitle == "Available")
 								{
 									<a asp-action="Request" asp-route-id="@record.EquipmentId" class="btn btn-primary">Request for Rental</a>
 								}

@@ -161,6 +161,7 @@ namespace RentOpsWebApp.Controllers
         public IActionResult AddFeedback(int rentalTransactionId)
         {
             var transaction = _context.RentalTransactions
+                .Include(t => t.RentalRequest)
                 .Include(t => t.Equipment)
                 .ThenInclude(e => e.EquipmentCategory)
                 .FirstOrDefault(t => t.RentalTransactionId == rentalTransactionId);
@@ -172,7 +173,7 @@ namespace RentOpsWebApp.Controllers
             var userEmail = User?.Identity?.Name;
             var currentUserId = _context.Users
                 .FirstOrDefault(u => u.Email == userEmail)?.UserId;
-            if (currentUserId == null || currentUserId != transaction.UserId)
+            if (currentUserId == null || (currentUserId != transaction.UserId && currentUserId != transaction.RentalRequest.UserId))
                 return Forbid(); // Only allow the owner
 
             var viewModel = new ReturnRecordViewModel
@@ -194,6 +195,7 @@ namespace RentOpsWebApp.Controllers
             //only allow the user who rented the equipment to add feedback
 
             var transaction = _context.RentalTransactions
+                .Include(t => t.RentalRequest)
                 .Include(t => t.Equipment)
                 .ThenInclude(e => e.EquipmentCategory)
                 .FirstOrDefault(t => t.RentalTransactionId == model.NewFeedback.RentalTransactionId);
@@ -205,8 +207,8 @@ namespace RentOpsWebApp.Controllers
             var userEmail = User?.Identity?.Name;
             var currentUserId = _context.Users
                 .FirstOrDefault(u => u.Email == userEmail)?.UserId;
-            if (currentUserId == null || currentUserId != transaction.UserId)
-                return Forbid(); // Only allow the owner
+            if (currentUserId == null || (currentUserId != transaction.UserId && currentUserId != transaction.RentalRequest.UserId))
+                    return Forbid(); // Only allow the owner
 
             try {
 

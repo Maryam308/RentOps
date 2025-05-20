@@ -32,7 +32,7 @@
                     if (isRentalRequest)
                     {
                         //if the rental request is from the website then display the request id and requester id and name
-                        equipmentName = Model.rentalTransaction?.RentalRequest?.Equipment?.EquipmentName;
+                        equipmentName = Model.rentalTransaction?.RentalRequest?.Equipment?.EquipmentName ?? "Equipment Not Found";
 
                         //if it is a rental request then display its id and requester id and name
                         <div class="form-group col-md-6 mb-3">
@@ -88,7 +88,7 @@
                     }
                     else
                     {
-                        equipmentName = Model.rentalTransaction.Equipment?.EquipmentName;
+                        equipmentName = Model.rentalTransaction?.Equipment?.EquipmentName ?? "Equipment Not Found";
 
                         //if the request is not from the website then display the customer id and name
 
@@ -189,7 +189,7 @@
                 <!-- RentalFee" -->
                 <div class="form-group mb-3">
                     <label asp-for="rentalTransaction.RentalFee" class="form-label">Rental Fee</label>
-                    <input type="text" class="form-control" id="TotalCost" value="@Model.rentalTransaction.RentalFee" disabled />
+                    <input type="text" class="form-control" id="TotalCost" value="@Model.rentalTransaction?.RentalFee" disabled />
                     <input type="hidden" asp-for="rentalTransaction.RentalFee" id="HiddenTotalCost" />
                 </div>
 
@@ -197,7 +197,7 @@
 
                 <!--if the rental request status is not pending-->
                 @{
-                    bool isPaid = Model.rentalTransaction.PaymentId != null;
+                    bool isPaid = Model.rentalTransaction?.PaymentId != null;
                 }
 
                 <!-- payment method and payment status -->
@@ -211,13 +211,13 @@
                         //if the payment is not paid then add two select fields for the payment method and payment status
                         <label asp-for="rentalTransaction.Payment.PaymentMethodId" class="form-label">Payment Method</label>
                         <select asp-for="rentalTransaction.Payment.PaymentMethodId"
-                        asp-items="@Model.PaymentMethod.Select(i => new SelectListItem { Text = i.PaymentMethodTitle, Value = i.PaymentMethodId.ToString() })"
+                        asp-items="@Model.PaymentMethod?.Select(i => new SelectListItem { Text = i.PaymentMethodTitle, Value = i.PaymentMethodId.ToString() })"
                         class="form-select">
                             <option value="" disabled>-- Select Payment Method --</option>
                         </select>
                         <label asp-for="rentalTransaction.Payment.PaymentStatusId" class="form-label">Payment Method</label>
                         <select asp-for="rentalTransaction.Payment.PaymentStatusId"
-                        asp-items="@Model.PaymentStatus.Select(i => new SelectListItem { Text = i.PaymentStatusTitle, Value = i.PaymentStatusId.ToString() })"
+                        asp-items="@Model.PaymentStatus?.Select(i => new SelectListItem { Text = i.PaymentStatusTitle, Value = i.PaymentStatusId.ToString() })"
                         class="form-select">
                             <option value="" disabled>-- Select Payment Status --</option>
                         </select>
@@ -228,13 +228,13 @@
                         //if the payment is paid then add two select fields for the payment method and payment status and disabled
                         <label asp-for="rentalTransaction.Payment.PaymentMethodId" class="form-label">Payment Method</label>
                         <select disabled asp-for="rentalTransaction.Payment.PaymentMethodId"
-                        asp-items="@Model.PaymentMethod.Select(i => new SelectListItem { Text = i.PaymentMethodTitle, Value = i.PaymentMethodId.ToString() })"
+                        asp-items="@Model.PaymentMethod?.Select(i => new SelectListItem { Text = i.PaymentMethodTitle, Value = i.PaymentMethodId.ToString() })"
                         class="form-select">
                             <option value="" disabled>-- Select Payment Method --</option>
                         </select>
                         <label asp-for="rentalTransaction.Payment.PaymentStatusId" class="form-label">Payment Method</label>
                         <select disabled asp-for="rentalTransaction.Payment.PaymentStatusId"
-                        asp-items="@Model.PaymentStatus.Select(i => new SelectListItem { Text = i.PaymentStatusTitle, Value = i.PaymentStatusId.ToString() })"
+                        asp-items="@Model.PaymentStatus?.Select(i => new SelectListItem { Text = i.PaymentStatusTitle, Value = i.PaymentStatusId.ToString() })"
                         class="form-select">
                             <option value="" disabled>-- Select Payment Status --</option>
                         </select>
@@ -248,12 +248,12 @@
                 @{
                     // Variables to hold document IDs, names, and file paths
                     int? rentalAgreementId = null;
-                    string rentalAgreementName = null;
+                    string rentalAgreementName = "";
                     int? idVerificationId = null;
-                    string idVerificationName = null;
+                    string idVerificationName = "";
 
                     // Find the rental agreement and ID verification documents
-                    foreach (Document document in Model.rentalTransaction.Documents)
+                    foreach (Document document in Model.rentalTransaction?.Documents)
                     {
                         if (document.FileTypeId == 4)
                         {
@@ -346,8 +346,8 @@
     </div>
 
     @{
-        var price = Model.rentalTransaction.Equipment?.RentalPrice
-        ?? Model.rentalTransaction.RentalRequest?.Equipment?.RentalPrice
+        var price = Model.rentalTransaction?.Equipment?.RentalPrice
+        ?? Model.rentalTransaction?.RentalRequest?.Equipment?.RentalPrice
         ?? 0;
     }
 

@@ -216,7 +216,7 @@ namespace RentOpsWebApp.Controllers
                             feedbackMessageContent = new MessageContent
                             {
                                  MessageTypeId = _context.MessageTypes.Where(mt => mt.MessageTypeTitle == "Feedback Request").Select(mt => mt.MessageTypeId).FirstOrDefault(),
-                                 MessageContentText = "Thank you for using RentOps. Your Feedback matter, Find your returns under My Return Records section.",
+                                 MessageContentText = "Your rented equipment has been returned. Please provide us with your feedback through My Return Record Page.",
                             };
                         }
 
