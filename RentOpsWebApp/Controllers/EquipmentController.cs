@@ -748,7 +748,7 @@ namespace RentOpsWebApp.Controllers
 
         //delete equipment category and all its equipment
 
-        [HttpGet]
+        [HttpPost]
         [Authorize(Roles = "Administrator")]
         public IActionResult DeleteCategory(int id)
         {
