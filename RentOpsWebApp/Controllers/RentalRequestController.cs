@@ -97,6 +97,42 @@ namespace RentOpsWebApp.Controllers
             }
         }
 
+
+        public IActionResult Review(int id)
+        {
+
+            try { 
+                var rentalRequest = _context.RentalRequests
+                    .Include(r => r.RentalRequestStatus)
+                    .Include(r => r.Equipment)
+                    .Include(r => r.User)
+                    .FirstOrDefault(r => r.RentalRequestId == id);
+
+                if (rentalRequest == null)
+                {
+                    return NotFound();
+                }
+
+                var rentalRequestViewModel = new RentalRequestViewModel
+                {
+                    RentalRequest = rentalRequest,
+                    rentalRequestStatuses = _context.RentalRequestStatuses.ToList(),
+                };
+
+                return View(rentalRequestViewModel);
+            
+            }
+            catch (Exception ex)
+            {
+                //save the error message to the viewbag
+                ViewBag.ErrorMessage = ex.Message;
+                // return  error view 
+                return View("Error");
+            }
+
+            
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Review(RentalRequestViewModel model)
