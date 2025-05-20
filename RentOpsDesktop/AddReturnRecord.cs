@@ -163,6 +163,14 @@ namespace RentOpsDesktop
                 }
 
 
+                // Convert the DateOnly value to DateTime for comparison  
+                if (dtpReturnDate.Value.Date <= rentalTransaction.PickupDate.ToDateTime(TimeOnly.MinValue))
+                {
+                    MessageBox.Show("Return Date must be later than the original pickup date.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+
 
                 //check if a return condition is selected
                 if (cmbReturnCondition.SelectedIndex == -1)
@@ -242,13 +250,6 @@ namespace RentOpsDesktop
 
 
                 dbContext.SaveChanges(); // Save changes to the database
-
-                //call the function to notify the user 
-                int? useridnotify = rentalTransaction.UserId ?? rentalTransaction.RentalRequest.UserId;
-                if (useridnotify != null)
-                {
-                    notifyUser((int)useridnotify);
-                }
 
 
                 //set the dialog result to ok
