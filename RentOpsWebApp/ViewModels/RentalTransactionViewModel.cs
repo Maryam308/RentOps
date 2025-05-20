@@ -38,16 +38,6 @@ namespace RentOpsWebApp.ViewModels
 
         public bool idVerificationIsModified { get; set; } = false; //used to track if the agreement is modified or not
 
-        // pagination properties
-        public List<RentalTransaction>? WebsiteTransactions { get; set; }
-        public List<RentalTransaction>? ExternalTransactions { get; set; }
-
-        public int WebsiteCurrentPage { get; set; }
-        public int WebsiteTotalPages { get; set; }
-
-        public int ExternalCurrentPage { get; set; }
-        public int ExternalTotalPages { get; set; }
-
 
 
     }
