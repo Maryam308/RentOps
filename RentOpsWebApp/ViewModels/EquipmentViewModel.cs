@@ -30,5 +30,9 @@ namespace RentOpsWebApp.ViewModels
         //feedbacks related to the equipment
         public IEnumerable<Feedback>? EquipmentFeedbacks { get; set; }
 
+        // pagination properties
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+
     }
 }

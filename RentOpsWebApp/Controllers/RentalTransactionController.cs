@@ -27,91 +27,84 @@ namespace RentOpsWebApp.Controllers
         {
             return View();
         }
-        public IActionResult RentalTransaction(string searchRentalTransactionId, string SearchRentalRequestId, string searchEmployeeId, string SearchEquipment, string SearchTransactionDate, string SearchPayment)
+        public IActionResult RentalTransaction(string searchRentalTransactionId, string SearchRentalRequestId, string searchEmployeeId, string SearchEquipment, string SearchTransactionDate, string SearchPayment, int websitePage = 1, int externalPage = 1)
         {
 
-            IEnumerable<RentalTransaction> rentalTransactions = _context.RentalTransactions
-                .Include(rt => rt.Equipment)
-                .Include(rt => rt.Employee)
-                .Include(rt => rt.RentalRequest)
-                    .ThenInclude(rr => rr.User)
-                .Include(rt => rt.User)
-                .Include(rt => rt.Customer)
-                .Include(rt => rt.Payment)
-                .OrderByDescending(rt => rt.RentalTransactionTimestamp)
-                .ToList();
-
-            //filtering system
-
-            //If return record id is used, we filter the list retrieved above
-            if (!String.IsNullOrEmpty(searchRentalTransactionId))
+            try
             {
-                rentalTransactions = rentalTransactions.Where(p =>
-                    p.RentalTransactionId == Convert.ToInt32(searchRentalTransactionId)
-                );
-            }
+                int pageSize = 25;
 
-            if (!String.IsNullOrEmpty(SearchRentalRequestId))
-            {
-                rentalTransactions = rentalTransactions.Where(p =>
-                    p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId)
-                );
-            }
+                //fetch all rental transactions and include the related entities
+                IEnumerable<RentalTransaction> allTransactions = _context.RentalTransactions
+                    .Include(rt => rt.Equipment)
+                    .Include(rt => rt.Employee)
+                    .Include(rt => rt.RentalRequest)
+                        .ThenInclude(rr => rr.User)
+                    .Include(rt => rt.User)
+                    .Include(rt => rt.Customer)
+                    .Include(rt => rt.Payment)
+                    .OrderByDescending(rt => rt.RentalTransactionTimestamp)
+                    .ToList();
 
-            if (!String.IsNullOrEmpty(searchEmployeeId))
-            {
-                rentalTransactions = rentalTransactions.Where(p =>
-                    p.EmployeeId == Convert.ToInt32(searchEmployeeId)
-                );
-            }
+                //filtering system
+                if (!String.IsNullOrEmpty(searchRentalTransactionId))
+                    allTransactions = allTransactions.Where(p => p.RentalTransactionId == Convert.ToInt32(searchRentalTransactionId));
 
-            if (!String.IsNullOrEmpty(SearchEquipment))
-            {
-                rentalTransactions = rentalTransactions.Where(p =>
-                    p.EquipmentId == Convert.ToInt32(SearchEquipment)
-                );
-            }
+                if (!String.IsNullOrEmpty(SearchRentalRequestId))
+                    allTransactions = allTransactions.Where(p => p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId));
 
+                if (!String.IsNullOrEmpty(searchEmployeeId))
+                    allTransactions = allTransactions.Where(p => p.EmployeeId == Convert.ToInt32(searchEmployeeId));
 
-            if (!String.IsNullOrEmpty(SearchPayment))
-            {
+                if (!String.IsNullOrEmpty(SearchEquipment))
+                    allTransactions = allTransactions.Where(p => p.EquipmentId == Convert.ToInt32(SearchEquipment));
 
-                //if searchpayment is = paid then we filter the list to show only the paid transactions
-                if (SearchPayment == "Paid")
+                if (!String.IsNullOrEmpty(SearchPayment))
                 {
-                    rentalTransactions = rentalTransactions.Where(p =>
-                        p.Payment != null
-                    );
+                    if (SearchPayment == "Paid")
+                        allTransactions = allTransactions.Where(p => p.Payment != null);
+                    else if (SearchPayment == "Not Paid")
+                        allTransactions = allTransactions.Where(p => p.Payment == null);
                 }
-                else if (SearchPayment == "Not Paid") {
 
-                    rentalTransactions = rentalTransactions.Where(p =>
-                        p.Payment == null
-                    );
-
-                }
-            }
-
-
-            if (!string.IsNullOrEmpty(SearchTransactionDate))
-            {
-                DateTime searchTimestamp;
-                if (DateTime.TryParse(SearchTransactionDate, out searchTimestamp))
+                if (!string.IsNullOrEmpty(SearchTransactionDate))
                 {
-                    rentalTransactions = rentalTransactions.Where(p => p.RentalTransactionTimestamp.Date == searchTimestamp.Date);
+                    DateTime searchTimestamp;
+                    if (DateTime.TryParse(SearchTransactionDate, out searchTimestamp))
+                        allTransactions = allTransactions.Where(p => p.RentalTransactionTimestamp.Date == searchTimestamp.Date);
                 }
+
+                //split into two lists
+                var websiteAll = allTransactions.Where(rt => rt.UserId == null && rt.RentalRequest != null).ToList();
+                var externalAll = allTransactions.Where(rt => rt.UserId != null && rt.RentalRequest == null).ToList();
+
+                //calculate total pages
+                int websiteTotal = websiteAll.Count();
+                int externalTotal = externalAll.Count();
+
+                var websitePaged = websiteAll.Skip((websitePage - 1) * pageSize).Take(pageSize).ToList();
+                var externalPaged = externalAll.Skip((externalPage - 1) * pageSize).Take(pageSize).ToList();
+
+                var rentalTransactionViewModel = new RentalTransactionViewModel
+                {
+                    WebsiteTransactions = websitePaged,
+                    WebsiteCurrentPage = websitePage,
+                    WebsiteTotalPages = (int)Math.Ceiling(websiteTotal / (double)pageSize),
+
+                    ExternalTransactions = externalPaged,
+                    ExternalCurrentPage = externalPage,
+                    ExternalTotalPages = (int)Math.Ceiling(externalTotal / (double)pageSize),
+
+                    equipmentTitle = _context.Equipment.ToList()
+                };
+
+                return View(rentalTransactionViewModel);
             }
-
-
-
-
-            var rentalTransactionViewModel = new RentalTransactionViewModel
+            catch (Exception ex)
             {
-                rentalTransactions = rentalTransactions,
-                equipmentTitle = _context.Equipment.ToList(),
-            };
-
-            return View(rentalTransactionViewModel);
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
         }
 
 

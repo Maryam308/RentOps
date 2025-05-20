@@ -23,63 +23,73 @@ namespace RentOpsWebApp.Controllers
         {
             return View();
         }
-        public IActionResult ReturnRecord(string searchReturnRecordId, string searchRentalTransactionId, string searchActualReturnDate, string searchConditionStatus)
+        public IActionResult ReturnRecord(string searchReturnRecordId, string searchRentalTransactionId, string searchActualReturnDate, string searchConditionStatus, int page = 1)
         {
 
-            IEnumerable<ReturnRecord> returnRecords = _context.ReturnRecords
-                .Include(e => e.ReturnCondition)
-                .Include(e => e.RentalTransaction)
-                .Include(e => e.Document)
-                .OrderByDescending(d => d.ActualReturnDate)
-                .ToList();
- 
-            
-            
-           
-
-            //filtering system
-
-            //If return record id is used, we filter the list retrieved above
-            if (!String.IsNullOrEmpty(searchReturnRecordId))
+            try
             {
-                returnRecords = returnRecords.Where(p =>
-                    p.ReturnRecordId == Convert.ToInt32(searchReturnRecordId)
-                );
-            }
+                int pageSize = 25; // Set the number of records per page
 
-            if (!String.IsNullOrEmpty(searchRentalTransactionId))
-            {
-                returnRecords = returnRecords.Where(p =>
-                    p.RentalTransactionId == Convert.ToInt32(searchRentalTransactionId)
-                );
-            }
+                // Fetch all return records and include the related entities
+                IEnumerable<ReturnRecord> returnRecords = _context.ReturnRecords
+                    .Include(e => e.ReturnCondition)
+                    .Include(e => e.RentalTransaction)
+                    .Include(e => e.Document)
+                    .OrderByDescending(d => d.ActualReturnDate)
+                    .ToList();
 
-            if (!String.IsNullOrEmpty(searchConditionStatus))
-            {
-                returnRecords = returnRecords.Where(p =>
-                    p.ReturnConditionId == Convert.ToInt32(searchConditionStatus)
-                );
-            }
+                // filtering system
 
-
-            if (!string.IsNullOrEmpty(searchActualReturnDate))
-            {
-                DateOnly searchDate;
-                if (DateOnly.TryParse(searchActualReturnDate, out searchDate))
+                if (!String.IsNullOrEmpty(searchReturnRecordId))
                 {
-                    returnRecords = returnRecords.Where(p => p.ActualReturnDate == searchDate);
+                    returnRecords = returnRecords.Where(p =>
+                        p.ReturnRecordId == Convert.ToInt32(searchReturnRecordId)
+                    );
                 }
+
+                if (!String.IsNullOrEmpty(searchRentalTransactionId))
+                {
+                    returnRecords = returnRecords.Where(p =>
+                        p.RentalTransactionId == Convert.ToInt32(searchRentalTransactionId)
+                    );
+                }
+
+                if (!String.IsNullOrEmpty(searchConditionStatus))
+                {
+                    returnRecords = returnRecords.Where(p =>
+                        p.ReturnConditionId == Convert.ToInt32(searchConditionStatus)
+                    );
+                }
+
+                if (!string.IsNullOrEmpty(searchActualReturnDate))
+                {
+                    DateOnly searchDate;
+                    if (DateOnly.TryParse(searchActualReturnDate, out searchDate))
+                    {
+                        returnRecords = returnRecords.Where(p => p.ActualReturnDate == searchDate);
+                    }
+                }
+
+                // Calculate total count and pages
+                int totalRecords = returnRecords.Count();
+                var pagedRecords = returnRecords.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+                var returnRecordViewModel = new ReturnRecordViewModel
+                {
+                    returnRecords = pagedRecords,
+                    conditionStatuses = _context.ConditionStatuses.ToList(),
+                    CurrentPage = page,
+                    TotalPages = totalPages
+                };
+
+                return View(returnRecordViewModel);
             }
-
-
-
-            var returnRecordViewModel = new ReturnRecordViewModel
+            catch (Exception ex)
             {
-                returnRecords = returnRecords,
-                conditionStatuses = _context.ConditionStatuses.ToList(),
-            };
-
-            return View(returnRecordViewModel);
+                ViewBag.ErrorMessage = ex.Message;
+                return View("Error");
+            }
         }
 
 

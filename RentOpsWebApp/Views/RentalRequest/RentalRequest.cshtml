@@ -5,7 +5,13 @@
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles {
+	<link rel="stylesheet" href="~/css/PaginationStyle.css" />
+}
+
+
 @{
+
 
 	//check tempdata for success message
 	if (TempData["CreateSuccess"] != null)
@@ -129,5 +135,53 @@
 			}
 		</tbody>
 		</table>
+		@if (Model.TotalPages > 1)
+		{
+			<nav class="mt-4">
+				<ul class="pagination pagination-sm justify-content-center custom-pagination">
+
+					<!-- Previous Button -->
+					<li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+						<a class="page-link"
+						   asp-action="RentalRequest"
+						   asp-route-SearchRentalRequestId="@Context.Request.Query["SearchRentalRequestId"]"
+						   asp-route-SearchRentalRequestStatusId="@Context.Request.Query["SearchRentalRequestStatusId"]"
+						   asp-route-searchequipmentId="@Context.Request.Query["searchequipmentId"]"
+						   asp-route-page="@(Model.CurrentPage - 1)">
+							&laquo;
+						</a>
+					</li>
+
+					<!-- Page Numbers -->
+					@for (int i = 1; i <= Model.TotalPages; i++)
+					{
+						<li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+							<a class="page-link"
+							   asp-action="RentalRequest"
+							   asp-route-SearchRentalRequestId="@Context.Request.Query["SearchRentalRequestId"]"
+							   asp-route-SearchRentalRequestStatusId="@Context.Request.Query["SearchRentalRequestStatusId"]"
+							   asp-route-searchequipmentId="@Context.Request.Query["searchequipmentId"]"
+							   asp-route-page="@i">
+								@i
+							</a>
+						</li>
+					}
+
+					<!-- Next Button -->
+					<li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+						<a class="page-link"
+						   asp-action="RentalRequest"
+						   asp-route-SearchRentalRequestId="@Context.Request.Query["SearchRentalRequestId"]"
+						   asp-route-SearchRentalRequestStatusId="@Context.Request.Query["SearchRentalRequestStatusId"]"
+						   asp-route-searchequipmentId="@Context.Request.Query["searchequipmentId"]"
+						   asp-route-page="@(Model.CurrentPage + 1)">
+							&raquo;
+						</a>
+					</li>
+
+				</ul>
+			</nav>
+		}
+
 	}
 	</div>

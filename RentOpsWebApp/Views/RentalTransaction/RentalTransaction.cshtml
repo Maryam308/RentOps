@@ -5,6 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Styles {
+	<link rel="stylesheet" href="~/css/PaginationStyle.css" />
+}
+
 
 
 @{
@@ -240,6 +244,55 @@
 			}
 		</tbody>
 </table>
+
+		@if (Model.WebsiteTotalPages > 1)
+		{
+			<nav class="mt-4">
+				<ul class="pagination custom-pagination justify-content-center">
+					@for (int i = 1; i <= Model.WebsiteTotalPages; i++)
+					{
+						<li class="page-item @(i == Model.WebsiteCurrentPage ? "active" : "")">
+							<a class="page-link"
+							   asp-action="RentalTransaction"
+							   asp-route-websitePage="@i"
+							   asp-route-externalPage="@Model.ExternalCurrentPage"
+							   asp-route-SearchRentalTransactionId="@Model.SearchRentalTransactionId"
+							   asp-route-SearchRentalRequestId="@Model.SearchRentalRequestId"
+							   asp-route-SearchEmployeeId="@Model.SearchEmployeeId"
+							   asp-route-SearchEquipment="@Model.SearchEquipment"
+							   asp-route-SearchTransactionDate="@Model.SearchTransactionDate"
+							   asp-route-SearchPayment="@Model.SearchPayment">@i</a>
+						</li>
+					}
+				</ul>
+			</nav>
+		}
+
+		@if (Model.ExternalTotalPages > 1)
+		{
+			<nav class="mt-4">
+				<ul class="pagination custom-pagination justify-content-center">
+					@for (int i = 1; i <= Model.ExternalTotalPages; i++)
+					{
+						<li class="page-item @(i == Model.ExternalCurrentPage ? "active" : "")">
+							<a class="page-link"
+							   asp-action="RentalTransaction"
+							   asp-route-websitePage="@Model.WebsiteCurrentPage"
+							   asp-route-externalPage="@i"
+							   asp-route-SearchRentalTransactionId="@Model.SearchRentalTransactionId"
+							   asp-route-SearchRentalRequestId="@Model.SearchRentalRequestId"
+							   asp-route-SearchEmployeeId="@Model.SearchEmployeeId"
+							   asp-route-SearchEquipment="@Model.SearchEquipment"
+							   asp-route-SearchTransactionDate="@Model.SearchTransactionDate"
+							   asp-route-SearchPayment="@Model.SearchPayment">@i</a>
+						</li>
+					}
+				</ul>
+			</nav>
+		}
+
+
+
 
 
 }

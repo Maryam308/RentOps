@@ -1,0 +1,35 @@
+﻿
+html {
+    scroll-behavior: smooth;
+}
+
+.privacy-header {
+    background-color: #e8f5f9; /* Light blue shade from Flatly */
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+    .privacy-header h2 {
+        color: #2c3e50; /* Flatly dark heading color */
+    }
+
+.privacy-nav {
+    position: sticky;
+    top: 1rem;
+}
+
+.privacy-content section {
+    margin-bottom: 4rem; /* Space between sections */
+    padding-top: 2rem; /* Ensures scroll stops slightly below top */
+    border-top: 1px solid #ddd; /* Optional visual separation */
+}
+
+.privacy-content h5 {
+    margin-top: 1rem;
+    color: #2c3e50;
+}
+
+.privacy-content p, .privacy-content li {
+    color: #4f5d73; /* Softer text color */
+}

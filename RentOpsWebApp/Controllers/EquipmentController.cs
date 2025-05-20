@@ -211,20 +211,23 @@ namespace RentOpsWebApp.Controllers
             return LoadManageCategoriesView();
         }
 
-        public IActionResult Equipment(string SearchEquipmentName, string SearchEquipmentId, string SearchCategory, string SearchAvailability , string SearchCondition)
+        public IActionResult Equipment(string SearchEquipmentName, string SearchEquipmentId, string SearchCategory, string SearchAvailability, string SearchCondition, int page = 1)
         {
             try
             {
-                IEnumerable<Equipment> equipmentList = _context.Equipment
-                .Include(e => e.ConditionStatus)
-                .Include(e => e.EquipmentCategory)
-                .Include(e => e.AvailabilityStatus)
-                .ToList();
+                int pageSize = 25;
+
+                //get all equipment from the database with includes
+                var equipmentQuery = _context.Equipment
+                    .Include(e => e.ConditionStatus)
+                    .Include(e => e.EquipmentCategory)
+                    .Include(e => e.AvailabilityStatus)
+                    .AsQueryable();
 
                 //If equipment name filter is used, we filter the list retrieved above
                 if (!String.IsNullOrEmpty(SearchEquipmentName))
                 {
-                    equipmentList = equipmentList.Where(p =>
+                    equipmentQuery = equipmentQuery.Where(p =>
                         p.EquipmentName != null && p.EquipmentName.Contains(SearchEquipmentName, StringComparison.OrdinalIgnoreCase)
                     );
                 }
@@ -232,42 +235,48 @@ namespace RentOpsWebApp.Controllers
                 //if the equipment id filter is used, we filter the list retrieved above
                 if (!String.IsNullOrEmpty(SearchEquipmentId))
                 {
-                    equipmentList = equipmentList.Where(p => p.EquipmentId == Convert.ToInt32(SearchEquipmentId));
+                    equipmentQuery = equipmentQuery.Where(p => p.EquipmentId == Convert.ToInt32(SearchEquipmentId));
                 }
 
                 //if the equipment category filter is used, we filter the list retrieved above
                 if (!String.IsNullOrEmpty(SearchCategory))
                 {
-                    equipmentList = equipmentList.Where(p => p.EquipmentCategoryId == Convert.ToInt32(SearchCategory));
+                    equipmentQuery = equipmentQuery.Where(p => p.EquipmentCategoryId == Convert.ToInt32(SearchCategory));
                 }
 
                 //if the equipment availability filter is used, we filter the list retrieved above
                 if (!String.IsNullOrEmpty(SearchAvailability))
                 {
-                    equipmentList = equipmentList.Where(p => p.AvailabilityStatusId == Convert.ToInt32(SearchAvailability));
+                    equipmentQuery = equipmentQuery.Where(p => p.AvailabilityStatusId == Convert.ToInt32(SearchAvailability));
                 }
 
                 //if the equipment condition filter is used, we filter the list retrieved above
                 if (!String.IsNullOrEmpty(SearchCondition))
                 {
-                    equipmentList = equipmentList.Where(p => p.ConditionStatusId == Convert.ToInt32(SearchCondition));
+                    equipmentQuery = equipmentQuery.Where(p => p.ConditionStatusId == Convert.ToInt32(SearchCondition));
                 }
 
+                //get total count for pagination
+                int totalCount = equipmentQuery.Count();
 
+                //apply pagination
+                var pagedEquipment = equipmentQuery
+                    .OrderBy(e => e.EquipmentId)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                //create viewmodel and assign the lists
                 var viewmodel = new EquipmentViewModel
                 {
-                    //get all equipment from the database
-                    Equipment = equipmentList,
-                    //get all equipment categories from the database
+                    Equipment = pagedEquipment,
                     EquipmentCategories = _context.EquipmentCategories.ToList(),
-                    //get all equipment availability statuses from the database
                     EquipmentAvailability = _context.AvailabilityStatuses.ToList(),
-                    //get all equipment condition statuses from the database
-                    EquipmentStatuses = _context.ConditionStatuses.ToList()
-
+                    EquipmentStatuses = _context.ConditionStatuses.ToList(),
+                    CurrentPage = page,
+                    TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
                 };
 
-                
                 // Fetch the current user id
                 var userEmail = User?.Identity?.Name;
 
@@ -289,7 +298,6 @@ namespace RentOpsWebApp.Controllers
 
                 return View(viewmodel);
             }
-
             catch (Exception ex)
             {
                 //save the error message to the viewbag
