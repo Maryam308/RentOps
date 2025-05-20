@@ -27,14 +27,12 @@ namespace RentOpsWebApp.Controllers
         {
             return View();
         }
-        public IActionResult RentalTransaction(string searchRentalTransactionId, string SearchRentalRequestId, string searchEmployeeId, string SearchEquipment, string SearchTransactionDate, string SearchPayment, int websitePage = 1, int externalPage = 1)
+        public IActionResult RentalTransaction(string searchRentalTransactionId, string SearchRentalRequestId, string searchEmployeeId, string SearchEquipment, string SearchTransactionDate, string SearchPayment)
         {
 
             try
             {
-                int pageSize = 25;
-
-                //fetch all rental transactions and include the related entities
+                // Fetch all rental transactions with related data
                 IEnumerable<RentalTransaction> allTransactions = _context.RentalTransactions
                     .Include(rt => rt.Equipment)
                     .Include(rt => rt.Employee)
@@ -46,20 +44,20 @@ namespace RentOpsWebApp.Controllers
                     .OrderByDescending(rt => rt.RentalTransactionTimestamp)
                     .ToList();
 
-                //filtering system
-                if (!String.IsNullOrEmpty(searchRentalTransactionId))
+                // Filtering
+                if (!string.IsNullOrEmpty(searchRentalTransactionId))
                     allTransactions = allTransactions.Where(p => p.RentalTransactionId == Convert.ToInt32(searchRentalTransactionId));
 
-                if (!String.IsNullOrEmpty(SearchRentalRequestId))
+                if (!string.IsNullOrEmpty(SearchRentalRequestId))
                     allTransactions = allTransactions.Where(p => p.RentalRequestId == Convert.ToInt32(SearchRentalRequestId));
 
-                if (!String.IsNullOrEmpty(searchEmployeeId))
+                if (!string.IsNullOrEmpty(searchEmployeeId))
                     allTransactions = allTransactions.Where(p => p.EmployeeId == Convert.ToInt32(searchEmployeeId));
 
-                if (!String.IsNullOrEmpty(SearchEquipment))
+                if (!string.IsNullOrEmpty(SearchEquipment))
                     allTransactions = allTransactions.Where(p => p.EquipmentId == Convert.ToInt32(SearchEquipment));
 
-                if (!String.IsNullOrEmpty(SearchPayment))
+                if (!string.IsNullOrEmpty(SearchPayment))
                 {
                     if (SearchPayment == "Paid")
                         allTransactions = allTransactions.Where(p => p.Payment != null);
@@ -69,32 +67,13 @@ namespace RentOpsWebApp.Controllers
 
                 if (!string.IsNullOrEmpty(SearchTransactionDate))
                 {
-                    DateTime searchTimestamp;
-                    if (DateTime.TryParse(SearchTransactionDate, out searchTimestamp))
+                    if (DateTime.TryParse(SearchTransactionDate, out DateTime searchTimestamp))
                         allTransactions = allTransactions.Where(p => p.RentalTransactionTimestamp.Date == searchTimestamp.Date);
                 }
 
-                //split into two lists
-                var websiteAll = allTransactions.Where(rt => rt.UserId == null && rt.RentalRequest != null).ToList();
-                var externalAll = allTransactions.Where(rt => rt.UserId != null && rt.RentalRequest == null).ToList();
-
-                //calculate total pages
-                int websiteTotal = websiteAll.Count();
-                int externalTotal = externalAll.Count();
-
-                var websitePaged = websiteAll.Skip((websitePage - 1) * pageSize).Take(pageSize).ToList();
-                var externalPaged = externalAll.Skip((externalPage - 1) * pageSize).Take(pageSize).ToList();
-
                 var rentalTransactionViewModel = new RentalTransactionViewModel
                 {
-                    WebsiteTransactions = websitePaged,
-                    WebsiteCurrentPage = websitePage,
-                    WebsiteTotalPages = (int)Math.Ceiling(websiteTotal / (double)pageSize),
-
-                    ExternalTransactions = externalPaged,
-                    ExternalCurrentPage = externalPage,
-                    ExternalTotalPages = (int)Math.Ceiling(externalTotal / (double)pageSize),
-
+                    rentalTransactions = allTransactions.ToList(),
                     equipmentTitle = _context.Equipment.ToList()
                 };
 

@@ -1,18 +1,15 @@
 ﻿@using RentOpsWebApp.ViewModels;
 @model RentalTransactionViewModel;
 @{
-    ViewData["Title"] = "RentalTransaction";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewData["Title"] = "RentalTransaction";
+	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section Styles {
 	<link rel="stylesheet" href="~/css/PaginationStyle.css" />
 }
 
-
-
 @{
-	//will be used to display success message for editting
 	if (TempData["UpdateSuccess"] != null)
 	{
 		<div class="alert alert-success mt-3" role="alert">
@@ -21,43 +18,31 @@
 	}
 }
 
-
 <div class="container p-3 px-0">
 	<h1 class="m-2">Rental Transactions</h1>
 	<div class="row pt-2">
 		<div class="p-3">
-
 			<div class="card border-primary mx-3">
 				<div class="card-header p-3"><h4>Search & Filter Rental Transactions</h4></div>
 				<div class="card-body p-4">
 					<form asp-controller="RentalTransaction" asp-action="RentalTransaction" method="get">
 						<div class="input-group">
-
 							<input type="text" name="SearchRentalTransactionId" value="@Context.Request.Query["SearchRentalTransactionId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Rental Transaction Id" />
-
 							<input type="text" name="SearchRentalRequestId" value="@Context.Request.Query["SearchRentalRequestId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Rental Request Id" />
-
 							<input type="text" name="SearchEmployeeId" value="@Context.Request.Query["SearchEmployeeId"].ToString()" class="form-control mx-4 col-4 my-2" placeholder="Employee Id" />
-
 						</div>
-
-
 						<div class="input-group pt-2">
 							Transaction Date:
-
 							<input type="date" class="form-control mb-3 mx-4" name="SearchTransactionDate" value="@Context.Request.Query["SearchTransactionDate"].ToString()">
 						</div>
-
 						Equipment Name: <br />
 						<div class="input-group">
 							<select asp-for="SearchEquipment"
-									asp-items="@Model.equipmentTitle?
-                               .Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
+									asp-items="@Model.equipmentTitle?.Select(i => new SelectListItem { Text = i.EquipmentName, Value = i.EquipmentId.ToString() })"
 									class="form-select mb-3 mx-4">
 								<option value="" disabled selected>Select an Equipment</option>
 							</select>
 						</div>
-
 						Payment Status:<br />
 						<div class="input-group">
 							<select asp-for="SearchPayment" class="form-select mb-3 mx-4">
@@ -67,19 +52,14 @@
 							</select>
 						</div>
 						<div class="align-items-end text-end pe-2">
-
 							<input type="submit" value="Search" class="px-4 btn btn-secondary" />
 							<a asp-controller="RentalTransaction" asp-action="RentalTransaction" class="px-4 btn btn-danger m-2">Clear</a>
-
 						</div>
 					</form>
-
-
 				</div>
 			</div>
-
 		</div>
-		</div>
+	</div>
 
 	<h2>Website Rental Requests</h2>
 	<br />
@@ -87,7 +67,6 @@
 	@{
 		var websiteRentalTransactions = Model.rentalTransactions?.Where(record => record.UserId == null && record.RentalRequest != null).ToList();
 	}
-
 
 	@if (websiteRentalTransactions == null || !websiteRentalTransactions.Any())
 	{
@@ -97,7 +76,6 @@
 	}
 	else
 	{
-
 		<table class="table table-striped">
 			<thead>
 				<tr class="text-center table-primary">
@@ -122,35 +100,28 @@
 				{
 					@if (record.UserId == null && record.RentalRequest != null)
 					{
-
-					<tr class="text-center">
-						<td>@record.RentalTransactionId</td>
-						<td>@record.RentalTransactionTimestamp</td>
-						<td>@record.RentalRequestId</td>
-						<td>@record.EmployeeId</td>
-						<td>@record.Employee?.FirstName @record.Employee?.LastName</td>
-						<td>@record.RentalRequest.UserId </td>
-						<td>@record.RentalRequest?.User?.FirstName @record.RentalRequest?.User?.LastName </td>	
-						<td>@record.RentalFee</td>
-						<td>@record.PickupDate</td>
-						<td>@record.ReturnDate</td>
-						<td>@record.Equipment?.EquipmentName</td>
-						<td>
-							@(record.PaymentId == null ? "Not Paid" : "Paid")
-						</td>
-						<td>Documents</td>
-						<!--print the ids of the docuemnts-->
-						<td>
-							<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
-
-					
-						</td>
-					</tr>
-					}}
+						<tr class="text-center">
+							<td>@record.RentalTransactionId</td>
+							<td>@record.RentalTransactionTimestamp</td>
+							<td>@record.RentalRequestId</td>
+							<td>@record.EmployeeId</td>
+							<td>@record.Employee?.FirstName @record.Employee?.LastName</td>
+							<td>@record.RentalRequest.UserId</td>
+							<td>@record.RentalRequest?.User?.FirstName @record.RentalRequest?.User?.LastName</td>
+							<td>@record.RentalFee</td>
+							<td>@record.PickupDate</td>
+							<td>@record.ReturnDate</td>
+							<td>@record.Equipment?.EquipmentName</td>
+							<td>@(record.PaymentId == null ? "Not Paid" : "Paid")</td>
+							<td>Documents</td>
+							<td>
+								<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
+							</td>
+						</tr>
+					}
+				}
 			</tbody>
-
-			</table> 
-	
+		</table>
 	}
 
 	<br />
@@ -162,8 +133,7 @@
 		var externalRentalTransactions = Model.rentalTransactions?.Where(record => record.UserId != null && record.RentalRequest == null).ToList();
 	}
 
-
-	@if (externalRentalTransactions == null || !externalRentalTransactions.Any() )
+	@if (externalRentalTransactions == null || !externalRentalTransactions.Any())
 	{
 		<div class="alert alert-light text-center" role="alert">
 			There are no rental transactions to display.
@@ -171,130 +141,67 @@
 	}
 	else
 	{
-	
-	<table class="table table-striped">
-		<thead>
-			<tr class="text-center table-primary">
-				<th>Rental Transaction ID</th>
-				<th>Rental Transaction TimeStamp</th>
-				<th>Employee ID</th>
-				<th>Employee Name</th>
-				<th>Customer ID</th>
-				<th>Customer Name</th>
-				<th>Rental Fee</th>
-				<th>Pickup Date</th>
-				<th>Return Date</th>
-				<th>Equipment Name</th>
-				<th>Payment Status</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
+		<table class="table table-striped">
+			<thead>
+				<tr class="text-center table-primary">
+					<th>Rental Transaction ID</th>
+					<th>Rental Transaction TimeStamp</th>
+					<th>Employee ID</th>
+					<th>Employee Name</th>
+					<th>Customer ID</th>
+					<th>Customer Name</th>
+					<th>Rental Fee</th>
+					<th>Pickup Date</th>
+					<th>Return Date</th>
+					<th>Equipment Name</th>
+					<th>Payment Status</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
 				@foreach (var record in Model.rentalTransactions)
-			{
-				@if (record.UserId != null)
 				{
-
-					<tr class="text-center">
-						<td>@record.RentalTransactionId</td>
-						<td>@record.RentalTransactionTimestamp</td>
-						<td>@record.EmployeeId</td>
-						<td>@record.Employee?.FirstName @record.Employee?.LastName</td>
-						<td>@record.UserId </td>
-						<td>@record.User?.FirstName @record.User?.LastName </td>
-						<td>@record.RentalFee</td>
-						<td>@record.PickupDate</td>
-						<td>@record.ReturnDate</td>
-						<td>@record.Equipment?.EquipmentName</td>
-						<td>
-							@(record.PaymentId == null ? "Not Paid" : "Paid")
-						</td>
-						<td>
-							<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
-				
-							
-						</td>
-					</tr>
-				}
-
-					@if ( record.CustomerId !=null)
+					@if (record.UserId != null)
 					{
-						
 						<tr class="text-center">
 							<td>@record.RentalTransactionId</td>
 							<td>@record.RentalTransactionTimestamp</td>
 							<td>@record.EmployeeId</td>
 							<td>@record.Employee?.FirstName @record.Employee?.LastName</td>
-							<td>@record.CustomerId </td>
-							<td>@record.Customer?.FirstName @record.Customer?.LastName </td>
+							<td>@record.UserId</td>
+							<td>@record.User?.FirstName @record.User?.LastName</td>
 							<td>@record.RentalFee</td>
 							<td>@record.PickupDate</td>
 							<td>@record.ReturnDate</td>
 							<td>@record.Equipment?.EquipmentName</td>
-							<td>
-								@(record.PaymentId == null ? "Not Paid" : "Paid")
-							</td>
+							<td>@(record.PaymentId == null ? "Not Paid" : "Paid")</td>
 							<td>
 								<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
-							
-
 							</td>
 						</tr>
 					}
-			}
-		</tbody>
-</table>
 
-		@if (Model.WebsiteTotalPages > 1)
-		{
-			<nav class="mt-4">
-				<ul class="pagination custom-pagination justify-content-center">
-					@for (int i = 1; i <= Model.WebsiteTotalPages; i++)
+					@if (record.CustomerId != null)
 					{
-						<li class="page-item @(i == Model.WebsiteCurrentPage ? "active" : "")">
-							<a class="page-link"
-							   asp-action="RentalTransaction"
-							   asp-route-websitePage="@i"
-							   asp-route-externalPage="@Model.ExternalCurrentPage"
-							   asp-route-SearchRentalTransactionId="@Model.SearchRentalTransactionId"
-							   asp-route-SearchRentalRequestId="@Model.SearchRentalRequestId"
-							   asp-route-SearchEmployeeId="@Model.SearchEmployeeId"
-							   asp-route-SearchEquipment="@Model.SearchEquipment"
-							   asp-route-SearchTransactionDate="@Model.SearchTransactionDate"
-							   asp-route-SearchPayment="@Model.SearchPayment">@i</a>
-						</li>
+						<tr class="text-center">
+							<td>@record.RentalTransactionId</td>
+							<td>@record.RentalTransactionTimestamp</td>
+							<td>@record.EmployeeId</td>
+							<td>@record.Employee?.FirstName @record.Employee?.LastName</td>
+							<td>@record.CustomerId</td>
+							<td>@record.Customer?.FirstName @record.Customer?.LastName</td>
+							<td>@record.RentalFee</td>
+							<td>@record.PickupDate</td>
+							<td>@record.ReturnDate</td>
+							<td>@record.Equipment?.EquipmentName</td>
+							<td>@(record.PaymentId == null ? "Not Paid" : "Paid")</td>
+							<td>
+								<a asp-action="Edit" asp-route-id="@record.RentalTransactionId" class="btn btn-primary">Edit</a>
+							</td>
+						</tr>
 					}
-				</ul>
-			</nav>
-		}
-
-		@if (Model.ExternalTotalPages > 1)
-		{
-			<nav class="mt-4">
-				<ul class="pagination custom-pagination justify-content-center">
-					@for (int i = 1; i <= Model.ExternalTotalPages; i++)
-					{
-						<li class="page-item @(i == Model.ExternalCurrentPage ? "active" : "")">
-							<a class="page-link"
-							   asp-action="RentalTransaction"
-							   asp-route-websitePage="@Model.WebsiteCurrentPage"
-							   asp-route-externalPage="@i"
-							   asp-route-SearchRentalTransactionId="@Model.SearchRentalTransactionId"
-							   asp-route-SearchRentalRequestId="@Model.SearchRentalRequestId"
-							   asp-route-SearchEmployeeId="@Model.SearchEmployeeId"
-							   asp-route-SearchEquipment="@Model.SearchEquipment"
-							   asp-route-SearchTransactionDate="@Model.SearchTransactionDate"
-							   asp-route-SearchPayment="@Model.SearchPayment">@i</a>
-						</li>
-					}
-				</ul>
-			</nav>
-		}
-
-
-
-
-
-}
+				}
+			</tbody>
+		</table>
+	}
 </div>
-
